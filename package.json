@@ -11,6 +11,7 @@
   "dependencies": {
     "@capacitor/cli": "^7.4.0",
     "@capacitor/core": "^7.4.0",
+    "eslint-plugin-prettier": "^5.5.1",
     "lucide-react": "^0.523.0",
     "next": "15.3.4",
     "prettier": "^3.6.0",
@@ -21,8 +22,9 @@
   "devDependencies": {
     "@eslint/eslintrc": "^3",
     "@tailwindcss/postcss": "^4",
-    "eslint": "^9",
+    "eslint": "^9.29.0",
     "eslint-config-next": "15.3.4",
+    "eslint-config-prettier": "^10.1.5",
     "tailwindcss": "^4"
   }
 }
