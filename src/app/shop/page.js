@@ -13,6 +13,7 @@ import Item from '@/components/Item';
 
 export default function Shop() {
   const [selectBtn, setSelectBtn] = useState(1);
+  const [selectedItemIdx, setSelectedItemIdx] = useState(null);
 
   const categoryBtns = [
     { id: 1, name: '의상', icon: FaShirt },
@@ -79,7 +80,11 @@ export default function Shop() {
         {/* 아이템 리스트 (스크롤 영역) */}
         <div className="grid grid-cols-3 gap-2 bg-white py-2 overflow-y-auto scrollbar-hide flex-1 pb-[80px]">
           {Array.from({ length: 12 }).map((_, idx) => (
-            <Item key={idx} />
+            <Item
+              key={idx}
+              onClick={() => setSelectedItemIdx(idx)}
+              isSelected={selectedItemIdx === idx}
+            />
           ))}
         </div>
       </div>
