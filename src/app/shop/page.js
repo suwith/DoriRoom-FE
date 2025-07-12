@@ -9,6 +9,7 @@ import {
   FaWindowMaximize,
   FaBoxes,
 } from 'react-icons/fa';
+import { RiWallet3Fill } from 'react-icons/ri';
 import Item from '@/components/Item';
 
 export default function Shop() {
@@ -39,16 +40,24 @@ export default function Shop() {
         </div>
 
         {/* 캐릭터 */}
-        <div className="flex justify-center my-20">
+        <div className="flex justify-center mt-20">
           <img
             src="/character.png"
             alt="character"
             className="w-[136px] h-[152px]"
           />
         </div>
-
+        <div className="flex justify-end my-5">
+          <button
+            disabled={selectedItemIdx === null}
+            className={`flex gap-2 items-center justify-center rounded-md px-4 py-2 ${selectedItemIdx === null ? 'bg-neutral-300' : 'bg-emerald-400'}`}
+          >
+            <RiWallet3Fill className="fill-white" size={20} />
+            <p className="font-bold text-[14px]">구입하기</p>
+          </button>
+        </div>
         {/* 카테고리 버튼 */}
-        <div className="flex overflow-x-auto scrollbar-hide gap-2 pb-2">
+        <div className="flex overflow-x-auto scrollbar-hide gap-2">
           {categoryBtns.map(({ id, name, icon: Icon }) => {
             const isActive = selectBtn === id;
 
