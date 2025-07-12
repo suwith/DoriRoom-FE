@@ -15,7 +15,7 @@ const eslintConfig = [
     extends: ['next/core-web-vitals', 'prettier'],
     rules: {
       // 기본 스타일 규칙
-      quotes: ['error', 'single'],
+      quotes: ['error', 'single', { allowTemplateLiterals: true }],
       indent: ['error', 2],
       // 'no-console': 'warn',
 
