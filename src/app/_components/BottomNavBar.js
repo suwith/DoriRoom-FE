@@ -9,6 +9,7 @@ const navItems = [
   { href: '/festival', label: '축제' },
   { href: '/collection', label: '도감' },
   { href: '/mypage', label: '마이' },
+  { href: '/reward', label: '테스트' },
 ];
 
 export default function BottomNavBar() {

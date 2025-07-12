@@ -1,4 +1,5 @@
 import HeaderBar from './home/Header';
+import Image from 'next/image';
 
 export default function Home() {
   return (
@@ -6,7 +7,7 @@ export default function Home() {
       <HeaderBar />
 
       <div className="h-full flex justify-center items-center p-4">
-        <p className="text-gray-400">캐릭터 위치</p>
+        <Image src="/character.png" alt="character" />
       </div>
     </>
   );
