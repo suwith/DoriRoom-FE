@@ -154,7 +154,7 @@ export default function Shop() {
           </button>
         </div>
         {/* 카테고리 버튼 */}
-        <div className="shrink-0 my-5 flex gap-2 px-2 overflow-x-auto scrollbar-hide">
+        <div className="shrink-0 mt-5 flex gap-2 px-2 overflow-x-auto scrollbar-hide">
           {categoryBtns.map(({ id, name, icon: Icon }) => {
             const isActive = selectBtn === id;
 
@@ -162,7 +162,7 @@ export default function Shop() {
               <button
                 key={id}
                 onClick={() => setSelectBtn(id)}
-                className={`shrink-0 flex gap-2 items-center justify-center rounded-t px-5 py-2  min-h-[44px] ${
+                className={`shrink-0 flex gap-2 items-center justify-center rounded-t px-5 py-2 min-h-[44px] ${
                   isActive ? 'bg-white' : 'bg-neutral-200'
                 }`}
               >
@@ -184,7 +184,7 @@ export default function Shop() {
         </div>
 
         {/* 아이템 리스트 (스크롤 영역) */}
-        <div className="grow overflow-y-auto px-3 pb-[80px] grid grid-cols-3 gap-2 bg-white scrollbar-hide">
+        <div className="overflow-y-auto bg-white px-3 pt-3 pb-[80px] grid grid-cols-3 gap-2 scrollbar-hide">
           {dummyItems
             .filter((item) => item.categoryId === selectBtn)
             .map((item) => (
