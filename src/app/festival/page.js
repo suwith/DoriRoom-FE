@@ -1,7 +1,6 @@
 'use client';
 
 import { useRouter } from 'next/navigation';
-import { useState } from 'react';
 import { GoHeartFill } from 'react-icons/go';
 import RegionFilter from './_components/RegionFilter';
 import FestivalCardListSection from './_components/FestivalCardListSection';
