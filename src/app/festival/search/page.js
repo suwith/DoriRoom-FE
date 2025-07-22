@@ -4,6 +4,7 @@ import { useState } from 'react';
 import { useRouter } from 'next/navigation';
 import RegionFilter from '../RegionFilter';
 import 'mingcute_icon/font/Mingcute.css';
+import BackButton from '@/app/_components/BackButton';
 
 export default function SearchPage({ onClose }) {
   const router = useRouter();
@@ -30,10 +31,7 @@ export default function SearchPage({ onClose }) {
   return (
     <div className="max-w-[390px] w-full h-screen bg-white mx-auto px-4 pt-4">
       <div className="flex items-center gap-1">
-        <i
-          className="mgc_left_line text-3xl text-neutral-500 cursor-pointer"
-          onClick={onClose}
-        />
+        <BackButton />
         <input
           type="text"
           value={input}

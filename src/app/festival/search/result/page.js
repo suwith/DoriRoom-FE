@@ -7,6 +7,7 @@ import { FaCommentAlt } from 'react-icons/fa';
 import { FiFilter } from 'react-icons/fi';
 import { mockFestivals } from '../../mockData';
 import 'mingcute_icon/font/Mingcute.css';
+import BackButton from '@/app/_components/BackButton';
 
 export default function FestivalSearchResultPage() {
   const searchParams = useSearchParams();
@@ -27,9 +28,7 @@ export default function FestivalSearchResultPage() {
   return (
     <div className="max-w-[390px] w-full h-screen mx-auto px-4 pt-4 pb-28">
       <div className="flex items-center gap-2 mb-2">
-        <button onClick={() => history.back()}>
-          <i className="mgc_left_line text-3xl text-neutral-500 cursor-pointer" />
-        </button>
+        <BackButton />
 
         <div className="flex-1 bg-neutral-100 px-4 py-2 rounded-lg text-sm text-gray-500">
           {query}
