@@ -1,23 +1,29 @@
 const regions = [
-  { name: '서울', color: 'bg-[#9DBEFF]' },
-  { name: '경기도', color: 'bg-[#CAD8FF]' },
-  { name: '강원도', color: 'bg-[#9DEBCB]' },
-  { name: '경상도', color: 'bg-[#FFD482]' },
-  { name: '전라도', color: 'bg-[#FFBFAE]' },
-  { name: '충청도', color: 'bg-[#D6F6B4]' },
-  { name: '제주도', color: 'bg-[#FF9E7C]' },
-  { name: '기타', color: 'bg-[#F9B5E2]' },
+  { name: '서울', icon: '/icons/region/서울.svg' },
+  { name: '경기도', icon: '/icons/region/경기도.svg' },
+  { name: '강원도', icon: '/icons/region/강원도.svg' },
+  { name: '경상도', icon: '/icons/region/경상도.svg' },
+  { name: '전라도', icon: '/icons/region/전라도.svg' },
+  { name: '충청도', icon: '/icons/region/충청도.svg' },
+  { name: '제주도', icon: '/icons/region/제주도.svg' },
 ];
 
 export default function RegionFilter() {
   return (
-    <div className="flex gap-2 w-max">
+    <div className="flex gap-3 overflow-x-auto w-full scrollbar-hide">
       {regions.map((region) => (
         <div
           key={region.name}
-          className={`${region.color} w-[52px] h-[52px] rounded-xl flex items-center justify-center text-[11px] text-white font-semibold`}
+          className="flex flex-col items-center gap-[6px] shrink-0"
         >
-          {region.name}
+          <div
+            className={
+              'w-[45px] h-[45px] rounded-full flex items-center justify-center'
+            }
+          >
+            <img src={region.icon} alt={region.name} />
+          </div>
+          <span className="text-[11px] text-neutral-800">{region.name}</span>
         </div>
       ))}
     </div>
