@@ -29,7 +29,7 @@ export default function BottomNavBar() {
   return (
     <nav className="max-w-[390px] w-full h-18 flex justify-around items-center bg-white fixed bottom-0 z-50 shadow-[0_-2px_4px_rgba(0,0,0,0.08)]">
       {navItems.map(({ href, label, iconClass }) => {
-        const isActive = pathname === href;
+        const isActive = pathname === href || pathname.startsWith(`${href}/`);
         const color = isActive ? 'var(--color-main-100)' : '#A3A3A3';
 
         return (
