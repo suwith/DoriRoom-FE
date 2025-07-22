@@ -2,7 +2,7 @@
 
 import { useState } from 'react';
 import { useRouter } from 'next/navigation';
-import RegionFilter from '../RegionFilter';
+import RegionFilter from '../_components/RegionFilter';
 import 'mingcute_icon/font/Mingcute.css';
 import BackButton from '@/app/_components/BackButton';
 

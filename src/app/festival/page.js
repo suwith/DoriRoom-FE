@@ -3,8 +3,8 @@
 import { useRouter } from 'next/navigation';
 import { useState } from 'react';
 import { GoHeartFill } from 'react-icons/go';
-import RegionFilter from './RegionFilter';
-import FestivalCardListSection from './FestivalCardListSection';
+import RegionFilter from './_components/RegionFilter';
+import FestivalCardListSection from './_components/FestivalCardListSection';
 import 'mingcute_icon/font/Mingcute.css';
 import { mockFestivals } from './mockData';
 
