@@ -42,15 +42,25 @@ export default function SearchPage() {
       {/* 검색창 */}
       <div className="flex items-center gap-1 px-4">
         <BackButton />
-        <input
-          type="text"
-          value={input}
-          onChange={(e) => setInput(e.target.value)}
-          onKeyDown={handleSearch}
-          placeholder="방문하고 싶은 축제를 검색해 보세요!"
-          className="flex-1 bg-neutral-100 px-4 py-1.5 rounded-lg text-sm outline-none"
-          autoFocus
-        />
+        <div className="relative flex-1">
+          <input
+            type="text"
+            value={input}
+            onChange={(e) => setInput(e.target.value)}
+            onKeyDown={handleSearch}
+            placeholder="방문하고 싶은 축제를 검색해 보세요!"
+            className="w-full bg-neutral-100 px-4 py-1.5 pr-8 rounded-lg text-sm outline-none"
+            autoFocus
+          />
+          {input && (
+            <button
+              onClick={() => setInput('')}
+              className="absolute right-2 top-1/2 -translate-y-1/2 text-neutral-400 text-sm"
+            >
+              ✕
+            </button>
+          )}
+        </div>
       </div>
 
       {/* 최근 검색어 */}
