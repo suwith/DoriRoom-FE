@@ -1,17 +1,19 @@
 'use client';
 
-import { useSearchParams } from 'next/navigation';
-import { useState } from 'react';
+import { useSearchParams, useRouter } from 'next/navigation';
+import { useEffect, useState } from 'react';
+import { mockFestivals } from '../../mockData';
+import SearchInputBar from '@/app/festival/_components/SearchInputBar';
+import { FiFilter } from 'react-icons/fi';
 import { GoHeart, GoHeartFill } from 'react-icons/go';
 import { FaCommentAlt } from 'react-icons/fa';
-import { FiFilter } from 'react-icons/fi';
-import { mockFestivals } from '../../mockData';
-import 'mingcute_icon/font/Mingcute.css';
-import BackButton from '@/app/_components/BackButton';
 
 export default function FestivalSearchResultPage() {
+  const router = useRouter();
   const searchParams = useSearchParams();
-  const query = searchParams.get('query') || '';
+  const initialQuery = searchParams.get('query') || '';
+
+  const [input, setInput] = useState(initialQuery);
   const [likedIds, setLikedIds] = useState([]);
 
   const toggleLike = (id) => {
@@ -20,22 +22,30 @@ export default function FestivalSearchResultPage() {
     );
   };
 
-  // 추후 실제 검색 필터링 로직에 맞게 필터링 가능
+  const [searchQuery, setSearchQuery] = useState(initialQuery);
+
+  const handleEnter = (text) => {
+    setSearchQuery(text);
+    router.replace(`/festival/search/result?query=${encodeURIComponent(text)}`);
+  };
+
   const filteredFestivals = mockFestivals.filter((f) =>
-    f.title.includes(query)
+    f.title.includes(searchQuery)
   );
 
   return (
     <div className="max-w-[390px] w-full h-screen mx-auto px-4 pt-4 pb-28">
-      <div className="flex items-center gap-2 mb-2">
-        <BackButton />
+      {/* 상단 검색창 */}
+      <SearchInputBar
+        value={input}
+        onChange={(e) => setInput(e.target.value)}
+        onEnter={handleEnter}
+        onClear={() => router.push('/festival/search')}
+        withBack
+      />
 
-        <div className="flex-1 bg-neutral-100 px-4 py-2 rounded-lg text-sm text-gray-500">
-          {query}
-        </div>
-      </div>
-
-      <div className="flex gap-2 items-center mb-3">
+      {/* 필터바 */}
+      <div className="flex gap-2 items-center mt-3 mb-3">
         {['정렬기준', '지역', '분야', '기간'].map((tag) => (
           <button
             key={tag}

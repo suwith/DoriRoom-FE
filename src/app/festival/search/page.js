@@ -4,7 +4,7 @@ import { useState } from 'react';
 import { useRouter } from 'next/navigation';
 import RegionFilter from '../_components/RegionFilter';
 import 'mingcute_icon/font/Mingcute.css';
-import BackButton from '@/app/_components/BackButton';
+import SearchInputBar from '@/app/festival/_components/SearchInputBar';
 
 export default function SearchPage() {
   const router = useRouter();
@@ -40,27 +40,20 @@ export default function SearchPage() {
   return (
     <div className="max-w-[390px] w-full h-screen bg-white mx-auto pt-4">
       {/* 검색창 */}
-      <div className="flex items-center gap-1 px-4">
-        <BackButton />
-        <div className="relative flex-1">
-          <input
-            type="text"
-            value={input}
-            onChange={(e) => setInput(e.target.value)}
-            onKeyDown={handleSearch}
-            placeholder="방문하고 싶은 축제를 검색해 보세요!"
-            className="w-full bg-neutral-100 px-4 py-1.5 pr-8 rounded-lg text-sm outline-none"
-            autoFocus
-          />
-          {input && (
-            <button
-              onClick={() => setInput('')}
-              className="absolute right-2 top-1/2 -translate-y-1/2 text-neutral-400 text-sm"
-            >
-              ✕
-            </button>
-          )}
-        </div>
+
+      <div className="px-4">
+        <SearchInputBar
+          value={input}
+          onChange={(e) => setInput(e.target.value)}
+          onEnter={(text) =>
+            router.push(
+              `/festival/search/result?query=${encodeURIComponent(text)}`
+            )
+          }
+          onClear={() => setInput('')}
+          withBack
+          autoFocus
+        />
       </div>
 
       {/* 최근 검색어 */}
