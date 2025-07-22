@@ -1,33 +1,28 @@
 'use client';
 
+import { useRouter } from 'next/navigation';
 import { useState } from 'react';
 import { GoHeartFill } from 'react-icons/go';
 import RegionFilter from './RegionFilter';
 import FestivalCardListSection from './FestivalCardListSection';
-import SearchPage from './SearchPage';
 import 'mingcute_icon/font/Mingcute.css';
 import { mockFestivals } from './mockData';
 
 export default function FestivalPage() {
-  const [showSearch, setShowSearch] = useState(false);
-
-  if (showSearch) return <SearchPage onClose={() => setShowSearch(false)} />;
+  const router = useRouter();
 
   return (
     <div className="pb-24 max-w-[390px] mx-auto">
       {/* 상단 검색바 + 하트 */}
       <div className="flex items-center gap-1 px-4 pt-4">
         <div
-          onClick={() => setShowSearch(true)}
-          className="flex items-center flex-grow bg-neutral-100 px-4 py-2 rounded-lg text-sm "
+          onClick={() => router.push('/festival/search')}
+          className="flex items-center flex-grow bg-neutral-100 px-4 py-2 rounded-lg text-sm cursor-pointer"
         >
           <i className="mgc_search_2_fill text-neutral-400 text-lg mr-2" />
-          <input
-            type="text"
-            placeholder="방문하고 싶은 축제를 검색해 보세요!"
-            className="text-[13px] bg-transparent outline-none w-full text-neutral-500"
-            readOnly
-          />
+          <span className="text-[13px] text-neutral-500">
+            방문하고 싶은 축제를 검색해 보세요!
+          </span>
         </div>
 
         <button className="p-1">
