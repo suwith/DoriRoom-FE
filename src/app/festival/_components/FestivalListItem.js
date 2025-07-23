@@ -48,7 +48,7 @@ export default function FestivalListItem({ festival, liked, onLike }) {
 
           <div className="flex justify-between items-end mt-2">
             <div className="text-neutral-400 text-[11px] font-thin">
-              {festival.startDate} ~ {festival.endDate}
+              {festival.startDate}~{festival.endDate}
             </div>
             <div className="flex gap-3 text-[11px]">
               <div className="flex items-center gap-1 text-main-100">
