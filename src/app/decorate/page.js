@@ -2,7 +2,7 @@
 
 import HeaderNavigationBar from '../_components/HeaderNavigationBar';
 import { useState } from 'react';
-import { FaFire, FaShirt } from 'react-icons/fa6';
+import { FaShirt } from 'react-icons/fa6';
 import {
   FaHatCowboy,
   FaShoePrints,
@@ -12,8 +12,8 @@ import {
   FaStore,
 } from 'react-icons/fa';
 import { GoCircleSlash } from 'react-icons/go';
-import { RiWallet3Fill } from 'react-icons/ri';
 import Item from '@/components/Item';
+import Link from 'next/link';
 
 const dummyItems = [
   // 👕 의상
@@ -104,11 +104,6 @@ const dummyItems = [
 export default function Decorate() {
   const [selectBtn, setSelectBtn] = useState(1);
   const [selectedItemIdx, setSelectedItemIdx] = useState(null);
-  const [isOpenBuyModal, setIsOpenBuyModal] = useState(false);
-
-  const filteredItems = dummyItems.filter(
-    (item) => item.categoryId === selectBtn
-  );
 
   const categoryBtns = [
     { id: 1, name: '의상', icon: FaShirt },
@@ -118,10 +113,6 @@ export default function Decorate() {
     { id: 5, name: '모자', icon: FaHatCowboy },
     { id: 6, name: '신발', icon: FaShoePrints },
   ];
-
-  function handleConfirm() {
-    console.log('구매 API 호출');
-  }
 
   return (
     <div className="flex justify-center h-screen">
@@ -135,15 +126,13 @@ export default function Decorate() {
             className="w-[136px] h-[152px]"
           />
         </div>
-        <div className="flex justify-end my-5 pr-3">
-          <button
-            disabled={selectedItemIdx === null}
-            className={`flex gap-2 items-center justify-center rounded-xl px-4 py-2 ${selectedItemIdx === null ? 'bg-neutral-300' : 'bg-emerald-400'}`}
-            onClick={() => setIsOpenBuyModal(true)}
-          >
-            <FaStore className="fill-white" size={20} />
-            <p className="font-bold text-[14px]">상점으로</p>
-          </button>
+        <div className="flex justify-end my-3 pr-3">
+          <Link href="/shop">
+            <div className="flex gap-2 items-center justify-center rounded-xl px-4 py-2 bg-main-100 text-white">
+              <FaStore size={20} />
+              <p className="font-bold text-[14px]">상점으로</p>
+            </div>
+          </Link>
         </div>
         {/* 카테고리 버튼 */}
         <div className="shrink-0 mt-5 flex gap-2 px-2 overflow-x-auto scrollbar-hide">
@@ -154,22 +143,14 @@ export default function Decorate() {
               <button
                 key={id}
                 onClick={() => setSelectBtn(id)}
-                className={`shrink-0 flex gap-2 items-center justify-center rounded-t px-5 py-2 min-h-[44px] ${
-                  isActive ? 'bg-white' : 'bg-neutral-200'
+                className={`shrink-0 flex gap-2 items-center justify-center rounded-t-lg px-5 py-1.5 min-h-[35px] ${
+                  isActive
+                    ? 'bg-white text-main-100'
+                    : 'bg-neutral-200 text-neutral-400'
                 }`}
               >
-                <Icon
-                  className={`text-xl ${
-                    isActive ? 'text-emerald-400' : 'text-neutral-400'
-                  }`}
-                />
-                <p
-                  className={`text-sm font-medium whitespace-nowrap ${
-                    isActive ? 'text-emerald-400' : 'text-neutral-400'
-                  }`}
-                >
-                  {name}
-                </p>
+                <Icon className="text-xl" />
+                <p className="text-sm font-medium whitespace-nowrap">{name}</p>
               </button>
             );
           })}

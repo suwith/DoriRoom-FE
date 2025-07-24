@@ -12,7 +12,7 @@ export default function Item({
     <div className="flex flex-col items-center gap-2">
       <div
         onClick={onClick}
-        className={`relative rounded-md w-[110px] h-[126px]  ${!isSelected ? 'bg-neutral-100 ring-1 ring-neutral-300/30' : 'bg-emerald-100/30 ring-1 ring-emerald-300/30'}`}
+        className={`relative rounded-md w-[110px] h-[126px]  ${!isSelected ? 'bg-neutral-100 ring-1 ring-neutral-300/50' : 'bg-main-5 ring-1 ring-main-40'}`}
       >
         <Icon
           className={`absolute top-2/5 left-1/2 transform -translate-x-1/2 -translate-y-1/2 text-black w-12 h-12 ${name === '선택안함' ? 'opacity-40' : null}`}
@@ -24,7 +24,7 @@ export default function Item({
         </div>
       </div>
       {price && (
-        <div className="flex items-center justify-center gap-2 rounded-md w-[110px] h-[20px] ring-1 ring-neutral-300/30 text-emerald-400">
+        <div className="flex items-center justify-center gap-2 rounded-md w-[110px] h-[20px] ring-1 ring-neutral-300/50 text-main-100">
           <FaLeaf className="" />
           <p className="text-center font-bold text-[13px]">{price}</p>
         </div>
