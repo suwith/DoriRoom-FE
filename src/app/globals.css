@@ -1,8 +1,20 @@
+@import url('https://cdn.jsdelivr.net/gh/orioncactus/pretendard/dist/web/static/pretendard.css');
 @import "tailwindcss";
 
 :root {
   --background: #ffffff;
   --foreground: #171717;
+}
+
+@theme {
+  --background: #FEFEFE;
+  --font-sans: Pretendard, system-ui, sans-serif;
+  --color-main-100: #35C284;
+  --color-main-40: #A8E4CA;
+  --color-main-5: #F4FBF8;
+  --color-sub-100: #FACC15;
+  --color-sub-15: #FDF4D1;
+  --color-sub-5: #FEFBF2;
 }
 
 @theme inline {
@@ -23,6 +35,12 @@ body {
   background: var(--background);
   color: var(--foreground);
   font-family: Arial, Helvetica, sans-serif;
+}
+
+/*mingcute 아이콘 색 오버라이딩*/
+[class^='mgc_']::before,
+[class*=' mgc_']::before {
+  color: inherit !important;
 }
 
 /* 숨기기용 유틸 클래스 */
