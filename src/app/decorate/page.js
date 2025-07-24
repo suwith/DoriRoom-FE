@@ -12,7 +12,7 @@ import {
   FaStore,
 } from 'react-icons/fa';
 import { GoCircleSlash } from 'react-icons/go';
-import Item from '@/components/Item';
+import Item from '@/app/decorate/_components/Item';
 import Link from 'next/link';
 
 const dummyItems = [
