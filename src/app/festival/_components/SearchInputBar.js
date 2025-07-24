@@ -1,6 +1,5 @@
 'use client';
 
-import { useRouter } from 'next/navigation';
 import { useEffect, useRef } from 'react';
 import BackButton from '../../_components/BackButton';
 import 'mingcute_icon/font/Mingcute.css';
@@ -13,7 +12,6 @@ export default function SearchInputBar({
   withBack = false,
   autoFocus = false,
 }) {
-  const router = useRouter();
   const inputRef = useRef(null);
 
   useEffect(() => {

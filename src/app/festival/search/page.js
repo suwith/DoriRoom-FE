@@ -27,12 +27,6 @@ export default function SearchPage() {
     { keyword: '피크닉', status: 'down' },
   ];
 
-  const handleSearch = (e) => {
-    if (e.key === 'Enter' && input.trim()) {
-      router.push(`/festival/search/result?query=${encodeURIComponent(input)}`);
-    }
-  };
-
   const removeTag = (tag) => {
     setRecentSearches((prev) => prev.filter((t) => t !== tag));
   };
