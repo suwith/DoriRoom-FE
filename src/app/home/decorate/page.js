@@ -1,6 +1,6 @@
 'use client';
 
-import HeaderNavigationBar from '../_components/HeaderNavigationBar';
+import HeaderNavigationBar from '@/app/_components/HeaderNavigationBar';
 import { useState } from 'react';
 import { FaShirt } from 'react-icons/fa6';
 import {
@@ -12,7 +12,7 @@ import {
   FaStore,
 } from 'react-icons/fa';
 import { GoCircleSlash } from 'react-icons/go';
-import Item from '@/app/decorate/_components/Item';
+import Item from '@/app/home/decorate/_components/Item';
 import Link from 'next/link';
 
 const dummyItems = [
