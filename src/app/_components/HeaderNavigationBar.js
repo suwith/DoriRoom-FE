@@ -20,7 +20,11 @@ export default function HeaderNavigationBar({
       </h1>
 
       {/* 뒤로가기 버튼 */}
-      {showBackButton && <BackButton />}
+      {showBackButton && (
+        <div className="absolute left-5">
+          <BackButton />
+        </div>
+      )}
     </header>
   );
 }
