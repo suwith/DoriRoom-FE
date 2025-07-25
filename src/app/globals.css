@@ -1,8 +1,10 @@
 @import url('https://cdn.jsdelivr.net/gh/orioncactus/pretendard/dist/web/static/pretendard.css');
 @import "tailwindcss";
 
+@tailwind utilities;
+
 :root {
-  --background: #ffffff;
+  --background: #FEFEFE;
   --foreground: #171717;
 }
 
@@ -20,8 +22,6 @@
 @theme inline {
   --color-background: var(--background);
   --color-foreground: var(--foreground);
-  --font-sans: var(--font-geist-sans);
-  --font-mono: var(--font-geist-mono);
 }
 
 @media (prefers-color-scheme: dark) {
@@ -31,10 +31,27 @@
   }
 }
 
-body {
-  background: var(--background);
-  color: var(--foreground);
-  font-family: Arial, Helvetica, sans-serif;
+/* 기본 텍스트 색 및 폰트 변경 */
+@layer base {
+  body {
+    @apply text-neutral-900;
+    font-family: 'Pretendard', sans-serif;
+  }
+}
+
+/*mingcute 아이콘 색 오버라이딩*/
+[class^='mgc_']::before,
+[class*=' mgc_']::before {
+  color: inherit !important;
+}
+
+/* 숨기기용 유틸 클래스 */
+.scrollbar-hide {
+  -ms-overflow-style: none; /* IE/Edge */
+  scrollbar-width: none; /* Firefox */
+}
+.scrollbar-hide::-webkit-scrollbar {
+  display: none; /* Chrome, Safari, Opera */
 }
 
 /*mingcute 아이콘 색 오버라이딩*/
