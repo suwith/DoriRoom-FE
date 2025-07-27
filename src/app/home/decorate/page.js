@@ -12,7 +12,7 @@ import {
   FaStore,
 } from 'react-icons/fa';
 import { GoCircleSlash } from 'react-icons/go';
-import Item from '@/app/home/decorate/_components/Item';
+import Item from '../../_components/Item';
 import Link from 'next/link';
 import CategoryTabs from '@/app/_components/CategoryTabs';
 

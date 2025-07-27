@@ -10,8 +10,8 @@ import {
   FaBoxes,
 } from 'react-icons/fa';
 import { RiWallet3Fill } from 'react-icons/ri';
-import Item from '@/components/Item';
-import ConfirmModal from '@/components/ConfirmModal';
+import Item from '../_components/Item';
+import ConfirmModal from '@/app/shop/_components/ConfirmModal';
 import CategoryTabs from '../_components/CategoryTabs';
 
 const dummyItems = [
