@@ -12,6 +12,7 @@ import {
 import { RiWallet3Fill } from 'react-icons/ri';
 import Item from '@/components/Item';
 import ConfirmModal from '@/components/ConfirmModal';
+import CategoryTabs from '../_components/CategoryTabs';
 
 const dummyItems = [
   // 👕 의상
@@ -143,7 +144,7 @@ export default function Shop() {
             className="w-[136px] h-[152px]"
           />
         </div>
-        <div className="flex justify-end my-5 pr-3">
+        <div className="flex justify-end my-5 pr-3 text-white">
           <button
             disabled={selectedItemIdx === null}
             className={`flex gap-2 items-center justify-center rounded-xl px-4 py-2 ${selectedItemIdx === null ? 'bg-neutral-300' : 'bg-emerald-400'}`}
@@ -155,32 +156,7 @@ export default function Shop() {
         </div>
         {/* 카테고리 버튼 */}
         <div className="shrink-0 mt-5 flex gap-2 px-2 overflow-x-auto scrollbar-hide">
-          {categoryBtns.map(({ id, name, icon: Icon }) => {
-            const isActive = selectBtn === id;
-
-            return (
-              <button
-                key={id}
-                onClick={() => setSelectBtn(id)}
-                className={`shrink-0 flex gap-2 items-center justify-center rounded-t px-5 py-2 min-h-[44px] ${
-                  isActive ? 'bg-white' : 'bg-neutral-200'
-                }`}
-              >
-                <Icon
-                  className={`text-xl ${
-                    isActive ? 'text-emerald-400' : 'text-neutral-400'
-                  }`}
-                />
-                <p
-                  className={`text-sm font-medium whitespace-nowrap ${
-                    isActive ? 'text-emerald-400' : 'text-neutral-400'
-                  }`}
-                >
-                  {name}
-                </p>
-              </button>
-            );
-          })}
+          <CategoryTabs selectedId={selectBtn} onSelect={setSelectBtn} />
         </div>
 
         {/* 아이템 리스트 (스크롤 영역) */}
