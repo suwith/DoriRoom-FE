@@ -11,10 +11,8 @@ import {
   FaBoxes,
   FaStore,
 } from 'react-icons/fa';
-import { GoCircleSlash } from 'react-icons/go';
-import Item from '../../_components/Item';
 import Link from 'next/link';
-import CategoryTabs from '@/app/_components/CategoryTabs';
+import CategoryItemPanel from '@/app/_components/CategoryItemPanel';
 
 const dummyItems = [
   // 👕 의상
@@ -103,7 +101,6 @@ const dummyItems = [
 ];
 
 export default function Decorate() {
-  const [selectBtn, setSelectBtn] = useState(1);
   const [selectedItemIdx, setSelectedItemIdx] = useState(null);
 
   return (
@@ -128,31 +125,13 @@ export default function Decorate() {
             </div>
           </Link>
         </div>
-        {/* 카테고리 버튼 */}
-        <div className="shrink-0 mt-5 flex gap-2 px-2 overflow-x-auto scrollbar-hide">
-          <CategoryTabs selectedId={selectBtn} onSelect={setSelectBtn} />
-        </div>
 
-        {/* 아이템 리스트 (스크롤 영역) */}
-        <div className="overflow-y-auto bg-white px-3 pt-3 pb-[80px] grid grid-cols-3 gap-2 scrollbar-hide">
-          <Item
-            onClick={() => setSelectedItemIdx(0)}
-            isSelected={selectedItemIdx === 0}
-            icon={GoCircleSlash}
-            name="선택안함"
-          />
-          {dummyItems
-            .filter((item) => item.categoryId === selectBtn)
-            .map((item) => (
-              <Item
-                key={item.id}
-                onClick={() => setSelectedItemIdx(item.id)}
-                isSelected={selectedItemIdx === item.id}
-                icon={item.icon}
-                name={item.name}
-              />
-            ))}
-        </div>
+        <CategoryItemPanel
+          items={dummyItems}
+          selectedItemId={selectedItemIdx}
+          onItemSelect={setSelectedItemIdx}
+          isShop={false}
+        />
       </div>
     </div>
   );
