@@ -19,7 +19,7 @@ export default function HeaderBar() {
           <IconButton
             icon={<Brush className="w-5 h-5" />}
             label="꾸미기"
-            href="/decorate"
+            href="/home/decorate"
           />
           <IconButton icon={<Users className="w-5 h-5" />} label="이웃" />
           <IconButton icon={<Camera className="w-5 h-5" />} label="촬영" />

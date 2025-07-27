@@ -12,7 +12,7 @@ export default function HeaderNavigationBar({
 
   return (
     <header
-      className={`relative w-full h-[56px] flex items-center justify-center px-4 ${className}`}
+      className={`relative w-full h-[50px] flex items-center justify-center px-4 ${className}`}
     >
       {/* 중앙 타이틀 */}
       <h1 className="text-lg font-semibold text-gray-800 absolute left-1/2 transform -translate-x-1/2">
