@@ -6,7 +6,7 @@ export default function Home() {
       <HeaderBar />
 
       <div className="h-full flex justify-center items-center p-4">
-        <p className="text-gray-400">캐릭터 위치</p>
+        <p className="text-main">캐릭터 위치</p>
       </div>
     </>
   );

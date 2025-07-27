@@ -1,6 +1,7 @@
 'use client';
 
 import { Mail, Brush, Users, Camera, Leaf } from 'lucide-react';
+import Link from 'next/link';
 
 export default function HeaderBar() {
   return (
@@ -15,7 +16,11 @@ export default function HeaderBar() {
         {/* 오른쪽 기능 버튼들 */}
         <div className="flex flex-col items-center space-y-3 text-green-500 text-sm font-medium">
           <IconButton icon={<Mail className="w-5 h-5" />} label="우편함" />
-          <IconButton icon={<Brush className="w-5 h-5" />} label="꾸미기" />
+          <IconButton
+            icon={<Brush className="w-5 h-5" />}
+            label="꾸미기"
+            href="/home/decorate"
+          />
           <IconButton icon={<Users className="w-5 h-5" />} label="이웃" />
           <IconButton icon={<Camera className="w-5 h-5" />} label="촬영" />
         </div>
@@ -24,11 +29,13 @@ export default function HeaderBar() {
   );
 }
 
-function IconButton({ icon, label }) {
+function IconButton({ icon, label, href = '/' }) {
   return (
-    <div className="flex flex-col items-center space-y-1">
-      {icon}
-      <span className="text-xs">{label}</span>
-    </div>
+    <Link href={href}>
+      <div className="flex flex-col items-center space-y-1">
+        {icon}
+        <span className="text-xs">{label}</span>
+      </div>
+    </Link>
   );
 }
