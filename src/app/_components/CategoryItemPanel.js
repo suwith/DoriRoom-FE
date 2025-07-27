@@ -1,7 +1,6 @@
 'use client';
 
 import { useState } from 'react';
-import { useSwipeable } from 'react-swipeable';
 import { GoCircleSlash } from 'react-icons/go';
 import Item from './Item';
 import { FaShirt } from 'react-icons/fa6';
