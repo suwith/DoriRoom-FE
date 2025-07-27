@@ -10,7 +10,7 @@ export default function ConfirmModal({
   if (!isOpen) return null;
 
   return (
-    <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/30">
+    <div className="fixed inset-0 z-100 flex items-center justify-center bg-black/30">
       <div className="flex flex-col gap-4 bg-white rounded-lg shadow-lg w-[25%] max-w-sm px-10 py-6 animate-fade-in">
         <p className="text-center text-gray-800 text-lg font-medium">
           {message}
