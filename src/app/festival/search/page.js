@@ -71,7 +71,7 @@ export default function SearchPage() {
         </div>
       </div>
 
-      <div className="mt-6 w-full h-1 p-0 bg-neutral-100"></div>
+      <div className="mt-6 w-full h-2 p-0 bg-neutral-100"></div>
 
       {/* 카테고리 */}
       <div className="mt-6 px-4">
@@ -98,10 +98,10 @@ export default function SearchPage() {
                 </span>
                 <span className="text-xs gap-1 flex items-center">
                   {item.status === 'up' && (
-                    <i className="mgc_up_small_fill text-red-500 text-2xl" />
+                    <i className="mgc_up_small_fill text-main-100 text-2xl" />
                   )}
                   {item.status === 'down' && (
-                    <i className="mgc_down_small_fill text-blue-500 text-2xl" />
+                    <i className="mgc_down_small_fill text-sub-100 text-2xl" />
                   )}
                   {item.status === 'same' && (
                     <span className="text-neutral-400 px-2.5 py-1">–</span>
@@ -126,10 +126,10 @@ export default function SearchPage() {
                 </span>
                 <span className="text-xs gap-1 flex items-center">
                   {item.status === 'up' && (
-                    <i className="mgc_up_small_fill text-red-500 text-2xl" />
+                    <i className="mgc_up_small_fill text-main-100 text-2xl" />
                   )}
                   {item.status === 'down' && (
-                    <i className="mgc_down_small_fill text-blue-500 text-2xl" />
+                    <i className="mgc_down_small_fill text-sub-100 text-2xl" />
                   )}
                   {item.status === 'same' && (
                     <span className="text-neutral-400 px-2.5 py-1">–</span>
