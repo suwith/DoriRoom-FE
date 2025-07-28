@@ -73,6 +73,7 @@ export default function FestivalSearchResultPage() {
             festival={festival}
             liked={likedIds.includes(festival.id)}
             onLike={() => toggleLike(festival.id)}
+            onClick={() => router.push(`/festival/${festival.id}`)}
           />
         ))}
       </div>
