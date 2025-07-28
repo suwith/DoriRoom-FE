@@ -5,7 +5,6 @@ import { GoHeart, GoHeartFill } from 'react-icons/go';
 import Icon from '@mdi/react';
 import { mdiTree } from '@mdi/js';
 import 'mingcute_icon/font/Mingcute.css';
-import { PencilSolid } from 'flowbite-react-icons';
 import clsx from 'clsx';
 import BackButton from '@/app/_components/BackButton';
 import { MdEditSquare } from 'react-icons/md';
