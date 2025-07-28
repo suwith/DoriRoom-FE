@@ -1,13 +1,14 @@
 'use client';
 
 import { useState } from 'react';
+import KoreaMap from './_components/KoreaMap';
 
 export default function Collection() {
   const [activeTab, setActiveTab] = useState(1);
 
   return (
-    <div className="pb-24 max-w-[390px] mx-auto">
-      <div className="flex justify-around border-b border-neutral-200 mt-[60px]">
+    <div className="max-w-[390px] mx-auto h-screen">
+      <div className="flex justify-around border-b border-neutral-200 h-[86px]">
         <div
           className={`flex flex-col items-center justify-end cursor-pointer px-4 text-base ${
             activeTab === 1
@@ -34,6 +35,10 @@ export default function Collection() {
             className={`transition-all duration-500 ease-out ${activeTab === 2 ? 'w-[80%]' : 'w-[0px]'}`}
           />
         </div>
+      </div>
+
+      <div className="flex items-center justify-center h-[calc(100vh-86px)] bg-linear-to-t from-[#AFDDF1] to-white">
+        <KoreaMap />
       </div>
     </div>
   );
