@@ -5,6 +5,7 @@ import KoreaMap from './_components/KoreaMap';
 
 export default function Collection() {
   const [activeTab, setActiveTab] = useState(1);
+  const [clickResion, setClickResion] = useState('');
 
   return (
     <div className="max-w-[390px] mx-auto h-screen">
@@ -37,8 +38,8 @@ export default function Collection() {
         </div>
       </div>
 
-      <div className="flex items-center justify-center h-[calc(100vh-86px)] bg-linear-to-t from-[#AFDDF1] to-white">
-        <KoreaMap />
+      <div className="flex items-center justify-center h-[calc(100vh-86px)] bg-linear-to-t from-[#AFDDF1] to-white overflow-hidden">
+        <KoreaMap onClickRegion={setClickResion} />
       </div>
     </div>
   );
