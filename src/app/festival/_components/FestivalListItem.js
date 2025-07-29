@@ -3,7 +3,12 @@
 import { GoHeart, GoHeartFill } from 'react-icons/go';
 import { FaCommentAlt } from 'react-icons/fa';
 
-export default function FestivalListItem({ festival, liked, onLike }) {
+export default function FestivalListItem({
+  festival,
+  liked = false,
+  onLike = () => {},
+  hideLikeButton = false,
+}) {
   return (
     <div className="bg-white">
       <div className="flex gap-3">
@@ -13,14 +18,17 @@ export default function FestivalListItem({ festival, liked, onLike }) {
             alt={festival.title}
             className="w-full h-full object-cover"
           />
-          <button onClick={onLike} className="absolute top-1 left-1 z-10">
-            {liked ? (
-              <GoHeartFill className="text-main-100 w-4 h-4 drop-shadow" />
-            ) : (
-              <GoHeart className="text-white w-4 h-4 drop-shadow" />
-            )}
-          </button>
+          {!hideLikeButton && (
+            <button onClick={onLike} className="absolute top-1 left-1 z-10">
+              {liked ? (
+                <GoHeartFill className="text-main-100 w-4 h-4 drop-shadow" />
+              ) : (
+                <GoHeart className="text-white w-4 h-4 drop-shadow" />
+              )}
+            </button>
+          )}
         </div>
+
         <div className="flex flex-col justify-between flex-1 pr-1">
           <div>
             <div className="flex flex-wrap gap-1 mb-1 text-[11px]">
@@ -30,9 +38,11 @@ export default function FestivalListItem({ festival, liked, onLike }) {
               <span className="text-main-100 bg-main-5 px-1 rounded-full">
                 {festival.category}
               </span>
-              <span className="text-main-100 bg-main-5 px-1 rounded-full">
-                후기 {festival.reviews.length}개
-              </span>
+              {festival.reviews.length > 0 && (
+                <span className="text-main-100 bg-main-5 px-1 rounded-full">
+                  후기 {festival.reviews.length}개
+                </span>
+              )}
               <span className="text-main-100 bg-main-5 px-1 rounded-full">
                 {festival.price === 0 ? '무료' : '유료'}
               </span>
