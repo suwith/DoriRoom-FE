@@ -112,8 +112,10 @@ export default function Shop() {
     if (credit >= selectedItem.price) {
       // 구매 요청 API 호출
       alert('구매가 완료되었습니다.');
+      setIsOpenBuyModal(false);
     } else {
       alert('크레딧이 부족합니다.');
+      setIsOpenBuyModal(false);
     }
   }
 
