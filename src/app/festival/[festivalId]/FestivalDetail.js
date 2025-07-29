@@ -232,7 +232,7 @@ export default function FestivalDetail({ festival }) {
                   </p>
                   {review.content.length > 70 && (
                     <button
-                      className="mt-1 text-xs text-neutral-400 underline"
+                      className="mt-1 text-xs text-neutral-400"
                       onClick={() => toggleReviewExpand(review.id)}
                     >
                       {expandedReviews.includes(review.id)

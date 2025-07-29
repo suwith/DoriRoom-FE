@@ -28,7 +28,7 @@ export const mockFestivals = [
       },
       {
         id: 2,
-        nickname: '튀김소보로',
+        nickname: '튀김소보로2',
         date: '2025.06.27',
         content:
           '너무 덥지 않을 때 가서 좋았다! 바닷바람을 바라보며 맥주 한 캔을 마시니 정말 여유로웠다 🍺',
