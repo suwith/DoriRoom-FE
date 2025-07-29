@@ -1,5 +1,5 @@
 import { mockFestivals } from '../mockData';
-import FestivalDetail from './FestivalDetail';
+import FestivalDetail from '../_components/FestivalDetail';
 
 export function generateStaticParams() {
   return mockFestivals.map((festival) => ({
