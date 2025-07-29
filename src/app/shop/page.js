@@ -103,8 +103,18 @@ export default function Shop() {
   const [selectedItemIdx, setSelectedItemIdx] = useState(null);
   const [isOpenBuyModal, setIsOpenBuyModal] = useState(false);
 
+  // 유저가 가지고 있는 크레딧
+  const credit = 222000;
+
+  const selectedItem = dummyItems.find((item) => item.id === selectedItemIdx);
   function handleConfirm() {
-    console.log('구매 API 호출');
+    // 현재 이 유저가 가지고 있는 크레딧 조회
+    if (credit >= selectedItem.price) {
+      // 구매 요청 API 호출
+      alert('구매가 완료되었습니다.');
+    } else {
+      alert('크레딧이 부족합니다.');
+    }
   }
 
   return (
@@ -151,8 +161,10 @@ export default function Shop() {
         <ConfirmModal
           isOpen={isOpenBuyModal}
           onConfirm={handleConfirm}
-          message={'8 도깨비불로 장미 머리띠를 구매하시겠습니까?'}
           setIsOpen={setIsOpenBuyModal}
+          credit={credit}
+          price={selectedItem.price}
+          name={selectedItem.name}
         />
       )}
     </div>

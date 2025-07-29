@@ -5,7 +5,9 @@ export default function ConfirmModal({
   isOpen,
   onConfirm,
   setIsOpen,
-  message,
+  credit,
+  price,
+  name,
 }) {
   if (!isOpen) return null;
 
@@ -13,10 +15,10 @@ export default function ConfirmModal({
     <div className="fixed inset-0 z-100 flex items-center justify-center bg-black/30">
       <div className="flex flex-col gap-4 bg-white rounded-lg shadow-lg w-[25%] max-w-sm px-10 py-6 animate-fade-in">
         <p className="text-center text-gray-800 text-lg font-medium">
-          {message}
+          {price} 도깨비불로 {name}을(를) 구매하시겠습니까?
         </p>
         <p className="text-center text-neutral-500 font-regular text-[14px]">
-          남은 잎사귀 7개
+          남은 잎사귀 {credit}개
         </p>
         <div className="flex justify-between gap-3">
           <button
