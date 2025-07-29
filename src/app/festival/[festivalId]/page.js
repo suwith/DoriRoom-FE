@@ -7,9 +7,9 @@ export function generateStaticParams() {
   }));
 }
 
-export default function Page({ params }) {
-  const festivalId = Number(params.festivalId);
-  const festival = mockFestivals.find((f) => f.id === festivalId);
+export default async function Page({ params }) {
+  const { festivalId } = await params;
+  const festival = mockFestivals.find((f) => f.id === Number(festivalId));
 
   if (!festival) return <div>존재하지 않는 축제입니다.</div>;
 
