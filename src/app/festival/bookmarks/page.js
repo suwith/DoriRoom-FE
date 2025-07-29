@@ -92,20 +92,20 @@ export default function BookmarkPage() {
       )}
 
       {bookmarks.length > 0 && (
-        <div className="space-y-4 px-4 pt-3">
+        <div className="space-y-3">
           {bookmarks.map((festival) => {
             const isSelected = selectedIds.includes(festival.id);
 
             return (
               <div
                 key={festival.id}
-                className={` relative rounded-md ${isSelected && editMode ? 'bg-sub-15' : ''} `}
+                className={` relative rounded-md ${isSelected && editMode ? 'bg-sub-5' : ''}  `}
               >
                 <FestivalListItem festival={festival} hideLikeButton={true} />
                 {editMode && (
                   <button
                     onClick={() => toggleSelect(festival.id)}
-                    className="absolute right-2 -top-1 text-xl z-10"
+                    className="absolute right-4 top-1.5 text-xl z-10"
                   >
                     <i
                       className={`${
@@ -136,28 +136,30 @@ export default function BookmarkPage() {
 
       {/* 삭제 모달 */}
       {showDeleteModal && (
-        <div className="fixed inset-0 bg-black/30 z-50 flex items-center justify-center">
-          <div className="bg-white w-[75%] max-w-[390px] rounded-xl p-4 text-center shadow-lg">
-            <p className="text-base font-semibold mt-3">
-              즐겨찾기를 삭제하시겠어요?
-            </p>
-            <p className="text-base font-semibold">
-              삭제된 즐겨찾기는 복구가 불가능해요!
-            </p>
-            <div className="flex gap-3 mt-8">
-              <button
-                onClick={() => setShowDeleteModal(false)}
-                className="flex-1 py-2.5 bg-main-5 text-main-100 font-semibold rounded-md shadow-[0_0_3px_rgba(0,0,0,0.1)]"
-              >
-                취소할래요
-              </button>
+        <div className="fixed inset-0 z-50 flex justify-center">
+          <div className="w-full max-w-[390px] bg-black/30 px-4 flex items-center justify-center">
+            <div className="bg-white w-full rounded-xl p-4 text-center shadow-lg">
+              <p className="text-base font-semibold mt-3">
+                즐겨찾기를 삭제하시겠어요?
+              </p>
+              <p className="text-base font-semibold">
+                삭제된 즐겨찾기는 복구가 불가능해요!
+              </p>
+              <div className="flex gap-3 mt-8">
+                <button
+                  onClick={() => setShowDeleteModal(false)}
+                  className="flex-1 py-2.5 bg-main-5 text-main-100 font-semibold rounded-md shadow-[0_0_3px_rgba(0,0,0,0.1)]"
+                >
+                  취소할래요
+                </button>
 
-              <button
-                onClick={handleDelete}
-                className="flex-1 py-2.5 bg-main-100 text-background font-semibold rounded-md"
-              >
-                삭제할래요
-              </button>
+                <button
+                  onClick={handleDelete}
+                  className="flex-1 py-2.5 bg-main-100 text-background font-semibold rounded-md"
+                >
+                  삭제할래요
+                </button>
+              </div>
             </div>
           </div>
         </div>
