@@ -6,7 +6,7 @@ import { FaCommentAlt } from 'react-icons/fa';
 export default function FestivalListItem({
   festival,
   liked = false,
-  onLike = () => {},
+  onLike = null,
   hideLikeButton = false,
 }) {
   return (
