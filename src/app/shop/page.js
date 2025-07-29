@@ -121,13 +121,13 @@ export default function Shop() {
     <div className="flex justify-center h-screen pt-[30px]">
       <div className="flex flex-col max-w-[390px] mx-auto">
         {/* 상단 고정: 보유 포인트 (왼쪽 정렬) */}
-        <div className="sticky top-0 z-10 pt-4 pb-2 pl-3">
+        <div className="sticky flex top-0 z-10 pt-4 pb-2 pl-3">
           <div
-            className="flex justify-center items-center max-w-[70px] gap-2 py-1 rounded-lg"
+            className="flex justify-center items-center gap-2 py-1 rounded-lg w-auto px-1"
             style={{ boxShadow: '0 0 10px rgba(0,0,0,0.1)' }}
           >
             <FaFire className="ml-1 trnsform scale-x-[-1] text-emerald-400 w-5 h-5" />
-            <span className="font-bold text-emerald-400 text-lg">70</span>
+            <p className="font-bold text-emerald-400 text-lg">{credit}</p>
           </div>
         </div>
 
