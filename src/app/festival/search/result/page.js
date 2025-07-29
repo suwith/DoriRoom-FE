@@ -87,13 +87,17 @@ export default function FestivalSearchResultPage() {
           </div>
         ) : (
           filteredFestivals.map((festival) => (
-            <FestivalListItem
+            <div
               key={festival.id}
-              festival={festival}
-              liked={likedIds.includes(festival.id)}
-              onLike={() => toggleLike(festival.id)}
               onClick={() => router.push(`/festival/${festival.id}`)}
-            />
+            >
+              <FestivalListItem
+                key={festival.id}
+                festival={festival}
+                liked={likedIds.includes(festival.id)}
+                onLike={() => toggleLike(festival.id)}
+              />
+            </div>
           ))
         )}
       </div>
