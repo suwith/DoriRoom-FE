@@ -8,6 +8,7 @@ import 'mingcute_icon/font/Mingcute.css';
 import clsx from 'clsx';
 import BackButton from '@/app/_components/BackButton';
 import { MdEditSquare } from 'react-icons/md';
+import ReviewItem from '@/app/festival/_components/ReviewItem';
 
 export default function FestivalDetail({ festival }) {
   const [activeTab, setActiveTab] = useState('설명');
@@ -185,92 +186,12 @@ export default function FestivalDetail({ festival }) {
           )}
 
           {sortedReviews.map((review) => (
-            <div key={review.id} className="overflow-hidden">
-              <div className="flex items-center justify-between mb-1 py-2">
-                <div className="flex items-center gap-2">
-                  {review.profileImage ? (
-                    <img
-                      src={review.profileImage}
-                      alt="profile"
-                      className="w-8 h-8 rounded-full object-cover"
-                    />
-                  ) : (
-                    <div className="w-8 h-8 rounded-full bg-neutral-100" />
-                  )}
-                  <div className="text-sm font-semibold text-neutral-800">
-                    {review.nickname}
-                  </div>
-                </div>
-                <div className="flex items-center gap-2">
-                  <button className="text-[11px] px-3 py-0.5 bg-main-5 text-main-100 rounded">
-                    방문
-                  </button>
-                  <button className="text-[11px] px-2 py-0.5 bg-main-5 text-main-100 rounded">
-                    팔로우
-                  </button>
-                </div>
-              </div>
-
-              <div className="flex overflow-x-scroll gap-2 scrollbar-hide">
-                {review.images?.map((src, idx) => (
-                  <img
-                    key={idx}
-                    src={src}
-                    alt={`review-${idx}`}
-                    className="w-[110px] h-[110px] object-cover rounded-lg"
-                  />
-                ))}
-              </div>
-
-              <div className="py-2">
-                <div className="text-sm text-neutral-700 mt-1">
-                  <p>
-                    {expandedReviews.includes(review.id) ||
-                    review.content.length <= 70
-                      ? review.content
-                      : `${review.content.slice(0, 70)}...`}
-                  </p>
-                  {review.content.length > 70 && (
-                    <button
-                      className="mt-1 text-xs text-neutral-400"
-                      onClick={() => toggleReviewExpand(review.id)}
-                    >
-                      {expandedReviews.includes(review.id)
-                        ? '간략히'
-                        : '더보기'}
-                    </button>
-                  )}
-                </div>
-                <div className="flex items-center mt-2 gap-2">
-                  <div className="text-xs text-neutral-400 ">
-                    {review.date} •
-                  </div>
-                  <div className="flex items-center gap-1 text-main-100 text-xs">
-                    <button onClick={() => toggleReviewLike(review.id)}>
-                      {likedReviews.includes(review.id) ? (
-                        <i className="mgc_emoji_2_line text-lg text-main-100" />
-                      ) : (
-                        <i className="mgc_emoji_2_line text-lg text-neutral-400" />
-                      )}
-                    </button>
-                    <span
-                      className={`text-[11px] ${
-                        likedReviews.includes(review.id)
-                          ? 'text-main-100'
-                          : 'text-neutral-400'
-                      }`}
-                    >
-                      {review.likes +
-                        (likedReviews.includes(review.id) ? 1 : 0) ===
-                      0
-                        ? '좋아요'
-                        : review.likes +
-                          (likedReviews.includes(review.id) ? 1 : 0)}
-                    </span>
-                  </div>
-                </div>
-              </div>
-            </div>
+            <ReviewItem
+              key={review.id}
+              review={review}
+              isLiked={likedReviews.includes(review.id)}
+              onLike={toggleReviewLike}
+            />
           ))}
 
           <button className="fixed bottom-20 left-1/2 -translate-x-1/2 w-[350px] py-2 bg-main-100 text-white rounded-lg text-sm font-medium shadow-md">
