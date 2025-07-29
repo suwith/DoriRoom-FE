@@ -42,7 +42,7 @@ export default function BookmarkPage() {
   };
 
   return (
-    <div className="max-w-[390px] mx-auto min-h-screen bg-white pb-28">
+    <div className="max-w-[390px] mx-auto h-screen bg-white pb-28">
       {/* 상단 헤더 */}
       <div className="relative w-full h-[60px] flex items-center justify-center px-4 ">
         {editMode ? (
@@ -68,55 +68,65 @@ export default function BookmarkPage() {
         )}
       </div>
 
-      {bookmarks.length === 0 && (
-        <div className="flex flex-col items-center justify-center mt-32 text-center px-8 gap-4">
-          <i className="mgc_emotion_unhappy_line text-6xl text-main-100" />
-          <div className="text-base font-semibold">
-            앗, 저장된 축제가 없어요!
-          </div>
-          <p className="text-sm text-neutral-500">
-            방문하고 싶으신 축제를 저장해 주세요 🥲
-          </p>
-          <button
-            onClick={() => router.push('/festival')}
-            className="mt-4 px-6 py-2 rounded-md bg-main-5 text-main-100 text-sm font-medium"
+      <div className="space-y-4 h-full">
+        {bookmarks.length === 0 && (
+          <div
+            className="flex flex-col h-full items-center justify-center gap-3"
+            style={{ height: 'calc(100% - 80px)' }}
           >
-            축제 메인으로 돌아가기
-          </button>
-        </div>
-      )}
+            <i className="mgc_sweats_fill text-6xl text-main-100" />
+            <p className="text-center text-lg font-semibold">
+              앗, 저장된 축제가 없어요!
+            </p>
+            <p className="text-center text-sm text-neutral-500">
+              방문하고 싶으신 축제를 저장해 주세요 ☺️
+            </p>
+            <button
+              onClick={() => router.push('/festival')}
+              className="mt-4 px-6 py-2 rounded-md bg-main-5 text-main-100 text-xl font-medium "
+            >
+              축제 메인으로 돌아가기
+            </button>
+          </div>
+        )}
+      </div>
 
       {bookmarks.length > 0 && (
         <div className="space-y-4 px-4 pt-3">
-          {bookmarks.map((festival) => (
-            <div
-              key={festival.id}
-              className="relative"
-              onClick={() => {
-                if (!editMode) router.push(`/festival/${festival.id}`);
-              }}
-            >
-              <FestivalListItem festival={festival} hideLikeButton={true} />
-              {editMode && (
-                <button
-                  onClick={() => toggleSelect(festival.id)}
-                  className="absolute right-2 top-2 w-5 h-5 rounded-full border-2 border-main-100 bg-white flex items-center justify-center"
-                >
-                  {selectedIds.includes(festival.id) && (
-                    <div className="w-3 h-3 rounded-full bg-main-100" />
-                  )}
-                </button>
-              )}
-            </div>
-          ))}
+          {bookmarks.map((festival) => {
+            const isSelected = selectedIds.includes(festival.id);
+
+            return (
+              <div
+                key={festival.id}
+                className={` relative rounded-md ${isSelected && editMode ? 'bg-sub-15' : ''} `}
+              >
+                <FestivalListItem festival={festival} hideLikeButton={true} />
+                {editMode && (
+                  <button
+                    onClick={() => toggleSelect(festival.id)}
+                    className="absolute right-2 -top-1 text-xl z-10"
+                  >
+                    <i
+                      className={`${
+                        isSelected
+                          ? 'mgc_check_circle_fill text-sub-100'
+                          : 'mgc_check_circle_line text-neutral-300'
+                      }`}
+                    />
+                  </button>
+                )}
+              </div>
+            );
+          })}
         </div>
       )}
 
       {/* 하단 삭제 버튼 */}
-      {editMode && (
+      {selectedIds.length > 0 && (
         <button
           onClick={() => setShowDeleteModal(true)}
-          className="fixed bottom-20 left-1/2 -translate-x-1/2 w-[350px] py-2 bg-main-100 text-white rounded-lg text-sm font-medium shadow-md"
+          className="fixed bottom-20 left-1/2 -translate-x-1/2 w-[350px] py-2 bg-main-100 text-background text-lg rounded-lg font-medium shadow-md"
         >
           {selectedIds.length > 0
             ? `${selectedIds.length}개 삭제하기`
@@ -127,21 +137,24 @@ export default function BookmarkPage() {
       {/* 삭제 모달 */}
       {showDeleteModal && (
         <div className="fixed inset-0 bg-black/30 z-50 flex items-center justify-center">
-          <div className="bg-white w-[80%] rounded-xl p-6 text-center space-y-4">
-            <p className="text-base font-medium">즐겨찾기를 삭제하시겠어요?</p>
-            <p className="text-sm text-neutral-500">
+          <div className="bg-white w-[75%] max-w-[390px] rounded-xl p-4 text-center shadow-lg">
+            <p className="text-base font-semibold mt-3">
+              즐겨찾기를 삭제하시겠어요?
+            </p>
+            <p className="text-base font-semibold">
               삭제된 즐겨찾기는 복구가 불가능해요!
             </p>
-            <div className="flex gap-3 mt-4">
+            <div className="flex gap-3 mt-8">
               <button
                 onClick={() => setShowDeleteModal(false)}
-                className="flex-1 py-2 border border-main-100 rounded-md text-main-100"
+                className="flex-1 py-2.5 bg-main-5 text-main-100 font-semibold rounded-md shadow-[0_0_3px_rgba(0,0,0,0.1)]"
               >
                 취소할래요
               </button>
+
               <button
                 onClick={handleDelete}
-                className="flex-1 py-2 bg-main-100 text-white rounded-md"
+                className="flex-1 py-2.5 bg-main-100 text-background font-semibold rounded-md"
               >
                 삭제할래요
               </button>
