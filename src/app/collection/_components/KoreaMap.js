@@ -6,6 +6,7 @@ import GaugeBar from './GaugeBar';
 export default function UnifiedKoreaMap() {
   const [clickResion, setClickResion] = useState('Test');
   const [bottomSheetOpen, setBottomSheetOpen] = useState(false);
+  const [isVisible, setIsVisible] = useState(false);
   const [viewBox, setViewBox] = useState('0 0 400 700');
 
   const animRef = useRef();
@@ -39,7 +40,8 @@ export default function UnifiedKoreaMap() {
   const clickHandler = (resion, to) => {
     setClickResion(resion);
     animateViewBox(viewBox, to);
-    setBottomSheetOpen(true);
+    setIsVisible(true);
+    setTimeout(() => setBottomSheetOpen(true), 10);
   };
 
   return (
@@ -211,8 +213,10 @@ export default function UnifiedKoreaMap() {
           <NameCircle name={'제주도'} color={'#FB923C'} />
         </g>
       </svg>
-      {bottomSheetOpen && (
-        <div className="fixed bottom-0 w-full max-w-[390px] mx-auto pb-5 z-100 bg-white rounded-t-xl px-3 pt-4">
+      {isVisible && (
+        <div
+          className={`fixed bottom-0 w-full max-w-[390px] mx-auto pb-5 z-100 bg-white rounded-t-xl px-3 pt-4 transition-transform duration-300 ease-in-out ${bottomSheetOpen ? 'translate-y-0' : 'translate-y-full'}`}
+        >
           <div className="flex items-center justify-between">
             <span className="font-semibold">{clickResion}</span>
             <div className="bg-main-5 rounded-full p-1">
@@ -222,6 +226,7 @@ export default function UnifiedKoreaMap() {
                 onClick={() => {
                   setBottomSheetOpen(false);
                   animateViewBox(viewBox, '0 0 400 700');
+                  setTimeout(() => setIsVisible(false), 300);
                 }}
               />
             </div>
