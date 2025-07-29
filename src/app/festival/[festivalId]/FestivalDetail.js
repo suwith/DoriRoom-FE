@@ -169,7 +169,7 @@ export default function FestivalDetail({ festival }) {
             <select
               value={reviewSort}
               onChange={(e) => setReviewSort(e.target.value)}
-              className="text-xs px-2 py-1 bg-white border border-neutral-300 rounded focus:outline-none"
+              className="text-sm px-2 py-1 text-right text-neutral-500 focus:outline-none"
             >
               <option value="latest">최신순</option>
               <option value="likes">좋아요순</option>
