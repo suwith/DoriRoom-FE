@@ -68,8 +68,8 @@ export default function BookmarkPage() {
         )}
       </div>
 
-      <div className="space-y-4 h-full">
-        {bookmarks.length === 0 && (
+      {bookmarks.length === 0 && (
+        <div className="space-y-4 h-full">
           <div
             className="flex flex-col h-full items-center justify-center gap-3"
             style={{ height: 'calc(100% - 80px)' }}
@@ -87,9 +87,9 @@ export default function BookmarkPage() {
             >
               축제 메인으로 돌아가기
             </button>
-          </div>
-        )}
-      </div>
+          </div>{' '}
+        </div>
+      )}
 
       {bookmarks.length > 0 && (
         <div className="space-y-4 px-4 pt-3">
