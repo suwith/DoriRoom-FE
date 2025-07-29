@@ -11,9 +11,8 @@ import {
   FaBoxes,
   FaStore,
 } from 'react-icons/fa';
-import { GoCircleSlash } from 'react-icons/go';
-import Item from '@/app/home/decorate/_components/Item';
 import Link from 'next/link';
+import CategoryItemPanel from '@/app/_components/CategoryItemPanel';
 
 const dummyItems = [
   // 👕 의상
@@ -102,20 +101,10 @@ const dummyItems = [
 ];
 
 export default function Decorate() {
-  const [selectBtn, setSelectBtn] = useState(1);
   const [selectedItemIdx, setSelectedItemIdx] = useState(null);
 
-  const categoryBtns = [
-    { id: 1, name: '의상', icon: FaShirt },
-    { id: 2, name: '선반', icon: FaBoxes },
-    { id: 3, name: '시계', icon: FaClock },
-    { id: 4, name: '창문', icon: FaWindowMaximize },
-    { id: 5, name: '모자', icon: FaHatCowboy },
-    { id: 6, name: '신발', icon: FaShoePrints },
-  ];
-
   return (
-    <div className="flex justify-center h-screen">
+    <div className="flex justify-center h-screen bg-neutral-100">
       <div className="bg-white shadow-md fixed top-0 z-50 w-full max-w-[390px] pt-[50px]">
         <HeaderNavigationBar title="꾸미기" />
       </div>
@@ -136,48 +125,13 @@ export default function Decorate() {
             </div>
           </Link>
         </div>
-        {/* 카테고리 버튼 */}
-        <div className="shrink-0 mt-5 flex gap-2 px-2 overflow-x-auto scrollbar-hide">
-          {categoryBtns.map(({ id, name, icon: Icon }) => {
-            const isActive = selectBtn === id;
 
-            return (
-              <button
-                key={id}
-                onClick={() => setSelectBtn(id)}
-                className={`shrink-0 flex gap-2 items-center justify-center rounded-t-lg px-5 py-1.5 min-h-[35px] ${
-                  isActive
-                    ? 'bg-white text-main-100'
-                    : 'bg-neutral-200 text-neutral-400'
-                }`}
-              >
-                <Icon className="text-xl" />
-                <p className="text-sm font-medium whitespace-nowrap">{name}</p>
-              </button>
-            );
-          })}
-        </div>
-
-        {/* 아이템 리스트 (스크롤 영역) */}
-        <div className="overflow-y-auto bg-white px-3 pt-3 pb-[80px] grid grid-cols-3 gap-2 scrollbar-hide">
-          <Item
-            onClick={() => setSelectedItemIdx(0)}
-            isSelected={selectedItemIdx === 0}
-            icon={GoCircleSlash}
-            name="선택안함"
-          />
-          {dummyItems
-            .filter((item) => item.categoryId === selectBtn)
-            .map((item) => (
-              <Item
-                key={item.id}
-                onClick={() => setSelectedItemIdx(item.id)}
-                isSelected={selectedItemIdx === item.id}
-                icon={item.icon}
-                name={item.name}
-              />
-            ))}
-        </div>
+        <CategoryItemPanel
+          items={dummyItems}
+          selectedItemId={selectedItemIdx}
+          onItemSelect={setSelectedItemIdx}
+          isShop={false}
+        />
       </div>
     </div>
   );

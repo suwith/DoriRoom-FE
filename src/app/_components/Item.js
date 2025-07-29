@@ -25,7 +25,7 @@ export default function Item({
       </div>
       {price && (
         <div className="flex items-center justify-center gap-2 rounded-md w-[110px] h-[20px] ring-1 ring-neutral-300/50 text-main-100">
-          <FaLeaf className="" />
+          <FaLeaf />
           <p className="text-center font-bold text-[13px]">{price}</p>
         </div>
       )}
