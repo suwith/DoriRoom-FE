@@ -16,17 +16,10 @@ export default function FestivalDetail({ festival }) {
   const [likeCount, setLikeCount] = useState(festival.likes || 0);
   const [likedReviews, setLikedReviews] = useState([]);
   const [reviewSort, setReviewSort] = useState('latest');
-  const [expandedReviews, setExpandedReviews] = useState([]);
 
   const handleLike = () => {
     setLiked((prev) => !prev);
     setLikeCount((prev) => (liked ? prev - 1 : prev + 1));
-  };
-
-  const toggleReviewExpand = (id) => {
-    setExpandedReviews((prev) =>
-      prev.includes(id) ? prev.filter((r) => r !== id) : [...prev, id]
-    );
   };
 
   const toggleReviewLike = (reviewId) => {
@@ -51,8 +44,8 @@ export default function FestivalDetail({ festival }) {
           alt={festival.title}
           className="w-full h-[370px] object-cover"
         />
-        <div className="absolute top-2 left-2 text-white">
-          <BackButton />
+        <div className="absolute top-10 left-3">
+          <BackButton color={'text-background'} isShadow={true} />
         </div>
         <div className="absolute bottom-8 left-1/2 -translate-x-1/2 text-main-100 text-[12px] bg-white px-4 py-1.5 rounded-full flex items-center gap-1 whitespace-nowrap">
           <i className="mgc_user_follow_fill text-lg text-main-100 mr-1" />
