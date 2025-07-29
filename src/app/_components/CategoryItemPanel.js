@@ -29,9 +29,9 @@ export default function CategoryItemPanel({
   ];
 
   return (
-    <div className="flex flex-col overflow-y-auto px-3">
+    <div className="flex flex-col overflow-y-auto">
       {/* 탭 영역 */}
-      <div className="shrink-0 mt-5 flex gap-2 overflow-x-auto scrollbar-hide">
+      <div className="shrink-0 mt-5 flex gap-2 overflow-x-auto scrollbar-hide px-3">
         {categoryBtns.map(({ id, name, icon: Icon }) => {
           const isActive = id === selectedCategoryId;
           return (
@@ -60,7 +60,7 @@ export default function CategoryItemPanel({
       </div>
 
       {/* 아이템 리스트 */}
-      <div className="overflow-y-auto bg-white pt-3 pb-[80px] grid grid-cols-3 gap-2 scrollbar-hide">
+      <div className="overflow-y-auto bg-white px-3 pt-3 pb-[80px] grid grid-cols-3 gap-2 scrollbar-hide">
         {/* 선택 안 함 */}
         {!isShop && (
           <Item

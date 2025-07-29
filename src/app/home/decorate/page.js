@@ -104,7 +104,7 @@ export default function Decorate() {
   const [selectedItemIdx, setSelectedItemIdx] = useState(null);
 
   return (
-    <div className="flex justify-center h-screen">
+    <div className="flex justify-center h-screen bg-neutral-100">
       <div className="bg-white shadow-md fixed top-0 z-50 w-full max-w-[390px] pt-[50px]">
         <HeaderNavigationBar title="꾸미기" />
       </div>

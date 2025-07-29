@@ -120,7 +120,7 @@ export default function Shop() {
   }
 
   return (
-    <div className="flex justify-center h-screen pt-[30px]">
+    <div className="flex justify-center h-screen pt-[30px] bg-neutral-100">
       <div className="flex flex-col max-w-[390px] mx-auto">
         {/* 상단 고정: 보유 포인트 (왼쪽 정렬) */}
         <div className="sticky flex top-0 z-10 pt-4 pb-2 pl-3">
