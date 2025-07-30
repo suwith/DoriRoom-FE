@@ -31,7 +31,7 @@ export default function FestivalListItem({ festival, liked, onLike }) {
                 {festival.category}
               </span>
               <span className="text-main-100 bg-main-5 px-1 rounded-full">
-                후기 {festival.reviews}개
+                후기 {festival.reviews.length}개
               </span>
               <span className="text-main-100 bg-main-5 px-1 rounded-full">
                 {festival.price === 0 ? '무료' : '유료'}
@@ -57,7 +57,7 @@ export default function FestivalListItem({ festival, liked, onLike }) {
               </div>
               <div className="flex items-center gap-1 text-main-100">
                 <FaCommentAlt className="w-3.5 h-3.5" />
-                <span>{festival.reviews}</span>
+                <span>{festival.reviews.length}</span>
               </div>
             </div>
           </div>

@@ -1,6 +1,6 @@
 'use client';
 
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { useRouter } from 'next/navigation';
 import RegionFilter from '../_components/RegionFilter';
 import 'mingcute_icon/font/Mingcute.css';
@@ -9,12 +9,25 @@ import SearchInputBar from '@/app/festival/_components/SearchInputBar';
 export default function SearchPage() {
   const router = useRouter();
   const [input, setInput] = useState('');
-  const [recentSearches, setRecentSearches] = useState([
-    '바다',
-    '산',
-    '맥주',
-    '파티',
-  ]);
+  const [recentSearches, setRecentSearches] = useState([]);
+
+  useEffect(() => {
+    const stored = localStorage.getItem('recentSearches');
+    if (stored) {
+      setRecentSearches(JSON.parse(stored));
+    }
+  }, []);
+
+  const saveRecentSearch = (keyword) => {
+    setRecentSearches((prev) => {
+      const updated = [keyword, ...prev.filter((t) => t !== keyword)].slice(
+        0,
+        8
+      );
+      localStorage.setItem('recentSearches', JSON.stringify(updated));
+      return updated;
+    });
+  };
 
   const trending = [
     { keyword: '바다', status: 'up' },
@@ -28,7 +41,11 @@ export default function SearchPage() {
   ];
 
   const removeTag = (tag) => {
-    setRecentSearches((prev) => prev.filter((t) => t !== tag));
+    setRecentSearches((prev) => {
+      const updated = prev.filter((t) => t !== tag);
+      localStorage.setItem('recentSearches', JSON.stringify(updated));
+      return updated;
+    });
   };
 
   return (
@@ -39,11 +56,12 @@ export default function SearchPage() {
         <SearchInputBar
           value={input}
           onChange={(e) => setInput(e.target.value)}
-          onEnter={(text) =>
+          onEnter={(text) => {
             router.push(
               `/festival/search/result?query=${encodeURIComponent(text)}`
-            )
-          }
+            );
+            saveRecentSearch(text);
+          }}
           onClear={() => setInput('')}
           withBack
           autoFocus
@@ -55,23 +73,32 @@ export default function SearchPage() {
         <h3 className="text-sm mb-3 font-semibold">최근 검색어</h3>
         <div className="flex gap-2 flex-wrap">
           {recentSearches.map((tag) => (
-            <div
+            <button
               key={tag}
-              className="bg-transparent text-xs px-2 py-1 rounded-full border border-neutral-200  text-neutral-900 flex items-center gap-1"
+              onClick={() => {
+                saveRecentSearch(tag);
+                router.push(
+                  `/festival/search/result?query=${encodeURIComponent(tag)}`
+                );
+              }}
+              className="bg-transparent text-xs px-2 py-1 rounded-full border border-neutral-200 text-neutral-900 flex items-center gap-1"
             >
               <span>{tag}</span>
-              <button
-                onClick={() => removeTag(tag)}
-                className="text-[10px] text-neutral-300"
+              <span
+                onClick={(e) => {
+                  e.stopPropagation();
+                  removeTag(tag);
+                }}
+                className="text-[10px] text-neutral-300 cursor-pointer"
               >
                 ✕
-              </button>
-            </div>
+              </span>
+            </button>
           ))}
         </div>
       </div>
 
-      <div className="mt-6 w-full h-1 p-0 bg-neutral-100"></div>
+      <div className="mt-6 w-full h-2 p-0 bg-neutral-100"></div>
 
       {/* 카테고리 */}
       <div className="mt-6 px-4">
@@ -98,10 +125,10 @@ export default function SearchPage() {
                 </span>
                 <span className="text-xs gap-1 flex items-center">
                   {item.status === 'up' && (
-                    <i className="mgc_up_small_fill text-red-500 text-2xl" />
+                    <i className="mgc_up_small_fill text-main-100 text-2xl" />
                   )}
                   {item.status === 'down' && (
-                    <i className="mgc_down_small_fill text-blue-500 text-2xl" />
+                    <i className="mgc_down_small_fill text-sub-100 text-2xl" />
                   )}
                   {item.status === 'same' && (
                     <span className="text-neutral-400 px-2.5 py-1">–</span>
@@ -126,10 +153,10 @@ export default function SearchPage() {
                 </span>
                 <span className="text-xs gap-1 flex items-center">
                   {item.status === 'up' && (
-                    <i className="mgc_up_small_fill text-red-500 text-2xl" />
+                    <i className="mgc_up_small_fill text-main-100 text-2xl" />
                   )}
                   {item.status === 'down' && (
-                    <i className="mgc_down_small_fill text-blue-500 text-2xl" />
+                    <i className="mgc_down_small_fill text-sub-100 text-2xl" />
                   )}
                   {item.status === 'same' && (
                     <span className="text-neutral-400 px-2.5 py-1">–</span>
