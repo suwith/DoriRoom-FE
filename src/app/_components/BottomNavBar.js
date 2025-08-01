@@ -26,8 +26,27 @@ const navItems = [
 export default function BottomNavBar() {
   const pathname = usePathname();
 
+  const HIDDEN_PATHS = [
+    '/home/decorate/',
+    '/festival/search/',
+    '/festival/bookmarks/',
+    '/sign-in/',
+    '/sign-up/',
+  ];
+
+  const HIDDEN_PREFIXES = ['/festival/search/result'];
+
+  const shouldHide =
+    HIDDEN_PATHS.includes(pathname) ||
+    (pathname.startsWith('/festival') &&
+      pathname !== '/festival' &&
+      pathname !== '/festival/') ||
+    HIDDEN_PREFIXES.some((prefix) => pathname.startsWith(prefix));
+
+  if (shouldHide) return null;
+
   return (
-    <nav className="max-w-[390px] w-full h-18 flex justify-around items-center bg-white fixed bottom-0 z-50 shadow-[0_-2px_4px_rgba(0,0,0,0.08)]">
+    <nav className="max-w-[390px] w-full h-18 flex justify-around items-center bg-background fixed bottom-0 z-50 shadow-[0_-2px_4px_rgba(0,0,0,0.08)]">
       {navItems.map(({ href, label, iconClass }) => {
         const isActive = pathname === href || pathname.startsWith(`${href}/`);
         const color = isActive ? 'var(--color-main-100)' : '#A3A3A3';
