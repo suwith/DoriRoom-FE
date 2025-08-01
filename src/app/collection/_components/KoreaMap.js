@@ -2,13 +2,25 @@ import { useState, useRef } from 'react';
 import NameCircle from './NameCircle';
 import { FaXmark } from 'react-icons/fa6';
 import GaugeBar from './GaugeBar';
+import { useRouter } from 'next/navigation';
+
+const resionDetails = [
+  { id: 0, name: '서울' },
+  { id: 1, name: '경기도' },
+  { id: 2, name: '강원도' },
+  { id: 3, name: '충청도' },
+  { id: 4, name: '전라도' },
+  { id: 5, name: '경상도' },
+  { id: 6, name: '제주도' },
+];
 
 export default function UnifiedKoreaMap() {
-  const [clickResion, setClickResion] = useState('Test');
+  const [clickResion, setClickResion] = useState('');
   const [bottomSheetOpen, setBottomSheetOpen] = useState(false);
   const [isVisible, setIsVisible] = useState(false);
   const [viewBox, setViewBox] = useState('0 0 390 623');
 
+  const router = useRouter();
   const animRef = useRef();
 
   const animateViewBox = (from, to, duration = 500) => {
@@ -38,7 +50,7 @@ export default function UnifiedKoreaMap() {
   };
 
   const clickHandler = (resion, to) => {
-    setClickResion(resion);
+    setClickResion(resionDetails.find((r) => r.name === resion));
     animateViewBox(viewBox, to);
     setIsVisible(true);
     setTimeout(() => setBottomSheetOpen(true), 10);
@@ -287,7 +299,7 @@ export default function UnifiedKoreaMap() {
           className={`fixed bottom-0 w-full max-w-[390px] mx-auto pb-5 z-100 bg-white rounded-t-xl px-3 pt-4 transition-transform duration-300 ease-in-out ${bottomSheetOpen ? 'translate-y-0' : 'translate-y-full'}`}
         >
           <div className="flex items-center justify-between">
-            <span className="font-semibold">{clickResion}</span>
+            <span className="font-semibold">{clickResion.name}</span>
             <div className="bg-main-5 rounded-full p-1">
               <FaXmark
                 size={13}
@@ -319,7 +331,12 @@ export default function UnifiedKoreaMap() {
               Lv.10을 달성하면 반달가슴곰 인형을 얻을 수 있어요!
             </span>
           </div>
-          <button className="w-full bg-main-100 font-semibold text-white text-lg rounded-lg py-2 mt-7">
+          <button
+            className="w-full bg-main-100 font-semibold text-white text-lg rounded-lg py-2 mt-7"
+            onClick={() => {
+              router.push(`/collection/${clickResion.id}`);
+            }}
+          >
             과제 리스트 보기
           </button>
         </div>
