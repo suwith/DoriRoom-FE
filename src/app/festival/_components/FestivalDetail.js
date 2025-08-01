@@ -36,7 +36,7 @@ export default function FestivalDetail({ festival }) {
   });
 
   return (
-    <div className="max-w-[390px] mx-auto bg-[#FEFEFE] min-h-screen pb-28">
+    <div className="max-w-[390px] mx-auto bg-[#FEFEFE] min-h-screen pb-10">
       {/* 이미지 상단 */}
       <div className="relative">
         <img
@@ -187,7 +187,7 @@ export default function FestivalDetail({ festival }) {
             />
           ))}
 
-          <button className="fixed bottom-20 left-1/2 -translate-x-1/2 w-[350px] py-2 bg-main-100 text-white rounded-lg text-sm font-medium shadow-md">
+          <button className="fixed bottom-7 left-1/2 -translate-x-1/2 w-[350px] py-2 bg-main-100 text-white rounded-lg text-sm font-medium shadow-md">
             <div className="flex items-center justify-center gap-2">
               {' '}
               <MdEditSquare className="text-white w-5 h-5" />
