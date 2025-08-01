@@ -4,7 +4,8 @@ import React, { useMemo, useState } from 'react';
 import DayPicker from 'react-day-picker';
 import 'react-day-picker/lib/style.css';
 import { ko } from 'date-fns/locale';
-import { mockDiaries } from '../mockData.js'; // 원하는 위치에 맞게 경로 조정
+import { mockDiaries } from '../mockData.js';
+import { format, parse } from 'date-fns';
 
 export default function DiaryCalendar({ onDateClick }) {
   const diaryMap = useMemo(() => {
@@ -16,17 +17,17 @@ export default function DiaryCalendar({ onDateClick }) {
     return map;
   }, []);
 
-  const disabledDays = mockDiaries
-    .filter((d) => d.disabled)
-    .map((d) => new Date(d.date));
-
   const diaryWithImage = mockDiaries
     .filter((d) => d.images?.length > 0)
-    .map((d) => new Date(d.date));
+    .map((d) => parse(d.date, 'yyyy.MM.dd', new Date()));
 
   const diaryWithoutImage = mockDiaries
     .filter((d) => !d.images?.length && !d.disabled)
-    .map((d) => new Date(d.date));
+    .map((d) => parse(d.date, 'yyyy.MM.dd', new Date()));
+
+  const disabledDays = mockDiaries
+    .filter((d) => d.disabled)
+    .map((d) => parse(d.date, 'yyyy.MM.dd', new Date()));
 
   const [month, setMonth] = useState(new Date());
 
@@ -63,7 +64,7 @@ export default function DiaryCalendar({ onDateClick }) {
           diaryWithoutImage,
         }}
         renderDay={(date) => {
-          const iso = date.toISOString().split('T')[0];
+          const iso = format(date, 'yyyy.MM.dd');
           const isToday = new Date().toDateString() === date.toDateString();
           const diary = diaryMap[iso]?.[0];
           const isDisabled = diary?.disabled;
