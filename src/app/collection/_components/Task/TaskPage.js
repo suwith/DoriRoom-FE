@@ -23,7 +23,7 @@ export default function TasksPage() {
         onClick={() => setBottomSheetOpen(true)}
       >
         <span>{selectFilter.name}</span>
-        <IoIosArrowDown className="" />
+        <IoIosArrowDown />
       </div>
       <TaskList type="general" />
       <div
