@@ -140,7 +140,7 @@ export default function BookmarkPage() {
       {selectedIds.length > 0 && (
         <button
           onClick={() => setShowDeleteModal(true)}
-          className="fixed bottom-20 left-1/2 -translate-x-1/2 w-[350px] py-2 bg-main-100 text-background text-lg rounded-lg font-medium shadow-md"
+          className="fixed bottom-7 left-1/2 -translate-x-1/2 w-[350px] py-2 bg-main-100 text-background text-lg rounded-lg font-medium shadow-md"
         >
           {selectedIds.length > 0
             ? `${selectedIds.length}개 삭제하기`
