@@ -111,7 +111,10 @@ export default function BookmarkPage() {
                 <FestivalListItem festival={festival} hideLikeButton={true} />
                 {editMode && (
                   <button
-                    onClick={() => toggleSelect(festival.id)}
+                    onClick={() => {
+                      e.stopPropagation();
+                      toggleSelect(festival.id);
+                    }}
                     className="absolute right-4 top-1.5 text-xl z-10"
                   >
                     <i
