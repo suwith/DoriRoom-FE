@@ -101,7 +101,11 @@ export default function BookmarkPage() {
                 key={festival.id}
                 className={` relative rounded-md ${isSelected && editMode ? 'bg-sub-5' : ''}  `}
                 onClick={() => {
-                  if (!editMode) router.push(`/festival/${festival.id}`);
+                  if (!editMode) {
+                    router.push(`/festival/${festival.id}`);
+                  } else {
+                    toggleSelect(festival.id);
+                  }
                 }}
               >
                 <FestivalListItem festival={festival} hideLikeButton={true} />
