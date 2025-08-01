@@ -116,9 +116,7 @@ export default function Decorate() {
 
   return (
     <div className="flex justify-center h-screen">
-      <div className="bg-white shadow-md fixed top-0 z-50 w-full max-w-[390px] pt-[50px]">
-        <HeaderNavigationBar title="꾸미기" />
-      </div>
+      <HeaderNavigationBar title="꾸미기" className="bg-white shadow-sm" />
       <div className="flex flex-col max-w-[390px] mx-auto">
         {/* 캐릭터 */}
         <div className="shrink-0 mt-50 flex justify-center">
