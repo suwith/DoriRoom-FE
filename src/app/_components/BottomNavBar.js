@@ -34,7 +34,7 @@ export default function BottomNavBar() {
     '/sign-up/',
   ];
 
-  const HIDDEN_PREFIXES = ['/festival/search/result'];
+  const HIDDEN_PREFIXES = ['/festival/search/result', '/diary/'];
 
   const shouldHide =
     HIDDEN_PATHS.includes(pathname) ||
