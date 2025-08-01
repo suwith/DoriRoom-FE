@@ -56,7 +56,7 @@
 
 /*캘린더 커스터마이징*/
 .DayPicker-Day {
-  padding: 6.5px !important;
+  padding: 6px !important;
 }
 
 .DayPicker-Day:hover {
@@ -80,6 +80,5 @@
 
 .DayPicker-NavButton--prev,
 .DayPicker-NavButton--next{
-  font-size: 13px; /* 아이콘 크기 */
-
+  font-size: 13px;
 }
