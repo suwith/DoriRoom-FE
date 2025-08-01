@@ -63,7 +63,11 @@ export default function BookmarkPage() {
             onClick={editMode ? toggleAll : () => setEditMode(true)}
             className="absolute right-4 text-sm text-main-100"
           >
-            {editMode ? '전체선택' : '편집'}
+            {editMode
+              ? selectedIds.length === bookmarks.length
+                ? '전체해제'
+                : '전체선택'
+              : '편집'}
           </button>
         )}
       </div>
