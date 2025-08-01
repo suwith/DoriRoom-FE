@@ -1,6 +1,6 @@
 export default function NameCircle({ name, color }) {
   return (
-    <g transform="translate(25, 50) scale(0.6)">
+    <g transform="translate(80, 180) scale(2.5)">
       <rect
         x={-19.8}
         y={-7.5}
