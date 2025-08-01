@@ -1,0 +1,30 @@
+export const mockDiaries = [
+  {
+    id: '1',
+    authorName: '박수연',
+    authorImage: '/mock/user1.png',
+    date: '2025-08-01',
+    content:
+      '오늘은 친구들과 함께 한강축제를 다녀왔어요! 너무 재밌었고 불꽃놀이도 최고!',
+    images: ['/images/test/review1.png', '/images/test/review2.png'],
+    isPublic: true,
+  },
+  {
+    id: '2',
+    authorName: '이재영',
+    authorImage: '/mock/user2.png',
+    date: '2025-08-04',
+    content: '비가 와서 아쉽지만, 그래도 좋은 추억이었어요 ☔️',
+    images: [],
+    isPublic: false,
+  },
+  {
+    id: '3',
+    authorName: '박수연',
+    authorImage: '/mock/user1.png',
+    date: '2025-08-06',
+    content: '속초 축제 다녀왔어요! 해변이 정말 예뻤어요 🌊',
+    images: [],
+    isPublic: true,
+  },
+];
