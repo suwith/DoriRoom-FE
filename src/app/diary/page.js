@@ -5,6 +5,8 @@ import { mockDiaries } from './mockData';
 import DiaryCalendar from './_components/DiaryCalendar';
 import ReviewItem from '../festival/_components/ReviewItem';
 import HeaderNavigationBar from '@/app/_components/HeaderNavigationBar';
+import { isWithinInterval, parse, subDays } from 'date-fns';
+import { MdEditSquare } from 'react-icons/md';
 
 export default function DiaryPage() {
   const [likedIds, setLikedIds] = useState([]);
@@ -15,11 +17,25 @@ export default function DiaryPage() {
     );
   };
 
-  // 오늘 날짜 기준 필터 (나중에 동적으로 바꾸면 됨)
-  const today = '2025-08-01'; // 임시 하드코딩
-  const todayPublicDiaries = mockDiaries.filter(
-    (d) => d.date === today && d.isPublic
-  );
+  const today = new Date();
+  const oneWeekAgo = subDays(today, 6); // 오늘 포함 7일치 (오늘 ~ 6일 전)
+
+  const recentPublicDiaries = mockDiaries
+    .filter((d) => {
+      if (!d.isPublic) return false;
+
+      const diaryDate = parse(d.date, 'yyyy.MM.dd', new Date());
+
+      return isWithinInterval(diaryDate, {
+        start: oneWeekAgo,
+        end: today,
+      });
+    })
+    .sort((a, b) => {
+      const dateA = parse(a.date, 'yyyy.MM.dd', new Date());
+      const dateB = parse(b.date, 'yyyy.MM.dd', new Date());
+      return dateB - dateA; // 최신순 정렬
+    });
 
   return (
     <div className="space-y-2 min-h-screen">
@@ -32,13 +48,13 @@ export default function DiaryPage() {
         }}
       />
 
-      {todayPublicDiaries.length > 0 && (
-        <section className="space-y-4 px-4">
+      {recentPublicDiaries.length > 0 && (
+        <section className="space-y-4 px-4 pb-20">
           <h2 className="text-md font-bold mt-4 text-neutral-800">
             친구가 새로 글을 업로드했어요! ☕️
           </h2>
-          <div className="space-y-6">
-            {todayPublicDiaries.map((diary) => (
+          <div className="space-y-2">
+            {recentPublicDiaries.map((diary) => (
               <ReviewItem
                 key={diary.id}
                 review={{
@@ -56,6 +72,14 @@ export default function DiaryPage() {
           </div>
         </section>
       )}
+
+      <button className="fixed bottom-7 left-1/2 -translate-x-1/2 w-[350px] py-2 bg-main-100 text-white rounded-lg text-sm font-medium shadow-md">
+        <div className="flex items-center justify-center gap-2">
+          {' '}
+          <MdEditSquare className="text-white w-5 h-5" />
+          <span className="text-lg">일기 작성하기</span>
+        </div>
+      </button>
     </div>
   );
 }
