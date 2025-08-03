@@ -3,12 +3,13 @@
 import { useState } from 'react';
 import KoreaMap from './_components/KoreaMap';
 import TasksPage from './_components/Task/TaskPage';
+import TaskCompleteModal from './_components/Task/TaskCompleteModal';
 
 export default function Collection() {
   const [activeTab, setActiveTab] = useState(1);
 
   return (
-    <div className="max-w-[390px] mx-auto h-screen">
+    <div className="max-w-[390px] w-screen mx-auto h-screen">
       <div className="flex justify-around border-b border-neutral-200 h-[86px]">
         <div
           className={`flex flex-col items-center justify-end cursor-pointer px-4 text-base ${
@@ -43,6 +44,7 @@ export default function Collection() {
         </div>
       )}
       {activeTab === 2 && <TasksPage />}
+      <TaskCompleteModal isOpen={false} />
     </div>
   );
 }
