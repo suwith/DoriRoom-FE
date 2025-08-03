@@ -17,9 +17,9 @@ export default function HeaderNavigationBar({
 
   return (
     <header
-      className={`fixed top-0 z-50 max-w-[390px] w-full pt-[50px] pb-[20px] ${className}`}
+      className={`fixed top-0 left-1/2 transform -translate-x-1/2 z-50 max-w-[390px] w-full pt-[50px] pb-[20px] ${className}`}
     >
-      <div className="relative w-full flex items-center justify-center mx-auto">
+      <div className="relative flex items-center justify-center mx-auto">
         {/* 중앙 타이틀 */}
         {type === 'collection' && (
           <div className="bg-sub-5 px-1 py-1 text-xs text-sub-100 mr-2">
