@@ -38,8 +38,11 @@ export default function TaskInfoModal({ isOpen, setIsOpen }) {
           <p className="text-lg text-main-100">반달가슴곰 인형</p>
         </div>
         <div className="space-y-2 w-full mt-5">
-          {comments.map((comment) => (
-            <div className="bg-neutral-100 px-3 py-1.5 font-normal text-xs rounded-md">
+          {comments.map((comment, idx) => (
+            <div
+              key={idx}
+              className="bg-neutral-100 px-3 py-1.5 font-normal text-xs rounded-md"
+            >
               {comment}
             </div>
           ))}
