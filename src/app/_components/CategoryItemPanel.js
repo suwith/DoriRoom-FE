@@ -39,17 +39,17 @@ export default function CategoryItemPanel({
               key={id}
               onClick={() => onCategorySelect(id)}
               className={`shrink-0 flex gap-2 items-center justify-center rounded-t-lg px-5 py-1.5 min-h-[35px] ${
-                isActive ? 'bg-white' : 'bg-neutral-200'
+                isActive ? 'bg-background' : 'bg-neutral-200'
               }`}
             >
               <Icon
                 className={`text-xl ${
-                  isActive ? 'text-emerald-400' : 'text-neutral-400'
+                  isActive ? 'text-main-100' : 'text-neutral-400'
                 }`}
               />
               <p
                 className={`text-sm font-medium whitespace-nowrap ${
-                  isActive ? 'text-emerald-400' : 'text-neutral-400'
+                  isActive ? 'text-main-100' : 'text-neutral-400'
                 }`}
               >
                 {name}
@@ -60,7 +60,7 @@ export default function CategoryItemPanel({
       </div>
 
       {/* 아이템 리스트 */}
-      <div className="overflow-y-auto bg-white px-3 pt-3 pb-[80px] grid grid-cols-3 gap-2 scrollbar-hide">
+      <div className="overflow-y-auto bg-background px-3 pt-3 pb-[80px] grid grid-cols-3 gap-2 scrollbar-hide">
         {/* 선택 안 함 */}
         {!isShop && (
           <Item

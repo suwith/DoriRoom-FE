@@ -47,7 +47,7 @@ export default function FestivalDetail({ festival }) {
         <div className="absolute top-10 left-3">
           <BackButton color={'text-background'} isShadow={true} />
         </div>
-        <div className="absolute bottom-8 left-1/2 -translate-x-1/2 text-main-100 text-[12px] bg-white px-4 py-1.5 rounded-full flex items-center gap-1 whitespace-nowrap">
+        <div className="absolute bottom-8 left-1/2 -translate-x-1/2 text-main-100 text-[12px] bg-background px-4 py-1.5 rounded-full flex items-center gap-1 whitespace-nowrap">
           <i className="mgc_user_follow_fill text-lg text-main-100 mr-1" />
           <span className="mt-0.5">
             {festival.visitedFriend > 0

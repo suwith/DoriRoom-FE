@@ -105,7 +105,7 @@ export default function Decorate() {
 
   return (
     <div className="flex justify-center h-screen">
-      <HeaderNavigationBar title="꾸미기" className="bg-white shadow-sm" />
+      <HeaderNavigationBar title="꾸미기" className="bg-background shadow-sm" />
       <div className="flex flex-col max-w-[390px] mx-auto">
         {/* 캐릭터 */}
         <div className="shrink-0 mt-50 flex justify-center">
@@ -117,7 +117,7 @@ export default function Decorate() {
         </div>
         <div className="flex justify-end my-3 pr-3">
           <Link href="/shop">
-            <div className="flex gap-2 items-center justify-center rounded-xl px-4 py-2 bg-main-100 text-white">
+            <div className="flex gap-2 items-center justify-center rounded-xl px-4 py-2 bg-main-100 text-background">
               <FaStore size={20} />
               <p className="font-bold text-[14px]">상점으로</p>
             </div>

@@ -31,7 +31,7 @@ export default async function Page({ params }) {
     <div className="max-w-[390px] w-screen mx-auto h-screen">
       <HeaderNavigationBar
         title={resion.name}
-        className="bg-white"
+        className="bg-background"
         type="collection"
       />
       <div className="mt-20">

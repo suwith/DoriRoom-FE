@@ -17,7 +17,7 @@ export default function Item({
         <Icon
           className={`absolute top-2/5 left-1/2 transform -translate-x-1/2 -translate-y-1/2 text-black w-12 h-12 ${name === '선택안함' ? 'opacity-40' : null}`}
         />
-        <div className="absolute left-1/2 -bottom-2 transform -translate-x-1/2 -translate-y-1/2 bg-white w-[100px] h-[23px] rounded-lg flex justify-center items-center">
+        <div className="absolute left-1/2 -bottom-2 transform -translate-x-1/2 -translate-y-1/2 bg-background w-[100px] h-[23px] rounded-lg flex justify-center items-center">
           <p className="text-center text-black font-semibold text-[13px]">
             {name}
           </p>

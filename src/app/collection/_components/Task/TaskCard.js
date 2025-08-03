@@ -17,13 +17,13 @@ export default function TaskCard({
       <div className="flex justify-between items-center">
         <div className="flex gap-1 items-center text-xs">
           <div
-            className={`flex items-center gap-1 text-white px-1 py-1 rounded-sm font-semibold ${status === '달성' ? 'bg-sub-100' : 'bg-main-100'}`}
+            className={`flex items-center gap-1 text-background px-1 py-1 rounded-sm font-semibold ${status === '달성' ? 'bg-sub-100' : 'bg-main-100'}`}
           >
             <FaCirclePlus size={15} />
             {point}xp
           </div>
           <div
-            className={`flex items-center gap-1 bg-white px-2 py-1 rounded-sm font-normal ${status === '달성' ? 'text-sub-100' : 'text-main-100'}`}
+            className={`flex items-center gap-1 bg-background px-2 py-1 rounded-sm font-normal ${status === '달성' ? 'text-sub-100' : 'text-main-100'}`}
           >
             <FaFire size={15} className="scale-x-[-1]" />
             <span className="text-neutral-900">{reward}</span>

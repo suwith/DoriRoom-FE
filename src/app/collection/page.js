@@ -39,7 +39,7 @@ export default function Collection() {
         </div>
       </div>
       {activeTab === 1 && (
-        <div className="flex items-center justify-center h-[calc(100vh-86px)] bg-linear-to-t from-[#AFDDF1] to-white overflow-hidden">
+        <div className="flex items-center justify-center h-[calc(100vh-86px)] bg-linear-to-t from-[#AFDDF1] to-background overflow-hidden">
           <KoreaMap />
         </div>
       )}
