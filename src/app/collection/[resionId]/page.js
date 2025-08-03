@@ -28,14 +28,14 @@ export default async function Page({ params }) {
   }
 
   return (
-    <div>
+    <div className="max-w-[390px] w-screen mx-auto h-screen">
       <HeaderNavigationBar
         title={resion.name}
         className="bg-white"
         type="collection"
       />
       <div className="mt-20">
-        <TasksPage />
+        <TasksPage type="resion" />
       </div>
     </div>
   );
