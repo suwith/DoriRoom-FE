@@ -41,6 +41,7 @@ export default function BottomNavBar() {
     (pathname.startsWith('/festival') &&
       pathname !== '/festival' &&
       pathname !== '/festival/') ||
+    (/^\/collection\/.+/.test(pathname) && pathname !== '/collection') ||
     HIDDEN_PREFIXES.some((prefix) => pathname.startsWith(prefix));
 
   if (shouldHide) return null;
