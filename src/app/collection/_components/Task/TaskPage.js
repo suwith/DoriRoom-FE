@@ -210,7 +210,7 @@ const tmpMissions = [
   },
 ];
 
-export default function TasksPage({ type = 'resion' }) {
+export default function TasksPage({ type }) {
   const [selectFilter, setSelectFilter] = useState(filterList[0]);
   const [bottomSheetOpen, setBottomSheetOpen] = useState(false);
   const [tasks, setTasks] = useState(

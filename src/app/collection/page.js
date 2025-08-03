@@ -43,7 +43,7 @@ export default function Collection() {
           <KoreaMap />
         </div>
       )}
-      {activeTab === 2 && <TasksPage />}
+      {activeTab === 2 && <TasksPage type="general" />}
       <TaskCompleteModal isOpen={false} />
     </div>
   );
