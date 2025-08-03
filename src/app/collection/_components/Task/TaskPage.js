@@ -135,42 +135,111 @@ const tmpTasks = [
     complete: 1,
     status: '달성',
   },
+].sort((a, b) => (a.status > b.status ? -1 : a.status < b.status ? 1 : 0));
+
+const tmpMissions = [
+  {
+    id: 1,
+    title: '영주 시원(ONE)축제 방문하기',
+    point: 200,
+    reward: 10,
+    progress: 70,
+    score: 7,
+    complete: 10,
+    status: '시작',
+  },
+  {
+    id: 2,
+    title: '경상도 퀴즈 풀기',
+    point: 200,
+    reward: 10,
+    progress: 0,
+    score: 0,
+    complete: 0,
+    status: '대기',
+  },
+  {
+    id: 3,
+    title: '상주세계모자페스티벌 방문하기',
+    point: 200,
+    reward: 10,
+    progress: 0,
+    score: 0,
+    complete: 0,
+    status: '대기',
+  },
+  {
+    id: 4,
+    title: '영일대샌드페스티벌 방문하기',
+    point: 200,
+    reward: 10,
+    progress: 0,
+    score: 0,
+    complete: 0,
+    status: '대기',
+  },
+  {
+    id: 5,
+    title: '안아드림페스티벌 방문하기',
+    point: 200,
+    reward: 10,
+    progress: 0,
+    score: 0,
+    complete: 0,
+    status: '대기',
+  },
+  {
+    id: 6,
+    title: '대한민국 펫캉스 방문하기',
+    point: 200,
+    reward: 10,
+    progress: 100,
+    score: 10,
+    complete: 10,
+    status: '달성',
+  },
+  {
+    id: 7,
+    title: '경산 카페축제 방문하기',
+    point: 200,
+    reward: 10,
+    progress: 100,
+    score: 10,
+    complete: 10,
+    status: '달성',
+  },
 ];
 
-export default function TasksPage() {
+export default function TasksPage({ type = 'resion' }) {
   const [selectFilter, setSelectFilter] = useState(filterList[0]);
   const [bottomSheetOpen, setBottomSheetOpen] = useState(false);
-  const [tasks, setTasks] = useState(tmpTasks);
+  const [tasks, setTasks] = useState(
+    type === 'resion' ? tmpMissions : tmpTasks
+  );
+  const tmp = type === 'resion' ? tmpMissions : tmpTasks;
 
   useEffect(() => {
-    console.log(tasks);
     switch (selectFilter.id) {
       case 0:
-        setTasks(tmpTasks); // 전체보기: 모든 과제
+        setTasks(tmp); // 전체보기: 모든 과제
         return;
       case 1:
         setTasks(
-          tmpTasks.filter(
-            (task) => selectFilter.id === 1 && task.status === '대기'
-          )
+          tmp.filter((task) => selectFilter.id === 1 && task.status === '대기')
         );
         return;
       case 2:
         setTasks(
-          tmpTasks.filter(
-            (task) => selectFilter.id === 2 && task.status === '시작'
-          )
+          tmp.filter((task) => selectFilter.id === 2 && task.status === '시작')
         );
         return;
       case 3:
         setTasks(
-          tmpTasks.filter(
-            (task) => selectFilter.id === 3 && task.status === '달성'
-          )
+          tmp.filter((task) => selectFilter.id === 3 && task.status === '달성')
         );
         return;
       default:
-        setTasks(tmpTasks); // 기본값 (전체보기)
+        setTasks(tmp); // 기본값 (전체보기)
     }
   }, [selectFilter]);
 
@@ -183,7 +252,7 @@ export default function TasksPage() {
         <span>{selectFilter.name}</span>
         <IoIosArrowDown />
       </div>
-      <TaskList type="general" tasks={tasks} />
+      <TaskList type={type} tasks={tasks} />
       <div
         className={`fixed bottom-0 left-1/2 transform -translate-x-1/2 w-full max-w-[390px] mx-auto pb-10 z-100 bg-white rounded-t-xl px-3 pt-4 shadow-[0_-4px_12px_rgba(0,0,0,0.1)] transition-transform duration-300 ease-in-out ${bottomSheetOpen ? 'translate-y-0' : 'translate-y-full'}`}
       >
