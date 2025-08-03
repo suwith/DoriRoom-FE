@@ -14,7 +14,6 @@ export default function FestivalSearchResultPage() {
   const [input, setInput] = useState('');
   const [likedIds, setLikedIds] = useState([]);
 
-  // ✅ 클라이언트에서 쿼리 직접 파싱
   useEffect(() => {
     const params = new URLSearchParams(window.location.search);
     const query = params.get('query') || '';
@@ -66,15 +65,41 @@ export default function FestivalSearchResultPage() {
         검색결과 ({filteredFestivals.length})
       </div>
 
-      <div className="space-y-4">
-        {filteredFestivals.map((festival) => (
-          <FestivalListItem
-            key={festival.id}
-            festival={festival}
-            liked={likedIds.includes(festival.id)}
-            onLike={() => toggleLike(festival.id)}
-          />
-        ))}
+      <div className="space-y-4 h-full">
+        {filteredFestivals.length === 0 ? (
+          <div
+            className="flex flex-col h-full items-center justify-center gap-3"
+            style={{ height: 'calc(100% - 80px)' }}
+          >
+            <i className="mgc_sweats_fill text-6xl text-main-100" />
+            <p className="text-center text-lg font-semibold">
+              앗, 관련 축제가 없어요!
+            </p>
+            <p className="text-center text-sm text-neutral-500">
+              다른 키워드로 다시 검색해 주세요 😢
+            </p>
+            <button
+              onClick={() => router.push('/festival')}
+              className="mt-4 px-6 py-2 rounded-md bg-main-5 text-main-100 text-xl font-medium "
+            >
+              축제 메인으로 돌아가기
+            </button>
+          </div>
+        ) : (
+          filteredFestivals.map((festival) => (
+            <div
+              key={festival.id}
+              onClick={() => router.push(`/festival/${festival.id}`)}
+            >
+              <FestivalListItem
+                key={festival.id}
+                festival={festival}
+                liked={likedIds.includes(festival.id)}
+                onLike={() => toggleLike(festival.id)}
+              />
+            </div>
+          ))
+        )}
       </div>
     </div>
   );
