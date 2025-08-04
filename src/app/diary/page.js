@@ -7,9 +7,11 @@ import ReviewItem from '../festival/_components/ReviewItem';
 import HeaderNavigationBar from '@/app/_components/HeaderNavigationBar';
 import { isWithinInterval, parse, subDays } from 'date-fns';
 import { MdEditSquare } from 'react-icons/md';
+import { useRouter } from 'next/navigation';
 
 export default function DiaryPage() {
   const [likedIds, setLikedIds] = useState([]);
+  const router = useRouter();
 
   const handleLike = (id) => {
     setLikedIds((prev) =>
@@ -37,16 +39,26 @@ export default function DiaryPage() {
       return dateB - dateA; // 최신순 정렬
     });
 
-  return (
-    <div className="space-y-2 min-h-screen">
-      <HeaderNavigationBar title={'일기장'} showBackButton={true} />
+  const handleDateClick = (isoDate) => {
+    const formattedDate = isoDate.replace(/-/g, '.');
+    const diariesForDate = mockDiaries.filter((d) => d.date === formattedDate);
 
-      <DiaryCalendar
-        diaries={mockDiaries}
-        onDateClick={(date) => {
-          console.log('날짜 클릭됨:', date); // 이후 분기 로직 추가 예정
-        }}
+    if (diariesForDate.length === 1) {
+      router.push(`/diary/${diariesForDate[0].id}`); // 상세 페이지
+    } else if (diariesForDate.length > 1) {
+      router.push(`/diary/date/${formattedDate}`); // 목록 페이지
+    } else {
+    }
+  };
+  return (
+    <div className="space-y-2 min-h-screen pt-20">
+      <HeaderNavigationBar
+        title={'일기장'}
+        showBackButton={true}
+        className="bg-background"
       />
+
+      <DiaryCalendar diaries={mockDiaries} onDateClick={handleDateClick} />
 
       {recentPublicDiaries.length > 0 && (
         <section className="space-y-4 px-4 pb-20">
