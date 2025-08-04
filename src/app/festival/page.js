@@ -25,7 +25,10 @@ export default function FestivalPage() {
         </div>
 
         <button className="p-1">
-          <GoHeartFill className="text-main-100 w-5 h-5" />
+          <GoHeartFill
+            className="text-main-100 w-5 h-5"
+            onClick={() => router.push(`/festival/bookmarks`)}
+          />
         </button>
       </div>
 
