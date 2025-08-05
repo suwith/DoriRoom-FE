@@ -1,4 +1,3 @@
-// components/ConfirmModal.js
 'use client';
 
 export default function ConfirmModal({
