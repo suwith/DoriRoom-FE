@@ -2,7 +2,7 @@ import { FaCirclePlus } from 'react-icons/fa6';
 import { FaFire } from 'react-icons/fa6';
 import { IoIosArrowForward } from 'react-icons/io';
 
-export default function ResionTaskCard({
+export default function RegionTaskCard({
   title,
   point,
   status,

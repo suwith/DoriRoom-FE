@@ -214,9 +214,9 @@ export default function TasksPage({ type }) {
   const [selectFilter, setSelectFilter] = useState(filterList[0]);
   const [bottomSheetOpen, setBottomSheetOpen] = useState(false);
   const [tasks, setTasks] = useState(
-    type === 'resion' ? tmpMissions : tmpTasks
+    type === 'region' ? tmpMissions : tmpTasks
   );
-  const tmp = type === 'resion' ? tmpMissions : tmpTasks;
+  const tmp = type === 'region' ? tmpMissions : tmpTasks;
 
   useEffect(() => {
     switch (selectFilter.id) {
