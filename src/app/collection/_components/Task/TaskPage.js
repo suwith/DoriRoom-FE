@@ -244,9 +244,9 @@ export default function TasksPage({ type }) {
   }, [selectFilter]);
 
   return (
-    <div className="space-y-3 p-4">
+    <div className="flex flex-col gap-3 p-4 h-[calc(100vh-86px)]">
       <div
-        className="flex gap-2 items-center text-neutral-600 justify-self-end font-normal text-[14px]"
+        className="flex gap-2 items-center text-neutral-600 self-end font-normal text-[14px]"
         onClick={() => setBottomSheetOpen(true)}
       >
         <span>{selectFilter.name}</span>
