@@ -86,7 +86,12 @@ export default function DiaryPage() {
       )}
 
       <button className="fixed bottom-7 left-1/2 -translate-x-1/2 w-[350px] py-2 bg-main-100 text-white rounded-lg text-sm font-medium shadow-md">
-        <div className="flex items-center justify-center gap-2">
+        <div
+          className="flex items-center justify-center gap-2"
+          onClick={() => {
+            router.push('/diary/write');
+          }}
+        >
           {' '}
           <MdEditSquare className="text-white w-5 h-5" />
           <span className="text-lg">일기 작성하기</span>
