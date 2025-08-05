@@ -1,5 +1,4 @@
-import { FaCirclePlus } from 'react-icons/fa6';
-import { FaFire } from 'react-icons/fa6';
+import { createPortal } from 'react-dom';
 import { FaXmark } from 'react-icons/fa6';
 
 const comments = [
@@ -10,8 +9,9 @@ const comments = [
 
 export default function TaskInfoModal({ isOpen, setIsOpen }) {
   if (!isOpen) return null;
+  const portalElement = document.getElementById('main');
 
-  return (
+  return createPortal(
     <div className="max-w-[390px] w-full fixed top-0 bottom-0 bg-black/50 flex justify-center items-center z-50">
       <div className="flex flex-col items-center bg-background p-5 rounded-lg w-[90%]">
         <div className="flex items-center justify-between w-full mb-5">
@@ -48,6 +48,7 @@ export default function TaskInfoModal({ isOpen, setIsOpen }) {
           ))}
         </div>
       </div>
-    </div>
+    </div>,
+    portalElement
   );
 }
