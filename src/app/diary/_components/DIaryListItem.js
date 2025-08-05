@@ -3,12 +3,21 @@
 import { mockFestivals } from '@/app/festival/mockData';
 import { useState } from 'react';
 import { useRouter } from 'next/navigation';
+import TwoButtonModal from '@/app/_components/TwoButtonModal';
 
 export default function DiaryListItem({ diary }) {
   const router = useRouter();
   const festival = mockFestivals.find((f) => f.id === diary.festivalId);
 
   const [showDiaryMenu, setShowDiaryMenu] = useState(false);
+  const [showDeleteModal, setShowDeleteModal] = useState(false);
+
+  const handleDelete = (e) => {
+    e.stopPropagation();
+    setShowDiaryMenu(false);
+    setShowDeleteModal(false);
+    console.log('삭제 완료');
+  };
 
   return (
     <div
@@ -48,8 +57,7 @@ export default function DiaryListItem({ diary }) {
                 className="w-full text-center px-4 py-2 hover:bg-neutral-100"
                 onClick={(e) => {
                   e.stopPropagation();
-                  setShowDiaryMenu(false);
-                  console.log('삭제 완료');
+                  setShowDeleteModal(true);
                 }}
               >
                 삭제
@@ -88,6 +96,17 @@ export default function DiaryListItem({ diary }) {
         </div>
         <div>{diary.date}</div>
       </div>
+      {/* 삭제 모달 */}
+      {showDeleteModal && (
+        <TwoButtonModal
+          title="즐겨찾기를 삭제하시겠어요?"
+          description="삭제된 즐겨찾기는 복구가 불가능해요!"
+          cancelText="취소할래요"
+          confirmText="삭제할래요"
+          onCancel={() => setShowDeleteModal(false)}
+          onConfirm={handleDelete}
+        />
+      )}
     </div>
   );
 }

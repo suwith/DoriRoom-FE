@@ -6,6 +6,7 @@ import { mockFestivals } from '@/app/festival/mockData';
 import FestivalListItem from '@/app/festival/_components/FestivalListItem';
 import Icon from '@mdi/react';
 import { mdiTree } from '@mdi/js';
+import TwoButtonModal from '@/app/_components/TwoButtonModal';
 
 export default function DiaryDetail({ diary }) {
   const [likedIds, setLikedIds] = useState([]);
@@ -14,6 +15,12 @@ export default function DiaryDetail({ diary }) {
   const isLiked = likedIds.includes(diary.id);
   const likeCount = diary.likes + (isLiked ? 1 : 0);
   const displayLikeText = likeCount === 0 ? '좋아요' : likeCount;
+  const [showDeleteModal, setShowDeleteModal] = useState(false);
+
+  const handleDelete = () => {
+    console.log('삭제 완료');
+    setShowDeleteModal(false);
+  };
 
   const handleLike = (id) => {
     setLikedIds((prev) =>
@@ -82,6 +89,18 @@ export default function DiaryDetail({ diary }) {
             <FestivalListItem festival={festival} hideLikeButton={true} />
           </div>
         </div>
+      )}
+
+      {/* 삭제 모달 */}
+      {showDeleteModal && (
+        <TwoButtonModal
+          title="즐겨찾기를 삭제하시겠어요?"
+          description="삭제된 즐겨찾기는 복구가 불가능해요!"
+          cancelText="취소할래요"
+          confirmText="삭제할래요"
+          onCancel={() => setShowDeleteModal(false)}
+          onConfirm={handleDelete}
+        />
       )}
     </div>
   );
