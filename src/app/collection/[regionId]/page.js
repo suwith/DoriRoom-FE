@@ -34,7 +34,7 @@ export default async function Page({ params }) {
         className="bg-background"
         type="collection"
       />
-      <div className="mt-20">
+      <div className="pt-20">
         <TasksPage type="region" />
       </div>
     </div>
