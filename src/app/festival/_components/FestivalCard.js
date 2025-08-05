@@ -42,9 +42,11 @@ export default function FestivalCard({ festival }) {
           <span className="text-main-100 bg-main-5 px-1 rounded-full">
             {festival.category}
           </span>
-          <span className="text-main-100 bg-main-5 px-1 rounded-full">
-            후기 {festival.reviews.length}개
-          </span>
+          {festival.reviews.length > 0 && (
+            <span className="text-main-100 bg-main-5 px-1 rounded-full">
+              후기 {festival.reviews.length}개
+            </span>
+          )}
           <span className="text-main-100 bg-main-5 px-1 rounded-full">
             {festival.price === 0 ? '무료' : '유료'}
           </span>
