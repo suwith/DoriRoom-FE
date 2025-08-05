@@ -1,9 +1,11 @@
-// app/diary/write/page.tsx
 'use client';
 
-import { useState } from 'react';
+import React, { useState } from 'react';
 import { MdEditSquare } from 'react-icons/md';
 import TwoButtonModal from '@/app/_components/TwoButtonModal';
+import 'react-day-picker/lib/style.css';
+import DayPicker from 'react-day-picker';
+import { format } from 'date-fns';
 
 export default function DiaryWritePage() {
   const [selectedDate, setSelectedDate] = useState('');
@@ -12,6 +14,8 @@ export default function DiaryWritePage() {
   const [diaryText, setDiaryText] = useState('');
   const [visibility, setVisibility] = useState('public');
   const [showLeaveModal, setShowLeaveModal] = useState(false);
+  const [showCalendar, setShowCalendar] = useState(false);
+  const [tempDate, setTempDate] = useState(new Date());
 
   const isFormValid =
     selectedDate && selectedFestival && diaryText.trim() !== '';
@@ -23,8 +27,8 @@ export default function DiaryWritePage() {
   };
 
   return (
-    <main className="max-w-[390px] mt-20 mx-auto p-4 pb-7 font-sans">
-      <header className="fixed top-0 left-1/2 transform -translate-x-1/2 z-50 max-w-[390px] w-full pt-[50px] pb-[20px] bg-background">
+    <div className="min-h-screen pt-20">
+      <header className="fixed top-0 left-1/2 transform -translate-x-1/2 z-50 max-w-[390px] w-full pt-[50px] pb-[10px] bg-background">
         <div className="relative flex items-center justify-center mx-auto">
           <h1 className="text-lg font-semibold text-gray-800">일기 작성하기</h1>
           {/* 뒤로가기 버튼 */}
@@ -41,7 +45,7 @@ export default function DiaryWritePage() {
           </div>
         </div>
       </header>
-      <div className="space-y-5">
+      <div className="space-y-5 px-4 pt-4 pb-7">
         {/* 축제 검색 */}
         <div>
           <p className="text-[15px] font-semibold mb-3">
@@ -50,7 +54,7 @@ export default function DiaryWritePage() {
           <div className="flex gap-2">
             <input
               type="text"
-              className="flex-1 text-sm bg-neutral-100 rounded-md px-3 py-2"
+              className="flex-1 text-sm bg-neutral-100 rounded-md px-3 py-2 placeholder:text-neutral-300"
               placeholder="페스티벌 찾기"
               value={selectedFestival}
               onChange={(e) => setSelectedFestival(e.target.value)}
@@ -68,12 +72,17 @@ export default function DiaryWritePage() {
           </p>
           <div className="flex gap-2">
             <input
-              type="date"
-              className="flex-1 rounded-md bg-neutral-100 text-neutral-400 text-sm px-3 py-2"
-              value={selectedDate}
-              onChange={(e) => setSelectedDate(e.target.value)}
+              readOnly
+              type="text"
+              className="flex-1 rounded-md bg-neutral-100 text-sm px-3 py-2 placeholder:text-neutral-300"
+              placeholder="00-00-00"
+              value={selectedDate ? format(selectedDate, 'yy-MM-dd') : ''}
             />
-            <button className="bg-main-100 text-background px-5 py-3 text-[15px] rounded-lg">
+
+            <button
+              className="bg-main-100 text-background px-5 py-3 text-[15px] rounded-lg"
+              onClick={() => setShowCalendar(true)}
+            >
               선택
             </button>
           </div>
@@ -133,7 +142,7 @@ export default function DiaryWritePage() {
 
         {/* 내용 입력 */}
         <textarea
-          className="w-full min-h-[400px] text-sm bg-neutral-100 rounded-lg px-4 py-4 h-[160px] resize-none"
+          className="w-full min-h-[250px] text-sm bg-neutral-100 rounded-lg px-4 py-4 resize-none"
           placeholder="내용 입력하기"
           value={diaryText}
           onChange={(e) => setDiaryText(e.target.value)}
@@ -193,6 +202,82 @@ export default function DiaryWritePage() {
         </button>
       </div>
 
+      {showCalendar && (
+        <div className="fixed bottom-0 left-1/2 transform -translate-x-1/2 w-full max-w-[390px] mx-auto pb-16 z-30 rounded-t-xl px-4 pt-4 bg-background shadow-[0_-4px_12px_rgba(0,0,0,0.1)] transition-transform duration-300 ease-in-out ">
+          <div className="w-full text-right mb-1">
+            <button
+              onClick={() => setShowCalendar((prev) => !prev)}
+              className=" bg-main-5 bg-opacity-50 text-main-40 rounded-full w-5 h-5 text-xs"
+            >
+              ✕
+            </button>
+          </div>
+          <div className="w-full max-w-sm mx-auto flex justify-center items-center mb-3">
+            <DayPicker
+              selectedDays={selectedDate}
+              onDayClick={(date) => setSelectedDate(date)}
+              months={[
+                '1월',
+                '2월',
+                '3월',
+                '4월',
+                '5월',
+                '6월',
+                '7월',
+                '8월',
+                '9월',
+                '10월',
+                '11월',
+                '12월',
+              ]}
+              weekdaysShort={['일', '월', '화', '수', '목', '금', '토']}
+              firstDayOfWeek={1}
+              renderDay={(date) => {
+                const isSelected =
+                  selectedDate &&
+                  new Date(selectedDate).toDateString() === date.toDateString();
+
+                const style = {
+                  width: '39px',
+                  height: '39px',
+                  borderRadius: '8px',
+                  fontSize: '14px',
+                  fontWeight: 500,
+                  lineHeight: '32px',
+                  textAlign: 'center',
+                  backgroundColor: isSelected ? '#35C284' : '#F7F7F7',
+                  color: isSelected ? '#FEFEFE' : '#737373',
+                  paddingTop: '4px',
+                };
+
+                return (
+                  <div>
+                    <div style={style}>{date.getDate()}</div>
+                  </div>
+                );
+              }}
+            />
+          </div>
+          <div
+            className="bg-white rounded-xl py-1"
+            style={{
+              boxShadow: '0 0 8px rgba(0, 0, 0, 0.1)',
+            }}
+          >
+            <button className="fixed bottom-7 left-1/2 -translate-x-1/2 w-[350px] py-2 bg-main-100 text-background rounded-lg text-sm font-medium shadow-md">
+              <div
+                className="flex items-center justify-center gap-2"
+                onClick={() => {
+                  setShowCalendar(false);
+                }}
+              >
+                <span className="text-lg">날짜 선택 완료</span>
+              </div>
+            </button>
+          </div>
+        </div>
+      )}
+
       {showLeaveModal && (
         <TwoButtonModal
           title="앗, 이대로 나가시겠어요?"
@@ -203,6 +288,6 @@ export default function DiaryWritePage() {
           onConfirm={() => history.back()}
         />
       )}
-    </main>
+    </div>
   );
 }

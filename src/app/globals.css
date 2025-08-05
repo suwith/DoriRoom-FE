@@ -82,3 +82,8 @@
 .DayPicker-NavButton--next{
   font-size: 13px;
 }
+
+.DayPicker-Day--selected {
+  background-color: transparent !important; /* main-100 */
+  color: #ffffff !important;
+}
