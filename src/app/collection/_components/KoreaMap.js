@@ -4,7 +4,7 @@ import { FaXmark } from 'react-icons/fa6';
 import GaugeBar from './GaugeBar';
 import { useRouter } from 'next/navigation';
 
-const resionDetails = [
+const regionDetails = [
   { id: 0, name: '서울' },
   { id: 1, name: '경기도' },
   { id: 2, name: '강원도' },
@@ -15,7 +15,7 @@ const resionDetails = [
 ];
 
 export default function UnifiedKoreaMap() {
-  const [clickResion, setClickResion] = useState('');
+  const [clickRegion, setClickRegion] = useState('');
   const [bottomSheetOpen, setBottomSheetOpen] = useState(false);
   const [isVisible, setIsVisible] = useState(false);
   const [viewBox, setViewBox] = useState('0 0 390 623');
@@ -49,8 +49,8 @@ export default function UnifiedKoreaMap() {
     animRef.current = requestAnimationFrame(step);
   };
 
-  const clickHandler = (resion, to) => {
-    setClickResion(resionDetails.find((r) => r.name === resion));
+  const clickHandler = (region, to) => {
+    setClickRegion(regionDetails.find((r) => r.name === region));
     animateViewBox(viewBox, to);
     setIsVisible(true);
     setTimeout(() => setBottomSheetOpen(true), 10);
@@ -299,7 +299,7 @@ export default function UnifiedKoreaMap() {
           className={`fixed bottom-0 w-full max-w-[390px] mx-auto pb-5 z-100 bg-white rounded-t-xl px-4 pt-4 transition-transform duration-300 ease-in-out ${bottomSheetOpen ? 'translate-y-0' : 'translate-y-full'}`}
         >
           <div className="flex items-center justify-between">
-            <span className="font-semibold">{clickResion.name}</span>
+            <span className="font-semibold">{clickRegion.name}</span>
             <div className="bg-main-5 rounded-full p-1">
               <FaXmark
                 size={13}
@@ -334,7 +334,7 @@ export default function UnifiedKoreaMap() {
           <button
             className="w-full bg-main-100 font-semibold text-white text-lg rounded-lg py-2 mt-7"
             onClick={() => {
-              router.push(`/collection/${clickResion.id}`);
+              router.push(`/collection/${clickRegion.id}`);
             }}
           >
             과제 리스트 보기
