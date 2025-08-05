@@ -16,6 +16,12 @@ export default function DiaryWritePage() {
   const isFormValid =
     selectedDate && selectedFestival && diaryText.trim() !== '';
 
+  const handleImageChange = (e) => {
+    const newFiles = Array.from(e.target.files || []);
+    const totalFiles = [...images, ...newFiles].slice(0, 5);
+    setImages(totalFiles);
+  };
+
   return (
     <main className="max-w-[390px] mt-20 mx-auto p-4 font-sans">
       <HeaderNavigationBar title="일기 작성하기" className="bg-background" />
@@ -63,12 +69,25 @@ export default function DiaryWritePage() {
           <p className="text-[15px] font-semibold mb-3">
             📗 축제에 대한 일기를 작성해 주세요
           </p>
-          <div className="flex gap-2">
+          <div className="flex gap-2 overflow-x-auto scrollbar-hide">
+            <div className="min-w-[120px] min-h-[120px] w-[120px] h-[120px] flex-shrink-0 rounded-md bg-neutral-100 border border-dashed border-neutral-300 flex items-center justify-center overflow-hidden relative">
+              <label className="flex flex-col items-center justify-center text-xs text-neutral-400 cursor-pointer">
+                <i className="mgc_camera_fill text-2xl mb-1" />
+                사진 추가하기
+                <input
+                  type="file"
+                  accept="image/*"
+                  multiple
+                  hidden
+                  onChange={handleImageChange}
+                />
+              </label>
+            </div>
             {[...images, ...Array(5 - images.length).fill(null)].map(
               (img, i) => (
                 <div
                   key={i}
-                  className="w-20 h-20 rounded-md bg-gray-100 flex items-center justify-center overflow-hidden relative"
+                  className="min-w-[120px] min-h-[120px] w-[120px] h-[120px] flex-shrink-0 rounded-md bg-neutral-100 border border-dashed border-neutral-300  flex items-center justify-center overflow-hidden relative"
                 >
                   {img ? (
                     <>
@@ -82,26 +101,12 @@ export default function DiaryWritePage() {
                             prev.filter((_, idx) => idx !== i)
                           )
                         }
-                        className="absolute top-1 right-1 bg-black bg-opacity-50 text-white rounded-full w-5 h-5 text-xs"
+                        className="absolute top-1 right-1 bg-main-5 bg-opacity-50 text-main-40 rounded-full w-5 h-5 text-xs"
                       >
                         ✕
                       </button>
                     </>
-                  ) : (
-                    <label className="text-xs text-gray-400 cursor-pointer">
-                      <input
-                        type="file"
-                        accept="image/*"
-                        hidden
-                        onChange={(e) => {
-                          const file = e.target.files?.[0];
-                          if (file)
-                            setImages((prev) => [...prev.slice(0, 4), file]);
-                        }}
-                      />
-                      사진 추가하기
-                    </label>
-                  )}
+                  ) : null}
                 </div>
               )
             )}
@@ -113,7 +118,7 @@ export default function DiaryWritePage() {
 
         {/* 내용 입력 */}
         <textarea
-          className="w-full min-h-[400px] text-sm bg-neutral-100 rounded px-4 py-4 h-[160px] resize-none"
+          className="w-full min-h-[400px] text-sm bg-neutral-100 rounded-lg px-4 py-4 h-[160px] resize-none"
           placeholder="내용 입력하기"
           value={diaryText}
           onChange={(e) => setDiaryText(e.target.value)}
