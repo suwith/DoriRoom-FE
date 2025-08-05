@@ -36,7 +36,7 @@ export default function DiaryDetail({ diary }) {
         title={festival.title}
         type="diary"
         onEditClick={() => console.log('수정 클릭')}
-        onDeleteClick={() => console.log('삭제 클릭')}
+        onDeleteClick={() => setShowDeleteModal(true)}
         className="bg-background"
       />
 
@@ -60,8 +60,10 @@ export default function DiaryDetail({ diary }) {
           <div className="flex items-center gap-1 text-xs">
             <button onClick={() => handleLike(diary.id)}>
               <i
-                className={`mgc_emoji_2_line text-lg ${
-                  isLiked ? 'text-main-100' : 'text-neutral-400'
+                className={`text-lg ${
+                  isLiked
+                    ? 'mgc_emoji_2_fill text-main-100'
+                    : 'mgc_emoji_2_line text-neutral-400'
                 }`}
               />
             </button>
@@ -74,7 +76,7 @@ export default function DiaryDetail({ diary }) {
 
       {/* 관련 축제 바텀시트 */}
       {festival && isBottomOpen && (
-        <div className="fixed bottom-0 left-1/2 transform -translate-x-1/2 w-full max-w-[390px] mx-auto pb-16 z-100 rounded-t-xl px-4 pt-4 bg-main-5 shadow-[0_-4px_12px_rgba(0,0,0,0.1)] transition-transform duration-300 ease-in-out ">
+        <div className="fixed bottom-0 left-1/2 transform -translate-x-1/2 w-full max-w-[390px] mx-auto pb-16 z-30 rounded-t-xl px-4 pt-4 bg-main-5 shadow-[0_-4px_12px_rgba(0,0,0,0.1)] transition-transform duration-300 ease-in-out ">
           <div className="w-20 h-1 bg-main-40 rounded-full mx-auto mb-2" />
           <div className="text-sm font-bold text-main-100 flex items-center gap-1 mb-3">
             <Icon path={mdiTree} className="w-4 h-4 text-main-100" />
