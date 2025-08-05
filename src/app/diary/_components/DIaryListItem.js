@@ -13,7 +13,10 @@ export default function DiaryListItem({ diary }) {
   return (
     <div
       className="bg-main-5 rounded-lg p-3 space-y-2"
-      onClick={() => router.push(`/diary/${diary.id}`)}
+      onClick={() => {
+        if (showDiaryMenu) return;
+        router.push(`/diary/${diary.id}`);
+      }}
     >
       <div className="flex items-center justify-between">
         {/* 축제명 */}
@@ -23,13 +26,17 @@ export default function DiaryListItem({ diary }) {
         <div>
           <i
             className="mgc_more_2_line text-neutral-300 text-md"
-            onClick={() => setShowDiaryMenu((prev) => !prev)}
+            onClick={(e) => {
+              e.stopPropagation();
+              setShowDiaryMenu((prev) => !prev);
+            }}
           />
           {showDiaryMenu && (
             <div className="absolute right-6 mt-0 w-24 bg-background border border-neutral-100 text-neutral-600 rounded shadow-md text-sm z-50">
               <button
                 className="w-full text-center px-4 py-2 hover:bg-neutral-100"
-                onClick={() => {
+                onClick={(e) => {
+                  e.stopPropagation();
                   setShowDiaryMenu(false);
                   console.log('수정 완료');
                 }}
@@ -39,7 +46,8 @@ export default function DiaryListItem({ diary }) {
               <hr className="text-neutral-100" />
               <button
                 className="w-full text-center px-4 py-2 hover:bg-neutral-100"
-                onClick={() => {
+                onClick={(e) => {
+                  e.stopPropagation();
                   setShowDiaryMenu(false);
                   console.log('삭제 완료');
                 }}
