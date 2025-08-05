@@ -75,7 +75,7 @@ export default function ReviewItem({
           <div className="flex items-center gap-1 text-main-100 text-xs">
             <button onClick={() => onLike(review.id)}>
               {isLiked ? (
-                <i className="mgc_emoji_2_line text-lg text-main-100" />
+                <i className="mgc_emoji_2_fill text-lg text-main-100" />
               ) : (
                 <i className="mgc_emoji_2_line text-lg text-neutral-400" />
               )}
