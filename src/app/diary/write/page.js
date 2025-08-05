@@ -2,8 +2,8 @@
 'use client';
 
 import { useState } from 'react';
-import HeaderNavigationBar from '@/app/_components/HeaderNavigationBar';
 import { MdEditSquare } from 'react-icons/md';
+import TwoButtonModal from '@/app/_components/TwoButtonModal';
 
 export default function DiaryWritePage() {
   const [selectedDate, setSelectedDate] = useState('');
@@ -23,9 +23,24 @@ export default function DiaryWritePage() {
   };
 
   return (
-    <main className="max-w-[390px] mt-20 mx-auto p-4 font-sans">
-      <HeaderNavigationBar title="일기 작성하기" className="bg-background" />
+    <main className="max-w-[390px] mt-20 mx-auto p-4 pb-7 font-sans">
+      <header className="fixed top-0 left-1/2 transform -translate-x-1/2 z-50 max-w-[390px] w-full pt-[50px] pb-[20px] bg-background">
+        <div className="relative flex items-center justify-center mx-auto">
+          <h1 className="text-lg font-semibold text-gray-800">일기 작성하기</h1>
+          {/* 뒤로가기 버튼 */}
 
+          <div className="absolute left-5">
+            <button
+              onClick={() => {
+                setShowLeaveModal(true);
+              }}
+              className={`cursor-pointer flex items-center gap-1 text-neutral-500`}
+            >
+              <i className="mgc_left_line text-3xl" />
+            </button>
+          </div>
+        </div>
+      </header>
       <div className="space-y-5">
         {/* 축제 검색 */}
         <div>
@@ -179,31 +194,14 @@ export default function DiaryWritePage() {
       </div>
 
       {showLeaveModal && (
-        <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">
-          <div className="bg-background p-6 rounded-lg shadow w-[90%] max-w-sm text-center">
-            <p className="text-sm font-semibold mb-4">
-              앗, 이대로 나가시겠어요?
-              <br />
-              작성하던 글이 사라져요 😭
-            </p>
-            <div className="flex justify-around mt-2">
-              <button
-                className="px-4 py-2 bg-gray-200 rounded"
-                onClick={() => setShowLeaveModal(false)}
-              >
-                계속 작성할래요
-              </button>
-              <button
-                className="px-4 py-2 bg-main-100 text-background rounded"
-                onClick={() => {
-                  // TODO: 페이지 이동 또는 상태 초기화 처리
-                }}
-              >
-                다음에 쓸게요
-              </button>
-            </div>
-          </div>
-        </div>
+        <TwoButtonModal
+          title="앗, 이대로 나가시겠어요?"
+          description="작성하던 글이 사라져요 😭"
+          cancelText="계속 작성할래요"
+          onCancel={() => setShowLeaveModal(false)}
+          confirmText="다음에 쓸게요"
+          onConfirm={() => history.back()}
+        />
       )}
     </main>
   );
