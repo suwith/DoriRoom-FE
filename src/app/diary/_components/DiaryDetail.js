@@ -35,31 +35,33 @@ export default function DiaryDetail({ diary }) {
 
       <div className="p-5 space-y-5 whitespace-pre-line">
         <div className="text-sm">{diary.content}</div>
-        <div className="flex overflow-x-scroll gap-2 scrollbar-hide">
-          {diary.images?.map((src, idx) => (
-            <img
-              key={idx}
-              src={src}
-              alt={`diary-${idx}`}
-              className="w-[140px] h-[140px] object-cover rounded-lg"
-            />
-          ))}
-        </div>
-      </div>
+        {diary.images?.length > 0 && (
+          <div className="flex overflow-x-scroll gap-2 scrollbar-hide">
+            {diary.images?.map((src, idx) => (
+              <img
+                key={idx}
+                src={src}
+                alt={`diary-${idx}`}
+                className="w-[140px] h-[140px] object-cover rounded-lg"
+              />
+            ))}
+          </div>
+        )}
 
-      <div className="flex items-center px-5 pb-5 mt-2 gap-2">
-        <div className="text-xs text-neutral-400">{diary.date} •</div>
-        <div className="flex items-center gap-1 text-xs">
-          <button onClick={() => handleLike(diary.id)}>
-            <i
-              className={`mgc_emoji_2_line text-lg ${
-                isLiked ? 'text-main-100' : 'text-neutral-400'
-              }`}
-            />
-          </button>
-          <span className={isLiked ? 'text-main-100' : 'text-neutral-400'}>
-            {displayLikeText}
-          </span>
+        <div className="flex items-center gap-2">
+          <div className="text-xs text-neutral-400">{diary.date} •</div>
+          <div className="flex items-center gap-1 text-xs">
+            <button onClick={() => handleLike(diary.id)}>
+              <i
+                className={`mgc_emoji_2_line text-lg ${
+                  isLiked ? 'text-main-100' : 'text-neutral-400'
+                }`}
+              />
+            </button>
+            <span className={isLiked ? 'text-main-100' : 'text-neutral-400'}>
+              {displayLikeText}
+            </span>
+          </div>
         </div>
       </div>
 
