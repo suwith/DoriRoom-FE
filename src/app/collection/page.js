@@ -21,7 +21,7 @@ export default function Collection() {
         >
           지역과제
           <hr
-            className={`transition-all duration-500 ease-out ${activeTab === 1 ? 'w-[80%]' : 'w-[0px]'}`}
+            className={`mt-2 transition-all duration-500 ease-out ${activeTab === 1 ? 'w-[80%]' : 'w-[0px]'}`}
           />
         </div>
         <div
@@ -34,7 +34,7 @@ export default function Collection() {
         >
           일반과제
           <hr
-            className={`transition-all duration-500 ease-out ${activeTab === 2 ? 'w-[80%]' : 'w-[0px]'}`}
+            className={`mt-2 transition-all duration-500 ease-out ${activeTab === 2 ? 'w-[80%]' : 'w-[0px]'}`}
           />
         </div>
       </div>
