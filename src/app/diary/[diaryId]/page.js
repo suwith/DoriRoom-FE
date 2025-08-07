@@ -1,5 +1,5 @@
-import DiaryDetailPage from '../_components/DiaryDetail';
 import { mockDiaries } from '../mockData';
+import DiaryDetail from '../_components/DiaryDetail';
 
 export function generateStaticParams() {
   return mockDiaries.map((d) => ({
@@ -12,5 +12,5 @@ export default async function Page({ params }) {
 
   if (!diary) return <p>일기를 찾을 수 없습니다.</p>;
 
-  return <DiaryDetailPage diary={diary} />;
+  return <DiaryDetail diary={diary} />;
 }
