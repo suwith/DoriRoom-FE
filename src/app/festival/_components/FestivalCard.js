@@ -13,7 +13,7 @@ export default function FestivalCard({ festival }) {
   };
 
   return (
-    <div className="bg-white overflow-hidden">
+    <div className="bg-background overflow-hidden">
       <div
         className="relative bg-neutral-100 w-full h-40 bg-cover bg-center rounded-lg"
         style={{ backgroundImage: `url(${festival.thumbnail})` }}
@@ -23,11 +23,11 @@ export default function FestivalCard({ festival }) {
             {liked ? (
               <GoHeartFill className="text-main-100 w-5 h-5 drop-shadow" />
             ) : (
-              <GoHeart className="text-white w-5 h-5 drop-shadow" />
+              <GoHeart className="text-background w-5 h-5 drop-shadow" />
             )}
           </button>
           <span
-            className={`text-[10px] drop-shadow ${liked ? 'text-main-100' : 'text-white'}`}
+            className={`text-[10px] drop-shadow ${liked ? 'text-main-100' : 'text-background'}`}
           >
             {likeCount}
           </span>

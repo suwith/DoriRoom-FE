@@ -42,7 +42,7 @@ export default function BookmarkPage() {
   };
 
   return (
-    <div className="max-w-[390px] mx-auto h-screen bg-white pb-28">
+    <div className="max-w-[390px] mx-auto h-screen bg-background pb-28">
       {/* 상단 헤더 */}
       <div className="relative w-full h-[60px] flex items-center justify-center px-4 ">
         {editMode ? (
@@ -152,7 +152,7 @@ export default function BookmarkPage() {
       {showDeleteModal && (
         <div className="fixed inset-0 z-50 flex justify-center">
           <div className="w-full max-w-[390px] bg-black/30 px-4 flex items-center justify-center">
-            <div className="bg-white w-full rounded-xl p-4 text-center shadow-lg">
+            <div className="bg-background w-full rounded-xl p-4 text-center shadow-lg">
               <p className="text-base font-semibold mt-3">
                 즐겨찾기를 삭제하시겠어요?
               </p>

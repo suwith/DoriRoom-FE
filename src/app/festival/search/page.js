@@ -49,7 +49,7 @@ export default function SearchPage() {
   };
 
   return (
-    <div className="max-w-[390px] w-full h-screen bg-white mx-auto pt-4">
+    <div className="max-w-[390px] w-full h-screen bg-background mx-auto pt-4">
       {/* 검색창 */}
 
       <div className="px-4">

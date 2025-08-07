@@ -13,7 +13,7 @@ export default function ConfirmModal({
 
   return (
     <div className="fixed inset-0 z-100 flex items-center justify-center bg-black/30">
-      <div className="flex flex-col gap-4 bg-white rounded-lg shadow-lg w-[80%] max-w-sm px-10 py-6 animate-fade-in">
+      <div className="flex flex-col gap-4 bg-background rounded-lg shadow-lg w-[80%] max-w-sm px-10 py-6 animate-fade-in">
         <p className="text-center text-gray-800 text-lg font-medium">
           {price} 도깨비불로 {name}을(를) 구매하시겠습니까?
         </p>
@@ -23,13 +23,13 @@ export default function ConfirmModal({
         <div className="flex justify-between gap-3">
           <button
             onClick={onConfirm}
-            className="flex-1 py-2 bg-emerald-500 text-white font-semibold rounded-md"
+            className="flex-1 py-2 bg-main-100 text-background font-semibold rounded-md"
           >
             네
           </button>
           <button
             onClick={() => setIsOpen(false)}
-            className="flex-1 py-2 bg-emerald-500/5 text-emerald-500 font-semibold rounded-md"
+            className="flex-1 py-2 bg-main-5 text-main-100 font-semibold rounded-md"
           >
             아니요
           </button>
