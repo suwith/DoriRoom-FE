@@ -13,7 +13,7 @@ export default function FestivalCard({ festival }) {
   };
 
   return (
-    <div className="bg-white overflow-hidden">
+    <div className="bg-background overflow-hidden">
       <div
         className="relative bg-neutral-100 w-full h-40 bg-cover bg-center rounded-lg"
         style={{ backgroundImage: `url(${festival.thumbnail})` }}
@@ -23,11 +23,11 @@ export default function FestivalCard({ festival }) {
             {liked ? (
               <GoHeartFill className="text-main-100 w-5 h-5 drop-shadow" />
             ) : (
-              <GoHeart className="text-white w-5 h-5 drop-shadow" />
+              <GoHeart className="text-background w-5 h-5 drop-shadow" />
             )}
           </button>
           <span
-            className={`text-[10px] drop-shadow ${liked ? 'text-main-100' : 'text-white'}`}
+            className={`text-[10px] drop-shadow ${liked ? 'text-main-100' : 'text-background'}`}
           >
             {likeCount}
           </span>
@@ -42,9 +42,11 @@ export default function FestivalCard({ festival }) {
           <span className="text-main-100 bg-main-5 px-1 rounded-full">
             {festival.category}
           </span>
-          <span className="text-main-100 bg-main-5 px-1 rounded-full">
-            후기 {festival.reviews.length}개
-          </span>
+          {festival.reviews.length > 0 && (
+            <span className="text-main-100 bg-main-5 px-1 rounded-full">
+              후기 {festival.reviews.length}개
+            </span>
+          )}
           <span className="text-main-100 bg-main-5 px-1 rounded-full">
             {festival.price === 0 ? '무료' : '유료'}
           </span>

@@ -34,7 +34,7 @@ export default function FestivalPage() {
 
       {/* 배너 */}
       <div className="mt-4 px-4 w-full h-64 overflow-x-auto no-scrollbar">
-        <div className="text-sm text-white bg-neutral-100 w-full h-full rounded-md"></div>
+        <div className="text-sm text-background bg-neutral-100 w-full h-full rounded-md"></div>
       </div>
 
       {/* 지역 선택 */}

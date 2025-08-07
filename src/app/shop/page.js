@@ -128,8 +128,8 @@ export default function Shop() {
             className="flex justify-center items-center gap-2 py-1 rounded-lg w-auto px-2"
             style={{ boxShadow: '0 0 10px rgba(0,0,0,0.1)' }}
           >
-            <FaFire className="ml-1 trnsform scale-x-[-1] text-emerald-400 w-5 h-5" />
-            <p className="font-bold text-emerald-400 text-lg">{credit}</p>
+            <FaFire className="ml-1 trnsform scale-x-[-1] text-main-100 w-5 h-5" />
+            <p className="font-bold text-main-100 text-lg">{credit}</p>
           </div>
         </div>
 
@@ -141,13 +141,13 @@ export default function Shop() {
             className="w-[136px] h-[152px]"
           />
         </div>
-        <div className="flex justify-end my-5 pr-3 text-white">
+        <div className="flex justify-end my-5 pr-3 text-background">
           <button
             disabled={selectedItemIdx === null}
-            className={`flex gap-2 items-center justify-center rounded-xl px-4 py-2 ${selectedItemIdx === null ? 'bg-neutral-300' : 'bg-emerald-400'}`}
+            className={`flex gap-2 items-center justify-center rounded-xl px-4 py-2 ${selectedItemIdx === null ? 'bg-neutral-300' : 'bg-main-100'}`}
             onClick={() => setIsOpenBuyModal(true)}
           >
-            <RiWallet3Fill className="fill-white" size={20} />
+            <RiWallet3Fill className="fill-background" size={20} />
             <p className="font-bold text-[14px]">구입하기</p>
           </button>
         </div>

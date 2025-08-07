@@ -22,7 +22,7 @@ export default function FestivalListItem({
             {liked ? (
               <GoHeartFill className="text-main-100 w-4 h-4 drop-shadow" />
             ) : (
-              <GoHeart className="text-white w-4 h-4 drop-shadow" />
+              <GoHeart className="text-background w-4 h-4 drop-shadow" />
             )}
           </button>
         )}
