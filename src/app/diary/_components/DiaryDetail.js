@@ -7,8 +7,10 @@ import FestivalListItem from '@/app/festival/_components/FestivalListItem';
 import Icon from '@mdi/react';
 import { mdiTree } from '@mdi/js';
 import TwoButtonModal from '@/app/_components/TwoButtonModal';
+import { useRouter } from 'next/navigation';
 
 export default function DiaryDetail({ diary }) {
+  const router = useRouter();
   const [likedIds, setLikedIds] = useState([]);
   const [isBottomOpen, setIsBottomOpen] = useState(true); // 기본값 true 또는 false 설정
 
@@ -87,6 +89,7 @@ export default function DiaryDetail({ diary }) {
             style={{
               boxShadow: '0 0 8px rgba(0, 0, 0, 0.1)',
             }}
+            onClick={() => router.push(`/festival/${festival.id}`)}
           >
             <FestivalListItem festival={festival} hideLikeButton={true} />
           </div>
