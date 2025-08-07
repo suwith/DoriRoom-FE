@@ -7,7 +7,7 @@ import 'react-day-picker/lib/style.css';
 import DayPicker from 'react-day-picker';
 import { format } from 'date-fns';
 
-export default function DiaryWritePage() {
+export default function DiaryWrite() {
   const [selectedDate, setSelectedDate] = useState('');
   const [selectedFestival, setSelectedFestival] = useState('');
   const [images, setImages] = useState([]);
@@ -15,10 +15,11 @@ export default function DiaryWritePage() {
   const [visibility, setVisibility] = useState('public');
   const [showLeaveModal, setShowLeaveModal] = useState(false);
   const [showCalendar, setShowCalendar] = useState(false);
-  const [tempDate, setTempDate] = useState(new Date());
 
   const isFormValid =
     selectedDate && selectedFestival && diaryText.trim() !== '';
+
+  const isWriting = selectedDate || selectedFestival || diaryText.trim() !== '';
 
   const handleImageChange = (e) => {
     const newFiles = Array.from(e.target.files || []);
@@ -31,12 +32,12 @@ export default function DiaryWritePage() {
       <header className="fixed top-0 left-1/2 transform -translate-x-1/2 z-50 max-w-[390px] w-full pt-[50px] pb-[10px] bg-background">
         <div className="relative flex items-center justify-center mx-auto">
           <h1 className="text-lg font-semibold text-gray-800">일기 작성하기</h1>
-          {/* 뒤로가기 버튼 */}
 
+          {/* 뒤로가기 버튼 */}
           <div className="absolute left-5">
             <button
               onClick={() => {
-                setShowLeaveModal(true);
+                isWriting ? setShowLeaveModal(true) : history.back();
               }}
               className={`cursor-pointer flex items-center gap-1 text-neutral-500`}
             >
