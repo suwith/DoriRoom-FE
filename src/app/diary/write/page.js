@@ -57,7 +57,7 @@ export default function DiaryWrite() {
           </div>
         </div>
       </header>
-      <div className="space-y-5 px-4 pt-4 pb-7">
+      <div className="space-y-5 px-4 pt-7 pb-7">
         {/* 축제 검색 */}
         <div>
           <p className="text-[15px] font-semibold mb-3">
@@ -213,6 +213,10 @@ export default function DiaryWrite() {
         <button
           disabled={!isFormValid}
           className={`w-full py-2 rounded-lg font-bold text-sm text-background ${isFormValid ? 'bg-main-100' : 'bg-neutral-300 cursor-not-allowed'}`}
+          onClick={() => {
+            console.log('일기 업로드 완료');
+            history.back();
+          }}
         >
           <div className="flex items-center justify-center gap-2">
             <MdEditSquare className="text-background w-5 h-5" />
