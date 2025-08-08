@@ -1,6 +1,6 @@
 'use client';
 
-import { useState, useEffect } from 'react';
+import { useEffect, useState } from 'react';
 import { useRouter } from 'next/navigation';
 import RegionFilter from '../_components/RegionFilter';
 import 'mingcute_icon/font/Mingcute.css';
@@ -58,7 +58,7 @@ export default function SearchPage() {
           onChange={(e) => setInput(e.target.value)}
           onEnter={(text) => {
             router.push(
-              `/festival/search/result?query=${encodeURIComponent(text)}`
+              `/festival/search/result?query=${encodeURIComponent(text)}&mode=select`
             );
             saveRecentSearch(text);
           }}
@@ -78,7 +78,7 @@ export default function SearchPage() {
               onClick={() => {
                 saveRecentSearch(tag);
                 router.push(
-                  `/festival/search/result?query=${encodeURIComponent(tag)}`
+                  `/festival/search/result?query=${encodeURIComponent(tag)}&mode=select`
                 );
               }}
               className="bg-transparent text-xs px-2 py-1 rounded-full border border-neutral-200 text-neutral-900 flex items-center gap-1"

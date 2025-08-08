@@ -1,7 +1,7 @@
 'use client';
 
 import { useEffect, useState } from 'react';
-import { useRouter } from 'next/navigation';
+import { usePathname, useRouter } from 'next/navigation';
 import { mockFestivals } from '../../mockData';
 import SearchInputBar from '@/app/festival/_components/SearchInputBar';
 import { FiFilter } from 'react-icons/fi';
@@ -10,6 +10,17 @@ import FestivalListItem from '@/app/festival/_components/FestivalListItem';
 
 export default function FestivalSearchResultPage() {
   const router = useRouter();
+  const pathname = usePathname();
+  const [mode, setMode] = useState('default');
+
+  useEffect(() => {
+    const params = new URLSearchParams(window.location.search);
+    const modeParam = params.get('mode');
+    if (modeParam === 'select') {
+      setMode('select');
+    }
+  }, []);
+
   const [searchQuery, setSearchQuery] = useState('');
   const [input, setInput] = useState('');
   const [likedIds, setLikedIds] = useState([]);
@@ -89,13 +100,25 @@ export default function FestivalSearchResultPage() {
           filteredFestivals.map((festival) => (
             <div
               key={festival.id}
-              onClick={() => router.push(`/festival/${festival.id}`)}
+              onClick={() =>
+                mode === 'select'
+                  ? null
+                  : router.push(`/festival/${festival.id}`)
+              }
             >
               <FestivalListItem
                 key={festival.id}
                 festival={festival}
                 liked={likedIds.includes(festival.id)}
                 onLike={() => toggleLike(festival.id)}
+                mode={mode}
+                onSelect={() => {
+                  sessionStorage.setItem(
+                    'selectedFestival',
+                    JSON.stringify(festival)
+                  );
+                  router.push('/diary/write');
+                }}
               />
             </div>
           ))

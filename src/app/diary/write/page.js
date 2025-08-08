@@ -1,13 +1,15 @@
 'use client';
 
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { MdEditSquare } from 'react-icons/md';
 import TwoButtonModal from '@/app/_components/TwoButtonModal';
 import 'react-day-picker/lib/style.css';
 import { format } from 'date-fns';
 import SelectDate from '@/app/diary/write/_components/SelectDate';
+import { useRouter } from 'next/navigation';
 
 export default function DiaryWrite() {
+  const router = useRouter();
   const [selectedDate, setSelectedDate] = useState('');
   const [selectedFestival, setSelectedFestival] = useState('');
   const [images, setImages] = useState([]);
@@ -27,11 +29,20 @@ export default function DiaryWrite() {
     setImages(totalFiles);
   };
 
+  useEffect(() => {
+    const stored = sessionStorage.getItem('selectedFestival');
+    if (stored) {
+      const festival = JSON.parse(stored);
+      setSelectedFestival(festival.title); // 또는 festival 객체 전체 저장
+      sessionStorage.removeItem('selectedFestival'); // 1회용
+    }
+  }, []);
+
   return (
     <div className="min-h-screen pt-20">
       <header className="fixed top-0 left-1/2 transform -translate-x-1/2 z-50 max-w-[390px] w-full pt-[50px] pb-[10px] bg-background">
         <div className="relative flex items-center justify-center mx-auto">
-          <h1 className="text-lg font-semibold text-gray-800">일기 작성하기</h1>
+          <h1 className="text-lg font-semibold">일기 작성하기</h1>
 
           {/* 뒤로가기 버튼 */}
           <div className="absolute left-5">
@@ -54,13 +65,21 @@ export default function DiaryWrite() {
           </p>
           <div className="flex gap-2">
             <input
+              readOnly
               type="text"
-              className="flex-1 text-sm bg-neutral-100 rounded-md px-3 py-2 placeholder:text-neutral-300"
+              className="flex-1 text-sm bg-neutral-100 rounded-md px-3 py-2 placeholder:text-neutral-300 focus:outline-none"
               placeholder="페스티벌 찾기"
               value={selectedFestival}
               onChange={(e) => setSelectedFestival(e.target.value)}
             />
-            <button className="bg-main-100 text-background px-5 py-3 text-[15px] rounded-lg">
+            <button
+              className="bg-main-100 text-background px-5 py-3 text-[15px] rounded-lg"
+              onClick={() => {
+                router.push('/festival/search', {
+                  state: { mode: 'select' },
+                });
+              }}
+            >
               검색
             </button>
           </div>
@@ -75,7 +94,7 @@ export default function DiaryWrite() {
             <input
               readOnly
               type="text"
-              className="flex-1 rounded-md bg-neutral-100 text-sm px-3 py-2 placeholder:text-neutral-300"
+              className="flex-1 rounded-md bg-neutral-100 text-sm px-3 py-2 placeholder:text-neutral-300 focus:outline-none"
               placeholder="00-00-00"
               value={selectedDate ? format(selectedDate, 'yy-MM-dd') : ''}
             />
