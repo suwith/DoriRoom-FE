@@ -190,7 +190,7 @@ export default function FestivalDetail({ festival }) {
 
           <button
             className="fixed bottom-7 left-1/2 -translate-x-1/2 w-[350px] py-2 bg-main-100 text-white rounded-lg text-sm font-medium shadow-md"
-            onClick={() => router.push(`/festival/write`)}
+            onClick={() => router.push(`/diary/write`)}
           >
             <div className="flex items-center justify-center gap-2">
               {' '}
