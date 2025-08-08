@@ -57,26 +57,30 @@ export default function FestivalSearchResultPage() {
         withBack
       />
 
-      <div className="flex gap-2 items-center mt-3 mb-3">
-        {['정렬기준', '지역', '분야', '기간'].map((tag) => (
-          <button
-            key={tag}
-            className="bg-transparent text-xs px-2 py-1 rounded-full border border-neutral-200  text-neutral-900 flex items-center gap-1"
-          >
-            <span>{tag}</span>
-            <IoIosArrowDown />
-          </button>
-        ))}
-        <button className="ml-auto p-1">
-          <FiFilter className="text-neutral-500 w-4 h-4" />
-        </button>
-      </div>
+      {mode !== 'select' && (
+        <>
+          <div className="flex gap-2 items-center mt-3 mb-3">
+            {['정렬기준', '지역', '분야', '기간'].map((tag) => (
+              <button
+                key={tag}
+                className="bg-transparent text-xs px-2 py-1 rounded-full border border-neutral-200  text-neutral-900 flex items-center gap-1"
+              >
+                <span>{tag}</span>
+                <IoIosArrowDown />
+              </button>
+            ))}
+            <button className="ml-auto p-1">
+              <FiFilter className="text-neutral-500 w-4 h-4" />
+            </button>
+          </div>
 
-      <div className="text-xs text-neutral-600 mb-3">
-        검색결과 ({filteredFestivals.length})
-      </div>
+          <div className="text-xs text-neutral-600">
+            검색결과 ({filteredFestivals.length})
+          </div>
+        </>
+      )}
 
-      <div className="space-y-4 h-full">
+      <div className="space-y-4 h-full mt-3">
         {filteredFestivals.length === 0 ? (
           <div
             className="flex flex-col h-full items-center justify-center gap-3"

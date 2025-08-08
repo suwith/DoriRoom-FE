@@ -75,9 +75,8 @@ export default function DiaryWrite() {
             <button
               className="bg-main-100 text-background px-5 py-3 text-[15px] rounded-lg"
               onClick={() => {
-                router.push('/festival/search', {
-                  state: { mode: 'select' },
-                });
+                router.push('/festival/search');
+                sessionStorage.setItem('selectMode', 'true');
               }}
             >
               검색
