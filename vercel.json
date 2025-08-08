@@ -2,10 +2,5 @@
   "version": 2,
   "outputDirectory": "out",
   "cleanUrls": true,
-  "trailingSlash": true,
-  "build": {
-    "env": {
-      "NPM_FLAGS": "--legacy-peer-deps"
-    }
-  }
+  "trailingSlash": true
 }
