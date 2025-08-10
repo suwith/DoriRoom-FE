@@ -34,10 +34,10 @@ export default async function page({ params }) {
         className="bg-background"
       />
       <div className="h-screen relative mx-[16px]">
-        <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 text-center w-full">
+        <div className="absolute top-3/7 left-1/2 -translate-x-1/2 -translate-y-1/2 text-center w-full">
           <p className="font-medium text-xl">{region.name} 퀴즈 풀고</p>
           <p className="font-medium text-xl">
-            <b>경험치</b>와 <b>도깨비불</b> 받아가세요!✏️
+            <b>경험치</b>와 <b>도깨비불</b> 받아가세요! ✏️
           </p>
           <p className="mt-2 font-regular text-lg text-main-100">
             5문제를 모두 맞혀야 보상을 받을 수 있어요.
