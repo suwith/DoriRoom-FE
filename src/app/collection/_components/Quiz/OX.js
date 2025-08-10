@@ -23,13 +23,13 @@ export default function OX({ quiz }) {
         <p className="font-semibold text-xl">{title}</p>
         <div className="flex gap-2 mt-15 font-bold text-xl">
           <button
-            className={`w-full text-main-100 px-auto py-15 rounded-xl ${selectBtn ? 'border border-main-100 bg-main-15' : 'bg-main-5'}`}
+            className={`w-full text-main-100 px-auto py-15 rounded-xl border ${selectBtn ? 'border-main-100 bg-main-15' : 'border-main-5 bg-main-5'}`}
             onClick={() => setSelectBtn(true)}
           >
             예
           </button>
           <button
-            className={`w-full text-sub-100 px-auto py-15 rounded-xl ${!selectBtn ? 'border border-sub-100 bg-sub-15' : 'bg-sub-5'}`}
+            className={`w-full text-sub-100 px-auto py-15 rounded-xl border ${!selectBtn ? 'border-sub-100 bg-sub-15' : 'border-main-5 bg-sub-5'}`}
             onClick={() => setSelectBtn(false)}
           >
             아니오
@@ -55,7 +55,7 @@ export default function OX({ quiz }) {
         <p className="text-neutral-900 font-semibold text-lg text-center">
           {currect ? '정답이에요!' : '오답이에요 😭'}
         </p>
-        <p className="mt-5 text-md font-normal text-neutral-600">
+        <p className="mt-5 text-md font-normal text-neutral-600 text-justify">
           {explanation}
         </p>
         <button
