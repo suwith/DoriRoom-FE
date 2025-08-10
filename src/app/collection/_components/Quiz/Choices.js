@@ -62,7 +62,7 @@ export default function Choices({ quiz }) {
       </button>
 
       {bottomSheetOpen && (
-        <div className="fixed top-0 bottom-0 left-1/2 transform -translate-x-1/2 w-full max-w-[390px] bg-black/25 z-40" />
+        <div className="fixed top-0 bottom-0 left-1/2 transform -translate-x-1/2 w-full max-w-[390px] bg-black/25 z-99" />
       )}
 
       <div
