@@ -96,7 +96,7 @@ export function generateStaticParams() {
 }
 
 export default async function page({ params }) {
-  const { regionId, quizId } = params;
+  const { regionId, quizId } = await params;
   const region = regionDetails.find((r) => r.id === Number(regionId)); // 배열에서 첫 번째 항목 찾기
   const quiz = quizs.find(
     (r) => r.quizId === Number(quizId) && r.regionId === region.id
