@@ -1,4 +1,5 @@
 import HeaderNavigationBar from '@/app/_components/HeaderNavigationBar';
+import Link from 'next/link';
 
 const regionDetails = [
   { id: 0, lv: 5, name: '서울' },
@@ -49,9 +50,12 @@ export default async function page({ params }) {
             className="mt-10 mx-auto block"
           />
         </div>
-        <button className="absolute bottom-10 bg-main-100 text-white rounded-md w-full py-2.5 justify-self-end">
+        <Link
+          className="absolute bottom-10 bg-main-100 text-background text-center text-xl font-semibold rounded-md w-full py-2.5 justify-self-end"
+          href={`/collection/${regionId}/quiz/0`}
+        >
           퀴즈 시작하기
-        </button>
+        </Link>
       </div>
     </div>
   );
