@@ -98,6 +98,8 @@ export default async function page({ params }) {
       <HeaderNavigationBar
         title={`${region.name} 퀴즈`}
         className="bg-background"
+        showBackButton={false}
+        type="quiz"
       />
       <div className="flex gap-2 pt-28 mx-[16px]">
         {[0, 1, 2, 3, 4].map((i) => (

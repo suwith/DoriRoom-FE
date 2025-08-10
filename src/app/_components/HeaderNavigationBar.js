@@ -1,9 +1,9 @@
 'use client';
 
-import { useRouter } from 'next/navigation';
 import BackButton from '../_components/BackButton';
 import TaskInfoModal from '../collection/_components/Task/TaskInfoModal';
 import { useState } from 'react';
+import QuizQuitModal from '../collection/_components/Quiz/QuizQuitModal';
 
 export default function HeaderNavigationBar({
   title = '제목 없음',
@@ -12,7 +12,6 @@ export default function HeaderNavigationBar({
   type = 'general',
   lv = 0,
 }) {
-  const router = useRouter();
   const [isOpen, setIsOpen] = useState(false);
 
   return (
@@ -34,6 +33,11 @@ export default function HeaderNavigationBar({
             <BackButton />
           </div>
         )}
+        {type === 'quiz' && (
+          <div className="absolute left-[16px]" onClick={() => setIsOpen(true)}>
+            <i className={`mgc_left_line text-3xl text-neutral-500`} />
+          </div>
+        )}
         {type === 'collection' && (
           <i
             className="absolute right-[16px] mgc_information_fill text-neutral-500 text-xl"
@@ -41,7 +45,12 @@ export default function HeaderNavigationBar({
           />
         )}
       </div>
-      <TaskInfoModal isOpen={isOpen} setIsOpen={setIsOpen} />
+      {type === 'collection' && (
+        <TaskInfoModal isOpen={isOpen} setIsOpen={setIsOpen} />
+      )}
+      {type === 'quiz' && (
+        <QuizQuitModal isOpen={isOpen} setIsOpen={setIsOpen} />
+      )}
     </header>
   );
 }
