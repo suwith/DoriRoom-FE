@@ -75,11 +75,20 @@ const quizs = [
     explanation:
       '모란시장은 경기도 성남시 중원구에 위치한 전통시장으로, 전통 한과와 약재, 간식류 등으로 유명합니다.',
   },
+  {
+    quizId: 5,
+    type: 'result',
+    regionId: 1,
+    reward: {
+      exp: 200,
+      credit: 10,
+    },
+  },
 ];
 
 export function generateStaticParams() {
   const regionIds = Array.from({ length: 7 }, (_, i) => String(i)); // ["1","2",...,"7"]
-  const quizIds = Array.from({ length: 5 }, (_, i) => String(i)); // ["0","1","2","3","4"]
+  const quizIds = Array.from({ length: 6 }, (_, i) => String(i)); // ["0","1","2","3","4"]
 
   return regionIds.flatMap((regionId) =>
     quizIds.map((quizId) => ({ regionId, quizId }))
@@ -95,20 +104,24 @@ export default async function page({ params }) {
 
   return (
     <div className="max-w-[390px] w-screen mx-auto h-screen">
-      <HeaderNavigationBar
-        title={`${region.name} 퀴즈`}
-        className="bg-background"
-        showBackButton={false}
-        type="quiz"
-      />
-      <div className="flex gap-2 pt-28 mx-[16px]">
-        {[0, 1, 2, 3, 4].map((i) => (
-          <hr
-            key={i}
-            className={`w-full py-1 border-none rounded-xl ${i <= Number(quizId) ? 'bg-sub-100 ' : 'bg-sub-15 '}`}
-          />
-        ))}
-      </div>
+      {Number(quizId) !== 5 && (
+        <HeaderNavigationBar
+          title={`${region.name} 퀴즈`}
+          className="bg-background"
+          showBackButton={false}
+          type="quiz"
+        />
+      )}
+      {Number(quizId) !== 5 && (
+        <div className="flex gap-2 pt-28 mx-[16px]">
+          {[0, 1, 2, 3, 4].map((i) => (
+            <hr
+              key={i}
+              className={`w-full py-1 border-none rounded-xl ${i <= Number(quizId) ? 'bg-sub-100 ' : 'bg-sub-15 '}`}
+            />
+          ))}
+        </div>
+      )}
       <QuizClient quiz={quiz} />
     </div>
   );
