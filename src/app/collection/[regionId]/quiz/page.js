@@ -33,7 +33,7 @@ export default async function page({ params }) {
         title={`${region.name} 퀴즈`}
         className="bg-background"
       />
-      <div className="h-screen relative">
+      <div className="h-screen relative mx-[16px]">
         <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 text-center w-full">
           <p className="font-medium text-xl">{region.name} 퀴즈 풀고</p>
           <p className="font-medium text-xl">

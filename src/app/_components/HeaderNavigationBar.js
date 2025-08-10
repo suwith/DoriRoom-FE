@@ -30,13 +30,13 @@ export default function HeaderNavigationBar({
 
         {/* 뒤로가기 버튼 */}
         {showBackButton && (
-          <div className="absolute left-5">
+          <div className="absolute left-[16px]">
             <BackButton />
           </div>
         )}
         {type === 'collection' && (
           <i
-            className="absolute right-5 mgc_information_fill text-neutral-500 text-xl"
+            className="absolute right-[16px] mgc_information_fill text-neutral-500 text-xl"
             onClick={() => setIsOpen(true)}
           />
         )}
