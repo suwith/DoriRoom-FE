@@ -112,16 +112,6 @@ export default async function page({ params }) {
           type="quiz"
         />
       )}
-      {Number(quizId) !== 5 && (
-        <div className="flex gap-2 pt-28 mx-[16px]">
-          {[0, 1, 2, 3, 4].map((i) => (
-            <hr
-              key={i}
-              className={`w-full py-1 border-none rounded-xl ${i <= Number(quizId) ? 'bg-sub-100 ' : 'bg-sub-15 '}`}
-            />
-          ))}
-        </div>
-      )}
       <QuizClient quiz={quiz} />
     </div>
   );

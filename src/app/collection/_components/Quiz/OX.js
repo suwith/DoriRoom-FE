@@ -15,11 +15,21 @@ export default function OX({ quiz }) {
   const already = useQuizStore((s) => s.answers[quizId]);
 
   return (
-    <div className="h-[calc(100vh-120px)] relative mx-[16px]">
-      <div className="absolute top-1/3 left-1/2 -translate-x-1/2 -translate-y-1/2 w-full">
+    <div className="h-screen mx-[16px] flex flex-col">
+      {quizId !== 5 && (
+        <div className="flex gap-2 pt-28">
+          {[0, 1, 2, 3, 4].map((i) => (
+            <hr
+              key={i}
+              className={`w-full py-1 border-none rounded-xl ${i <= Number(quizId) ? 'bg-sub-100 ' : 'bg-sub-15 '}`}
+            />
+          ))}
+        </div>
+      )}
+      <div className="flex-1 flex flex-col justify-center w-full mb-20">
         <p className="font-bold text-2xl text-main-100">Q{quizId + 1}.</p>
         <p className="font-semibold text-xl">{title}</p>
-        <div className="flex gap-2 mt-15 font-bold text-xl">
+        <div className="flex w-full gap-2 mt-15 font-bold text-xl">
           <button
             className={`w-full text-main-100 px-auto py-15 rounded-xl border ${selectBtn ? 'border-main-100 bg-main-15' : 'border-main-5 bg-main-5'}`}
             onClick={() => setSelectBtn(true)}
@@ -35,7 +45,7 @@ export default function OX({ quiz }) {
         </div>
       </div>
       <button
-        className="absolute bottom-10 bg-main-100 text-background text-center text-xl font-semibold rounded-md w-full py-2.5 justify-self-end"
+        className="mb-10 bg-main-100 text-background text-center text-xl font-semibold rounded-md w-full py-2.5 justify-self-end"
         onClick={() => {
           if (selectBtn === null) return;
           setAnswer(quizId, selectBtn, isCurrect);

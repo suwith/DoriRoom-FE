@@ -28,30 +28,34 @@ export default async function page({ params }) {
   }
 
   return (
-    <div className="max-w-[390px] w-screen mx-auto h-screen bg-linear-to-t from-main-100/15 to-background">
+    <div className="max-w-[390px] w-screen mx-auto h-screen bg-linear-to-t from-main-100/15 to-background flex flex-col">
       <HeaderNavigationBar
         title={`${region.name} 퀴즈`}
         className="bg-background"
       />
-      <div className="h-screen relative mx-[16px]">
-        <div className="absolute top-3/7 left-1/2 -translate-x-1/2 -translate-y-1/2 text-center w-full">
-          <p className="font-medium text-xl">{region.name} 퀴즈 풀고</p>
-          <p className="font-medium text-xl">
-            <b>경험치</b>와 <b>도깨비불</b> 받아가세요! ✏️
-          </p>
-          <p className="mt-2 font-regular text-lg text-main-100">
-            5문제를 모두 맞혀야 보상을 받을 수 있어요.
-            <br />
-            여러 번 재도전이 가능하니 참여해 보세요!
-          </p>
-          <img
-            src="/character.png"
-            alt="character"
-            className="mt-10 mx-auto block"
-          />
-        </div>
+
+      {/* 콘텐츠 영역 */}
+      <div className="flex-1 flex flex-col items-center justify-center px-[16px] text-center">
+        <p className="font-medium text-xl">{region.name} 퀴즈 풀고</p>
+        <p className="font-medium text-xl">
+          <b>경험치</b>와 <b>도깨비불</b> 받아가세요! ✏️
+        </p>
+        <p className="mt-2 font-regular text-lg text-main-100">
+          5문제를 모두 맞혀야 보상을 받을 수 있어요.
+          <br />
+          여러 번 재도전이 가능하니 참여해 보세요!
+        </p>
+        <img
+          src="/character.png"
+          alt="character"
+          className="mt-10 mx-auto block"
+        />
+      </div>
+
+      {/* 하단 버튼 */}
+      <div className="px-[16px] pb-10">
         <Link
-          className="absolute bottom-10 bg-main-100 text-background text-center text-xl font-semibold rounded-md w-full py-2.5 justify-self-end"
+          className="bg-main-100 text-background text-center text-xl font-semibold rounded-md w-full py-2.5 block"
           href={`/collection/${regionId}/quiz/0`}
         >
           퀴즈 시작하기
