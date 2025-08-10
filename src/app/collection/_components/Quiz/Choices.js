@@ -2,13 +2,17 @@
 
 import { useState } from 'react';
 import { useRouter } from 'next/navigation';
+import { useQuizStore } from '@/stores/useQuizStore';
 
 export default function Choices({ quiz }) {
   const router = useRouter();
   const { quizId, regionId, title, options, answer, explanation } = quiz;
   const [selectBtn, setSelectBtn] = useState(null);
   const [bottomSheetOpen, setBottomSheetOpen] = useState(false);
-  const currect = selectBtn === answer;
+  const isCurrect = selectBtn === answer;
+
+  const setAnswer = useQuizStore((s) => s.setAnswer);
+  const already = useQuizStore((s) => s.answers[quizId]);
 
   return (
     <div className="h-[calc(100vh-120px)] relative mx-[16px]">
@@ -30,8 +34,11 @@ export default function Choices({ quiz }) {
       <button
         className="absolute bottom-10 bg-main-100 text-background text-center text-xl font-semibold rounded-md w-full py-2.5 justify-self-end"
         onClick={() => {
+          if (selectBtn === null) return;
+          setAnswer(quizId, selectBtn, isCurrect);
           setBottomSheetOpen(true);
         }}
+        disabled={selectBtn === null || already}
       >
         제출하기
       </button>
@@ -44,7 +51,7 @@ export default function Choices({ quiz }) {
         className={`fixed bottom-0 left-1/2 transform -translate-x-1/2 w-full max-w-[390px] mx-auto z-100 bg-white rounded-t-xl px-4 py-8 transition-transform duration-300 ease-in-out ${bottomSheetOpen ? 'translate-y-0' : 'translate-y-full'}`}
       >
         <p className="text-neutral-900 font-semibold text-lg text-center">
-          {currect ? '정답이에요!' : '오답이에요 😭'}
+          {isCurrect ? '정답이에요!' : '오답이에요 😭'}
         </p>
         <p className="mt-5 text-md font-normal text-neutral-600 text-justify">
           {explanation}
