@@ -10,12 +10,6 @@ export default function OX({ quiz }) {
   const [bottomSheetOpen, setBottomSheetOpen] = useState(false);
   const currect = selectBtn === answer;
 
-  const nextQuiz = () => {
-    if (quizId !== 4) {
-      router.push(`/collection/${regionId}/quiz/${quizId + 1}`);
-    }
-  };
-
   return (
     <div className="h-[calc(100vh-120px)] relative mx-[16px]">
       <div className="absolute top-1/3 left-1/2 -translate-x-1/2 -translate-y-1/2 w-full">
@@ -29,7 +23,7 @@ export default function OX({ quiz }) {
             예
           </button>
           <button
-            className={`w-full text-sub-100 px-auto py-15 rounded-xl border ${!selectBtn ? 'border-sub-100 bg-sub-15' : 'border-main-5 bg-sub-5'}`}
+            className={`w-full text-sub-100 px-auto py-15 rounded-xl border ${selectBtn === false ? 'border-sub-100 bg-sub-15' : 'border-main-5 bg-sub-5'}`}
             onClick={() => setSelectBtn(false)}
           >
             아니오
@@ -60,7 +54,9 @@ export default function OX({ quiz }) {
         </p>
         <button
           className="w-full bg-main-100 font-semibold text-white text-lg rounded-lg py-2 mt-7"
-          onClick={nextQuiz}
+          onClick={() =>
+            router.push(`/collection/${regionId}/quiz/${quizId + 1}`)
+          }
         >
           다음 퀴즈로
         </button>
