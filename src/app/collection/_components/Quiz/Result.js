@@ -12,7 +12,7 @@ export default function Result({ quiz }) {
       <div className="flex-1 flex flex-col items-center justify-center px-[16px] text-center">
         <p className="font-medium text-2xl text-neutral-900">축하드려요!</p>
         <p className="font-semibold text-2xl text-neutral-900">
-          {score} 개를 맞추셨어요!
+          모든 퀴즈를 맞히셨어요🎉
         </p>
         <p className="mt-3 font-normal text-base text-main-100">
           보상으로 {exp}xp와 {credit} 도깨비불이 지급돼요.

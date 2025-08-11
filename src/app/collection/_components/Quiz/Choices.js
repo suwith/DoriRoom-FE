@@ -13,7 +13,15 @@ export default function Choices({ quiz }) {
 
   const setAnswer = useQuizStore((s) => s.setAnswer);
   const already = useQuizStore((s) => s.answers[quizId]);
+  const reset = useQuizStore((s) => s.reset);
 
+  const routeHandler = () => {
+    if (isCurrect) router.push(`/collection/${regionId}/quiz/${quizId + 1}`);
+    else {
+      reset();
+      router.push(`/collection/${regionId}/quiz/`);
+    }
+  };
   return (
     <div className="h-screen mx-[16px] flex flex-col">
       {quizId !== 5 && (
@@ -78,11 +86,9 @@ export default function Choices({ quiz }) {
         </p>
         <button
           className="w-full bg-main-100 font-semibold text-white text-lg rounded-lg py-2 mt-7"
-          onClick={() =>
-            router.push(`/collection/${regionId}/quiz/${quizId + 1}`)
-          }
+          onClick={routeHandler}
         >
-          다음 퀴즈로
+          {isCurrect ? '다음 퀴즈로' : '처음으로 돌아가기'}
         </button>
       </div>
     </div>
