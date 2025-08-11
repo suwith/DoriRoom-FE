@@ -18,6 +18,7 @@ export default function OX({ quiz }) {
   const routeHandler = () => {
     if (isCurrect) router.push(`/collection/${regionId}/quiz/${quizId + 1}`);
     else {
+      reset();
       router.push(`/collection/${regionId}/quiz/`);
     }
   };
