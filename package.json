@@ -4,9 +4,11 @@
   "private": true,
   "scripts": {
     "dev": "next dev",
-    "build": "next build",
+    "build": "npm run build:plugin && next build",
     "start": "next start",
-    "lint": "next lint"
+    "lint": "next lint",
+    "postinstall": "npm --prefix doriroom-image-picker install --no-audit --no-fund && npm --prefix doriroom-image-picker run build",
+    "build:plugin": "npm --prefix doriroom-image-picker run build || true"
   },
   "dependencies": {
     "@capacitor/android": "^7.4.2",
