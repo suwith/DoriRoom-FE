@@ -17,8 +17,8 @@ const eslintConfig = [
       'next/core-web-vitals',
       'prettier',
       'plugin:prettier/recommended',
-      eslintConfigPrettier,
     ],
+    ...eslintConfigPrettier,
     rules: {
       // 기본 스타일 규칙
       quotes: ['error', 'single', { allowTemplateLiterals: true }],
