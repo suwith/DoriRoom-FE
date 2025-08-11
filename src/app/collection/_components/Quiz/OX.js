@@ -66,7 +66,7 @@ export default function OX({ quiz }) {
         <p className="text-neutral-900 font-semibold text-lg text-center">
           {isCurrect ? '정답이에요!' : '오답이에요 😭'}
         </p>
-        <p className="mt-5 text-md font-normal text-neutral-600 text-justify">
+        <p className="mt-5 text-base font-normal text-neutral-600 text-justify">
           {explanation}
         </p>
         <button
