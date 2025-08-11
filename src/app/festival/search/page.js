@@ -17,7 +17,6 @@ export default function SearchPage() {
 
     if (mode === 'true') {
       setIsSelectMode(true);
-      sessionStorage.removeItem('selectMode');
     }
   }, []);
 

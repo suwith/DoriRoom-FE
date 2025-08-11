@@ -14,7 +14,7 @@ const MAX_IMAGES = 5;
 
 export default function DiaryWrite() {
   const router = useRouter();
-  const [selectedDate, setSelectedDate] = useState('');
+  const [selectedDate, setSelectedDate] = useState(null);
   const [selectedFestival, setSelectedFestival] = useState('');
   const [images, setImages] = useState([]);
   const [diaryText, setDiaryText] = useState('');
@@ -73,11 +73,50 @@ export default function DiaryWrite() {
   };
 
   useEffect(() => {
-    const stored = sessionStorage.getItem('selectedFestival');
-    if (stored) {
-      const festival = JSON.parse(stored);
-      setSelectedFestival(festival.title); // 또는 festival 객체 전체 저장
-      sessionStorage.removeItem('selectedFestival'); // 1회용
+    const shouldRestore = sessionStorage.getItem('selectMode') === 'true';
+
+    if (shouldRestore) {
+      try {
+        const saved = JSON.parse(
+          sessionStorage.getItem('diaryWriteForm') || '{}'
+        );
+        console;
+
+        if (saved.selectedDate) {
+          const d = new Date(saved.selectedDate);
+          if (!isNaN(d.getTime())) setSelectedDate(d);
+        }
+
+        if (typeof saved.selectedFestival === 'string') {
+          setSelectedFestival(saved.selectedFestival);
+        }
+
+        if (Array.isArray(saved.images)) {
+          setImages(
+            saved.images
+              .map((it) => ({ uri: toDisplay(it?.uri) }))
+              .filter((x) => !!x.uri)
+          );
+        }
+
+        if (typeof saved.diaryText === 'string') setDiaryText(saved.diaryText);
+        if (typeof saved.visibility === 'string')
+          setVisibility(saved.visibility);
+      } catch (e) {
+        console.warn('폼 복원 실패:', e);
+      } finally {
+        sessionStorage.removeItem('selectMode');
+      }
+    }
+
+    // 검색 페이지에서 선택해 준 값 병합
+    const picked = sessionStorage.getItem('selectedFestival');
+    if (picked) {
+      try {
+        const f = JSON.parse(picked);
+        setSelectedFestival(f?.title || '');
+      } catch {}
+      sessionStorage.removeItem('selectedFestival');
     }
   }, []);
 
@@ -118,8 +157,20 @@ export default function DiaryWrite() {
             <button
               className="bg-main-100 text-background px-5 py-3 text-[15px] rounded-lg"
               onClick={() => {
-                router.push('/festival/search');
                 sessionStorage.setItem('selectMode', 'true');
+                sessionStorage.setItem(
+                  'diaryWriteForm',
+                  JSON.stringify({
+                    selectedDate: selectedDate?.toISOString?.() || null,
+                    selectedFestival,
+                    images: images
+                      .map((it) => ({ uri: it?.uri }))
+                      .filter(Boolean),
+                    diaryText,
+                    visibility,
+                  })
+                );
+                router.push('/festival/search');
               }}
             >
               검색
@@ -303,7 +354,11 @@ export default function DiaryWrite() {
           cancelText="계속 작성할래요"
           onCancel={() => setShowLeaveModal(false)}
           confirmText="다음에 쓸게요"
-          onConfirm={() => history.back()}
+          onConfirm={() => {
+            sessionStorage.removeItem('diaryWriteForm');
+            sessionStorage.removeItem('selectMode');
+            router.push('/diary/');
+          }}
         />
       )}
     </div>
