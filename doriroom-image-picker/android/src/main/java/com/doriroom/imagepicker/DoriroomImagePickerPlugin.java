@@ -152,13 +152,13 @@ public class DoriroomImagePickerPlugin extends Plugin {
             Log.e(TAG, "copy failed: " + uri, e);
         }
 
-        String absPath = outFile.getAbsolutePath();            // /data/.../cache/xxx.jpg
-        String fileUri = Uri.fromFile(outFile).toString();     // file://...
-        String webPath = getBridge().getLocalUrlForFullPath(absPath); // http://localhost/_capacitor_file_/...
+        String absPath = outFile.getAbsolutePath();
+        String fileUri = Uri.fromFile(outFile).toString();
+
 
         JSObject obj = new JSObject();
-        obj.put("path", fileUri);
-        obj.put("webPath", webPath);
+        obj.put("path", fileUri);                 // file://...  (필수)
+        obj.put("uri", fileUri);                  // 동일 값 보조로 넣어줌
         obj.put("mimeType", mime != null ? mime : "");
         obj.put("fileName", fileName);
         return obj;
