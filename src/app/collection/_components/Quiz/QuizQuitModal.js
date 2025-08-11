@@ -1,7 +1,7 @@
 import { createPortal } from 'react-dom';
 import { useRouter } from 'next/navigation';
 
-export default function QuizQuitModal({ isOpen, setIsOpen }) {
+export default function QuizQuitModal({ isOpen, setIsOpen, regionId }) {
   if (!isOpen) return null;
   const portalElement = document.getElementById('main');
   const router = useRouter();
@@ -14,14 +14,14 @@ export default function QuizQuitModal({ isOpen, setIsOpen }) {
         <div className="flex gap-2 mt-10 font-semibold text-xl">
           <button
             className="bg-main-5 text-main-100 rounded-xl w-full py-2.5"
-            onClick={() => isOpen(false)}
+            onClick={() => setIsOpen(false)}
           >
             계속 풀래요
           </button>
           <button
             className="bg-main-100 text-background rounded-xl w-full py-2.5"
             onClick={() => {
-              router.replace('/collection');
+              router.replace(`/collection/${regionId}/quiz`);
             }}
           >
             중단할래요

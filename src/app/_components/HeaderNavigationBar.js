@@ -11,6 +11,7 @@ export default function HeaderNavigationBar({
   className = '',
   type = 'general',
   lv = 0,
+  regionId = null,
 }) {
   const [isOpen, setIsOpen] = useState(false);
 
@@ -49,7 +50,11 @@ export default function HeaderNavigationBar({
         <TaskInfoModal isOpen={isOpen} setIsOpen={setIsOpen} />
       )}
       {type === 'quiz' && (
-        <QuizQuitModal isOpen={isOpen} setIsOpen={setIsOpen} />
+        <QuizQuitModal
+          isOpen={isOpen}
+          setIsOpen={setIsOpen}
+          regionId={regionId}
+        />
       )}
     </header>
   );

@@ -110,6 +110,7 @@ export default async function page({ params }) {
           className="bg-background"
           showBackButton={false}
           type="quiz"
+          regionId={regionId}
         />
       )}
       <QuizClient quiz={quiz} />
