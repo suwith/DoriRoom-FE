@@ -8,6 +8,9 @@ import { format } from 'date-fns';
 import SelectDate from '@/app/diary/write/_components/SelectDate';
 import { useRouter } from 'next/navigation';
 import { DoriroomImagePicker } from 'doriroom-image-picker';
+import { Capacitor } from '@capacitor/core';
+
+const MAX_IMAGES = 5;
 
 export default function DiaryWrite() {
   const router = useRouter();
@@ -24,21 +27,48 @@ export default function DiaryWrite() {
 
   const isWriting = selectedDate || selectedFestival || diaryText.trim() !== '';
 
-  const handleSelectImages = async () => {
+  const toDisplay = (uri) => {
+    if (!uri) return '';
     try {
-      const result = await DoriroomImagePicker.pickImages({ limit: 5 });
+      return typeof Capacitor?.convertFileSrc === 'function'
+        ? Capacitor.convertFileSrc(uri)
+        : uri;
+    } catch {
+      return uri;
+    }
+  };
 
-      if (Array.isArray(result?.paths)) {
-        const selected = result.paths.map((path) => ({
-          uri: path,
-        }));
+  const handleSelectImages = async () => {
+    const remaining = MAX_IMAGES - images.length;
+    if (remaining <= 0) return;
 
-        setImages((prev) => [...prev, ...selected].slice(0, 5));
+    try {
+      const res = await DoriroomImagePicker.pickImages({ limit: remaining });
+
+      let raw = [];
+      if (Array.isArray(res?.items)) {
+        raw = res.items
+          .map((it) => it.webPath || it.path || it.uri)
+          .filter(Boolean);
+      } else if (Array.isArray(res?.paths)) {
+        raw = res.paths;
       } else {
-        console.warn('이미지 결과가 비정상입니다:', result);
+        console.warn('알 수 없는 응답 형태:', res);
+        return;
       }
-    } catch (error) {
-      console.error('이미지 선택 중 오류 발생:', error);
+
+      const selected = raw.map((u) => ({ uri: toDisplay(u) }));
+
+      setImages((prev) => {
+        const merged = [...prev, ...selected];
+        // 중복 제거
+        const uniq = merged.filter(
+          (x, i, a) => a.findIndex((y) => y.uri === x.uri) === i
+        );
+        return uniq.slice(0, MAX_IMAGES);
+      });
+    } catch (err) {
+      console.error('이미지 선택 실패:', err);
     }
   };
 
@@ -126,20 +156,24 @@ export default function DiaryWrite() {
             📗 축제에 대한 일기를 작성해 주세요
           </p>
           <div className="flex gap-2 overflow-x-auto scrollbar-hide">
-            <div className="min-w-[120px] min-h-[120px] w-[120px] h-[120px] flex-shrink-0 rounded-md bg-neutral-100 flex items-center justify-center overflow-hidden relative">
-              <button
-                className="flex flex-col items-center justify-center text-xs text-neutral-400 cursor-pointer"
-                onClick={handleSelectImages}
-              >
-                <i className="mgc_camera_fill text-2xl mb-1" />
-                사진 추가하기
-              </button>
-            </div>
+            {images.length < MAX_IMAGES && (
+              <div className="min-w-[120px] min-h-[120px] w-[120px] h-[120px] flex-shrink-0 rounded-md bg-neutral-100 flex items-center justify-center overflow-hidden relative">
+                <button
+                  className="flex flex-col items-center justify-center text-xs text-neutral-400 cursor-pointer"
+                  onClick={handleSelectImages}
+                >
+                  <i className="mgc_camera_fill text-2xl mb-1" />
+                  사진 추가하기
+                </button>
+              </div>
+            )}
             {[...images, ...Array(5 - images.length).fill(null)].map(
               (img, i) => (
                 <div
                   key={i}
-                  className="min-w-[120px] min-h-[120px] w-[120px] h-[120px] flex-shrink-0 rounded-md bg-neutral-100 border border-dashed border-neutral-300  flex items-center justify-center overflow-hidden relative"
+                  className={`min-w-[120px] min-h-[120px] w-[120px] h-[120px] flex-shrink-0 rounded-md bg-neutral-100 flex items-center justify-center overflow-hidden relative ${
+                    img ? '' : 'border border-dashed border-neutral-300'
+                  }`}
                 >
                   {img ? (
                     <>
@@ -154,7 +188,7 @@ export default function DiaryWrite() {
                             prev.filter((_, idx) => idx !== i)
                           )
                         }
-                        className="absolute top-1 right-1 bg-main-5 bg-opacity-50 text-main-40 rounded-full w-5 h-5 text-xs"
+                        className="absolute top-1.5 right-1.5 bg-main-5 bg-opacity-50 text-main-40 rounded-full w-5 h-5 text-xs"
                       >
                         ✕
                       </button>
@@ -164,6 +198,7 @@ export default function DiaryWrite() {
               )
             )}
           </div>
+
           <p className="text-xs text-neutral-400 mt-2 flex">
             •사진은 최대 5장까지 등록이 가능해요!
           </p>
