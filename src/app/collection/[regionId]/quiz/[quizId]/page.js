@@ -102,6 +102,8 @@ export default async function page({ params }) {
     (r) => r.quizId === Number(quizId) && r.regionId === region.id
   );
 
+  if (!region || !quiz) return <div>해당 지역을 찾을 수 없습니다.</div>; // region이 없다면 에러 처리
+
   return (
     <div className="max-w-[390px] w-screen mx-auto h-screen">
       {Number(quizId) !== 5 && (
