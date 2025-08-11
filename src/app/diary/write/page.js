@@ -7,6 +7,7 @@ import 'react-day-picker/lib/style.css';
 import { format } from 'date-fns';
 import SelectDate from '@/app/diary/write/_components/SelectDate';
 import { useRouter } from 'next/navigation';
+import { DoriroomImagePicker } from 'doriroom-image-picker';
 
 export default function DiaryWrite() {
   const router = useRouter();
@@ -23,10 +24,22 @@ export default function DiaryWrite() {
 
   const isWriting = selectedDate || selectedFestival || diaryText.trim() !== '';
 
-  const handleImageChange = (e) => {
-    const newFiles = Array.from(e.target.files || []);
-    const totalFiles = [...images, ...newFiles].slice(0, 5);
-    setImages(totalFiles);
+  const handleSelectImages = async () => {
+    try {
+      const result = await DoriroomImagePicker.pickImages({ limit: 5 });
+
+      if (Array.isArray(result?.paths)) {
+        const selected = result.paths.map((path) => ({
+          uri: path,
+        }));
+
+        setImages((prev) => [...prev, ...selected].slice(0, 5));
+      } else {
+        console.warn('이미지 결과가 비정상입니다:', result);
+      }
+    } catch (error) {
+      console.error('이미지 선택 중 오류 발생:', error);
+    }
   };
 
   useEffect(() => {
@@ -113,18 +126,14 @@ export default function DiaryWrite() {
             📗 축제에 대한 일기를 작성해 주세요
           </p>
           <div className="flex gap-2 overflow-x-auto scrollbar-hide">
-            <div className="min-w-[120px] min-h-[120px] w-[120px] h-[120px] flex-shrink-0 rounded-md bg-neutral-100 border border-dashed border-neutral-300 flex items-center justify-center overflow-hidden relative">
-              <label className="flex flex-col items-center justify-center text-xs text-neutral-400 cursor-pointer">
+            <div className="min-w-[120px] min-h-[120px] w-[120px] h-[120px] flex-shrink-0 rounded-md bg-neutral-100 flex items-center justify-center overflow-hidden relative">
+              <button
+                className="flex flex-col items-center justify-center text-xs text-neutral-400 cursor-pointer"
+                onClick={handleSelectImages}
+              >
                 <i className="mgc_camera_fill text-2xl mb-1" />
                 사진 추가하기
-                <input
-                  type="file"
-                  accept="image/*"
-                  multiple
-                  hidden
-                  onChange={handleImageChange}
-                />
-              </label>
+              </button>
             </div>
             {[...images, ...Array(5 - images.length).fill(null)].map(
               (img, i) => (
@@ -135,7 +144,8 @@ export default function DiaryWrite() {
                   {img ? (
                     <>
                       <img
-                        src={URL.createObjectURL(img)}
+                        src={img.uri}
+                        alt={`selected-${i}`}
                         className="object-cover w-full h-full"
                       />
                       <button
@@ -154,18 +164,28 @@ export default function DiaryWrite() {
               )
             )}
           </div>
-          <p className="text-xs text-neutral-400 mt-2">
-            * 사진은 최대 5장까지 등록이 가능해요!
+          <p className="text-xs text-neutral-400 mt-2 flex">
+            •사진은 최대 5장까지 등록이 가능해요!
           </p>
         </div>
 
         {/* 내용 입력 */}
-        <textarea
-          className="w-full min-h-[250px] text-sm bg-neutral-100 rounded-lg px-4 py-4 resize-none"
-          placeholder="내용 입력하기"
-          value={diaryText}
-          onChange={(e) => setDiaryText(e.target.value)}
-        />
+        <div className="relative">
+          <textarea
+            className="w-full min-h-[250px] text-sm bg-neutral-100 rounded-lg px-4 py-4 pr-16 pb-8 resize-none placeholder:text-neutral-300 focus:outline-none"
+            placeholder="내용 입력하기"
+            value={diaryText}
+            maxLength={500}
+            onChange={(e) => setDiaryText(e.target.value.slice(0, 500))}
+            aria-describedby="diaryCounter"
+          />
+          <span
+            id="diaryCounter"
+            className="pointer-events-none absolute bottom-3 right-4 text-xs text-neutral-400"
+          >
+            {diaryText.length}/500자
+          </span>
+        </div>
 
         {/* 공개 범위 */}
         <div>
@@ -209,10 +229,18 @@ export default function DiaryWrite() {
           </div>
         </div>
 
+        <div className="flex flex-col text-xs text-neutral-400 gap-1">
+          <p>•일기 업로드 시 기본으로 10 도깨비불이 지급돼요.</p>
+          <p>
+            •사진이 함께 첨부된 일기의 경우 추가로 5 도깨비불을 지급 받을 수
+            있어요.
+          </p>
+        </div>
+
         {/* 업로드 버튼 */}
         <button
           disabled={!isFormValid}
-          className={`w-full py-2 rounded-lg font-bold text-sm text-background ${isFormValid ? 'bg-main-100' : 'bg-neutral-300 cursor-not-allowed'}`}
+          className={`w-full py-2 mt-3 rounded-lg font-bold text-sm text-background ${isFormValid ? 'bg-main-100' : 'bg-neutral-300 cursor-not-allowed'}`}
           onClick={() => {
             console.log('일기 업로드 완료');
             history.back();
