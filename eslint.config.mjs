@@ -1,8 +1,6 @@
 import { dirname } from 'path';
 import { fileURLToPath } from 'url';
 import { FlatCompat } from '@eslint/eslintrc';
-import eslintPluginPrettier from 'eslint-plugin-prettier';
-import eslintConfigPrettier from 'eslint-config-prettier';
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = dirname(__filename);
@@ -15,10 +13,9 @@ const eslintConfig = [
   ...compat.config({
     extends: [
       'next/core-web-vitals',
-      'prettier',
       'plugin:prettier/recommended',
+      'prettier',
     ],
-    ...eslintConfigPrettier,
     rules: {
       // 기본 스타일 규칙
       quotes: ['error', 'single', { allowTemplateLiterals: true }],
@@ -53,9 +50,7 @@ const eslintConfig = [
 
   // prettier 적용
   {
-    plugins: {
-      prettier: eslintPluginPrettier,
-    },
+    plugins: ['prettier'],
     rules: {
       'prettier/prettier': 'error',
     },

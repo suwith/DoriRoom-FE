@@ -2,9 +2,9 @@ import { createPortal } from 'react-dom';
 import { useRouter } from 'next/navigation';
 
 export default function QuizQuitModal({ isOpen, setIsOpen, regionId }) {
+  const router = useRouter();
   if (!isOpen) return null;
   const portalElement = document.getElementById('main');
-  const router = useRouter();
 
   return createPortal(
     <div className="max-w-[390px] w-full fixed top-0 bottom-0 bg-black/25 flex justify-center items-center z-50">
