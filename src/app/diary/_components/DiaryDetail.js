@@ -12,7 +12,7 @@ import { useRouter } from 'next/navigation';
 export default function DiaryDetail({ diary }) {
   const router = useRouter();
   const [likedIds, setLikedIds] = useState([]);
-  const [isBottomOpen, setIsBottomOpen] = useState(true); // 기본값 true 또는 false 설정
+  const [isBottomOpen, setIsBottomOpen] = useState(true);
 
   const isLiked = likedIds.includes(diary.id);
   const likeCount = diary.likes + (isLiked ? 1 : 0);
@@ -85,7 +85,7 @@ export default function DiaryDetail({ diary }) {
             관련 축제
           </div>
           <div
-            className="bg-white rounded-xl py-1"
+            className="bg-background rounded-xl py-1"
             style={{
               boxShadow: '0 0 8px rgba(0, 0, 0, 0.1)',
             }}

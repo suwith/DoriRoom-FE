@@ -189,7 +189,7 @@ export default function FestivalDetail({ festival }) {
           ))}
 
           <button
-            className="fixed bottom-7 left-1/2 -translate-x-1/2 w-[350px] py-2 bg-main-100 text-white rounded-lg text-sm font-medium shadow-md"
+            className="fixed bottom-7 left-1/2 -translate-x-1/2 w-[350px] py-2 bg-main-100 text-background rounded-lg text-sm font-medium shadow-md"
             onClick={() => {
               sessionStorage.setItem(
                 'selectedFestival',
@@ -200,7 +200,7 @@ export default function FestivalDetail({ festival }) {
           >
             <div className="flex items-center justify-center gap-2">
               {' '}
-              <MdEditSquare className="text-white w-5 h-5" />
+              <MdEditSquare className="text-background w-5 h-5" />
               <span className="text-lg">일기 작성하기</span>
             </div>
           </button>

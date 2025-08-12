@@ -1,6 +1,6 @@
 'use client';
 
-import React, { useMemo, useState } from 'react';
+import React, { useMemo } from 'react';
 import DayPicker from 'react-day-picker';
 import 'react-day-picker/lib/style.css';
 import { ko } from 'date-fns/locale';
@@ -28,8 +28,6 @@ export default function DiaryCalendar({ onDateClick }) {
   const disabledDays = mockDiaries
     .filter((d) => d.disabled)
     .map((d) => parse(d.date, 'yyyy.MM.dd', new Date()));
-
-  const [month, setMonth] = useState(new Date());
 
   return (
     <div className="w-full max-w-sm mx-auto flex justify-center items-center">
@@ -88,7 +86,7 @@ export default function DiaryCalendar({ onDateClick }) {
             style.backgroundImage = `url(${diary.images[0]})`;
             style.backgroundSize = 'cover';
             style.backgroundPosition = 'center';
-            style.color = '#FFFFFF';
+            style.color = '#FEFEFE'; // background
           }
           //썸네일 없는 일기가 있을 떄
           else if (diary && !diary.images?.length) {

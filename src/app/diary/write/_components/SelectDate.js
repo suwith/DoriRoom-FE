@@ -59,7 +59,7 @@ export default function SelectDate({ selectedDate, onSelect, onClose }) {
       </div>
 
       <div
-        className="bg-white rounded-xl py-1"
+        className="bg-background rounded-xl py-1"
         style={{ boxShadow: '0 0 8px rgba(0, 0, 0, 0.1)' }}
       >
         <button

@@ -43,7 +43,7 @@ export default function BookmarkPage() {
   };
 
   return (
-    <div className="max-w-[390px] mx-auto h-screen bg-white pb-28">
+    <div className="max-w-[390px] mx-auto h-screen bg-background pb-28">
       {/* 상단 헤더 */}
       <div className="relative w-full h-[60px] flex items-center justify-center px-4 ">
         {editMode ? (
