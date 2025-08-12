@@ -251,14 +251,14 @@ export default function DiaryWrite() {
           </div>
 
           <p className="text-xs text-neutral-400 mt-2 flex">
-            •사진은 최대 5장까지 등록이 가능해요!
+            • 사진은 최대 5장까지 등록이 가능해요!
           </p>
         </div>
 
         {/* 내용 입력 */}
-        <div className="relative">
+        <div className="w-full flex flex-col gap-2 relative bg-neutral-100 rounded-lg px-4 py-3 ">
           <textarea
-            className="w-full min-h-[250px] text-sm bg-neutral-100 rounded-lg px-4 py-4 pr-16 pb-8 resize-none placeholder:text-neutral-300 focus:outline-none"
+            className="min-h-[250px] text-sm resize-none placeholder:text-neutral-300 focus:outline-none scrollbar-hide"
             placeholder="내용 입력하기"
             value={diaryText}
             maxLength={500}
@@ -267,9 +267,9 @@ export default function DiaryWrite() {
           />
           <span
             id="diaryCounter"
-            className="pointer-events-none absolute bottom-3 right-4 text-xs text-neutral-400"
+            className="text-right text-xs text-neutral-400"
           >
-            {diaryText.length}/500자
+            ({diaryText.length}/500자)
           </span>
         </div>
 
@@ -316,9 +316,9 @@ export default function DiaryWrite() {
         </div>
 
         <div className="flex flex-col text-xs text-neutral-400 gap-1">
-          <p>•일기 업로드 시 기본으로 10 도깨비불이 지급돼요.</p>
+          <p>• 일기 업로드 시 기본으로 10 도깨비불이 지급돼요.</p>
           <p>
-            •사진이 함께 첨부된 일기의 경우 추가로 5 도깨비불을 지급 받을 수
+            • 사진이 함께 첨부된 일기의 경우 추가로 5 도깨비불을 지급 받을 수
             있어요.
           </p>
         </div>
