@@ -1,6 +1,6 @@
 'use client';
 
-import { useState, useEffect } from 'react';
+import { useEffect, useState } from 'react';
 import { useRouter } from 'next/navigation';
 import RegionFilter from '../_components/RegionFilter';
 import 'mingcute_icon/font/Mingcute.css';
@@ -10,6 +10,15 @@ export default function SearchPage() {
   const router = useRouter();
   const [input, setInput] = useState('');
   const [recentSearches, setRecentSearches] = useState([]);
+  const [isSelectMode, setIsSelectMode] = useState(false);
+
+  useEffect(() => {
+    const mode = sessionStorage.getItem('selectMode');
+
+    if (mode === 'true') {
+      setIsSelectMode(true);
+    }
+  }, []);
 
   useEffect(() => {
     const stored = localStorage.getItem('recentSearches');
@@ -57,9 +66,11 @@ export default function SearchPage() {
           value={input}
           onChange={(e) => setInput(e.target.value)}
           onEnter={(text) => {
-            router.push(
-              `/festival/search/result?query=${encodeURIComponent(text)}`
-            );
+            const encoded = encodeURIComponent(text);
+            const base = `/festival/search/result?query=${encoded}`;
+            const path = isSelectMode ? `${base}&mode=select` : base;
+
+            router.push(path);
             saveRecentSearch(text);
           }}
           onClear={() => setInput('')}
@@ -72,29 +83,32 @@ export default function SearchPage() {
       <div className="mt-6 px-4">
         <h3 className="text-sm mb-3 font-semibold">최근 검색어</h3>
         <div className="flex gap-2 flex-wrap">
-          {recentSearches.map((tag) => (
-            <button
-              key={tag}
-              onClick={() => {
-                saveRecentSearch(tag);
-                router.push(
-                  `/festival/search/result?query=${encodeURIComponent(tag)}`
-                );
-              }}
-              className="bg-transparent text-xs px-2 py-1 rounded-full border border-neutral-200 text-neutral-900 flex items-center gap-1"
-            >
-              <span>{tag}</span>
-              <span
-                onClick={(e) => {
-                  e.stopPropagation();
-                  removeTag(tag);
+          {recentSearches.map((tag) => {
+            const encoded = encodeURIComponent(tag);
+            const base = `/festival/search/result?query=${encoded}`;
+            const path = isSelectMode ? `${base}&mode=select` : base;
+            return (
+              <button
+                key={tag}
+                onClick={() => {
+                  saveRecentSearch(tag);
+                  router.push(path);
                 }}
-                className="text-[10px] text-neutral-300 cursor-pointer"
+                className="bg-transparent text-xs px-2 py-1 rounded-full border border-neutral-200 text-neutral-900 flex items-center gap-1"
               >
-                ✕
-              </span>
-            </button>
-          ))}
+                <span>{tag}</span>
+                <span
+                  onClick={(e) => {
+                    e.stopPropagation();
+                    removeTag(tag);
+                  }}
+                  className="text-[10px] text-neutral-300 cursor-pointer"
+                >
+                  ✕
+                </span>
+              </button>
+            );
+          })}
         </div>
       </div>
 

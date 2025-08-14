@@ -8,7 +8,40 @@ export default function FestivalListItem({
   liked = false,
   onLike = null,
   hideLikeButton = false,
+  mode = 'default',
+  onSelect = null,
 }) {
+  if (mode === 'select') {
+    return (
+      <div className="flex gap-3">
+        <img
+          src={festival.thumbnail}
+          alt={festival.title}
+          className="object-cover w-15 h-15 rounded-lg overflow-hidden "
+        />
+        <div className="flex justify-between flex-1 pr-1 items-center">
+          <div className="flex flex-col justify-center items-start">
+            <div className="flex text-sm font-semibold truncate">
+              {festival.title}
+            </div>
+            <div className="text-neutral-600 mt-0.5 text-xs truncate">
+              {festival.location}
+            </div>
+          </div>
+
+          <button
+            className="text-background text-xs border bg-main-100 px-3 h-8 rounded-md"
+            onClick={(e) => {
+              e.stopPropagation();
+              onSelect?.(festival);
+            }}
+          >
+            선택
+          </button>
+        </div>
+      </div>
+    );
+  }
   return (
     <div className={` flex gap-3 ${hideLikeButton ? 'px-4 py-2' : ''}  `}>
       <div className="relative w-20 h-20 rounded-lg overflow-hidden flex-shrink-0">
