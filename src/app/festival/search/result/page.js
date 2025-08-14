@@ -145,120 +145,133 @@ export default function FestivalSearchResultPage() {
     }`;
 
   return (
-    <div className="max-w-[390px] w-screen h-screen mx-auto px-4 pt-4 pb-28">
-      <SearchInputBar
-        value={input}
-        onChange={(e) => setInput(e.target.value)}
-        onEnter={handleEnter}
-        onClear={() => router.push('/festival/search')}
-        withBack
-      />
+    <div className="max-w-[390px] mx-auto h-screen w-screen flex flex-col bg-background">
+      {/* 고정 헤더 */}
+      <header className="sticky top-0 z-[10] bg-background">
+        <div className="pt-[50px] px-4 pb-3">
+          <SearchInputBar
+            value={input}
+            onChange={(e) => setInput(e.target.value)}
+            onEnter={handleEnter}
+            onClear={() => router.push('/festival/search')}
+            withBack
+          />
 
-      {mode !== 'select' && (
-        <div>
-          {/* 상단 요약 필터 바: 선택값이 버튼 안을 채우게 */}
-          <div className="flex items-center gap-2 overflow-x-auto flex-nowrap scrollbar-hide mt-3 mb-2">
-            <button
-              className={chip(sort !== '')}
-              onClick={() => setSheet('sort')}
-            >
-              <span className="mt-0.5 ml-0.5">{sortLabel}</span>
-              {sheet === 'sort' ? <IoIosArrowUp /> : <IoIosArrowDown />}
-            </button>
-            <button
-              className={chip(!!regions.length)}
-              onClick={() => setSheet('region')}
-            >
-              <span className="mt-0.5 ml-0.5">{regionLabel}</span>
-              {sheet === 'region' ? <IoIosArrowUp /> : <IoIosArrowDown />}
-            </button>
-            <button
-              className={chip(!!categories.length)}
-              onClick={() => setSheet('category')}
-            >
-              <span className="mt-0.5 ml-0.5">{categoryLabel}</span>
-              {sheet === 'category' ? <IoIosArrowUp /> : <IoIosArrowDown />}
-            </button>
-            <button
-              className={chip(!!period.start)}
-              onClick={() => setSheet('date')}
-            >
-              <span className="mt-0.5 ml-0.5">
-                {period.start
-                  ? period.end
-                    ? `${fmt(period.start)}~${fmt(period.end)}`
-                    : `${fmt(period.start)}`
-                  : '기간'}
-              </span>
-              {sheet === 'date' ? <IoIosArrowUp /> : <IoIosArrowDown />}
-            </button>
-          </div>
-
-          <div className="text-xs text-neutral-600 pt-4">
-            검색결과 ({filteredFestivals.length})
-          </div>
+          {mode !== 'select' && (
+            <>
+              {/* 칩 바: 가로 스크롤 */}
+              <div className="flex items-center gap-2 overflow-x-auto flex-nowrap scrollbar-hide mt-3">
+                <button
+                  className={chip(sort !== '')}
+                  onClick={() => setSheet(sheet === 'sort' ? null : 'sort')}
+                >
+                  <span className="mt-0.5 ml-0.5 whitespace-nowrap">
+                    {sortLabel}
+                  </span>
+                  {sheet === 'sort' ? <IoIosArrowUp /> : <IoIosArrowDown />}
+                </button>
+                <button
+                  className={chip(!!regions.length)}
+                  onClick={() => setSheet(sheet === 'region' ? null : 'region')}
+                >
+                  <span className="mt-0.5 ml-0.5 whitespace-nowrap">
+                    {regionLabel}
+                  </span>
+                  {sheet === 'region' ? <IoIosArrowUp /> : <IoIosArrowDown />}
+                </button>
+                <button
+                  className={chip(!!categories.length)}
+                  onClick={() =>
+                    setSheet(sheet === 'category' ? null : 'category')
+                  }
+                >
+                  <span className="mt-0.5 ml-0.5 whitespace-nowrap">
+                    {categoryLabel}
+                  </span>
+                  {sheet === 'category' ? <IoIosArrowUp /> : <IoIosArrowDown />}
+                </button>
+                <button
+                  className={chip(!!period.start)}
+                  onClick={() => setSheet(sheet === 'date' ? null : 'date')}
+                >
+                  <span className="mt-0.5 ml-0.5 whitespace-nowrap">
+                    {period.start
+                      ? period.end
+                        ? `${fmt(period.start)}~${fmt(period.end)}`
+                        : `${fmt(period.start)}`
+                      : '기간'}
+                  </span>
+                  {sheet === 'date' ? <IoIosArrowUp /> : <IoIosArrowDown />}
+                </button>
+              </div>
+            </>
+          )}
         </div>
-      )}
+      </header>
 
-      <div className="space-y-4 h-full mt-3">
-        {filteredFestivals.length === 0 ? (
-          <div
-            className="flex flex-col h-full items-center justify-center gap-3"
-            style={{ height: 'calc(100% - 80px)' }}
-          >
-            <i className="mgc_sweats_fill text-6xl text-main-100" />
-            <p className="text-center text-lg font-semibold">
-              앗, 관련 축제가 없어요!
-            </p>
-            <p className="text-center text-sm text-neutral-500">
-              다른 키워드로 다시 검색해 주세요 😢
-            </p>
-            <button
-              onClick={() => router.push('/festival')}
-              className="mt-4 px-6 py-2 rounded-md bg-main-5 text-main-100 text-xl font-medium "
-            >
-              축제 메인으로 돌아가기
-            </button>
-          </div>
-        ) : (
-          filteredFestivals.map((festival) => (
-            <div
-              key={festival.id}
-              onClick={() =>
-                mode === 'select'
-                  ? null
-                  : router.push(`/festival/${festival.id}`)
-              }
-            >
-              <FestivalListItem
-                festival={festival}
-                liked={likedIds.includes(festival.id)}
-                onLike={() => toggleLike(festival.id)}
-                mode={mode}
-                onSelect={() => {
-                  sessionStorage.setItem(
-                    'selectedFestival',
-                    JSON.stringify(festival)
-                  );
-                  router.push('/diary/write');
-                }}
-              />
+      {/* 스크롤 영역 */}
+      <main className="flex-1 overflow-y-auto p-4 scrollbar-hide">
+        <div className="text-xs text-neutral-600 mb-3">
+          검색결과 ({filteredFestivals.length})
+        </div>
+        <div className="space-y-4">
+          {filteredFestivals.length === 0 ? (
+            <div className="flex flex-col h-full items-center justify-center gap-3">
+              <i className="mgc_sweats_fill text-6xl text-main-100" />
+              <p className="text-center text-lg font-semibold">
+                앗, 관련 축제가 없어요!
+              </p>
+              <p className="text-center text-sm text-neutral-500">
+                다른 키워드로 다시 검색해 주세요 😢
+              </p>
+              <button
+                onClick={() => router.push('/festival')}
+                className="mt-4 px-6 py-2 rounded-md bg-main-5 text-main-100 text-xl font-medium "
+              >
+                축제 메인으로 돌아가기
+              </button>
             </div>
-          ))
-        )}
-      </div>
+          ) : (
+            filteredFestivals.map((festival) => (
+              <div
+                key={festival.id}
+                onClick={() =>
+                  mode === 'select'
+                    ? null
+                    : router.push(`/festival/${festival.id}`)
+                }
+              >
+                <FestivalListItem
+                  festival={festival}
+                  liked={likedIds.includes(festival.id)}
+                  onLike={() => toggleLike(festival.id)}
+                  mode={mode}
+                  onSelect={() => {
+                    sessionStorage.setItem(
+                      'selectedFestival',
+                      JSON.stringify(festival)
+                    );
+                    router.push('/diary/write');
+                  }}
+                />
+              </div>
+            ))
+          )}
+        </div>
+      </main>
 
+      {/* 오버레이 & 시트 (z-index 유효 클래스!) */}
       {sheet && (
         <button
-          className="fixed inset-0 left-1/2 -translate-x-1/2 w-full max-w-[390px] bg-black/25 z-99"
+          className="fixed inset-0 bg-black/25 z-[99]"
           onClick={() => setSheet(null)}
           aria-label="필터 닫기"
         />
       )}
       <div
-        className={`fixed bottom-0 left-1/2 transform -translate-x-1/2 w-full max-w-[390px] z-100 transition-transform duration-300 ease-in-out ${
-          sheet ? 'translate-y-0' : 'translate-y-[100vh]'
-        }`}
+        className={`fixed bottom-0 left-1/2 -translate-x-1/2 w-full max-w-[390px] z-[100]
+        bg-background rounded-t-xl px-4 py-8 transition-transform duration-300 ease-in-out
+        ${sheet ? 'translate-y-0' : 'translate-y-[100vh]'}`}
       >
         <SortFilter
           open={sheet === 'sort'}
@@ -285,7 +298,6 @@ export default function FestivalSearchResultPage() {
           onClose={() => setSheet(null)}
           value={period}
           onChange={setPeriod}
-          // resultCount={filteredFestivals.length} // 쓰면 "총 N개 결과 보기" 표시 가능
         />
       </div>
     </div>
