@@ -216,7 +216,7 @@ export default function FestivalSearchResultPage() {
         </div>
         <div className="space-y-4">
           {filteredFestivals.length === 0 ? (
-            <div className="flex flex-col h-full items-center justify-center gap-3">
+            <div className="flex flex-col flex-1 items-center justify-center gap-3 min-h-[calc(100vh-200px)]">
               <i className="mgc_sweats_fill text-6xl text-main-100" />
               <p className="text-center text-lg font-semibold">
                 앗, 관련 축제가 없어요!
