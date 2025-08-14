@@ -107,14 +107,6 @@ export default function FestivalSearchResultPage() {
     return res.sort(sorter);
   }, [searchQuery, regions, categories, period, sort]);
 
-  const clearAll = () => {
-    setSort('');
-    setRegions([]);
-    setCategories([]);
-    setPeriod({ start: null, end: null });
-    setSheet(null);
-  };
-
   // 옵션 예시
   const regionOptions = [
     { sido: '서울', sigungu: '강남구' },
@@ -142,10 +134,6 @@ export default function FestivalSearchResultPage() {
     : '분야';
   const fmt = (d) =>
     d ? `${String(d.getMonth() + 1)}/${String(d.getDate())}` : '';
-  const dateLabel =
-    period.start && period.end
-      ? `${fmt(period.start)}~${fmt(period.end)}`
-      : '기간';
   const sortLabel = sort || '정렬';
 
   // 공통 버튼 스타일

@@ -4,7 +4,7 @@ import DayPicker from 'react-day-picker';
 import 'react-day-picker/lib/style.css';
 import React from 'react';
 
-export default function SelectDate({ open, selectedDate, onSelect, onClose }) {
+export default function SelectDate({ selectedDate, onSelect, onClose }) {
   return (
     <div
       className={`fixed bottom-0 left-1/2 transform -translate-x-1/2 w-full max-w-[390px] mx-auto z-100 bg-background rounded-t-xl px-4 py-4`}

@@ -89,9 +89,6 @@ export default function DateFilter({
   const isStart = (d) => d && temp?.start && fmt(d) === fmt(temp.start);
   const isEnd = (d) => d && temp?.end && fmt(d) === fmt(temp.end);
 
-  // 단일 선택 허용: start만 있어도 적용 가능
-  const canApply = !!temp?.start;
-
   return (
     <BottomSheet
       open={open}
