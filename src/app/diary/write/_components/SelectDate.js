@@ -3,9 +3,13 @@
 import DayPicker from 'react-day-picker';
 import 'react-day-picker/lib/style.css';
 
-export default function SelectDate({ selectedDate, onSelect, onClose }) {
+export default function SelectDate({ open, selectedDate, onSelect, onClose }) {
   return (
-    <div className="fixed bottom-0 left-1/2 transform -translate-x-1/2 w-full max-w-[390px] mx-auto pb-16 z-100 rounded-t-xl px-4 pt-4 bg-background shadow-[0_-4px_12px_rgba(0,0,0,0.1)] transition-transform duration-300 ease-in-out ">
+    <div
+      className={`fixed bottom-0 left-1/2 transform -translate-x-1/2 w-full max-w-[390px] mx-auto z-100 bg-white rounded-t-xl px-4 py-8 transition-transform duration-300 ease-in-out ${
+        open ? 'translate-y-0' : 'translate-y-full'
+      }`}
+    >
       <div className="w-full text-right mb-1">
         <button
           onClick={onClose}
@@ -58,19 +62,15 @@ export default function SelectDate({ selectedDate, onSelect, onClose }) {
         />
       </div>
 
-      <div
-        className="bg-background rounded-xl py-1"
+      <button
+        onClick={onClose}
+        className="w-full py-2 bg-main-100 text-background rounded-lg text-sm font-medium shadow-md"
         style={{ boxShadow: '0 0 8px rgba(0, 0, 0, 0.1)' }}
       >
-        <button
-          onClick={onClose}
-          className="fixed bottom-7 left-1/2 -translate-x-1/2 w-[350px] py-2 bg-main-100 text-background rounded-lg text-sm font-medium shadow-md"
-        >
-          <div className="flex items-center justify-center gap-2">
-            <span className="text-lg">날짜 선택 완료</span>
-          </div>
-        </button>
-      </div>
+        <div className="flex items-center justify-center">
+          <span className="text-lg">날짜 선택 완료</span>
+        </div>
+      </button>
     </div>
   );
 }

@@ -5,10 +5,10 @@ import { MdEditSquare } from 'react-icons/md';
 import TwoButtonModal from '@/app/_components/TwoButtonModal';
 import 'react-day-picker/lib/style.css';
 import { format } from 'date-fns';
-import SelectDate from '@/app/diary/write/_components/SelectDate';
 import { useRouter } from 'next/navigation';
 import { DoriroomImagePicker } from 'doriroom-image-picker';
 import { Capacitor } from '@capacitor/core';
+import SelectDate from '@/app/diary/write/_components/SelectDate';
 
 const MAX_IMAGES = 5;
 
@@ -340,12 +340,20 @@ export default function DiaryWrite() {
       </div>
 
       {showCalendar && (
+        <div className="fixed top-0 bottom-0 left-1/2 transform -translate-x-1/2 w-full max-w-[390px] bg-black/25 z-99" />
+      )}
+      <div
+        className={`fixed bottom-0 left-1/2 transform -translate-x-1/2 w-full max-w-[390px] mx-auto z-100 bg-white rounded-t-xl px-4 py-8 transition-transform duration-300 ease-in-out ${
+          showCalendar ? 'translate-y-0' : 'translate-y-full'
+        }`}
+      >
         <SelectDate
+          open={showCalendar}
           selectedDate={selectedDate}
           onSelect={(date) => setSelectedDate(date)}
           onClose={() => setShowCalendar(false)}
         />
-      )}
+      </div>
 
       {showLeaveModal && (
         <TwoButtonModal
