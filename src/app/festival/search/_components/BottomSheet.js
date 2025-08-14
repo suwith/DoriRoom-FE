@@ -20,7 +20,7 @@ export default function BottomSheet({
           <button onClick={onClose} className="p-1"></button>
           <button
             onClick={onClose}
-            className="bg-main-5 bg-opacity-50 text-main-100 rounded-full w-5 h-5 p-1 text-xs"
+            className="bg-main-5 text-main-100 rounded-full w-5 h-5 p-1 text-xs"
           >
             <i className="mgc_close_line" />
           </button>

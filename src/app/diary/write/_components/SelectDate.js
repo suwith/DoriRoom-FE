@@ -12,7 +12,7 @@ export default function SelectDate({ selectedDate, onSelect, onClose }) {
       <div className="w-full text-right mb-1">
         <button
           onClick={onClose}
-          className="bg-main-5 bg-opacity-50 text-main-100 rounded-full w-5 h-5 p-1 text-xs"
+          className="bg-main-5 text-main-100 rounded-full w-5 h-5 p-1 text-xs"
         >
           <i className="mgc_close_line" />
         </button>
