@@ -6,7 +6,7 @@ import 'react-day-picker/lib/style.css';
 export default function SelectDate({ open, selectedDate, onSelect, onClose }) {
   return (
     <div
-      className={`fixed bottom-0 left-1/2 transform -translate-x-1/2 w-full max-w-[390px] mx-auto z-100 bg-white rounded-t-xl px-4 py-8 transition-transform duration-300 ease-in-out ${
+      className={`fixed bottom-0 left-1/2 transform -translate-x-1/2 w-full max-w-[390px] mx-auto z-100 bg-background rounded-t-xl px-4 py-8 transition-transform duration-300 ease-in-out ${
         open ? 'translate-y-0' : 'translate-y-full'
       }`}
     >
