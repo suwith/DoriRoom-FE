@@ -233,15 +233,16 @@ export default function DiaryWrite() {
                         alt={`selected-${i}`}
                         className="object-cover w-full h-full"
                       />
+
                       <button
                         onClick={() =>
                           setImages((prev) =>
                             prev.filter((_, idx) => idx !== i)
                           )
                         }
-                        className="absolute top-1.5 right-1.5 bg-main-5 bg-opacity-50 text-main-40 rounded-full w-5 h-5 text-xs"
+                        className="bg-main-5 bg-opacity-50 text-main-100 rounded-full w-5 h-5 p-1 text-xs"
                       >
-                        ✕
+                        <i className="mgc_close_line" />
                       </button>
                     </>
                   ) : null}
@@ -343,7 +344,7 @@ export default function DiaryWrite() {
         <div className="fixed top-0 bottom-0 left-1/2 transform -translate-x-1/2 w-full max-w-[390px] bg-black/25 z-99" />
       )}
       <div
-        className={`fixed bottom-0 left-1/2 transform -translate-x-1/2 w-full max-w-[390px] mx-auto z-100 bg-white rounded-t-xl px-4 py-8 transition-transform duration-300 ease-in-out ${
+        className={`fixed bottom-0 left-1/2 transform -translate-x-1/2 w-full max-w-[390px] mx-auto z-100 transition-transform duration-300 ease-in-out ${
           showCalendar ? 'translate-y-0' : 'translate-y-full'
         }`}
       >
