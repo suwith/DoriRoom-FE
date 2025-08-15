@@ -24,7 +24,7 @@ export default function OX({ quiz }) {
   };
 
   return (
-    <div className="h-screen mx-[16px] flex flex-col">
+    <div className="h-screen mx-4 flex flex-col">
       {quizId !== 5 && (
         <div className="flex gap-2 pt-28">
           {[0, 1, 2, 3, 4].map((i) => (
