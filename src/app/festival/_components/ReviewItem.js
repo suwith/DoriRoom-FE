@@ -2,7 +2,12 @@
 
 import { useState } from 'react';
 
-export default function ReviewItem({ review, isLiked, onLike }) {
+export default function ReviewItem({
+  review,
+  isLiked,
+  onLike,
+  type = 'festival',
+}) {
   const [expanded, setExpanded] = useState(false);
 
   const displayedText =
@@ -34,9 +39,11 @@ export default function ReviewItem({ review, isLiked, onLike }) {
           <button className="text-[11px] px-3 py-0.5 bg-main-5 text-main-100 rounded">
             방문
           </button>
-          <button className="text-[11px] px-2 py-0.5 bg-main-5 text-main-100 rounded">
-            팔로우
-          </button>
+          {type === 'diary' && (
+            <button className="text-[11px] px-2 py-0.5 bg-main-5 text-main-100 rounded">
+              팔로우
+            </button>
+          )}
         </div>
       </div>
 
@@ -68,7 +75,7 @@ export default function ReviewItem({ review, isLiked, onLike }) {
           <div className="flex items-center gap-1 text-main-100 text-xs">
             <button onClick={() => onLike(review.id)}>
               {isLiked ? (
-                <i className="mgc_emoji_2_line text-lg text-main-100" />
+                <i className="mgc_emoji_2_fill text-lg text-main-100" />
               ) : (
                 <i className="mgc_emoji_2_line text-lg text-neutral-400" />
               )}

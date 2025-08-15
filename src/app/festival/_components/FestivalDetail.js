@@ -9,8 +9,10 @@ import clsx from 'clsx';
 import BackButton from '@/app/_components/BackButton';
 import { MdEditSquare } from 'react-icons/md';
 import ReviewItem from '@/app/festival/_components/ReviewItem';
+import { useRouter } from 'next/navigation';
 
 export default function FestivalDetail({ festival }) {
+  const router = useRouter();
   const [activeTab, setActiveTab] = useState('설명');
   const [liked, setLiked] = useState(false);
   const [likeCount, setLikeCount] = useState(festival.likes || 0);
@@ -186,10 +188,19 @@ export default function FestivalDetail({ festival }) {
             />
           ))}
 
-          <button className="fixed bottom-7 left-1/2 -translate-x-1/2 w-[350px] py-2 bg-main-100 text-white rounded-lg text-sm font-medium shadow-md">
+          <button
+            className="fixed bottom-7 left-1/2 -translate-x-1/2 w-[350px] py-2 bg-main-100 text-background rounded-lg text-sm font-medium shadow-md"
+            onClick={() => {
+              sessionStorage.setItem(
+                'selectedFestival',
+                JSON.stringify(festival)
+              );
+              router.push('/diary/write');
+            }}
+          >
             <div className="flex items-center justify-center gap-2">
               {' '}
-              <MdEditSquare className="text-white w-5 h-5" />
+              <MdEditSquare className="text-background w-5 h-5" />
               <span className="text-lg">일기 작성하기</span>
             </div>
           </button>
@@ -197,7 +208,7 @@ export default function FestivalDetail({ festival }) {
       )}
 
       {showToast && (
-        <div className="fixed bottom-7 left-1/2 -translate-x-1/2 bg-sub-5 px-4 py-2 rounded-full text-xs text-sub-100 flex items-center gap-2 z-50">
+        <div className="fixed bottom-7 left-1/2 -translate-x-1/2 bg-sub-5 px-4 py-2 rounded-full text-xs text-sub-100 whitespace-nowrap flex items-center gap-2 z-50">
           <i className="mgc_user_follow_fill text-lg text-sub-100" />
           <span>
             {festival.visitedFriend > 0
