@@ -117,8 +117,10 @@ export default function FestivalSearchResultPage() {
   const categoryOptions = [
     '관광축제',
     '예술축제',
+    '특산물축제',
     '전통축제',
     '자연축제',
+    '기타축제',
     '공연',
     '행사',
   ];
