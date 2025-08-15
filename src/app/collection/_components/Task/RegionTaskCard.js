@@ -1,6 +1,6 @@
 import { FaCirclePlus } from 'react-icons/fa6';
 import { FaFire } from 'react-icons/fa6';
-import { IoIosArrowForward } from 'react-icons/io';
+import { IoMdMap } from 'react-icons/io';
 
 export default function RegionTaskCard({
   title,
@@ -30,7 +30,9 @@ export default function RegionTaskCard({
             <span className="text-neutral-900">{reward}</span>
           </div>
         </div>
-        <IoIosArrowForward className="mr-1 text-neutral-500 self-start" />
+        <div className="self-start flex items-center justify-center bg-white p-0.5 mr-1 rounded-md">
+          <IoMdMap className="text-main-100 text-lg" />
+        </div>
       </div>
       <div
         className={`flex justify-between items-center text-xs font-semibold mt-2 ${status === '달성' ? 'text-neutral-400' : 'text-neutral-900'}`}
