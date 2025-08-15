@@ -1,16 +1,22 @@
 'use client';
 
 import BottomSheet from './BottomSheet';
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 
 export default function CategoryFilter({
   open,
   onClose,
   value = [],
   onChange,
-  options,
+  options = [],
 }) {
   const [temp, setTemp] = useState(value);
+
+  // 바텀시트 열릴 때마다 현재 값으로 리셋
+  useEffect(() => {
+    if (open) setTemp(value);
+  }, [open, value]);
+
   const toggle = (k) => {
     setTemp((prev) =>
       prev.includes(k) ? prev.filter((x) => x !== k) : [...prev, k]
@@ -23,15 +29,18 @@ export default function CategoryFilter({
       onClose={onClose}
       title="분야"
       footer={
-        <div className="flex gap-2 font-semibold pb-3">
+        <div className="flex items-center gap-2 pb-3">
           <button
-            className="flex-1 py-3 rounded-md bg-main-15 text-main-100"
+            type="button"
+            className="px-4 py-3 rounded-md bg-main-15 text-main-100 font-semibold shrink-0"
             onClick={() => setTemp([])}
           >
             초기화
           </button>
+
           <button
-            className="flex-4 py-3 rounded-md bg-main-100 text-white"
+            type="button"
+            className="flex-1 py-3 rounded-md bg-main-100 text-white font-semibold"
             onClick={() => {
               onChange(temp);
               onClose();
@@ -42,16 +51,30 @@ export default function CategoryFilter({
         </div>
       }
     >
-      <div className="flex flex-wrap gap-2">
+      <div className="grid grid-cols-2 gap-2 mb-6">
         {options.map((c) => {
           const active = temp.includes(c);
           return (
             <button
+              type="button"
               key={c}
               onClick={() => toggle(c)}
-              className={`px-3 py-1 rounded-full border text-sm ${active ? 'bg-main-5 border-main-100 text-main-100' : 'border-neutral-200'}`}
+              className={[
+                'h-12 w-full rounded-lg px-4',
+                'flex items-center justify-between text-[15px]',
+                active
+                  ? 'bg-main-5 0 text-main-100'
+                  : 'bg-neutral-100  text-neutral-800',
+              ].join(' ')}
             >
-              {c}
+              <span className="truncate">{c}</span>
+
+              {/* 우측 체크 인디케이터 */}
+              <span className="ml-3 inline-flex items-center justify-center">
+                <i
+                  className={`mgc_check_fill  text-xl ${active ? 'text-main-100' : 'text-neutral-300'}`}
+                />
+              </span>
             </button>
           );
         })}

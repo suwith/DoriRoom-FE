@@ -15,7 +15,7 @@ export default function BottomSheet({
       <div
         className={`fixed bottom-0 left-1/2 transform -translate-x-1/2 w-full max-w-[390px] mx-auto bg-background rounded-t-xl px-4 py-5`}
       >
-        <div className="flex items-center justify-between mb-3">
+        <div className="flex items-center justify-between mb-6">
           <h3 className="text-lg font-semibold">{title}</h3>
           <button onClick={onClose} className="p-1"></button>
           <button
