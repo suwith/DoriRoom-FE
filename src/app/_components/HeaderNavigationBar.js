@@ -1,9 +1,9 @@
 'use client';
 
-import { useRouter } from 'next/navigation';
 import BackButton from '../_components/BackButton';
 import TaskInfoModal from '../collection/_components/Task/TaskInfoModal';
 import { useState } from 'react';
+import QuizQuitModal from '../collection/_components/Quiz/QuizQuitModal';
 
 export default function HeaderNavigationBar({
   title = '제목 없음',
@@ -13,8 +13,8 @@ export default function HeaderNavigationBar({
   lv = 0,
   onEditClick,
   onDeleteClick,
+  regionId = null,
 }) {
-  const router = useRouter();
   const [isOpen, setIsOpen] = useState(false);
   const [showDiaryMenu, setShowDiaryMenu] = useState(false);
 
@@ -33,17 +33,22 @@ export default function HeaderNavigationBar({
 
         {/* 뒤로가기 버튼 */}
         {showBackButton && (
-          <div className="absolute left-5">
+          <div className="absolute left-[16px]">
             <BackButton />
+          </div>
+        )}
+        {type === 'quiz' && (
+          <div className="absolute left-[16px]" onClick={() => setIsOpen(true)}>
+            <i className={`mgc_left_line text-3xl text-neutral-500`} />
           </div>
         )}
         {type === 'collection' && (
           <i
-            className="absolute right-5 mgc_information_fill text-neutral-500 text-xl"
+            className="absolute right-[16px] mgc_information_fill text-neutral-500 text-xl"
             onClick={() => setIsOpen(true)}
           />
         )}
-      <TaskInfoModal isOpen={isOpen} setIsOpen={setIsOpen} />
+        <TaskInfoModal isOpen={isOpen} setIsOpen={setIsOpen} />
 
         {/* 일기장 토글 버튼 */}
         {type === 'diary' && (
@@ -78,6 +83,16 @@ export default function HeaderNavigationBar({
           </div>
         )}
       </div>
+      {type === 'collection' && (
+        <TaskInfoModal isOpen={isOpen} setIsOpen={setIsOpen} />
+      )}
+      {type === 'quiz' && (
+        <QuizQuitModal
+          isOpen={isOpen}
+          setIsOpen={setIsOpen}
+          regionId={regionId}
+        />
+      )}
     </header>
   );
 }
