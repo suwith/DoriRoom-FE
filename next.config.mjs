@@ -1,10 +1,12 @@
 /** @type {import('next').NextConfig} */
+
+const url = process.env.NEXT_PUBLIC_API_BASE_URL;
 const nextConfig = {
   async rewrites() {
     return [
       {
         source: '/api/:path*',
-        destination: 'http://43.202.194.181:8080/api/:path*', // 백엔드 HTTP 그대로
+        destination: `${url}/api/:path*`,
       },
     ];
   },

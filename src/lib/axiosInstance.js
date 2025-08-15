@@ -1,6 +1,5 @@
 import axios from 'axios';
 
-const API_BASE_URL = process.env.NEXT_PUBLIC_API_BASE_URL;
 const DEV_ACCESS = process.env.NEXT_PUBLIC_API_ACCESS_TOKEN || '';
 const DEV_REFRESH = process.env.NEXT_PUBLIC_API_REFRESH_TOKEN || '';
 
@@ -10,7 +9,7 @@ let queue = [];
 // 새 액세스 토큰 발급
 async function refreshAccessToken() {
   const res = await axios.post(
-    `${API_BASE_URL}auth/reissue`,
+    `'/api/auth/reissue`,
     { refreshToken: DEV_REFRESH },
     { withCredentials: false }
   );
@@ -21,7 +20,7 @@ async function refreshAccessToken() {
 }
 
 const axiosInstance = axios.create({
-  baseURL: API_BASE_URL,
+  baseURL: '/api/',
   withCredentials: false,
   timeout: 15000,
   headers: { Accept: 'application/json' },
