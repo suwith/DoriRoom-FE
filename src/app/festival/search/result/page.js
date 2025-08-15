@@ -1,7 +1,7 @@
 'use client';
 
 import { useEffect, useState } from 'react';
-import { useRouter } from 'next/navigation';
+import { usePathname, useRouter } from 'next/navigation';
 import { mockFestivals } from '../../mockData';
 import SearchInputBar from '@/app/festival/_components/SearchInputBar';
 import { FiFilter } from 'react-icons/fi';
@@ -10,6 +10,17 @@ import FestivalListItem from '@/app/festival/_components/FestivalListItem';
 
 export default function FestivalSearchResultPage() {
   const router = useRouter();
+  const pathname = usePathname();
+  const [mode, setMode] = useState('default');
+
+  useEffect(() => {
+    const params = new URLSearchParams(window.location.search);
+    const modeParam = params.get('mode');
+    if (modeParam === 'select') {
+      setMode('select');
+    }
+  }, []);
+
   const [searchQuery, setSearchQuery] = useState('');
   const [input, setInput] = useState('');
   const [likedIds, setLikedIds] = useState([]);
@@ -46,26 +57,30 @@ export default function FestivalSearchResultPage() {
         withBack
       />
 
-      <div className="flex gap-2 items-center mt-3 mb-3">
-        {['정렬기준', '지역', '분야', '기간'].map((tag) => (
-          <button
-            key={tag}
-            className="bg-transparent text-xs px-2 py-1 rounded-full border border-neutral-200  text-neutral-900 flex items-center gap-1"
-          >
-            <span>{tag}</span>
-            <IoIosArrowDown />
-          </button>
-        ))}
-        <button className="ml-auto p-1">
-          <FiFilter className="text-neutral-500 w-4 h-4" />
-        </button>
-      </div>
+      {mode !== 'select' && (
+        <>
+          <div className="flex gap-2 items-center mt-3 mb-3">
+            {['정렬기준', '지역', '분야', '기간'].map((tag) => (
+              <button
+                key={tag}
+                className="bg-transparent text-xs px-2 py-1 rounded-full border border-neutral-200  text-neutral-900 flex items-center gap-1"
+              >
+                <span>{tag}</span>
+                <IoIosArrowDown />
+              </button>
+            ))}
+            <button className="ml-auto p-1">
+              <FiFilter className="text-neutral-500 w-4 h-4" />
+            </button>
+          </div>
 
-      <div className="text-xs text-neutral-600 mb-3">
-        검색결과 ({filteredFestivals.length})
-      </div>
+          <div className="text-xs text-neutral-600">
+            검색결과 ({filteredFestivals.length})
+          </div>
+        </>
+      )}
 
-      <div className="space-y-4 h-full">
+      <div className="space-y-4 h-full mt-3">
         {filteredFestivals.length === 0 ? (
           <div
             className="flex flex-col h-full items-center justify-center gap-3"
@@ -89,13 +104,25 @@ export default function FestivalSearchResultPage() {
           filteredFestivals.map((festival) => (
             <div
               key={festival.id}
-              onClick={() => router.push(`/festival/${festival.id}`)}
+              onClick={() =>
+                mode === 'select'
+                  ? null
+                  : router.push(`/festival/${festival.id}`)
+              }
             >
               <FestivalListItem
                 key={festival.id}
                 festival={festival}
                 liked={likedIds.includes(festival.id)}
                 onLike={() => toggleLike(festival.id)}
+                mode={mode}
+                onSelect={() => {
+                  sessionStorage.setItem(
+                    'selectedFestival',
+                    JSON.stringify(festival)
+                  );
+                  router.push('/diary/write');
+                }}
               />
             </div>
           ))

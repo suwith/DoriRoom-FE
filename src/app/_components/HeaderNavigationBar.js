@@ -11,9 +11,12 @@ export default function HeaderNavigationBar({
   className = '',
   type = 'general',
   lv = 0,
+  onEditClick,
+  onDeleteClick,
   regionId = null,
 }) {
   const [isOpen, setIsOpen] = useState(false);
+  const [showDiaryMenu, setShowDiaryMenu] = useState(false);
 
   return (
     <header
@@ -45,6 +48,41 @@ export default function HeaderNavigationBar({
             onClick={() => setIsOpen(true)}
           />
         )}
+      <TaskInfoModal isOpen={isOpen} setIsOpen={setIsOpen} />
+
+        {/* 일기장 토글 버튼 */}
+        {type === 'diary' && (
+          <div className="absolute right-5">
+            <i
+              className="mgc_more_2_fill text-neutral-500 text-2xl"
+              onClick={() => setShowDiaryMenu((prev) => !prev)}
+            />
+            {showDiaryMenu && (
+              <div className="absolute right-0 mt-0 w-24 bg-background border border-neutral-100 text-neutral-600 rounded shadow-md text-sm z-50">
+                <button
+                  className="w-full text-center px-4 py-2 hover:bg-neutral-100"
+                  onClick={() => {
+                    setShowDiaryMenu(false);
+                    onEditClick?.();
+                  }}
+                >
+                  수정
+                </button>
+                <hr className="text-neutral-100" />
+                <button
+                  className="w-full text-center px-4 py-2 hover:bg-neutral-100"
+                  onClick={() => {
+                    setShowDiaryMenu(false);
+                    onDeleteClick?.();
+                  }}
+                >
+                  삭제
+                </button>
+              </div>
+            )}
+          </div>
+        )}
+      </div>
       </div>
       {type === 'collection' && (
         <TaskInfoModal isOpen={isOpen} setIsOpen={setIsOpen} />
