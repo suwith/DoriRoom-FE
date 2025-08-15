@@ -6,14 +6,16 @@ import RegionFilter from './_components/RegionFilter';
 import FestivalCardListSection from './_components/FestivalCardListSection';
 import 'mingcute_icon/font/Mingcute.css';
 import { mockFestivals } from './mockData';
+import useMainFestivals from '@/hooks/festival/useMainFestivals';
 
 export default function FestivalPage() {
   const router = useRouter();
+  const { upcoming, endingSoon, loading, error } = useMainFestivals();
 
   return (
-    <div className="pb-24 max-w-[390px] mx-auto">
+    <div className="pb-24 pt-[50px] max-w-[390px] ">
       {/* 상단 검색바 + 하트 */}
-      <div className="flex items-center gap-1 px-4 pt-4">
+      <div className="flex items-center gap-1 px-4">
         <div
           onClick={() => router.push('/festival/search')}
           className="flex items-center flex-grow bg-neutral-100 px-4 py-2 rounded-lg text-sm cursor-pointer"
@@ -43,18 +45,22 @@ export default function FestivalPage() {
       </div>
 
       {/* 섹션 */}
-      <FestivalCardListSection
-        title="지금 뜨는 축제 🔥"
-        festivals={mockFestivals}
-      />
-      <FestivalCardListSection
-        title="따끈따끈 신규 축제 🌟"
-        festivals={mockFestivals}
-      />
-      <FestivalCardListSection
-        title="곧 있으면 끝나요! 마감 임박 축제 🚨"
-        festivals={mockFestivals}
-      />
+      {!loading && !error && (
+        <>
+          <FestivalCardListSection
+            title="지금 뜨는 축제 🔥"
+            festivals={mockFestivals}
+          />
+          <FestivalCardListSection
+            title="따끈따끈 신규 축제 🌟"
+            festivals={upcoming}
+          />
+          <FestivalCardListSection
+            title="곧 있으면 끝나요! 마감 임박 축제 🚨"
+            festivals={endingSoon}
+          />
+        </>
+      )}
     </div>
   );
 }
