@@ -1,6 +1,6 @@
 'use client';
 
-import { useEffect, useState } from 'react';
+import { useEffect, useRef, useState } from 'react';
 import { GoHeart, GoHeartFill } from 'react-icons/go';
 import Icon from '@mdi/react';
 import { mdiTree } from '@mdi/js';
@@ -19,6 +19,11 @@ export default function FestivalDetail({ festival }) {
   const [likedReviews, setLikedReviews] = useState([]);
   const [reviewSort, setReviewSort] = useState('latest');
   const [showToast, setShowToast] = useState(false);
+
+  // 헤더 전환 상태
+  const [isScrolled, setIsScrolled] = useState(false);
+  const sentinelRef = useRef(null);
+  const HEADER_H = 70; // 헤더 높이(px): h-12(=48) + 상단 패딩 보정 등이 있으면 맞춰 조정
 
   const handleLike = () => {
     setLiked((prev) => !prev);
@@ -44,19 +49,55 @@ export default function FestivalDetail({ festival }) {
     return () => clearTimeout(timer);
   }, []);
 
+  // 이미지 하단 센티넬이 헤더 뒤로 넘어가면 isScrolled = true
+  useEffect(() => {
+    const el = sentinelRef.current;
+    if (!el) return;
+
+    const io = new IntersectionObserver(
+      ([entry]) => {
+        // entry가 보이면 아직 이미지 영역, 안 보이면 정보 영역
+        setIsScrolled(!entry.isIntersecting);
+      },
+      {
+        root: null,
+        threshold: 0,
+        // 헤더 높이만큼 위쪽을 미리 깎아, 헤더와 정확히 맞닿을 때 전환되게 함
+        rootMargin: `-${HEADER_H}px 0px 0px 0px`,
+      }
+    );
+
+    io.observe(el);
+    return () => io.disconnect();
+  }, []);
+
   return (
-    <div className="max-w-[390px] mx-auto bg-[#FEFEFE] min-h-screen pb-10">
-      {/* 이미지 상단 */}
+    <div className="max-w-[390px] w-screen min-h-screen pb-10">
+      {/* 고정 헤더: 가운데 정렬 + 전환 애니메이션 */}
+      <div
+        className={`fixed top-0 left-1/2 -translate-x-1/2 w-full pt-[50px] max-w-[390px] z-50 transition-colors duration-300 ${
+          isScrolled ? 'bg-background' : 'bg-transparent'
+        }`}
+      >
+        <div className="flex items-center h-12 px-3">
+          <BackButton
+            color={isScrolled ? 'text-neutral-500' : 'text-background'}
+            isShadow={true}
+          />
+        </div>
+      </div>
+
+      {/* 썸네일 */}
       <div className="relative">
         <img
           src={festival.thumbnail}
           alt={festival.title}
           className="w-full h-[370px] object-cover"
         />
-        <div className="absolute top-10 left-3">
-          <BackButton color={'text-background'} isShadow={true} />
-        </div>
       </div>
+
+      {/* 이미지 바로 아래 센티넬: 이 지점이 헤더 뒤로 넘어갈 때 배경/아이콘 색 전환 */}
+      <div ref={sentinelRef} className="h-px" />
 
       {/* 정보 */}
       <div className="px-4 py-3 space-y-2">
