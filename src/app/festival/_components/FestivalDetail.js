@@ -122,9 +122,20 @@ export default function FestivalDetail({ festival }) {
         </div>
         <div className="flex flex-row items-center gap-3 text-sm">
           <p className="text-neutral-500">일자</p>
-          <span className="text-main-100 bg-main-5 rounded-full px-1.5 py-0.5 flex items-center font-normal text-[11px]">
+          <span
+            className={`rounded-full px-1.5 py-0.5 flex items-center font-normal text-[11px] ${
+              festival.status === '진행 예정'
+                ? 'bg-main-5 text-main-100'
+                : festival.status === '진행 중'
+                  ? 'bg-sub-5 text-sub-100'
+                  : festival.status === '행사 종료'
+                    ? 'bg-neutral-100 text-neutral-300'
+                    : ''
+            }`}
+          >
             {festival.status}
           </span>
+
           <span>
             {festival.startDate} ~ {festival.endDate}
           </span>
@@ -132,7 +143,9 @@ export default function FestivalDetail({ festival }) {
         <div className="flex flex-row items-center gap-3 text-sm">
           <p className="text-neutral-500">시간</p>
           <span>
-            {festival.startTime} ~ {festival.endTime}
+            {festival.startTime === ''
+              ? '-'
+              : `${festival.startTime} ~ ${festival.endTime}`}
           </span>
         </div>
         <div className="flex flex-row items-center gap-3 text-sm">
@@ -148,7 +161,7 @@ export default function FestivalDetail({ festival }) {
           <p>
             {festival.price === 0
               ? '무료'
-              : `₩${festival.price.toLocaleString()}`}
+              : `${festival.price.toLocaleString()}`}
           </p>
         </div>
       </div>
@@ -179,20 +192,34 @@ export default function FestivalDetail({ festival }) {
       {/* 설명 탭 */}
       {activeTab === '설명' && (
         <div className="px-4 py-6 space-y-6 text-sm text-neutral-800">
-          {festival.details?.map((detail, idx) => (
-            <div key={idx}>
-              <div className="text-main-100 font-medium mb-1 flex items-center gap-1">
-                <Icon path={mdiTree} className="w-4 h-4 text-main-100" />
-                {detail.infoname}
-              </div>
-              <p
-                className="text-neutral-600 leading-relaxed"
-                dangerouslySetInnerHTML={{
-                  __html: detail.infotext.replace(/\n/g, '<br />'),
-                }}
-              />
+          <div>
+            <img src={festival.thumbnail} />
+          </div>
+
+          <div>
+            <div className="text-main-100 font-medium mb-1 flex items-center gap-1">
+              <Icon path={mdiTree} className="w-4 h-4 text-main-100" />
+              행사소개
             </div>
-          ))}
+            <p
+              className="text-neutral-600 leading-relaxed"
+              dangerouslySetInnerHTML={{
+                __html: festival.eventIntro.replace(/\n/g, '<br />'),
+              }}
+            />{' '}
+          </div>
+          <div>
+            <div className="text-main-100 font-medium mb-1 flex items-center gap-1">
+              <Icon path={mdiTree} className="w-4 h-4 text-main-100" />
+              행사내용
+            </div>
+            <p
+              className="text-neutral-600 leading-relaxed"
+              dangerouslySetInnerHTML={{
+                __html: festival.eventContent.replace(/\n/g, '<br />'),
+              }}
+            />{' '}
+          </div>
         </div>
       )}
 
