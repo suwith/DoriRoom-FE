@@ -1,4 +1,3 @@
-// /app/hooks/useFestivalDetail.js
 'use client';
 
 import { useEffect, useMemo, useState } from 'react';
@@ -18,14 +17,6 @@ function calcStatus(start, end) {
   if (today < s) return '진행 예정';
   if (today > e) return '행사 종료';
   return '진행 중';
-}
-
-// 가격/요금 파싱(문구가 오면 그대로, 숫자면 숫자 처리)
-function normalizePrice(useTimeFestival) {
-  if (!useTimeFestival) return '';
-  const num = parseInt(useTimeFestival.replace(/[^\d]/g, ''), 10);
-  if (!isNaN(num)) return num; // 숫자면 원 단위 숫자 반환
-  return useTimeFestival; // 문구면 그대로
 }
 
 // API → UI 전용 모델로 정규화
@@ -51,7 +42,7 @@ function normalizeFestival(api) {
     endTime: '',
     location: api.addr1 || '',
     host, // 합친 값 저장
-    price: api.useTimeFestival ||'',
+    price: api.useTimeFestival || '',
     likes: typeof api.favoriteCount === 'number' ? api.favoriteCount : 0,
     details: [],
     reviews: [],
@@ -82,8 +73,7 @@ export default function useFestivalDetail(festivalId) {
         if (!mounted) return;
         setError(err);
       } finally {
-        if (!mounted) return;
-        setLoading(false);
+        if (mounted) setLoading(false);
       }
     }
 

@@ -1,22 +1,22 @@
+// lib/axiosInstance.js
 import axios from 'axios';
 
-const DEV_ACCESS = process.env.NEXT_PUBLIC_API_ACCESS_TOKEN || '';
-const DEV_REFRESH = process.env.NEXT_PUBLIC_API_REFRESH_TOKEN || '';
+function readTokens() {
+  if (typeof window === 'undefined')
+    return { access: '', refresh: '', kind: null };
+  const la = localStorage.getItem('access_token');
+  const lr = localStorage.getItem('refresh_token');
+  if (lr) return { access: la || '', refresh: lr, kind: 'local' };
+  const sa = sessionStorage.getItem('access_token');
+  const sr = sessionStorage.getItem('refresh_token');
+  if (sr) return { access: sa || '', refresh: sr, kind: 'session' };
+  return { access: '', refresh: '', kind: null };
+}
 
-let isRefreshing = false;
-let queue = [];
-
-// 새 액세스 토큰 발급
-async function refreshAccessToken() {
-  const res = await axios.post(
-    '/api/auth/reissue',
-    { refreshToken: DEV_REFRESH },
-    { withCredentials: false }
-  );
-  const content = res.data?.content || {};
-  const newAccess = content.accessToken;
-  if (!newAccess) throw new Error('No access token in refresh response');
-  return newAccess;
+function saveAccess(token, kind) {
+  if (typeof window === 'undefined') return;
+  if (kind === 'local') localStorage.setItem('access_token', token);
+  if (kind === 'session') sessionStorage.setItem('access_token', token);
 }
 
 const axiosInstance = axios.create({
@@ -26,57 +26,63 @@ const axiosInstance = axios.create({
   headers: { Accept: 'application/json' },
 });
 
-// 요청 인터셉터
+// 요청 인터셉터: 세션에 토큰이 있을 때만 Authorization 부착
 axiosInstance.interceptors.request.use((config) => {
-  const token =
-    (typeof window !== 'undefined' &&
-      (localStorage.getItem('access_token') ||
-        sessionStorage.getItem('access_token'))) ||
-    DEV_ACCESS;
-  if (token) {
+  const { access } = readTokens();
+  if (access) {
     config.headers = config.headers || {};
-    config.headers.Authorization = `Bearer ${token}`;
+    config.headers.Authorization = `Bearer ${access}`;
   }
   return config;
 });
 
-// 응답 인터셉터
+// 응답 인터셉터: 401이면 리프레시 시도 후 원요청 재시도
 axiosInstance.interceptors.response.use(
   (res) => res,
   async (err) => {
     const original = err.config || {};
-    if (err?.response?.status !== 401 || original._retry) {
-      return Promise.reject(err);
-    }
+    if (original._skipAuthRefresh) return Promise.reject(err);
+    if (err?.response?.status !== 401 || original._retry) return Promise.reject(err);
 
-    if (isRefreshing) {
-      return new Promise((resolve, reject) => {
-        queue.push({ resolve, reject });
-      }).then((token) => {
-        original.headers.Authorization = `Bearer ${token}`;
-        return axiosInstance(original);
-      });
-    }
+    const { refresh, kind } = readTokens();
+    if (!refresh) return Promise.reject(err);
 
-    isRefreshing = true;
     original._retry = true;
-
     try {
-      const newToken = await refreshAccessToken();
-      localStorage.setItem('access_token', newToken);
-      queue.forEach((p) => p.resolve(newToken));
-      queue = [];
+      const re = await axios.post(
+        '/api/auth/reissue',
+        { refreshToken: refresh },
+        { headers: { 'Content-Type': 'application/json' }, withCredentials: false, _skipAuthRefresh: true }
+      );
 
-      original.headers.Authorization = `Bearer ${newToken}`;
+      const newAccess = re.data?.content?.accessToken;
+
+      // 여기서 더 이상 throw 하지 않음
+      if (!newAccess) {
+        if (typeof window !== 'undefined') {
+          localStorage.removeItem('access_token');
+          localStorage.removeItem('refresh_token');
+          sessionStorage.removeItem('access_token');
+          sessionStorage.removeItem('refresh_token');
+        }
+        return Promise.reject(new Error('No access token in refresh response'));
+      }
+
+      saveAccess(newAccess, kind);
+      original.headers = original.headers || {};
+      original.headers.Authorization = `Bearer ${newAccess}`;
       return axiosInstance(original);
     } catch (e) {
-      queue.forEach((p) => p.reject(e));
-      queue = [];
+      if (typeof window !== 'undefined') {
+        localStorage.removeItem('access_token');
+        localStorage.removeItem('refresh_token');
+        sessionStorage.removeItem('access_token');
+        sessionStorage.removeItem('refresh_token');
+      }
       return Promise.reject(e);
-    } finally {
-      isRefreshing = false;
     }
   }
 );
+
 
 export default axiosInstance;
