@@ -9,7 +9,7 @@ let queue = [];
 // 새 액세스 토큰 발급
 async function refreshAccessToken() {
   const res = await axios.post(
-    `'/api/auth/reissue`,
+    '/api/auth/reissue',
     { refreshToken: DEV_REFRESH },
     { withCredentials: false }
   );
