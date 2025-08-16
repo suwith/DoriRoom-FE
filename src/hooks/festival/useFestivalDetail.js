@@ -33,7 +33,6 @@ function normalizeFestival(api) {
   if (!api) return null;
   const startDate = formatDisplayDate(api.startDate);
   const endDate = formatDisplayDate(api.endDate);
-  const price = normalizePrice(api.useTimeFestival);
 
   // sponsor1, sponsor2 합치기
   const hostParts = [];
@@ -52,7 +51,7 @@ function normalizeFestival(api) {
     endTime: '',
     location: api.addr1 || '',
     host, // 합친 값 저장
-    price,
+    price: api.useTimeFestival ||'',
     likes: typeof api.favoriteCount === 'number' ? api.favoriteCount : 0,
     details: [],
     reviews: [],

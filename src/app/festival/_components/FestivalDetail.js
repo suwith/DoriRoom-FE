@@ -140,7 +140,7 @@ export default function FestivalDetail({ festival }) {
             {festival.startDate} ~ {festival.endDate}
           </span>
         </div>
-        <div className="flex flex-row items-center gap-3 text-sm">
+        <div className="flex flex-row gap-3 text-sm">
           <p className="text-neutral-500">시간</p>
           <span>
             {festival.startTime === ''
@@ -148,21 +148,21 @@ export default function FestivalDetail({ festival }) {
               : `${festival.startTime} ~ ${festival.endTime}`}
           </span>
         </div>
-        <div className="flex flex-row items-center gap-3 text-sm">
+        <div className="flex flex-row gap-3 text-sm">
           <p className=" text-neutral-500">위치</p>
           <p>{festival.location}</p>
         </div>
-        <div className="flex flex-row items-center gap-3 text-sm">
+        <div className="flex flex-row gap-3 text-sm">
           <p className=" text-neutral-500">주최기관</p>
           <p>{festival.host}</p>
         </div>
-        <div className="flex flex-row items-center gap-3 text-sm">
+        <div className="flex flex-row gap-3 text-sm">
           <p className=" text-neutral-500">금액</p>
-          <p>
-            {festival.price === 0
-              ? '무료'
-              : `${festival.price.toLocaleString()}`}
-          </p>
+          <p
+            dangerouslySetInnerHTML={{
+              __html: festival.price.replace(/\n/g, '<br />'),
+            }}
+          />
         </div>
       </div>
       <div className="mt-1 w-full h-1.5 p-0 bg-neutral-100"></div>
