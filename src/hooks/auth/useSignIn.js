@@ -1,4 +1,3 @@
-// hooks/auth/useSignIn.js
 'use client';
 
 import { useCallback, useState } from 'react';
@@ -27,7 +26,10 @@ export default function useSignIn() {
       res = await axiosInstance.post(
         'auth/login',
         { username: 'user1234', password: 'Passw0rd!' },
-        { headers: { 'Content-Type': 'application/json' }, _skipAuthRefresh: true }
+        {
+          headers: { 'Content-Type': 'application/json' },
+          _skipAuthRefresh: true,
+        }
       );
     } catch (e) {
       setError(e);

@@ -1,4 +1,3 @@
-// lib/axiosInstance.js
 import axios from 'axios';
 
 function readTokens() {
@@ -42,7 +41,8 @@ axiosInstance.interceptors.response.use(
   async (err) => {
     const original = err.config || {};
     if (original._skipAuthRefresh) return Promise.reject(err);
-    if (err?.response?.status !== 401 || original._retry) return Promise.reject(err);
+    if (err?.response?.status !== 401 || original._retry)
+      return Promise.reject(err);
 
     const { refresh, kind } = readTokens();
     if (!refresh) return Promise.reject(err);
@@ -52,12 +52,15 @@ axiosInstance.interceptors.response.use(
       const re = await axios.post(
         '/api/auth/reissue',
         { refreshToken: refresh },
-        { headers: { 'Content-Type': 'application/json' }, withCredentials: false, _skipAuthRefresh: true }
+        {
+          headers: { 'Content-Type': 'application/json' },
+          withCredentials: false,
+          _skipAuthRefresh: true,
+        }
       );
 
       const newAccess = re.data?.content?.accessToken;
 
-      // 여기서 더 이상 throw 하지 않음
       if (!newAccess) {
         if (typeof window !== 'undefined') {
           localStorage.removeItem('access_token');
@@ -83,6 +86,5 @@ axiosInstance.interceptors.response.use(
     }
   }
 );
-
 
 export default axiosInstance;

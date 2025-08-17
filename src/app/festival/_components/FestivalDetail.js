@@ -153,7 +153,7 @@ export default function FestivalDetail({ festival }) {
           <p>{festival.location}</p>
         </div>
         <div className="flex flex-row gap-3 text-sm">
-          <p className=" text-neutral-500">주최기관</p>
+          <p className=" text-neutral-500">주최</p>
           <p>{festival.host}</p>
         </div>
         <div className="flex flex-row gap-3 text-sm">
@@ -193,7 +193,7 @@ export default function FestivalDetail({ festival }) {
       {activeTab === '설명' && (
         <div className="px-4 py-6 space-y-6 text-sm text-neutral-800">
           <div>
-            <img src={festival.thumbnail} />
+            <img src={festival.thumbnail} alt={festival.title} />
           </div>
 
           <div>

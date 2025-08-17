@@ -3,12 +3,7 @@
 import { useEffect, useMemo, useState } from 'react';
 import axiosInstance from '@/lib/axiosInstance';
 
-// 날짜 포맷 유틸(입력 예: "2025.08.07" → 그대로 표시용 리턴)
-function formatDisplayDate(yyyyDotMmDotDd) {
-  return yyyyDotMmDotDd || '';
-}
-
-// 상태 계산: 진행중/예정/종료
+// 진행중/예정/종료 상태
 function calcStatus(start, end) {
   if (!start || !end) return '';
   const today = new Date();
@@ -19,13 +14,11 @@ function calcStatus(start, end) {
   return '진행 중';
 }
 
-// API → UI 전용 모델로 정규화
 function normalizeFestival(api) {
   if (!api) return null;
-  const startDate = formatDisplayDate(api.startDate);
-  const endDate = formatDisplayDate(api.endDate);
+  const startDate = api.startDate;
+  const endDate = api.endDate;
 
-  // sponsor1, sponsor2 합치기
   const hostParts = [];
   if (api.sponsor1) hostParts.push(api.sponsor1);
   if (api.sponsor2) hostParts.push(api.sponsor2);
@@ -41,7 +34,7 @@ function normalizeFestival(api) {
     startTime: '',
     endTime: '',
     location: api.addr1 || '',
-    host, // 합친 값 저장
+    host,
     price: api.useTimeFestival || '',
     likes: typeof api.favoriteCount === 'number' ? api.favoriteCount : 0,
     details: [],
@@ -65,7 +58,7 @@ export default function useFestivalDetail(festivalId) {
     async function fetchDetail() {
       try {
         setLoading(true);
-        const res = await axiosInstance.get(`/event/detail/${festivalId}`);
+        const res = await axiosInstance.get(`event/detail/${festivalId}`);
         const apiContent = res.data?.content || null;
         if (!mounted) return;
         setFestival(normalizeFestival(apiContent));

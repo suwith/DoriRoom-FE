@@ -1,26 +1,23 @@
 import { useEffect, useState } from 'react';
 import axiosInstance from '@/lib/axiosInstance';
 
-// API 응답 → 카드에서 쓰기 좋은 형태로 정규화
 function normalizeFestival(item) {
   return {
-    id: item.eventId, // 기존 mock의 id 대체
+    id: item.eventId,
     eventId: item.eventId,
     contentId: item.contentId,
 
     title: item.title,
-    location: item.addr1 ?? '', // mock의 location 대응
-    startDate: item.startDate, // "YYYY.MM.DD"
+    location: item.addr1 ?? '',
+    startDate: item.startDate,
     endDate: item.endDate,
 
     areaName: item.areaName,
     areaCode: item.areaCode,
     categoryName: item.categoryName,
 
-    likes: typeof item.favoriteCount === 'number' ? item.favoriteCount : 0, // mock의 likes 대응
-    thumbnail: item.firstImage || item.secondImage || '', // mock의 thumbnail 대응
-    firstImage: item.firstImage || '',
-    secondImage: item.secondImage || '',
+    likes: typeof item.favoriteCount === 'number' ? item.favoriteCount : 0,
+    thumbnail: item.firstImage || item.secondImage || '',
   };
 }
 
@@ -52,8 +49,7 @@ export default function useMainFestivals() {
         if (!mounted) return;
         setError(e);
       } finally {
-        if (!mounted) return;
-        setLoading(false);
+        if (mounted) setLoading(false);
       }
     }
 

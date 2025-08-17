@@ -32,6 +32,6 @@ export default function AuthBootstrap({ children }) {
     };
   }, [signIn]);
 
-  if (!ready || signingIn) return null; // 필요하면 스켈레톤 표기
+  if (!ready || signingIn) return null;
   return children;
 }
