@@ -14,12 +14,12 @@ function saveTokens({ accessToken, refreshToken }, remember) {
   } catch (_) {}
 }
 
-export default function useSignIn() {
-  const [signingIn, setSigningIn] = useState(false);
+export default function useLogin() {
+  const [loggingIn, setLoggingIn] = useState(false);
   const [error, setError] = useState(null);
 
-  const signIn = useCallback(async ({ remember = true } = {}) => {
-    setSigningIn(true);
+  const login = useCallback(async ({ remember = true } = {}) => {
+    setLoggingIn(true);
     setError(null);
     let res;
     try {
@@ -33,9 +33,9 @@ export default function useSignIn() {
       );
     } catch (e) {
       setError(e);
-      return Promise.reject(e); // throw 대신 반환
+      return Promise.reject(e);
     } finally {
-      setSigningIn(false);
+      setLoggingIn(false);
     }
 
     const content = res?.data?.content || {};
@@ -45,7 +45,7 @@ export default function useSignIn() {
     if (!accessToken || !refreshToken) {
       const err = new Error('Invalid login response');
       setError(err);
-      return Promise.reject(err); // try 바깥 검증, throw 사용 안 함
+      return Promise.reject(err);
     }
 
     saveTokens({ accessToken, refreshToken }, remember);
@@ -53,7 +53,7 @@ export default function useSignIn() {
     return { accessToken, refreshToken };
   }, []);
 
-  const signOut = useCallback(() => {
+  const logout = useCallback(() => {
     try {
       localStorage.removeItem('access_token');
       localStorage.removeItem('refresh_token');
@@ -63,5 +63,5 @@ export default function useSignIn() {
     } catch (_) {}
   }, []);
 
-  return { signIn, signOut, signingIn, error };
+  return { login, logout, loggingIn, error };
 }

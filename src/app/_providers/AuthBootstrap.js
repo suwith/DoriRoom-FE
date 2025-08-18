@@ -1,7 +1,7 @@
 'use client';
 
 import { useEffect, useState } from 'react';
-import useSignIn from '@/hooks/auth/useSignIn';
+import useLogin from '@/hooks/auth/useLogin';
 
 function hasTokens() {
   if (typeof window === 'undefined') return false;
@@ -13,7 +13,7 @@ function hasTokens() {
 }
 
 export default function AuthBootstrap({ children }) {
-  const { signIn, signingIn } = useSignIn();
+  const { login, loggingIn } = useLogin();
   const [ready, setReady] = useState(false);
 
   useEffect(() => {
@@ -21,7 +21,7 @@ export default function AuthBootstrap({ children }) {
     async function boot() {
       if (!hasTokens()) {
         try {
-          await signIn({ remember: true });
+          await login({ remember: true });
         } catch (_) {}
       }
       if (mounted) setReady(true);
@@ -30,8 +30,8 @@ export default function AuthBootstrap({ children }) {
     return () => {
       mounted = false;
     };
-  }, [signIn]);
+  }, [login]);
 
-  if (!ready || signingIn) return null;
+  if (!ready || loggingIn) return null;
   return children;
 }
