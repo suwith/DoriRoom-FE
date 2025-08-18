@@ -1,5 +1,7 @@
 import './globals.css';
 import BottomNavBar from './_components/BottomNavBar';
+import Script from 'next/script';
+export const API = `https://dapi.kakao.com/v2/maps/sdk.js?appkey=fd8a9c08cac8e120ac0dc37633528343&autoload=false`;
 
 export const metadata = {
   title: 'Dori Room',
@@ -19,6 +21,7 @@ export default function RootLayout({ children }) {
             <div className="h-full pb-18">{children}</div>
           </main>
           <BottomNavBar />
+          <Script src={API} strategy="beforeInteractive" />
         </div>
       </body>
     </html>
