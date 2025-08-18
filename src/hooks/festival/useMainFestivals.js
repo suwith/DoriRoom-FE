@@ -12,9 +12,9 @@ function normalizeFestival(item) {
     startDate: item.startDate,
     endDate: item.endDate,
 
-    areaName: item.areaName,
+    region: item.areaName,
     areaCode: item.areaCode,
-    categoryName: item.categoryName,
+    category: item.categoryName,
 
     likes: typeof item.favoriteCount === 'number' ? item.favoriteCount : 0,
     thumbnail: item.firstImage || item.secondImage || '',
