@@ -1,6 +1,8 @@
 import { FaCirclePlus } from 'react-icons/fa6';
 import { FaFire } from 'react-icons/fa6';
 import { IoMdMap } from 'react-icons/io';
+import MapModal from '../Map/MapModal';
+import { useState } from 'react';
 
 export default function RegionTaskCard({
   title,
@@ -11,6 +13,8 @@ export default function RegionTaskCard({
   score,
   reward,
 }) {
+  const [isOpen, setIsOpen] = useState(false);
+
   return (
     <div
       className={`rounded-xl p-3 ${status === '달성' ? 'bg-sub-5' : status === '시작' ? 'bg-[#35C284]/15' : 'bg-neutral-100'}`}
@@ -30,7 +34,10 @@ export default function RegionTaskCard({
             <span className="text-neutral-900">{reward}</span>
           </div>
         </div>
-        <div className="self-start flex items-center justify-center bg-white p-0.5 mr-1 rounded-md">
+        <div
+          className="self-start flex items-center justify-center bg-white p-0.5 mr-1 rounded-md"
+          onClick={() => setIsOpen(true)}
+        >
           <IoMdMap className="text-main-100 text-lg" />
         </div>
       </div>
@@ -55,6 +62,19 @@ export default function RegionTaskCard({
           </button>
         )}
       </div>
+      <MapModal
+        isOpen={isOpen}
+        setIsOpen={setIsOpen}
+        coordinates={[
+          [126.93058863174969, 37.38487638219797],
+          [126.93108699436652, 37.38421177044464],
+          [126.93111905277988, 37.38422334909711],
+          [126.93129100245449, 37.384010301607134],
+          [126.93235184451322, 37.38457070783717],
+          [126.93163781620433, 37.385432150569585],
+          [126.93058863174969, 37.38487638219797],
+        ]}
+      />
     </div>
   );
 }
