@@ -1,6 +1,6 @@
 'use client';
 
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import { GoHeart, GoHeartFill } from 'react-icons/go';
 import Icon from '@mdi/react';
 import { mdiTree } from '@mdi/js';
@@ -16,6 +16,7 @@ export default function FestivalDetail({ festival }) {
   const [likeCount, setLikeCount] = useState(festival.likes || 0);
   const [likedReviews, setLikedReviews] = useState([]);
   const [reviewSort, setReviewSort] = useState('latest');
+  const [showToast, setShowToast] = useState(false);
 
   const handleLike = () => {
     setLiked((prev) => !prev);
@@ -35,6 +36,12 @@ export default function FestivalDetail({ festival }) {
     return new Date(b.date) - new Date(a.date);
   });
 
+  useEffect(() => {
+    setShowToast(true);
+    const timer = setTimeout(() => setShowToast(false), 3000);
+    return () => clearTimeout(timer);
+  }, []);
+
   return (
     <div className="max-w-[390px] mx-auto bg-[#FEFEFE] min-h-screen pb-10">
       {/* 이미지 상단 */}
@@ -46,14 +53,6 @@ export default function FestivalDetail({ festival }) {
         />
         <div className="absolute top-10 left-3">
           <BackButton color={'text-background'} isShadow={true} />
-        </div>
-        <div className="absolute bottom-8 left-1/2 -translate-x-1/2 text-main-100 text-[12px] bg-background px-4 py-1.5 rounded-full flex items-center gap-1 whitespace-nowrap">
-          <i className="mgc_user_follow_fill text-lg text-main-100 mr-1" />
-          <span className="mt-0.5">
-            {festival.visitedFriend > 0
-              ? `${festival.visitedFriend}명의 친구가 해당 장소에 방문했어요!`
-              : '아직 방문한 친구가 없어요'}
-          </span>
         </div>
       </div>
 
@@ -194,6 +193,17 @@ export default function FestivalDetail({ festival }) {
               <span className="text-lg">일기 작성하기</span>
             </div>
           </button>
+        </div>
+      )}
+
+      {showToast && (
+        <div className="fixed bottom-7 left-1/2 -translate-x-1/2 bg-sub-5 px-4 py-2 rounded-full text-xs text-sub-100 flex items-center gap-2 z-50">
+          <i className="mgc_user_follow_fill text-lg text-sub-100" />
+          <span>
+            {festival.visitedFriend > 0
+              ? `${festival.visitedFriend}명의 친구가 해당 장소에 방문했어요!`
+              : '아직 방문한 친구가 없어요'}
+          </span>
         </div>
       )}
     </div>
