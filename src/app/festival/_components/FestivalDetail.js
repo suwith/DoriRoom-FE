@@ -121,24 +121,26 @@ export default function FestivalDetail({ festival }) {
           </div>
         </div>
         <div className="flex flex-row items-center gap-3 text-sm">
-          <p className="text-neutral-500">일자</p>
-          <span
-            className={`rounded-full px-1.5 py-0.5 flex items-center font-normal text-[11px] ${
-              festival.status === '진행 예정'
-                ? 'bg-main-5 text-main-100'
-                : festival.status === '진행 중'
-                  ? 'bg-sub-5 text-sub-100'
-                  : festival.status === '행사 종료'
-                    ? 'bg-neutral-100 text-neutral-300'
-                    : ''
-            }`}
-          >
-            {festival.status}
-          </span>
-
-          <span>
-            {festival.startDate} ~ {festival.endDate}
-          </span>
+          <p className="text-neutral-500 whitespace-nowrap">일자</p>
+          <div className="flex flex-row gap-2 items-center">
+            {' '}
+            <span
+              className={`px-1.5 py-[1.8px] rounded-sm flex items-center font-normal text-[11px] ${
+                festival.status === '진행 예정'
+                  ? 'bg-main-5 text-main-100'
+                  : festival.status === '진행 중'
+                    ? 'bg-sub-5 text-sub-100'
+                    : festival.status === '행사 종료'
+                      ? 'bg-neutral-100 text-neutral-300'
+                      : ''
+              }`}
+            >
+              {festival.status}
+            </span>
+            <span>
+              {festival.startDate} ~ {festival.endDate}
+            </span>{' '}
+          </div>
         </div>
         <div className="flex flex-row gap-3 text-sm">
           <p className="text-neutral-500">시간</p>
@@ -149,15 +151,15 @@ export default function FestivalDetail({ festival }) {
           </span>
         </div>
         <div className="flex flex-row gap-3 text-sm">
-          <p className=" text-neutral-500">위치</p>
+          <p className=" text-neutral-500 whitespace-nowrap">위치</p>
           <p>{festival.location}</p>
         </div>
         <div className="flex flex-row gap-3 text-sm">
-          <p className=" text-neutral-500">주최</p>
+          <p className=" text-neutral-500 whitespace-nowrap">주최</p>
           <p>{festival.host}</p>
         </div>
         <div className="flex flex-row gap-3 text-sm">
-          <p className=" text-neutral-500">금액</p>
+          <p className=" text-neutral-500 whitespace-nowrap">금액</p>
           <p
             dangerouslySetInnerHTML={{
               __html: festival.price.replace(/\n/g, '<br />'),
