@@ -1,6 +1,6 @@
 'use client';
 
-import { useEffect, useRef } from 'react';
+import React, { useEffect, useRef } from 'react';
 import BackButton from '../../_components/BackButton';
 import 'mingcute_icon/font/Mingcute.css';
 
@@ -39,13 +39,13 @@ export default function SearchInputBar({
           placeholder="방문하고 싶은 축제를 검색해 보세요!"
           className="w-full bg-neutral-100 px-9 py-2 rounded-lg text-sm outline-none text-neutral-900 placeholder:text-[13px] placeholder:text-neutral-500"
         />
-        <i className="mgc_search_2_fill text-lg text-neutral-400 absolute left-2.5 top-1/2 -translate-y-1/2 pointer-events-none" />
+        <i className="mgc_search_2_fill text-lg text-neutral-400 absolute left-3 top-1/2 -translate-y-1/2 pointer-events-none" />
         {value && (
           <button
             onClick={onClear}
-            className="absolute right-2 top-1/2 -translate-y-1/2 text-neutral-400 text-sm"
+            className="bg-neutral-200 text-neutral-500 rounded-full w-4 h-4 text-xs flex items-center justify-center absolute right-3 top-1/2 -translate-y-1/2 "
           >
-            ✕
+            <i className="mgc_close_line" />
           </button>
         )}
       </div>

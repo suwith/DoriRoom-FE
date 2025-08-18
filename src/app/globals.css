@@ -54,37 +54,3 @@
 .scrollbar-hide::-webkit-scrollbar {
   display: none; /* Chrome, Safari, Opera */
 }
-
-/*캘린더 커스터마이징*/
-.DayPicker-Day {
-  padding: 6px !important;
-}
-
-.DayPicker-Day:hover {
-  background-color: transparent !important;
-}
-
-.DayPicker-Weekday {
-  color: #171717 !important;
-  font-weight: 500;
-  font-size: 13px;
-}
-
-.DayPicker-NavButton {
-  color: #737373 !important; /* neutral-500 */
-  width: 30px;
-  height: 30px;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-}
-
-.DayPicker-NavButton--prev,
-.DayPicker-NavButton--next{
-  font-size: 13px;
-}
-
-.DayPicker-Day--selected {
-  background-color: transparent !important; /* main-100 */
-  color: #ffffff !important;
-}
