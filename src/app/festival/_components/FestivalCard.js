@@ -37,7 +37,7 @@ export default function FestivalCard({ festival }) {
       <div className="py-2 text-[10px]">
         <div className="flex flex-wrap gap-1 mt-0.5">
           <span className="text-main-100 bg-main-5 px-1 rounded-xl">
-            {festival.region}
+            {festival.region.slice(0, 2)}
           </span>
           <span className="text-main-100 bg-main-5 px-1 rounded-full">
             {festival.category}
@@ -47,9 +47,12 @@ export default function FestivalCard({ festival }) {
           {/*    후기 {festival.reviews.length}개*/}
           {/*  </span>*/}
           {/*)}*/}
-          {/*<span className="text-main-100 bg-main-5 px-1 rounded-full">*/}
-          {/*  {festival.price === 0 ? '무료' : '유료'}*/}
-          {/*</span>*/}
+
+          {festival.price === '무료' && (
+            <span className="text-main-100 bg-main-5 px-1 rounded-full">
+              무료
+            </span>
+          )}
         </div>
         <div className="font-bold text-sm mt-1.5 truncate">
           {festival.title}
