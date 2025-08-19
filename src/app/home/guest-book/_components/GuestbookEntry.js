@@ -1,6 +1,11 @@
-import { SlOptionsVertical } from 'react-icons/sl';
+'use client';
 
-export default function GuestbookEntry({ data }) {
+import { SlOptionsVertical } from 'react-icons/sl';
+import OptionModal from './OptionModal';
+import { useState } from 'react';
+
+export default function GuestbookEntry({ data, setEntries }) {
+  const [isOpen, setIsOpen] = useState(false);
   return (
     <div className="flex w-full px-4 gap-8 items-center">
       <div className="w-[25%] text-center">
@@ -28,11 +33,20 @@ export default function GuestbookEntry({ data }) {
           <p className="flex-1 text-left font-normal text-neutral-900 text-base">
             {data.message}
           </p>
-          <SlOptionsVertical className="text-neutral-400 " />
+          <SlOptionsVertical
+            className="text-neutral-400"
+            onClick={() => setIsOpen(true)}
+          />
         </div>
         <p className="self-end font-normal text-sm text-neutral-400">
           {data.date}
         </p>
+        <OptionModal
+          isOpen={isOpen}
+          setIsOpen={setIsOpen}
+          setEntries={setEntries}
+          id={data.id}
+        />
       </div>
     </div>
   );

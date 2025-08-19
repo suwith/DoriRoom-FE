@@ -55,7 +55,7 @@ export default function GuestBookPage() {
       <HeaderNavigationBar title="방명록" className="bg-[#F7F7F7]" />
       <div className="h-[calc(100vh-98px)] pt-[98px] pb-2 space-y-5 bg-[#F7F7F7] overflow-y-auto scrollbar-hide">
         {entries.map((data) => (
-          <GuestbookEntry key={data.id} data={data} />
+          <GuestbookEntry key={data.id} data={data} setEntries={setEntries} />
         ))}
       </div>
       <BottomInputBox
