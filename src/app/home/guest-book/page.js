@@ -1,7 +1,11 @@
+'use client';
+
 import HeaderNavigationBar from '@/app/_components/HeaderNavigationBar';
 import GuestbookEntry from './_components/GuestbookEntry';
 import BottomInputBox from './_components/BottomInputBox';
-const dummyData = [
+import { useState } from 'react';
+
+const initialData = [
   {
     id: 1,
     username: '가나디',
@@ -24,42 +28,33 @@ const dummyData = [
     message: '제 방도 방문해 주세요!',
     date: '25.08.15',
   },
-  {
-    id: 4,
-    username: '가나디',
-    avatar: '/character.png',
-    message: '고향이 부산이신가요??\n저도 부산 출신인데 반갑네요 ㅎㅎ',
-    date: '25.08.15',
-  },
-  {
-    id: 5,
-    username: '가나디',
-    avatar: '/character.png',
-    message: '고향이 부산이신가요??\n저도 부산 출신인데 반갑네요 ㅎㅎ',
-    date: '25.08.15',
-  },
-  {
-    id: 6,
-    username: '가나디',
-    avatar: '/character.png',
-    message: '고향이 부산이신가요??\n저도 부산 출신인데 반갑네요 ㅎㅎ',
-    date: '25.08.15',
-  },
-  {
-    id: 7,
-    username: '가나디',
-    avatar: '/character.png',
-    message: '고향이 부산이신가요??\n저도 부산 출신인데 반갑네요 ㅎㅎ',
-    date: '25.08.15',
-  },
 ];
 
 export default function GuestBookPage() {
+  const [entries, setEntries] = useState(initialData);
+  const [context, setContext] = useState('');
+
+  const sendMsg = () => {
+    if (context.trim().length === 0) return;
+
+    const newEntry = {
+      id: entries.length + 1,
+      username: '이재영',
+      avatar: '/character.png', // 오타 avater → avatar 수정
+      message: context,
+      date: '25.08.19',
+    };
+
+    // ✅ 새 메시지를 맨 위에 추가
+    setEntries([newEntry, ...entries]);
+    setContext(''); // 입력창 비우기
+  };
+
   return (
     <div className="max-w-[390px] w-screen h-screen bg-[#F7F7F7]">
-      <HeaderNavigationBar title="방명록" />
-      <div className="h-[calc(100vh-98px)] pt-[98px] pb-2 space-y-5 bg-[#F7F7F7] overflow-y-auto">
-        {dummyData.map((data) => (
+      <HeaderNavigationBar title="방명록" className="bg-[#F7F7F7]" />
+      <div className="h-[calc(100vh-98px)] pt-[98px] pb-2 space-y-5 bg-[#F7F7F7] overflow-y-auto scrollbar-hide">
+        {entries.map((data) => (
           <GuestbookEntry key={data.id} data={data} />
         ))}
       </div>
@@ -67,6 +62,9 @@ export default function GuestBookPage() {
         classname={
           'fixed bottom-0 left-1/2 transform -translate-x-1/2 w-full max-w-[390px] px-4 py-[10px] mb-[34px]'
         }
+        context={context}
+        setContext={setContext}
+        sendMsg={sendMsg}
       />
     </div>
   );
