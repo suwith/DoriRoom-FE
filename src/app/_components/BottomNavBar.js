@@ -28,7 +28,6 @@ export default function BottomNavBar() {
 
   const HIDDEN_PATHS = [
     '/home/decorate/',
-    '/home/guest-book/',
     '/festival/search/',
     '/festival/bookmarks/',
     '/sign-in/',
@@ -43,6 +42,7 @@ export default function BottomNavBar() {
       pathname !== '/festival' &&
       pathname !== '/festival/') ||
     (/^\/collection\/.+/.test(pathname) && pathname !== '/collection') ||
+    pathname.endsWith('/guest-book') ||
     HIDDEN_PREFIXES.some((prefix) => pathname.startsWith(prefix));
 
   if (shouldHide) return null;
