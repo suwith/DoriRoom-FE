@@ -2,20 +2,19 @@
 
 import DayPicker from 'react-day-picker';
 import 'react-day-picker/lib/style.css';
+import React from 'react';
 
-export default function SelectDate({ open, selectedDate, onSelect, onClose }) {
+export default function SelectDate({ selectedDate, onSelect, onClose }) {
   return (
     <div
-      className={`fixed bottom-0 left-1/2 transform -translate-x-1/2 w-full max-w-[390px] mx-auto z-100 bg-background rounded-t-xl px-4 py-8 transition-transform duration-300 ease-in-out ${
-        open ? 'translate-y-0' : 'translate-y-full'
-      }`}
+      className={`fixed bottom-0 left-1/2 transform -translate-x-1/2 w-full max-w-[390px] mx-auto z-100 bg-background rounded-t-xl px-4 py-4`}
     >
       <div className="w-full text-right mb-1">
         <button
           onClick={onClose}
-          className=" bg-main-5 bg-opacity-50 text-main-40 rounded-full w-5 h-5 text-xs"
+          className="bg-main-5 text-main-100 rounded-full w-5 h-5 p-1 text-xs"
         >
-          ✕
+          <i className="mgc_close_line" />
         </button>
       </div>
 

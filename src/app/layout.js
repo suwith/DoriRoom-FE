@@ -1,5 +1,6 @@
 import './globals.css';
 import BottomNavBar from './_components/BottomNavBar';
+import AuthBootstrap from '@/app/_providers/AuthBootstrap';
 
 export const metadata = {
   title: 'Dori Room',
@@ -16,7 +17,9 @@ export default function RootLayout({ children }) {
             id="main"
             className="flex-1 bg-background overflow-y-auto scrollbar-hide w-max"
           >
-            <div className="h-full pb-18">{children}</div>
+            <div className="h-full pb-18">
+              <AuthBootstrap>{children}</AuthBootstrap>
+            </div>
           </main>
           <BottomNavBar />
         </div>
