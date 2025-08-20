@@ -26,12 +26,6 @@ export default function BottomInputBox({
             handleResizeHeight();
             setContext(e.target.value);
           }}
-          onKeyDown={(e) => {
-            if (e.key === 'Enter' && !e.shiftKey) {
-              e.preventDefault();
-              sendMsg();
-            }
-          }}
           value={context}
         />
         <i className="mgc_send_fill text-3xl text-main-100" onClick={sendMsg} />

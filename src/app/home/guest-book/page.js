@@ -40,14 +40,13 @@ export default function GuestBookPage() {
     const newEntry = {
       id: entries.length + 1,
       username: '이재영',
-      avatar: '/character.png', // 오타 avater → avatar 수정
+      avatar: '/character.png',
       message: context,
       date: '25.08.19',
     };
 
-    // ✅ 새 메시지를 맨 위에 추가
     setEntries([newEntry, ...entries]);
-    setContext(''); // 입력창 비우기
+    setContext('');
   };
 
   return (
