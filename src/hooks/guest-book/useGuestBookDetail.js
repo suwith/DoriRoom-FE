@@ -25,6 +25,7 @@ export default function useGuestBookDetail(roomOwnerId) {
   const refetch = useCallback(async () => {
     if (!roomOwnerId) return;
     setLoading(true);
+    setError(null);
     try {
       const res = await axiosInstance.get(`guestbooks/room/${roomOwnerId}`);
       const apiContent = (res.data?.content?.content || []).map(
@@ -42,6 +43,7 @@ export default function useGuestBookDetail(roomOwnerId) {
   }, [roomOwnerId]);
 
   useEffect(() => {
+    mountedRef.current = true;
     refetch();
 
     return () => {
