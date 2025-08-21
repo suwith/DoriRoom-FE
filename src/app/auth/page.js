@@ -32,7 +32,7 @@ export default function AuthPage() {
           로그인
         </Link>
 
-        <div className="flex items-center justify-center gap-4 text-neutral-400 text-sm pb-3">
+        <div className="flex items-center justify-center gap-4 text-neutral-400 pb-3">
           <Link href="/">아이디 찾기</Link>
           <span>|</span>
           <Link href="/">비밀번호 찾기</Link>

@@ -5,7 +5,7 @@ import { useState } from 'react';
 
 export default function PasswordInput({
   id,
-  label = '비밀번호',
+  label = '',
   placeholder = '비밀번호',
   autoComplete = 'current-password',
   value,
@@ -40,7 +40,11 @@ export default function PasswordInput({
           className="absolute justify-center right-4 top-9 -translate-y-1/2 text-sm text-neutral-500"
           aria-label={show ? '비밀번호 숨기기' : '비밀번호 보기'}
         >
-          {show ? '숨김' : '보기'}
+          {show ? (
+            <i className="mgc_eye_line text-neutral-400 text-xl" />
+          ) : (
+            <i className="mgc_eye_close_line text-neutral-400 text-xl" />
+          )}
         </button>
       </div>
     </div>
