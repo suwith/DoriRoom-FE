@@ -1,7 +1,7 @@
 'use client';
 
 import axiosInstance from '@/lib/axiosInstance';
-import { useEffect, useState, useMemo } from 'react';
+import { useEffect, useState, useMemo, useCallback, useRef } from 'react';
 
 function normalizeGuestBook(api) {
   if (!api) return null;
@@ -18,36 +18,35 @@ export default function useGuestBookDetail(roomOwnerId) {
   const [guestBook, setGuestBook] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
+  const mountedRef = useRef(true);
 
-  useEffect(() => {
+  const refetch = useCallback(async () => {
     if (!roomOwnerId) return;
-    let mounted = true;
+    setLoading(true);
+    try {
+      const res = await axiosInstance.get(`guestbooks/room/${roomOwnerId}`);
+      const apiContent = (res.data?.content?.content || []).map(
+        normalizeGuestBook
+      );
 
-    async function fetchDetail() {
-      try {
-        setLoading(true);
-        const res = await axiosInstance.get(`guestbooks/room/${roomOwnerId}`);
-        const apiContent = (res.data?.content?.content || []).map(
-          normalizeGuestBook
-        );
-
-        if (!mounted) return;
-        setGuestBook(apiContent);
-      } catch (err) {
-        if (!mounted) return;
-        setError(err);
-      } finally {
-        if (mounted) setLoading(false);
-      }
+      if (!mountedRef.current) return;
+      setGuestBook(apiContent);
+    } catch (e) {
+      console.log(e);
+      if (!mountedRef.current) return;
+      setError(e);
+    } finally {
+      if (mountedRef.current) setLoading(false);
     }
-
-    fetchDetail();
-    return () => {
-      mounted = false;
-    };
   }, [roomOwnerId]);
 
-  const data = useMemo(() => guestBook, [guestBook]);
+  useEffect(() => {
+    refetch();
 
-  return { guestBook: data, loading, error };
+    return () => {
+      mountedRef.current = false;
+    };
+  }, [refetch]);
+
+  return { guestBook, loading, error, refetch };
 }
