@@ -7,6 +7,7 @@ import { useState } from 'react';
 import { useParams } from 'next/navigation';
 import useGuestBookDetail from '@/hooks/guest-book/useGuestBookDetail';
 import usePostGuestBook from '@/hooks/guest-book/usePostGuestBook';
+import useDeleteGuestBook from '@/hooks/guest-book/useDeleteGuestBook';
 
 export default function GuestBookPage() {
   const params = useParams();
@@ -22,14 +23,17 @@ export default function GuestBookPage() {
     refetch: GBRefetch,
   } = useGuestBookDetail(roomOwnerId);
   const {
-    mutate,
+    mutate: PGMutate,
     loading: PGLoading,
     error: PGError,
   } = usePostGuestBook({ onSuccess: () => GBRefetch() });
+  const { mutate: DGMutate } = useDeleteGuestBook({
+    onSuccess: () => GBRefetch(),
+  });
 
   const sendMsg = async () => {
     if (content.trim().length === 0) return;
-    await mutate({ roomOwnerId, content });
+    await PGMutate({ roomOwnerId, content });
     setContent('');
   };
 
@@ -45,7 +49,7 @@ export default function GuestBookPage() {
       ) : (
         <div className="h-[calc(100vh-98px)] pt-[98px] pb-2 space-y-5 bg-[#F7F7F7] overflow-y-auto scrollbar-hide">
           {guestBook.map((data, idx) => (
-            <GuestbookEntry key={idx} data={data} />
+            <GuestbookEntry key={idx} data={data} DGMutate={DGMutate} />
           ))}
         </div>
       )}

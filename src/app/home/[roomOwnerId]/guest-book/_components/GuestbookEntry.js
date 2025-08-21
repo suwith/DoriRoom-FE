@@ -4,14 +4,15 @@ import { SlOptionsVertical } from 'react-icons/sl';
 import OptionModal from './OptionModal';
 import { useState } from 'react';
 
-export default function GuestbookEntry({ data }) {
+export default function GuestbookEntry({ data, DGMutate }) {
   const [isOpen, setIsOpen] = useState(false);
+
   return (
     <div className="flex w-full px-4 gap-8 items-center">
       <div className="w-[25%] text-center">
         <img src={data.avatar} />
         <span className="font-semibold text-neutral-900 text-base">
-          {data.username}
+          {data.writerNickname}
         </span>
       </div>
       <div className="relative w-[70%] flex flex-col justify-between bg-background rounded-xl p-3 min-h-25">
@@ -41,7 +42,13 @@ export default function GuestbookEntry({ data }) {
         <p className="self-end font-normal text-sm text-neutral-400">
           {data.createdAt}
         </p>
-        <OptionModal isOpen={isOpen} setIsOpen={setIsOpen} id={data.id} />
+        <OptionModal
+          isOpen={isOpen}
+          setIsOpen={setIsOpen}
+          guestbookId={data.guestbookId}
+          roomOwnerId={data.roomOwnerId}
+          DGMutate={DGMutate}
+        />
       </div>
     </div>
   );
