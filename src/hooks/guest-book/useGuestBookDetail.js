@@ -6,9 +6,11 @@ import { useEffect, useState, useMemo, useCallback, useRef } from 'react';
 function normalizeGuestBook(api) {
   if (!api) return null;
   return {
-    guestsbookId: api.guestsbookId,
+    guestbookId: api.guestbookId,
     content: api.content,
     writerId: api.writerId,
+    writerNickname: api.writerNickname,
+    writerEquippredItems: api.writerEquippredItems,
     roomOwnerId: api.roomOwnerId,
     createdAt: api.createdAt,
   };
@@ -32,7 +34,6 @@ export default function useGuestBookDetail(roomOwnerId) {
       if (!mountedRef.current) return;
       setGuestBook(apiContent);
     } catch (e) {
-      console.log(e);
       if (!mountedRef.current) return;
       setError(e);
     } finally {
