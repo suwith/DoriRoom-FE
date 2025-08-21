@@ -1,4 +1,4 @@
-export default function OptionModal({ isOpen, setIsOpen, setEntries, id }) {
+export default function OptionModal({ isOpen, setIsOpen, id }) {
   if (!isOpen) return;
   return (
     <>
@@ -11,7 +11,6 @@ export default function OptionModal({ isOpen, setIsOpen, setEntries, id }) {
         style={{ boxShadow: '0 0 10px rgba(0,0,0,0.1)' }}
         onClick={() => {
           setIsOpen(false);
-          setEntries((prev) => prev.filter((e) => e.id !== id));
         }}
       >
         삭제

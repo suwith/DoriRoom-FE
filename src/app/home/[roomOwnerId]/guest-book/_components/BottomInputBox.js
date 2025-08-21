@@ -3,8 +3,8 @@ import { useRef } from 'react';
 
 export default function BottomInputBox({
   classname,
-  context,
-  setContext,
+  content,
+  setContent,
   sendMsg,
 }) {
   const textarea = useRef();
@@ -24,9 +24,9 @@ export default function BottomInputBox({
           maxLength={200}
           onChange={(e) => {
             handleResizeHeight();
-            setContext(e.target.value);
+            setContent(e.target.value);
           }}
-          value={context}
+          value={content}
         />
         <i className="mgc_send_fill text-3xl text-main-100" onClick={sendMsg} />
       </div>
