@@ -15,7 +15,7 @@ export default function RootLayout({ children }) {
           {/* 고정된 앱 화면 높이에서 */}
           <main
             id="main"
-            className="flex-1 bg-background overflow-y-auto scrollbar-hide w-max"
+            className="flex-1 bg-background overflow-y-auto scrollbar-hide w-full"
           >
             <div className="h-full pb-18">
               <AuthBootstrap>{children}</AuthBootstrap>

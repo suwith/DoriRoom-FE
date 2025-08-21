@@ -1,37 +1,50 @@
+// app/_providers/AuthBootstrap.jsx
 'use client';
 
 import { useEffect, useState } from 'react';
-import useLogin from '@/hooks/auth/useLogin';
+import { usePathname, useRouter } from 'next/navigation';
+import axiosInstance from '@/lib/axiosInstance';
 
-function hasTokens() {
-  if (typeof window === 'undefined') return false;
+function getStoredTokens() {
+  if (typeof window === 'undefined') return null;
   const la = localStorage.getItem('access_token');
   const lr = localStorage.getItem('refresh_token');
   const sa = sessionStorage.getItem('access_token');
   const sr = sessionStorage.getItem('refresh_token');
-  return (la && lr) || (sa && sr);
+  if ((la && lr) || (sa && sr)) return { accessToken: la || sa };
+  return null;
 }
 
 export default function AuthBootstrap({ children }) {
-  const { login, loggingIn } = useLogin();
+  const router = useRouter();
+  const pathname = usePathname();
   const [ready, setReady] = useState(false);
 
   useEffect(() => {
     let mounted = true;
-    async function boot() {
-      if (!hasTokens()) {
-        try {
-          await login({ remember: true });
-        } catch (_) {}
-      }
-      if (mounted) setReady(true);
-    }
-    boot();
-    return () => {
-      mounted = false;
-    };
-  }, [login]);
 
-  if (!ready || loggingIn) return null;
+    const isAuthPage =
+      pathname?.startsWith('/login') ||
+      pathname?.startsWith('/signup');
+
+    const tokens = getStoredTokens();
+
+    if (tokens?.accessToken) {
+      axiosInstance.defaults.headers.Authorization = `Bearer ${tokens.accessToken}`;
+      if (mounted) setReady(true);
+      return;
+    }
+
+    if (!isAuthPage) {
+      router.replace('/auth');
+      if (mounted) setReady(true);
+      return;
+    }
+
+    if (mounted) setReady(true);
+    return () => { mounted = false; };
+  }, [pathname, router]);
+
+  if (!ready) return null;
   return children;
 }
