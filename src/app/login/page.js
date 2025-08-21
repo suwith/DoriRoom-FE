@@ -61,7 +61,7 @@ export default function LoginPage() {
     >
       <HeaderNavigationBar title="로그인" />
 
-      <form onSubmit={onSubmit} className="flex-1 flex flex-col gap-4">
+      <form onSubmit={onSubmit} className="flex-1 flex flex-col">
         <TextInput
           id="username"
           label="아이디를 입력해주세요."
@@ -70,6 +70,7 @@ export default function LoginPage() {
           value={form.username}
           onChange={(e) => setForm((s) => ({ ...s, username: e.target.value }))}
           required
+          className="mb-9"
         />
 
         <PasswordInput
@@ -80,6 +81,7 @@ export default function LoginPage() {
           value={form.password}
           onChange={(e) => setForm((s) => ({ ...s, password: e.target.value }))}
           required
+          className="mb-4"
         />
 
         <label className="inline-flex items-center gap-2 text-sm text-gray-600">
@@ -111,18 +113,18 @@ export default function LoginPage() {
 
       <div
         ref={footerRef}
-        className="sticky left-0 right-0 bg-white pt-4 pb-7 space-y-5"
+        className="sticky left-0 right-0 pt-4 pb-7 space-y-5"
         style={{
           bottom: 'calc(env(safe-area-inset-bottom) + var(--kb-offset, 0px))',
         }}
       >
-        <div className="mt-2 flex items-center justify-center gap-4 text-neutral-400 text-sm">
+        <div className="mt-2 flex items-center justify-center gap-4 text-neutral-400">
           <Link href="/auth/find-id">아이디 찾기</Link>
           <span>|</span>
           <Link href="/auth/find-password">비밀번호 찾기</Link>
         </div>
         <PrimaryButton type="submit" disabled={!isValid || loggingIn}>
-          {loggingIn ? '로그인 중...' : '로그인'}
+          {loggingIn ? '로그인 중...' : '로그인하기'}
         </PrimaryButton>
       </div>
     </div>

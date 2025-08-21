@@ -17,7 +17,7 @@ export default function TextInput({
   return (
     <div className={className}>
       {label ? (
-        <label htmlFor={id} className="block text-sm font-medium text-gray-800">
+        <label htmlFor={id} className="block font-medium">
           {label}
         </label>
       ) : null}
