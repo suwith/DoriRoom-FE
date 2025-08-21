@@ -1,6 +1,6 @@
 'use client';
 
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import { FaFire } from 'react-icons/fa6';
 import { RiWallet3Fill } from 'react-icons/ri';
 import ConfirmModal from '@/app/shop/_components/ConfirmModal';
@@ -13,9 +13,9 @@ export default function Shop() {
   const { items, loading, error } = useItemAll();
 
   // 유저가 가지고 있는 크레딧
-  const credit = 222000;
+  const credit = 0;
 
-  const selectedItem = items.find((item) => item.id === selectedItemIdx);
+  const selectedItem = items.find((item) => item.itemId === selectedItemIdx);
 
   function handleConfirm() {
     // 현재 이 유저가 가지고 있는 크레딧 조회
@@ -72,11 +72,8 @@ export default function Shop() {
       {isOpenBuyModal && (
         <ConfirmModal
           isOpen={isOpenBuyModal}
-          onConfirm={handleConfirm}
           setIsOpen={setIsOpenBuyModal}
-          credit={credit}
-          price={selectedItem.price}
-          name={selectedItem.name}
+          itemId={selectedItemIdx}
         />
       )}
     </div>
