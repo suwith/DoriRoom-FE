@@ -10,6 +10,8 @@ import usePostGuestBook from '@/hooks/guest-book/usePostGuestBook';
 import useDeleteGuestBook from '@/hooks/guest-book/useDeleteGuestBook';
 
 export default function GuestBookPage() {
+  const userId =
+    localStorage.getItem('user_id') || sessionStorage.getItem('user_id');
   const params = useParams();
   const roomOwnerId = Array.isArray(params.roomOwnerId)
     ? params.roomOwnerId[0]
@@ -54,14 +56,16 @@ export default function GuestBookPage() {
         </div>
       )}
 
-      <BottomInputBox
-        classname={
-          'fixed bottom-0 left-1/2 transform -translate-x-1/2 w-full max-w-[390px] px-4 py-[10px] mb-[34px]'
-        }
-        content={content}
-        setContent={setContent}
-        sendMsg={sendMsg}
-      />
+      {userId !== roomOwnerId && (
+        <BottomInputBox
+          classname={
+            'fixed bottom-0 left-1/2 transform -translate-x-1/2 w-full max-w-[390px] px-4 py-[10px] mb-[34px]'
+          }
+          content={content}
+          setContent={setContent}
+          sendMsg={sendMsg}
+        />
+      )}
     </div>
   );
 }
