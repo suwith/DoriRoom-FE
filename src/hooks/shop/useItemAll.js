@@ -1,4 +1,4 @@
-import { useEffect, useState } from 'react';
+import { useEffect, useState, useCallback, useRef } from 'react';
 import axiosInstance from '@/lib/axiosInstance';
 
 function normalizeItem(item) {
@@ -20,31 +20,34 @@ export default function useItemAll() {
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
 
-  useEffect(() => {
-    let mounted = true;
+  const mountedRef = useRef(true);
 
-    async function fetchAll() {
-      setLoading(true);
-      setError(null);
-      try {
-        const res = await axiosInstance.get('items');
-        const apiContent = (res.data?.content || []).map(normalizeItem);
+  const refetch = useCallback(async () => {
+    setLoading(true);
+    setError(null);
 
-        if (!mounted) return;
-        setItems(apiContent.filter((item) => !item.isOwned));
-      } catch (e) {
-        if (!mounted) return;
-        setError(e);
-      } finally {
-        if (mounted) setLoading(false);
-      }
+    try {
+      const res = await axiosInstance.get('items');
+      const apiContent = (res.data?.content || []).map(normalizeItem);
+
+      if (!mountedRef.current) return;
+      setItems(apiContent.filter((item) => !item.isOwned));
+    } catch (e) {
+      if (!mountedRef.current) return;
+      setError(e);
+    } finally {
+      if (mountedRef.current) setLoading(false);
     }
-
-    fetchAll();
-    return () => {
-      mounted = false;
-    };
   }, []);
 
-  return { items, loading, error };
+  useEffect(() => {
+    mountedRef.current = true;
+    refetch();
+
+    return () => {
+      mountedRef.current = false;
+    };
+  }, [refetch]);
+
+  return { items, loading, error, refetch };
 }
