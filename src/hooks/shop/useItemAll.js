@@ -16,7 +16,7 @@ function normalizeItem(item) {
 }
 
 export default function useItemAll() {
-  const [items, setItems] = useState([]); // 마감 임박
+  const [items, setItems] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
 
