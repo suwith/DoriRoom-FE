@@ -14,6 +14,13 @@ function saveTokens({ accessToken, refreshToken }, remember) {
   } catch (_) {}
 }
 
+function saveUserId(userId, remember) {
+  try {
+    const primary = remember ? localStorage : sessionStorage;
+    primary.setItem('user_id', userId);
+  } catch (_) {}
+}
+
 export default function useSignIn() {
   const [signingIn, setSigningIn] = useState(false);
   const [error, setError] = useState(null);
@@ -50,6 +57,17 @@ export default function useSignIn() {
 
     saveTokens({ accessToken, refreshToken }, remember);
     axiosInstance.defaults.headers.Authorization = `Bearer ${accessToken}`;
+
+    try {
+      const infoRes = await axiosInstance.get('users/me');
+      const info = infoRes.data?.content || {};
+      const userId = info.userId;
+      saveUserId(userId);
+    } catch (err) {
+      setError(err);
+      return Promise.reject(err);
+    }
+
     return { accessToken, refreshToken };
   }, []);
 
@@ -59,6 +77,8 @@ export default function useSignIn() {
       localStorage.removeItem('refresh_token');
       sessionStorage.removeItem('access_token');
       sessionStorage.removeItem('refresh_token');
+      localStorage.removeItem('user_id');
+      sessionStorage.removeItem('user_id');
       delete axiosInstance.defaults.headers.Authorization;
     } catch (_) {}
   }, []);
