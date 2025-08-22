@@ -28,7 +28,10 @@ export default function BottomInputBox({
           }}
           value={content}
         />
-        <i className="mgc_send_fill text-3xl text-main-100" onClick={sendMsg} />
+        <i
+          className="mgc_send_fill text-3xl text-main-100 self-end"
+          onClick={sendMsg}
+        />
       </div>
     </div>
   );
