@@ -1,13 +1,33 @@
 'use client';
 
 import usePurchaseInfo from '@/hooks/shop/usePurchaseInfo';
+import usePurchase from '@/hooks/shop/usePurchase';
+import useItemAll from '@/hooks/shop/useItemAll';
 
-export default function ConfirmModal({ isOpen, setIsOpen, itemId }) {
+export default function ConfirmModal({ isOpen, setIsOpen, itemId, refetch }) {
   const { items, loading, error } = usePurchaseInfo(itemId);
+  const { mutate } = usePurchase({
+    onSuccess: async () => {
+      setIsOpen(false);
+      await refetch();
+    },
+    onError: () => {
+      return;
+    },
+  });
 
   if (!isOpen) return null;
 
-  if (loading) return;
+  if (loading) return null;
+
+  async function handleConfirm() {
+    if (items.isBuyable) {
+      await mutate({ itemId });
+    } else {
+      alert('크레딧이 부족합니다.');
+      setIsOpen(false);
+    }
+  }
 
   return (
     <div className="fixed inset-0 z-50 flex justify-center">
@@ -20,7 +40,11 @@ export default function ConfirmModal({ isOpen, setIsOpen, itemId }) {
             남은 도깨비불 : {items.remainingCredit}개
           </p>
           <div className="flex justify-between gap-3">
-            <button className="flex-1 py-2 bg-emerald-500 text-white font-semibold rounded-md">
+            <button
+              className="flex-1 py-2 bg-emerald-500 text-white font-semibold rounded-md"
+              onClick={handleConfirm}
+              disabled={!items.isBuyable}
+            >
               네
             </button>
             <button

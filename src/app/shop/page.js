@@ -1,6 +1,6 @@
 'use client';
 
-import { useEffect, useState } from 'react';
+import { useState } from 'react';
 import { FaFire } from 'react-icons/fa6';
 import { RiWallet3Fill } from 'react-icons/ri';
 import ConfirmModal from '@/app/shop/_components/ConfirmModal';
@@ -10,28 +10,14 @@ import useItemAll from '@/hooks/shop/useItemAll';
 export default function Shop() {
   const [selectedItemIdx, setSelectedItemIdx] = useState(null);
   const [isOpenBuyModal, setIsOpenBuyModal] = useState(false);
-  const { items, loading, error } = useItemAll();
+  const { items, loading, error, refetch } = useItemAll();
 
   // 유저가 가지고 있는 크레딧
   const credit = 0;
 
-  const selectedItem = items.find((item) => item.itemId === selectedItemIdx);
-
-  function handleConfirm() {
-    // 현재 이 유저가 가지고 있는 크레딧 조회
-    if (credit >= selectedItem.price) {
-      // 구매 요청 API 호출
-      alert('구매가 완료되었습니다.');
-      setIsOpenBuyModal(false);
-    } else {
-      alert('크레딧이 부족합니다.');
-      setIsOpenBuyModal(false);
-    }
-  }
-
   return (
     <div className="flex justify-center h-screen pt-[30px] bg-neutral-100">
-      <div className="flex flex-col max-w-[390px] mx-auto">
+      <div className="flex flex-col max-w-[390px] w-screen mx-auto">
         {/* 상단 고정: 보유 포인트 (왼쪽 정렬) */}
         <div className="sticky flex top-0 z-10 pt-4 pb-2 pl-3">
           <div
@@ -61,19 +47,23 @@ export default function Shop() {
             <p className="font-bold text-[14px]">구입하기</p>
           </button>
         </div>
-
-        <CategoryItemPanel
-          items={items}
-          selectedItemId={selectedItemIdx}
-          onItemSelect={setSelectedItemIdx}
-          isShop={true}
-        />
+        {loading ? (
+          <div>불러오는중...</div>
+        ) : (
+          <CategoryItemPanel
+            items={items}
+            selectedItemId={selectedItemIdx}
+            onItemSelect={setSelectedItemIdx}
+            isShop={true}
+          />
+        )}
       </div>
       {isOpenBuyModal && (
         <ConfirmModal
           isOpen={isOpenBuyModal}
           setIsOpen={setIsOpenBuyModal}
           itemId={selectedItemIdx}
+          refetch={refetch}
         />
       )}
     </div>
