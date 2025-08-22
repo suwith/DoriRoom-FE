@@ -25,7 +25,7 @@ export default function Item({
       </div>
       {price !== null && (
         <div className="flex items-center justify-center gap-1 rounded-md w-[110px] h-[20px] ring-1 ring-neutral-300/50 text-main-100">
-          <FaFire className="trnsform scale-x-[-1] text-main-100 w-4 h-4" />
+          <FaFire className="trnsform scale-x-[-1] text-main-100 w-3.5 h-3.5" />
           <p className="text-center font-bold text-sm">{price}</p>
         </div>
       )}
