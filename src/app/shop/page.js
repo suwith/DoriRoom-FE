@@ -21,10 +21,10 @@ export default function Shop() {
         {/* 상단 고정: 보유 포인트 (왼쪽 정렬) */}
         <div className="sticky flex top-0 z-10 pt-4 pb-2 pl-3">
           <div
-            className="flex justify-center items-center gap-2 py-1 rounded-lg w-auto px-2"
+            className="flex justify-center items-center gap-2 rounded-lg w-auto px-2"
             style={{ boxShadow: '0 0 10px rgba(0,0,0,0.1)' }}
           >
-            <FaFire className="ml-1 trnsform scale-x-[-1] text-main-100 w-5 h-5" />
+            <FaFire className="trnsform scale-x-[-1] text-main-100 w-5 h-5" />
             <p className="font-bold text-main-100 text-lg">{credit}</p>
           </div>
         </div>
