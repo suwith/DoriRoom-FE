@@ -7,15 +7,14 @@ import ConfirmModal from '@/app/shop/_components/ConfirmModal';
 import CategoryItemPanel from '../_components/CategoryItemPanel';
 import useItemAll from '@/hooks/shop/useItemAll';
 import { useToast } from '../_providers/ToastProvider';
+import useMyCredit from '@/hooks/user/useMyCredit';
 
 export default function Shop() {
   const [selectedItemIdx, setSelectedItemIdx] = useState(null);
   const [isOpenBuyModal, setIsOpenBuyModal] = useState(false);
-  const { items, loading, error, refetch } = useItemAll();
+  const { items, loading: IALoaing, error: IAError, refetch } = useItemAll();
+  const { credit, loading: MYLoading, error: MCError } = useMyCredit();
   const { show } = useToast();
-
-  // 유저가 가지고 있는 크레딧
-  const credit = 0;
 
   const selectedItem = items.find((item) => item.itemId === selectedItemIdx);
 
@@ -29,10 +28,11 @@ export default function Shop() {
             style={{ boxShadow: '0 0 10px rgba(0,0,0,0.1)' }}
           >
             <FaFire className="trnsform scale-x-[-1] text-main-100 w-5 h-5" />
-            <p className="font-bold text-main-100 text-lg">{credit}</p>
+            <p className="font-bold text-main-100 text-lg">
+              {MYLoading ? '' : credit}
+            </p>
           </div>
         </div>
-
         {/* 캐릭터 */}
         <div className="shrink-0 mt-20 flex justify-center">
           <img
@@ -57,7 +57,7 @@ export default function Shop() {
             <p className="font-bold text-[14px]">구입하기</p>
           </button>
         </div>
-        {loading ? (
+        {IALoaing ? (
           <div>불러오는중...</div>
         ) : (
           <CategoryItemPanel
