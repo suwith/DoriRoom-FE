@@ -21,6 +21,7 @@ export default function LoginPage() {
   });
   const redirect = search.get('redirect') || '/';
   const isValid = form.username.trim() && form.password.trim();
+  const formId = 'login-form';
 
   async function onSubmit(e) {
     e.preventDefault();
@@ -49,7 +50,8 @@ export default function LoginPage() {
   }, []);
   useEffect(() => {
     const style = document.createElement('style');
-    style.textContent = `input,button,select,textarea{scroll-margin-bottom:calc(var(--footer-h,72px) + env(safe-area-inset-bottom) + var(--kb-offset,0px) + 12px);}`;
+    style.textContent =
+      'input,button,select,textarea{scroll-margin-bottom:calc(var(--footer-h,72px) + env(safe-area-inset-bottom) + var(--kb-offset,0px) + 12px);}';
     document.head.appendChild(style);
     return () => document.head.removeChild(style);
   }, []);
@@ -61,7 +63,7 @@ export default function LoginPage() {
     >
       <HeaderNavigationBar title="로그인" />
 
-      <form onSubmit={onSubmit} className="flex-1 flex flex-col">
+      <form id={formId} onSubmit={onSubmit} className="flex-1 flex flex-col">
         <TextInput
           id="username"
           label="아이디를 입력해주세요."
@@ -70,8 +72,16 @@ export default function LoginPage() {
           value={form.username}
           onChange={(e) => setForm((s) => ({ ...s, username: e.target.value }))}
           required
-          className="mb-9"
+          className="mb-2"
         />
+        {error?.field === 'username' ? (
+          <p className="mt-1 mb-4 text-xs text-red-600 items-center flex gap-1">
+            <i className="mgc_warning_fill text-md pb-0.5" />
+            {error.message}
+          </p>
+        ) : (
+          <div className="mb-7" />
+        )}
 
         <PasswordInput
           id="password"
@@ -81,8 +91,16 @@ export default function LoginPage() {
           value={form.password}
           onChange={(e) => setForm((s) => ({ ...s, password: e.target.value }))}
           required
-          className="mb-4"
+          className="mb-2"
         />
+        {error?.field === 'password' ? (
+          <p className="mt-1 mb-4 text-xs text-red-600 items-center flex gap-1">
+            <i className="mgc_warning_fill text-md pb-0.5" />
+            {error.message}
+          </p>
+        ) : (
+          <div className="mb-4" />
+        )}
 
         <label className="inline-flex items-center gap-2 text-sm text-gray-600">
           <input
@@ -96,10 +114,8 @@ export default function LoginPage() {
           로그인 상태 유지
         </label>
 
-        {error ? (
-          <p className="text-sm text-red-600">
-            아이디 또는 비밀번호를 확인해주세요.
-          </p>
+        {error?.field === 'form' ? (
+          <p className="mt-3 text-sm text-red-600">{error.message}</p>
         ) : null}
 
         <div
@@ -123,7 +139,11 @@ export default function LoginPage() {
           <span>|</span>
           <Link href="/auth/find-password">비밀번호 찾기</Link>
         </div>
-        <PrimaryButton type="submit" disabled={!isValid || loggingIn}>
+        <PrimaryButton
+          type="submit"
+          disabled={!isValid || loggingIn}
+          form={formId}
+        >
           {loggingIn ? '로그인 중...' : '로그인하기'}
         </PrimaryButton>
       </div>
