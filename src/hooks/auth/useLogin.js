@@ -1,3 +1,4 @@
+// hooks/auth/useLogin.js
 'use client';
 
 import { useCallback, useState } from 'react';
@@ -18,39 +19,40 @@ export default function useLogin() {
   const [loggingIn, setLoggingIn] = useState(false);
   const [error, setError] = useState(null);
 
-  const login = useCallback(async ({ remember = true } = {}) => {
+  // credentials는 login 호출 시 인자로 받는다.
+  const login = useCallback(async ({ username, password, remember = true } = {}) => {
     setLoggingIn(true);
     setError(null);
-    let res;
+
     try {
-      res = await axiosInstance.post(
+      const res = await axiosInstance.post(
         'auth/login',
-        { username: 'user1234', password: 'Passw0rd!' },
+        { username, password },
         {
           headers: { 'Content-Type': 'application/json' },
           _skipAuthRefresh: true,
         }
       );
+
+      const content = res?.data?.content || {};
+      const accessToken = content.accessToken;
+      const refreshToken = content.refreshToken;
+
+      if (!accessToken || !refreshToken) {
+        const err = new Error('Invalid login response');
+        setError(err);
+        return Promise.reject(err);
+      }
+
+      saveTokens({ accessToken, refreshToken }, remember);
+      axiosInstance.defaults.headers.Authorization = `Bearer ${accessToken}`;
+      return { accessToken, refreshToken };
     } catch (e) {
       setError(e);
       return Promise.reject(e);
     } finally {
       setLoggingIn(false);
     }
-
-    const content = res?.data?.content || {};
-    const accessToken = content.accessToken;
-    const refreshToken = content.refreshToken;
-
-    if (!accessToken || !refreshToken) {
-      const err = new Error('Invalid login response');
-      setError(err);
-      return Promise.reject(err);
-    }
-
-    saveTokens({ accessToken, refreshToken }, remember);
-    axiosInstance.defaults.headers.Authorization = `Bearer ${accessToken}`;
-    return { accessToken, refreshToken };
   }, []);
 
   const logout = useCallback(() => {
