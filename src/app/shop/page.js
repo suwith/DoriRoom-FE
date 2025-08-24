@@ -8,6 +8,8 @@ import CategoryItemPanel from '../_components/CategoryItemPanel';
 import useItemAll from '@/hooks/shop/useItemAll';
 import { useToast } from '../_providers/ToastProvider';
 import useMyCredit from '@/hooks/user/useMyCredit';
+import { MdChair } from 'react-icons/md';
+import Link from 'next/link';
 
 export default function Shop() {
   const [selectedItemIdx, setSelectedItemIdx] = useState(null);
@@ -19,18 +21,26 @@ export default function Shop() {
   const selectedItem = items.find((item) => item.itemId === selectedItemIdx);
 
   return (
-    <div className="flex justify-center h-screen pt-[30px] bg-neutral-100">
+    <div className="flex justify-center h-screen pt-21 bg-neutral-100">
       <div className="flex flex-col max-w-[390px] w-screen mx-auto">
         {/* 상단 고정: 보유 포인트 (왼쪽 정렬) */}
-        <div className="sticky flex top-0 z-10 pt-4 pb-2 pl-3">
+        <div className="flex justify-between px-4">
           <div
-            className="flex justify-center items-center gap-2 rounded-lg w-auto px-2"
+            className="flex justify-center items-center gap-2 rounded-lg w-auto px-2 h-8"
             style={{ boxShadow: '0 0 10px rgba(0,0,0,0.1)' }}
           >
             <FaFire className="trnsform scale-x-[-1] text-main-100 w-5 h-5" />
             <p className="font-bold text-main-100 text-lg">
               {MYLoading ? '' : credit}
             </p>
+          </div>
+          <div>
+            <Link href="/home/decorate">
+              <div className="flex flex-col items-center space-y-1">
+                <MdChair className="w-6 h-6 text-[#F36693]" />
+                <span className="text-xs text-[#F36693]">꾸미기</span>
+              </div>
+            </Link>
           </div>
         </div>
         {/* 캐릭터 */}
