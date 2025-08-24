@@ -24,7 +24,7 @@ export default function Item({
           </div>
         )}
         {isOwned && (
-          <div className="absolute w-full h-full bg-neutral-100 opacity-40 z-100" />
+          <div className="absolute w-full h-full bg-neutral-100 opacity-40 z-10" />
         )}
         <div className="absolute left-1/2 -bottom-2 transform -translate-x-1/2 -translate-y-1/2 bg-background w-[100px] h-[23px] rounded-lg flex justify-center items-center">
           <p className="text-center text-neutral-900 font-semibold text-[13px]">
@@ -37,7 +37,7 @@ export default function Item({
           <FaFire className="trnsform scale-x-[-1] text-main-100 w-3.5 h-3.5" />
           <p className="text-center font-bold text-sm">{price}</p>
           {isOwned && (
-            <div className="absolute w-full h-full bg-neutral-100 opacity-40 z-100" />
+            <div className="absolute w-full h-full bg-neutral-100 opacity-40 z-10" />
           )}
         </div>
       )}
