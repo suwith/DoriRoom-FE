@@ -31,7 +31,7 @@ export default function useItemAll() {
       const apiContent = (res.data?.content || []).map(normalizeItem);
 
       if (!mountedRef.current) return;
-      setItems(apiContent.filter((item) => !item.isOwned));
+      setItems(apiContent);
     } catch (e) {
       if (!mountedRef.current) return;
       setError(e);

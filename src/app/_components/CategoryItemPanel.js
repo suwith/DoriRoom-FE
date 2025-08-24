@@ -76,6 +76,7 @@ export default function CategoryItemPanel({
               icon={item.imageUrl}
               name={item.name}
               price={isShop ? item.price : null}
+              isOwned={item.isOwned}
             />
           ))}
       </div>
