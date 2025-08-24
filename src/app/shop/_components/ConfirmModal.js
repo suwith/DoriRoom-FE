@@ -2,10 +2,11 @@
 
 import usePurchaseInfo from '@/hooks/shop/usePurchaseInfo';
 import usePurchase from '@/hooks/shop/usePurchase';
-import useItemAll from '@/hooks/shop/useItemAll';
+import { useToast } from '@/app/_providers/ToastProvider';
 
 export default function ConfirmModal({ isOpen, setIsOpen, itemId, refetch }) {
   const { items, loading, error } = usePurchaseInfo(itemId);
+  const { show } = useToast();
   const { mutate } = usePurchase({
     onSuccess: async () => {
       setIsOpen(false);
@@ -23,8 +24,14 @@ export default function ConfirmModal({ isOpen, setIsOpen, itemId, refetch }) {
   async function handleConfirm() {
     if (items.isBuyable) {
       await mutate({ itemId });
+      show({
+        message: `'${items.name}' 아이템을 구입하였어요!`,
+        variant: 'purchase',
+      });
     } else {
-      alert('크레딧이 부족합니다.');
+      show({
+        message: '앗, 도깨비불이 부족해서 구입할 수 없어요!',
+      });
       setIsOpen(false);
     }
   }

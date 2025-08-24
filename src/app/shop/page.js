@@ -6,14 +6,18 @@ import { RiWallet3Fill } from 'react-icons/ri';
 import ConfirmModal from '@/app/shop/_components/ConfirmModal';
 import CategoryItemPanel from '../_components/CategoryItemPanel';
 import useItemAll from '@/hooks/shop/useItemAll';
+import { useToast } from '../_providers/ToastProvider';
 
 export default function Shop() {
   const [selectedItemIdx, setSelectedItemIdx] = useState(null);
   const [isOpenBuyModal, setIsOpenBuyModal] = useState(false);
   const { items, loading, error, refetch } = useItemAll();
+  const { show } = useToast();
 
   // 유저가 가지고 있는 크레딧
   const credit = 0;
+
+  const selectedItem = items.find((item) => item.itemId === selectedItemIdx);
 
   return (
     <div className="flex justify-center h-screen pt-[30px] bg-neutral-100">
@@ -40,8 +44,14 @@ export default function Shop() {
         <div className="flex justify-end my-5 pr-3 text-background">
           <button
             disabled={selectedItemIdx === null}
-            className={`flex gap-2 items-center justify-center rounded-xl px-4 py-2 ${selectedItemIdx === null ? 'bg-neutral-300' : 'bg-main-100'}`}
-            onClick={() => setIsOpenBuyModal(true)}
+            className={`flex gap-2 items-center justify-center rounded-xl px-4 py-2 ${selectedItemIdx === null || credit - selectedItem.price < 0 ? 'bg-neutral-300' : 'bg-main-100'}`}
+            onClick={() => {
+              if (credit - selectedItem.price >= 0) setIsOpenBuyModal(true);
+              else
+                show({
+                  message: '앗, 도깨비불이 부족해서 구입할 수 없어요!',
+                });
+            }}
           >
             <RiWallet3Fill className="fill-background" size={20} />
             <p className="font-bold text-[14px]">구입하기</p>

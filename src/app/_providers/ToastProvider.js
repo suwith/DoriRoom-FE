@@ -26,7 +26,7 @@ function genId() {
 }
 
 export default function ToastProvider({ children }) {
-  const [toasts, setToasts] = useState([]); // { id, message, duration?, _state }
+  const [toasts, setToasts] = useState([]); // { id, message, variant, duration?, _state }
   const [mounted, setMounted] = useState(false);
   const timersRef = useRef({});
   const leavingRef = useRef({});
@@ -82,7 +82,10 @@ export default function ToastProvider({ children }) {
   const show = useCallback(
     (input) => {
       const id = genId();
-      const toast = { id, message: input, _state: 'enter' };
+      const toast =
+        typeof input === 'string'
+          ? { id, message: input, _state: 'enter' }
+          : { id, ...input, _state: 'enter' };
 
       setToasts((prev) => [...prev, toast]);
 
@@ -123,7 +126,12 @@ export default function ToastProvider({ children }) {
 }
 
 function ToastItem({ toast }) {
-  const { message, _state = 'idle' } = toast;
+  const { message, variant = 'default', _state = 'idle' } = toast;
+
+  const styles = {
+    default: <></>,
+    purchase: <i className="mgc_check_circle_fill text-main-100" />,
+  };
 
   const anim =
     _state === 'enter'
@@ -140,7 +148,8 @@ function ToastItem({ toast }) {
       `}
     >
       <div className="flex items-center justify-center gap-3">
-        <div className="text-base font-normal leading-5 whitespace-pre-line">
+        {styles[variant]}
+        <div className="text-sm font-normal text-background leading-5 whitespace-pre-line">
           {message}
         </div>
       </div>
