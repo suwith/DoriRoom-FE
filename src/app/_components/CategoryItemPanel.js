@@ -22,7 +22,7 @@ export default function CategoryItemPanel({
     { id: 3, name: '선반', type: 'SHELF', icon: 'mgc_layout_5_fill' },
     { id: 4, name: '창문', type: 'WINDOW', icon: 'mgc_curtain_fill' },
     { id: 5, name: '벽지', type: 'WALL', icon: 'mgc_paint_2_fill' },
-    { id: 6, name: '바닥', type: 'FLOOR', icon: 'mgc_paint_2_fill' },
+    { id: 6, name: '바닥', type: 'FLOOR', icon: 'mgc_map_2_fill' },
   ];
 
   return (
@@ -55,13 +55,13 @@ export default function CategoryItemPanel({
       </div>
 
       {/* 아이템 리스트 */}
-      <div className="overflow-y-auto bg-background h-screen px-3 pt-3 pb-[80px] grid grid-cols-3 gap-2 scrollbar-hide">
+      <div className="overflow-y-auto bg-background h-screen px-3 pt-3 pb-[80px] grid grid-cols-3 content-start gap-2 scrollbar-hide">
         {/* 선택 안 함 */}
         {!isShop && (
           <Item
             onClick={() => onItemSelect(0)}
             isSelected={selectedItemId === 0}
-            icon={GoCircleSlash}
+            Icon={GoCircleSlash}
             name="선택안함"
           />
         )}
@@ -73,7 +73,7 @@ export default function CategoryItemPanel({
               key={item.itemId}
               onClick={() => onItemSelect(item.itemId)}
               isSelected={selectedItemId === item.itemId}
-              icon={item.imageUrl}
+              imageUrl={item.imageUrl}
               name={item.name}
               price={isShop ? item.price : null}
             />
