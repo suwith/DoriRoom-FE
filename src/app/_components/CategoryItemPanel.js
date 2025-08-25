@@ -4,6 +4,7 @@ import { useState } from 'react';
 import { GoCircleSlash } from 'react-icons/go';
 import Item from './Item';
 import useEquipItems from '@/hooks/decorate/useEquipItems';
+import usePostEquipItem from '@/hooks/decorate/usePostEquipItem';
 
 export default function CategoryItemPanel({
   items,
@@ -11,7 +12,17 @@ export default function CategoryItemPanel({
   onItemSelect,
   isShop,
 }) {
-  const { equip, loading, error } = useEquipItems();
+  const {
+    equip,
+    loading: EILoading,
+    error: EIError,
+    refetch,
+  } = useEquipItems();
+  const {
+    mutate,
+    loading: PEILoading,
+    error: PEIError,
+  } = usePostEquipItem({ onSuccess: () => refetch() });
   const [selectedCategoryId, setSelectedCategoryId] = useState('APPAREL');
   const categoryBtns = [
     { id: 1, name: '의상', type: 'APPAREL', icon: 'mgc_t_shirt_fill' },
@@ -61,7 +72,11 @@ export default function CategoryItemPanel({
         {/* 선택 안 함 */}
         {!isShop && (
           <Item
-            onClick={() => onItemSelect(0)}
+            onClick={async () => {
+              onItemSelect(0);
+              const tmp = equip.find((e) => e.itemType === selectedCategoryId);
+              if (tmp) await mutate(tmp.itemId);
+            }}
             isSelected={
               selectedItemId === 0 ||
               !equip.some((e) => e.itemType === selectedCategoryId)
@@ -76,7 +91,11 @@ export default function CategoryItemPanel({
           .map((item) => (
             <Item
               key={item.itemId}
-              onClick={() => onItemSelect(item.itemId)}
+              onClick={async () => {
+                onItemSelect(item.itemId);
+                console.log(item.itemId);
+                await mutate(item.itemId);
+              }}
               isSelected={
                 selectedItemId === item.itemId ||
                 equip.some((e) => e.itemId == item.itemId)
