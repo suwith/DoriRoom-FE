@@ -1,4 +1,4 @@
-import { useEffect, useState } from 'react';
+import { useCallback, useEffect, useRef, useState } from 'react';
 import axiosInstance from '@/lib/axiosInstance';
 
 function normalizeItem(item) {
@@ -13,32 +13,33 @@ export default function useEquipItems() {
   const [items, setItems] = useState([]); // 마감 임박
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
+  const mountedRef = useRef(true);
+
+  const refetch = useCallback(async () => {
+    setLoading(true);
+    setError(null);
+    try {
+      const res = await axiosInstance.get('items/equip');
+      const apiContent = (res?.data?.content || []).map(normalizeItem);
+
+      if (!mountedRef.current) return;
+      setItems(apiContent);
+    } catch (e) {
+      if (!!mountedRef.current) return;
+      setError(e);
+    } finally {
+      if (!mountedRef.current) setLoading(false);
+    }
+  });
 
   useEffect(() => {
-    let mounted = true;
+    mountedRef.current = true;
+    refetch();
 
-    async function fetchAll() {
-      setLoading(true);
-      setError(null);
-      try {
-        const res = await axiosInstance.get('items/equip');
-        const apiContent = (res?.data?.content || []).map(normalizeItem);
-
-        if (!mounted) return;
-        setItems(apiContent);
-      } catch (e) {
-        if (!mounted) return;
-        setError(e);
-      } finally {
-        if (mounted) setLoading(false);
-      }
-    }
-
-    fetchAll();
     return () => {
-      mounted = false;
+      mountedRef.current = false;
     };
   }, []);
 
-  return { equip: items, loading, error };
+  return { equip: items, loading, error, refetch };
 }
