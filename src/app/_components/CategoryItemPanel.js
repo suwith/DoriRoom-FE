@@ -3,6 +3,7 @@
 import { useState } from 'react';
 import { GoCircleSlash } from 'react-icons/go';
 import Item from './Item';
+import useEquipItems from '@/hooks/decorate/useEquipItems';
 
 export default function CategoryItemPanel({
   items,
@@ -10,6 +11,7 @@ export default function CategoryItemPanel({
   onItemSelect,
   isShop,
 }) {
+  const { equip, loading, error } = useEquipItems();
   const [selectedCategoryId, setSelectedCategoryId] = useState('APPAREL');
   const categoryBtns = [
     { id: 1, name: '의상', type: 'APPAREL', icon: 'mgc_t_shirt_fill' },
@@ -60,7 +62,10 @@ export default function CategoryItemPanel({
         {!isShop && (
           <Item
             onClick={() => onItemSelect(0)}
-            isSelected={selectedItemId === 0}
+            isSelected={
+              selectedItemId === 0 ||
+              !equip.some((e) => e.itemType === selectedCategoryId)
+            }
             Icon={GoCircleSlash}
             name="선택안함"
           />
@@ -72,7 +77,10 @@ export default function CategoryItemPanel({
             <Item
               key={item.itemId}
               onClick={() => onItemSelect(item.itemId)}
-              isSelected={selectedItemId === item.itemId}
+              isSelected={
+                selectedItemId === item.itemId ||
+                equip.some((e) => e.itemId == item.itemId)
+              }
               imageUrl={item.imageUrl}
               name={item.name}
               price={isShop ? item.price : null}

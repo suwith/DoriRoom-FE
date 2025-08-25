@@ -11,8 +11,6 @@ export default function Decorate() {
   const [selectedItemIdx, setSelectedItemIdx] = useState(null);
   const { items, loading, error } = useUserItems();
 
-  console.log(items);
-
   return (
     <div className="flex justify-center h-screen bg-neutral-100">
       <HeaderNavigationBar title="꾸미기" className="bg-background shadow-sm" />
@@ -33,13 +31,16 @@ export default function Decorate() {
             </div>
           </Link>
         </div>
-
-        <CategoryItemPanel
-          items={items}
-          selectedItemId={selectedItemIdx}
-          onItemSelect={setSelectedItemIdx}
-          isShop={false}
-        />
+        {loading ? (
+          <div>불러오는중...</div>
+        ) : (
+          <CategoryItemPanel
+            items={items}
+            selectedItemId={selectedItemIdx}
+            onItemSelect={setSelectedItemIdx}
+            isShop={false}
+          />
+        )}
       </div>
     </div>
   );
