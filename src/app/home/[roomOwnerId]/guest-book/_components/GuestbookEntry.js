@@ -40,7 +40,7 @@ export default function GuestbookEntry({ data, DGMutate }) {
           />
         </div>
         <p className="self-end font-normal text-sm text-neutral-400">
-          {data.createdAt}
+          {data.createdAt.substring(2, 16).replaceAll('-', '.')}
         </p>
         <OptionModal
           isOpen={isOpen}
