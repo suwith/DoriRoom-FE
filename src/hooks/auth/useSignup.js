@@ -15,12 +15,15 @@ function toReadableError(error) {
 
 //  1) 이메일 인증코드 발송
 export async function sendSignupEmail(email) {
-  try {
-    const res = await axiosInstance.post('/auth/email', { email });
-    return res.data;
-  } catch (e) {
-    throw toReadableError(e);
+  const res = await axiosInstance.post('/auth/email', { email });
+  const data = res.data;
+
+  if (data?.statusCode && data.statusCode !== 200) {
+    console.error(data);
+    throw data.error || '이메일 전송 실패';
   }
+
+  return data;
 }
 
 //  2) 이메일 인증코드 검증

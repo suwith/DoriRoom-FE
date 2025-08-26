@@ -24,7 +24,11 @@ export default function SignupEmailPage() {
       await sendSignupEmail(email);
       router.push('/signup/code');
     } catch (e2) {
-      setErr('인증코드 전송에 실패했습니다. 이메일을 확인해주세요.');
+      const msg =
+        (typeof e2 === 'string' && e2) ||
+        e2?.message ||
+        '인증코드 전송에 실패했습니다. 이메일을 확인해주세요.';
+      setErr(msg);
     } finally {
       setLoading(false);
     }
@@ -75,7 +79,12 @@ export default function SignupEmailPage() {
           className="mb-4"
         />
 
-        {err ? <p className="text-sm text-red-600">{err}</p> : null}
+        {err ? (
+          <p className="text-xs text-red-600 items-center flex gap-1">
+            <i className="mgc_warning_fill text-md pb-0.5" />
+            {err}
+          </p>
+        ) : null}
 
         <div
           aria-hidden
