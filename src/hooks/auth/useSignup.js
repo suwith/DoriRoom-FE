@@ -28,17 +28,18 @@ export async function sendSignupEmail(email) {
 
 //  2) 이메일 인증코드 검증
 export async function verifySignupCode({ email, code }) {
-  try {
-    const res = await axiosInstance.post('/auth/email/verify', {
-      email,
-      verificationCode: code,
-    });
-    return res.data;
-  } catch (e) {
-    throw toReadableError(e);
-  }
-}
+  const res = await axiosInstance.post('/auth/email/verify', {
+    email,
+    verificationCode: code,
+  });
+  const data = res.data;
 
+  if (data?.statusCode && data.statusCode !== 200) {
+    throw data.error || '인증코드 확인 실패';
+  }
+
+  return data;
+}
 //  회원정보 제출(회원가입)
 
 export async function submitSignupProfile({

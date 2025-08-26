@@ -96,10 +96,14 @@ export default function SignupCodePage() {
     setErr(null);
     const code = digits.join('');
     try {
-      await verifySignupCode({ email, code }); // 모킹 훅은 항상 성공
+      await verifySignupCode({ email, code });
       router.push('/signup/info');
     } catch (e2) {
-      setErr('인증코드가 올바르지 않습니다.');
+      const msg =
+        (typeof e2 === 'string' && e2) ||
+        e2?.message ||
+        '인증코드 확인 중 오류가 발생했습니다.';
+      setErr(msg);
     } finally {
       setLoading(false);
     }
@@ -174,7 +178,12 @@ export default function SignupCodePage() {
             })}
           </div>
         </div>
-        {err ? <p className="text-sm text-red-600">{err}</p> : null}
+        {err ? (
+          <p className="text-xs text-red-600 items-center flex gap-1">
+            <i className="mgc_warning_fill text-md pb-0.5" />
+            {err}
+          </p>
+        ) : null}
 
         <div
           aria-hidden
