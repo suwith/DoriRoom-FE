@@ -24,10 +24,8 @@ export default function FestivalDetail({ festival }) {
   const sentinelRef = useRef(null);
   const HEADER_H = 70; // 헤더 높이(px): h-12(=48) + 상단 패딩 보정 등이 있으면 맞춰 조정
 
-  const { liked, likeCount, loading, toggleFavorite } = useFestivalFavorite(
-    festival.eventId,
-    festival.likes
-  );
+  const { liked, likeCount, loading, mutating, toggleFavorite } =
+    useFestivalFavorite(festival.id, festival.likes);
 
   const toggleReviewLike = (reviewId) => {
     setLikedReviews((prev) =>
