@@ -76,6 +76,7 @@ export default function SignupCodePage() {
       for (let i = 0; i < filled.length; i += 1) next[i] = filled[i];
       return next;
     });
+
     focusIndex(Math.min(filled.length - 1, 5));
   }
 
@@ -120,6 +121,7 @@ export default function SignupCodePage() {
     ro.observe(el);
     return () => ro.disconnect();
   }, []);
+
   useEffect(() => {
     const style = document.createElement('style');
     style.textContent = `input,button,select,textarea{scroll-margin-bottom:calc(var(--footer-h,72px) + env(safe-area-inset-bottom) + var(--kb-offset,0px) + 12px);}`;
@@ -129,46 +131,49 @@ export default function SignupCodePage() {
 
   return (
     <div
-      className="min-h-full flex flex-col px-4 pt-28"
+      className="min-h-full w-full flex flex-col px-4 pt-28"
       style={{ minHeight: 'calc(var(--vh, 1vh) * 100)' }}
     >
-      <HeaderNavigationBar title="회원가입" />
+      <div className="bg-background">
+        <HeaderNavigationBar title="회원가입" className="bg-background" />
+      </div>
 
       {/* 폼에 id 부여 */}
       <form
         id="signup-code-form"
         onSubmit={onSubmit}
-        className="flex-1 flex flex-col gap-5"
+        className="flex-1 flex flex-col gap-5 w-full"
       >
-        <div className="flex justify-start font-medium text-md gap-0 flex-col">
+        <div className="flex items-start font-medium text-md gap-0 flex-col">
           <span>{email}로</span>
           <span>전송된 인증코드 6자리를 입력해 주세요.</span>
         </div>
 
-        <div className="flex justify-between px-9">
-          {Array.from({ length: 6 }).map((_, i) => {
-            const digit = digits[i] || '';
-            const isFilled = digit.trim() !== '';
-            return (
-              <input
-                key={i}
-                ref={(el) => (inputsRef.current[i] = el)}
-                inputMode="numeric"
-                maxLength={1}
-                value={digit}
-                className={`w-10 h-12 text-center text-lg rounded-[10px] focus:outline-none focus:ring-0 ${
-                  isFilled
-                    ? 'bg-main-5 text-main-100'
-                    : 'bg-neutral-100 text-main'
-                }`}
-                onChange={(e) => onChangeDigit(i, e.target.value)}
-                onKeyDown={(e) => onKeyDown(i, e)}
-                onPaste={i === 0 ? onPaste : undefined}
-              />
-            );
-          })}
+        <div className="w-full flex items-center justify-center">
+          <div className="flex justify-between w-[80%] items-center gap-0.5">
+            {Array.from({ length: 6 }).map((_, i) => {
+              const digit = digits[i] || '';
+              const isFilled = digit.trim() !== '';
+              return (
+                <input
+                  key={i}
+                  ref={(el) => (inputsRef.current[i] = el)}
+                  inputMode="numeric"
+                  maxLength={1}
+                  value={digit}
+                  className={`w-10 h-12 text-center text-lg rounded-[10px] focus:outline-none focus:ring-0 ${
+                    isFilled
+                      ? 'bg-main-5 text-main-100'
+                      : 'bg-neutral-100 text-main'
+                  }`}
+                  onChange={(e) => onChangeDigit(i, e.target.value)}
+                  onKeyDown={(e) => onKeyDown(i, e)}
+                  onPaste={i === 0 ? onPaste : undefined}
+                />
+              );
+            })}
+          </div>
         </div>
-
         {err ? <p className="text-sm text-red-600">{err}</p> : null}
 
         <div
