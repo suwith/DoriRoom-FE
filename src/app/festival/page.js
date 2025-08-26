@@ -6,6 +6,7 @@ import RegionFilter from './_components/RegionFilter';
 import FestivalCardListSection from './_components/FestivalCardListSection';
 import 'mingcute_icon/font/Mingcute.css';
 import useMainFestivals from '@/hooks/festival/useMainFestivals';
+import LoadingContent from '@/app/_components/LoadingContent';
 
 export default function FestivalPage() {
   const router = useRouter();
@@ -60,6 +61,7 @@ export default function FestivalPage() {
           />
         </>
       )}
+      {loading && <LoadingContent loading={loading} className="py-20" />}
     </div>
   );
 }
