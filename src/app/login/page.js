@@ -9,6 +9,7 @@ import TextInput from '@/app/auth/_components/TextInput';
 import PasswordInput from '@/app/auth/_components/PasswordInput';
 import PrimaryButton from '@/app/_components/PrimaryButton';
 import Link from 'next/link';
+import LoadingModal from '@/app/_components/LoadingModal';
 
 export default function LoginPage() {
   const { login, loggingIn, error } = useLogin();
@@ -201,6 +202,8 @@ export default function LoginPage() {
           {loggingIn ? '로그인 중...' : '로그인하기'}
         </PrimaryButton>
       </div>
+
+      <LoadingModal open={loggingIn} />
     </div>
   );
 }

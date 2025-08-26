@@ -8,6 +8,7 @@ import HeaderNavigationBar from '@/app/_components/HeaderNavigationBar';
 import ImageUploader from '@/app/_components/ImageUploader';
 import PrimaryButton from '@/app/_components/PrimaryButton';
 import { submitSignupProfile } from '@/hooks/auth/useSignup';
+import LoadingModal from '@/app/_components/LoadingModal';
 
 export default function SignupAvatarPage() {
   const router = useRouter();
@@ -106,10 +107,12 @@ export default function SignupAvatarPage() {
             disabled={loading}
             onClick={() => finishSignup(true)} // 현재 선택된 이미지까지 함께 전송
           >
-            {loading ? '처리 중...' : '가입 완료'}
+            가입 완료
           </PrimaryButton>
         </div>
       </div>
+
+      <LoadingModal open={loading} />
     </div>
   );
 }
