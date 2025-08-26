@@ -1,11 +1,10 @@
 'use client';
 
-import useUserInfo from '@/hooks/mypage/useUserInfo';
 import { useRouter } from 'next/navigation';
+import { useProfile } from '../_context/UserInfoProvider';
 
 export default function UserProfile() {
-  const { info, loading, error } = useUserInfo();
-
+  const { info, loading } = useProfile();
   const router = useRouter();
 
   if (loading) return null;
@@ -13,8 +12,7 @@ export default function UserProfile() {
   return (
     <div className="text-center space-y-4">
       <img
-        // src={info.profileImageUrl}
-        src="/character.png"
+        src={info.profileImageUrl}
         alt="prifile_image"
         className="rounded-full w-23 h-23"
       />

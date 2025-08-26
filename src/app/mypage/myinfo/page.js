@@ -1,29 +1,55 @@
+'use client';
+
 import HeaderNavigationBar from '@/app/_components/HeaderNavigationBar';
 import { MdEditSquare } from 'react-icons/md';
+import useChangeProfile from '@/hooks/mypage/useChangeProfile';
+import { useProfile } from '../_context/UserInfoProvider';
 
 export default function Myinfo() {
+  const { info, refetch } = useProfile();
+  const { mutate, data, loading } = useChangeProfile({
+    onSuccess: () => {
+      refetch();
+    },
+  });
+
+  const handlerFile = async (e) => {
+    const file = e.target.files[0];
+    await mutate(file);
+  };
+
   return (
     <div className="flex flex-col h-full max-w-[390px] w-screen h-screen">
       <HeaderNavigationBar title="내 정보" />
-      <div className="flex-2 flex items-end justify-center bg-main-5 px-4">
+      <div className="flex-2 flex items-end justify-center px-4">
         <div className="relative mb-12">
           <img
-            src="/character.png"
+            src={info.profileImageUrl}
             alt="profile_image"
-            className="rounded-full w-30 h-30"
+            className="rounded-full w-30 h-30 bg-main-5"
           />
-          <button
+          <div
             className="absolute -bottom-1 -right-1 rounded-full p-2 bg-neutral-100"
             style={{ boxShadow: '0 0 3px rgba(0,0,0,0.2)' }}
           >
-            <MdEditSquare className="text-neutral-400 text-base" />
-          </button>
+            <label htmlFor="fileUpload">
+              <MdEditSquare className="text-neutral-400 text-base" />
+            </label>
+
+            <input
+              id="fileUpload"
+              type="file"
+              accept=".jpg,.jpeg,.png,.gif,.bmp,.webp"
+              className="hidden"
+              onChange={handlerFile}
+            />
+          </div>
         </div>
       </div>
       <div className="flex-3 flex flex-col divide-y-2 divide-neutral-100">
-        <IconButton title="닉네임" label="가나디" showEditBtn={true} />
-        <IconButton title="아이디" label="yeonn4" />
-        <IconButton title="이메일" label="daf@naver.com" />
+        <IconButton title="닉네임" label={info.nickname} showEditBtn={true} />
+        <IconButton title="아이디" label={info.username} />
+        <IconButton title="이메일" label={info.email} />
         <IconButton title="비밀번호" showEditBtn={true} />
       </div>
     </div>
