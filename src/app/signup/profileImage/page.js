@@ -15,8 +15,8 @@ export default function SignupAvatarPage() {
   const [loading, setLoading] = useState(false);
 
   useEffect(() => {
-    if (!profile) router.replace('/signup/info');
-  }, [profile, router]);
+    if (!email) router.replace('/signup/email');
+  }, [email, router]);
 
   const footerRef = useRef(null);
   useLayoutEffect(() => {
@@ -36,12 +36,14 @@ export default function SignupAvatarPage() {
   }, []);
   useEffect(() => {
     const style = document.createElement('style');
-    style.textContent = `input,button,select,textarea{scroll-margin-bottom:calc(var(--footer-h,72px) + env(safe-area-inset-bottom) + var(--kb-offset,0px) + 12px);}`;
+    style.textContent =
+      'input,button,select,textarea{scroll-margin-bottom:calc(var(--footer-h,72px) + env(safe-area-inset-bottom) + var(--kb-offset,0px) + 12px);}';
     document.head.appendChild(style);
     return () => document.head.removeChild(style);
   }, []);
 
-  async function finishSignup() {
+  async function finishSignup(withImage) {
+    if (loading) return;
     setLoading(true);
     try {
       await submitSignupProfile({
@@ -49,7 +51,7 @@ export default function SignupAvatarPage() {
         username: profile.username,
         password: profile.password,
         nickname: profile.nickname,
-        profileImage: profile.profileImage,
+        profileImage: withImage ? profile.profileImage : null,
       });
       reset();
       router.replace('/login?from=signup');
@@ -63,7 +65,10 @@ export default function SignupAvatarPage() {
       className="min-h-full flex flex-col px-4 pt-28"
       style={{ minHeight: 'calc(var(--vh, 1vh) * 100)' }}
     >
-      <HeaderNavigationBar title="회원가입" />
+      <HeaderNavigationBar
+        title="회원가입"
+        onBack={() => router.replace('/signup/info')}
+      />
 
       <div className="flex-1 flex flex-col items-center">
         <p className="w-full text-left mb-6 font-medium">
@@ -90,15 +95,16 @@ export default function SignupAvatarPage() {
           <button
             type="button"
             disabled={loading}
-            onClick={() => router.replace('/login?from=signup')}
+            onClick={() => finishSignup(false)} // 회원가입 진행하되 profileImage는 null로 전송
             className="w-18 text-sm text-neutral-400 border-b-1 border-neutral-400 mb-4"
           >
             다음에 하기
           </button>
+
           <PrimaryButton
             type="button"
             disabled={loading}
-            onClick={finishSignup}
+            onClick={() => finishSignup(true)} // 현재 선택된 이미지까지 함께 전송
           >
             {loading ? '처리 중...' : '가입 완료'}
           </PrimaryButton>
