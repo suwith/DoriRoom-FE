@@ -9,6 +9,11 @@ export default function FestivalCard({ festival }) {
     festival.likes
   );
 
+  const onLikeClick = (e) => {
+    e.stopPropagation();
+    toggleFavorite();
+  };
+
   return (
     <div className="bg-background overflow-hidden">
       <div
@@ -16,7 +21,7 @@ export default function FestivalCard({ festival }) {
         style={{ backgroundImage: `url(${festival.thumbnail})` }}
       >
         <div className="absolute top-3 right-3 flex flex-col items-center gap-0.5">
-          <button onClick={toggleFavorite} disabled={loading}>
+          <button onClick={onLikeClick} disabled={loading}>
             {liked ? (
               <GoHeartFill className="text-main-100 w-5 h-5 drop-shadow" />
             ) : (
