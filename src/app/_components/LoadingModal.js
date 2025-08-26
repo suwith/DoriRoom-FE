@@ -3,7 +3,7 @@
 import { useEffect } from 'react';
 import { FadeLoader } from 'react-spinners';
 
-export default function LoadingModal({ open, text = '' }) {
+export default function LoadingModal({ open }) {
   useEffect(() => {
     if (!open) return;
     const original = document.body.style.overflow;
