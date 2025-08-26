@@ -14,6 +14,7 @@ import TextInput from '@/app/auth/_components/TextInput';
 import PasswordInput from '@/app/auth/_components/PasswordInput';
 import PrimaryButton from '@/app/_components/PrimaryButton';
 
+//비밀번호 조건
 function validPassword(pw) {
   if (!pw) return false;
   const lenOk = pw.length >= 6 && pw.length <= 20;
@@ -33,19 +34,41 @@ export default function SignupInfoPage() {
   const [err, setErr] = useState(null);
 
   // 중복 확인 상태 묶어서 관리
-  const [uid, setUid] = useState({ checking: false, ok: null, tried: false, checkedValue: '' });
-  const [nick, setNick] = useState({ checking: false, ok: null, tried: false, checkedValue: '' });
+  const [uid, setUid] = useState({
+    checking: false,
+    ok: null,
+    tried: false,
+    checkedValue: '',
+  });
+  const [nick, setNick] = useState({
+    checking: false,
+    ok: null,
+    tried: false,
+    checkedValue: '',
+  });
 
   useEffect(() => {
     if (!email) router.replace('/signup/email');
   }, [email, router]);
 
   // 입력이 바뀌면 이전 중복 확인 결과 무효화
-  useEffect(() => { setUid((s) => ({ ...s, ok: null, tried: false })); }, [profile.username]);
-  useEffect(() => { setNick((s) => ({ ...s, ok: null, tried: false })); }, [profile.nickname]);
+  useEffect(() => {
+    setUid((s) => ({ ...s, ok: null, tried: false }));
+  }, [profile.username]);
+  useEffect(() => {
+    setNick((s) => ({ ...s, ok: null, tried: false }));
+  }, [profile.nickname]);
 
+  // 아이디 조건
   const usernameLenOk =
     profile.username.trim().length >= 4 && profile.username.trim().length <= 12;
+
+  // 영문 소문자 + 숫자만 허용
+  const usernameLowerOk = /^[a-z0-9]+$/.test(profile.username.trim());
+
+  // 최종 아이디 버튼 활성화 조건
+  const canCheckUid = usernameLenOk && usernameLowerOk;
+
   const nicknameLenOk =
     profile.nickname.trim().length >= 2 && profile.nickname.trim().length <= 10;
 
@@ -54,7 +77,12 @@ export default function SignupInfoPage() {
     if (!usernameLenOk) return;
     setUid((s) => ({ ...s, checking: true, tried: true }));
     const res = await checkUsernameAvailable(profile.username.trim());
-    setUid({ checking: false, tried: true, ok: !!res.available, checkedValue: profile.username.trim() });
+    setUid({
+      checking: false,
+      tried: true,
+      ok: !!res.available,
+      checkedValue: profile.username.trim(),
+    });
   }
 
   //닉네임 중복확인
@@ -62,11 +90,17 @@ export default function SignupInfoPage() {
     if (!nicknameLenOk) return;
     setNick((s) => ({ ...s, checking: true, tried: true }));
     const res = await checkNicknameAvailable(profile.nickname.trim());
-    setNick({ checking: false, tried: true, ok: !!res.available, checkedValue: profile.nickname.trim() });
+    setNick({
+      checking: false,
+      tried: true,
+      ok: !!res.available,
+      checkedValue: profile.nickname.trim(),
+    });
   }
 
   const passwordOk = validPassword(profile.password);
-  const passwordMatch = profile.password && profile.password === profile.passwordConfirm;
+  const passwordMatch =
+    profile.password && profile.password === profile.passwordConfirm;
 
   // 버튼 활성화 조건: 형식 + 비번 유효 + 비번일치 + 아이디/닉네임 중복 확인 통과
   const formValid =
@@ -109,7 +143,10 @@ export default function SignupInfoPage() {
     if (!el) return;
     const setVar = () => {
       const h = el.getBoundingClientRect().height || 0;
-      document.documentElement.style.setProperty('--footer-h', `${Math.ceil(h)}px`);
+      document.documentElement.style.setProperty(
+        '--footer-h',
+        `${Math.ceil(h)}px`
+      );
     };
     setVar();
     const ro = new ResizeObserver(setVar);
@@ -125,8 +162,11 @@ export default function SignupInfoPage() {
   }, []);
 
   return (
-    <div className="min-h-full flex flex-col px-4 pt-28" style={{ minHeight: 'calc(var(--vh, 1vh) * 100)' }}>
-      <HeaderNavigationBar title="회원가입" />
+    <div
+      className="min-h-full flex flex-col px-4 pt-28"
+      style={{ minHeight: 'calc(var(--vh, 1vh) * 100)' }}
+    >
+      <HeaderNavigationBar title="회원가입" className="bg-background" />
       <form onSubmit={onSubmit} className="flex-1 flex flex-col">
         {/* 아이디 */}
         <div className="mb-7">
@@ -143,25 +183,28 @@ export default function SignupInfoPage() {
             <button
               type="button"
               onClick={onCheckUsername}
-              disabled={!usernameLenOk || uid.checking}
+              disabled={!canCheckUid || uid.checking}
               className={`flex-1 px-3 py-3 rounded-[10px] text-background ${
-                usernameLenOk ? 'bg-main-100' : 'bg-neutral-300'
+                canCheckUid ? 'bg-main-100' : 'bg-neutral-300'
               }`}
             >
               {uid.checking ? '확인 중' : '중복 확인'}
             </button>
           </div>
-          <p className="mt-2 text-xs text-neutral-600">영문 소문자 및 숫자 조합으로 4~12자 설정해 주세요.</p>
+          <p className="mt-2 text-xs text-neutral-600">
+            영문 소문자 및 숫자 조합으로 4~12자 설정해 주세요.
+          </p>
 
-          {/* 에러/성공 문구: 버튼 클릭 이후(tried)만 노출 */}
           {uid.tried && uid.ok === false ? (
             <p className="mt-2 text-xs text-red-600 items-center flex gap-1">
-              <i className="mgc_warning_fill text-md pb-0.5" />이미 등록되어 있는 아이디예요!
+              <i className="mgc_warning_fill text-md pb-0.5" />
+              이미 등록되어 있는 아이디예요!
             </p>
           ) : null}
           {uid.tried && uid.ok === true && usernameLenOk ? (
             <p className="mt-1 text-xs text-main-100 items-center flex gap-1">
-              <i className="mgc_check_fill text-md pb-0.5" />사용 가능한 아이디예요.
+              <i className="mgc_check_fill text-md pb-0.5" />
+              사용 가능한 아이디예요.
             </p>
           ) : null}
         </div>
@@ -192,7 +235,8 @@ export default function SignupInfoPage() {
             <div className="mt-2 text-xs text-red-600 space-y-1">
               <p className="items-center flex gap-1">
                 <i className="mgc_warning_fill text-md pb-0.5" />
-                영문 대/소문자, 숫자, 특수문자 중 2가지 이상 조합으로 설정해 주세요!
+                영문 대/소문자, 숫자, 특수문자 중 2가지 이상 조합으로 설정해
+                주세요!
               </p>
               <p className="items-center flex gap-1">
                 <i className="mgc_warning_fill text-md pb-0.5" />
@@ -236,9 +280,10 @@ export default function SignupInfoPage() {
               {nick.checking ? '확인 중' : '중복 확인'}
             </button>
           </div>
-          <p className="mt-2 text-xs text-neutral-600">2~10자까지 설정이 가능해요.</p>
+          <p className="mt-2 text-xs text-neutral-600">
+            2~10자까지 설정이 가능해요.
+          </p>
 
-          {/* 에러/성공 문구: 버튼 클릭 이후(tried)만 노출 */}
           {nick.tried && nick.ok === false ? (
             <p className="mt-1 text-xs text-red-600 items-center flex gap-1">
               <i className="mgc_warning_fill text-md pb-0.5" />
@@ -255,21 +300,28 @@ export default function SignupInfoPage() {
 
         {err ? <p className="text-sm text-red-600">{err}</p> : null}
 
-        <div aria-hidden style={{
-          height: 'calc(var(--footer-h,72px) + env(safe-area-inset-bottom) + var(--kb-offset,0px))',
-        }} />
+        <div
+          aria-hidden
+          style={{
+            height:
+              'calc(var(--footer-h,30px) + env(safe-area-inset-bottom) + var(--kb-offset,0px))',
+          }}
+        />
       </form>
 
       <div
         ref={footerRef}
         className="sticky left-0 right-0 pt-4 pb-7"
-        style={{ bottom: 'calc(env(safe-area-inset-bottom) + var(--kb-offset, 0px))' }}
+        style={{
+          bottom: 'calc(env(safe-area-inset-bottom) + var(--kb-offset, 0px))',
+        }}
       >
         <PrimaryButton
           type="button"
           disabled={loading || !formValid}
           onClick={(e) => {
-            const formEl = e.currentTarget.closest('div')?.previousElementSibling;
+            const formEl =
+              e.currentTarget.closest('div')?.previousElementSibling;
             if (formEl?.tagName === 'FORM') formEl.requestSubmit();
           }}
         >
