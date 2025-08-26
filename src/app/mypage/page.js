@@ -1,7 +1,12 @@
+import UserProfile from './_components/UserProfile';
+
 export default function Mypage() {
   return (
-    <div className="flex justify-center items-center h-full max-w-[390px] w-screen">
-      <h1 className="text-xl font-bold text-black">마이페이지</h1>
+    <div className="flex flex-col h-full max-w-[390px] w-screen h-screen">
+      <div className="flex-2 flex items-center justify-center bg-main-5 px-4">
+        <UserProfile />
+      </div>
+      <div className="flex-3 px-4"></div>
     </div>
   );
 }
