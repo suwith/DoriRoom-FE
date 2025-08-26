@@ -143,14 +143,6 @@ export default function FestivalDetail({ festival }) {
           </div>
         </div>
         <div className="flex flex-row gap-3 text-sm">
-          <p className="text-neutral-500">시간</p>
-          <span>
-            {festival.startTime === ''
-              ? '-'
-              : `${festival.startTime} ~ ${festival.endTime}`}
-          </span>
-        </div>
-        <div className="flex flex-row gap-3 text-sm">
           <p className=" text-neutral-500 whitespace-nowrap">위치</p>
           <p>{festival.location}</p>
         </div>
