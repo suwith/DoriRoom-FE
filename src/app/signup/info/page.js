@@ -306,14 +306,14 @@ export default function SignupInfoPage() {
 
           {/* 중복확인 결과/에러/필요 안내 */}
           {uid.err ? (
-            <p className="mt-3 text-xs text-red-600 items-center flex gap-1">
+            <p className="mt-1 text-xs text-red-600 items-center flex gap-1">
               <i className="mgc_warning_fill text-md pb-0.5" />
               {uid.err}
             </p>
           ) : null}
 
           {uid.tried && uid.ok === false && !uid.err ? (
-            <p className="mt-3 text-xs text-red-600 items-center flex gap-1">
+            <p className="mt-1 text-xs text-red-600 items-center flex gap-1">
               <i className="mgc_warning_fill text-md pb-0.5" />
               이미 등록되어 있는 아이디예요!
             </p>
@@ -350,7 +350,7 @@ export default function SignupInfoPage() {
             <span>6~20자 설정해 주세요.</span>
           </p>
           {!passwordOk && profile.password ? (
-            <div className="mt-2 text-xs text-red-600 space-y-1">
+            <div className="mt-1 text-xs text-red-600 space-y-1">
               <p className="items-center flex gap-1">
                 <i className="mgc_warning_fill text-md pb-0.5" />
                 영문 대/소문자, 숫자, 특수문자 중 2가지 이상 조합으로 설정해
@@ -426,7 +426,7 @@ export default function SignupInfoPage() {
         </div>
 
         {globalErr ? (
-          <p className="mt-2 text-sm text-red-600 items-center flex gap-1">
+          <p className="mt-1 text-sm text-red-600 items-center flex gap-1">
             <i className="mgc_warning_fill text-md pb-0.5" />
             {globalErr}
           </p>
