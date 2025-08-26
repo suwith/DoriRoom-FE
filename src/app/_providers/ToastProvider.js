@@ -131,6 +131,7 @@ function ToastItem({ toast }) {
   const styles = {
     default: <></>,
     purchase: <i className="mgc_check_circle_fill text-main-100" />,
+    festival: <i className="mgc_user_follow_fill text-lg text-main-100" />,
   };
 
   const anim =

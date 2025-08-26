@@ -1,6 +1,7 @@
 import './globals.css';
 import BottomNavBar from './_components/BottomNavBar';
 import AuthBootstrap from '@/app/_providers/AuthBootstrap';
+import ToastProvider from '@/app/_providers/ToastProvider';
 
 export const metadata = {
   title: 'Dori Room',
@@ -18,7 +19,9 @@ export default function RootLayout({ children }) {
             className="flex-1 bg-background overflow-y-auto scrollbar-hide w-full"
           >
             <div className="h-full pb-18">
-              <AuthBootstrap>{children}</AuthBootstrap>
+              <AuthBootstrap>
+                <ToastProvider>{children}</ToastProvider>
+              </AuthBootstrap>
             </div>
           </main>
           <BottomNavBar />

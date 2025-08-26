@@ -11,13 +11,13 @@ import { MdEditSquare } from 'react-icons/md';
 import ReviewItem from '@/app/festival/_components/ReviewItem';
 import { useRouter } from 'next/navigation';
 import useFestivalFavorite from '@/hooks/festival/useFestivalFavorite';
+import { useToast } from '@/app/_providers/ToastProvider';
 
 export default function FestivalDetail({ festival }) {
   const router = useRouter();
   const [activeTab, setActiveTab] = useState('설명');
   const [likedReviews, setLikedReviews] = useState([]);
   const [reviewSort, setReviewSort] = useState('latest');
-  const [showToast, setShowToast] = useState(false);
 
   // 헤더 전환 상태
   const [isScrolled, setIsScrolled] = useState(false);
@@ -40,11 +40,22 @@ export default function FestivalDetail({ festival }) {
     return new Date(b.date) - new Date(a.date);
   });
 
+  const { show } = useToast();
+  const didShowRef = useRef(false); // StrictMode 중복 실행 가드
+
   useEffect(() => {
-    setShowToast(true);
-    const timer = setTimeout(() => setShowToast(false), 3000);
-    return () => clearTimeout(timer);
-  }, []);
+    if (didShowRef.current) return;
+    didShowRef.current = true;
+
+    show({
+      message:
+        festival.visitedFriend > 0
+          ? `${festival.visitedFriend}명의 친구가 해당 장소에 방문했어요!`
+          : '아직 방문한 친구가 없어요',
+      variant: 'festival',
+      duration: 2500,
+    });
+  }, [show, festival.visitedFriend]);
 
   // 이미지 하단 센티넬이 헤더 뒤로 넘어가면 isScrolled = true
   useEffect(() => {
@@ -264,17 +275,6 @@ export default function FestivalDetail({ festival }) {
               <span className="text-lg">일기 작성하기</span>
             </div>
           </button>
-        </div>
-      )}
-
-      {showToast && (
-        <div className="fixed bottom-7 left-1/2 -translate-x-1/2 bg-sub-5 px-4 py-2 rounded-full text-xs text-sub-100 whitespace-nowrap flex items-center gap-2 z-50">
-          <i className="mgc_user_follow_fill text-lg text-sub-100" />
-          <span>
-            {festival.visitedFriend > 0
-              ? `${festival.visitedFriend}명의 친구가 해당 장소에 방문했어요!`
-              : '아직 방문한 친구가 없어요'}
-          </span>
         </div>
       )}
     </div>
