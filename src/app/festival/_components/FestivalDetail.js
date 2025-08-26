@@ -10,12 +10,11 @@ import BackButton from '@/app/_components/BackButton';
 import { MdEditSquare } from 'react-icons/md';
 import ReviewItem from '@/app/festival/_components/ReviewItem';
 import { useRouter } from 'next/navigation';
+import useFestivalFavorite from '@/hooks/festival/useFestivalFavorite';
 
 export default function FestivalDetail({ festival }) {
   const router = useRouter();
   const [activeTab, setActiveTab] = useState('설명');
-  const [liked, setLiked] = useState(false);
-  const [likeCount, setLikeCount] = useState(festival.likes || 0);
   const [likedReviews, setLikedReviews] = useState([]);
   const [reviewSort, setReviewSort] = useState('latest');
   const [showToast, setShowToast] = useState(false);
@@ -25,10 +24,10 @@ export default function FestivalDetail({ festival }) {
   const sentinelRef = useRef(null);
   const HEADER_H = 70; // 헤더 높이(px): h-12(=48) + 상단 패딩 보정 등이 있으면 맞춰 조정
 
-  const handleLike = () => {
-    setLiked((prev) => !prev);
-    setLikeCount((prev) => (liked ? prev - 1 : prev + 1));
-  };
+  const { liked, likeCount, loading, toggleFavorite } = useFestivalFavorite(
+    festival.eventId,
+    festival.likes
+  );
 
   const toggleReviewLike = (reviewId) => {
     setLikedReviews((prev) =>
@@ -106,13 +105,14 @@ export default function FestivalDetail({ festival }) {
             {festival.title}
           </h1>
           <div className="flex flex-col items-center mt-2">
-            <button onClick={handleLike}>
+            <button onClick={toggleFavorite} disabled={loading || mutating}>
               {liked ? (
                 <GoHeartFill className="text-main-100 w-5 h-5" />
               ) : (
                 <GoHeart className="text-neutral-400 w-5 h-5" />
               )}
             </button>
+
             <span
               className={`text-[11px] ${liked ? 'text-main-100' : 'text-neutral-400'}`}
             >

@@ -1,16 +1,13 @@
 'use client';
 
-import { useState } from 'react';
 import { GoHeart, GoHeartFill } from 'react-icons/go';
+import useFestivalFavorite from '@/hooks/festival/useFestivalFavorite';
 
 export default function FestivalCard({ festival }) {
-  const [liked, setLiked] = useState(false);
-  const [likeCount, setLikeCount] = useState(festival.likes || 0);
-
-  const handleLike = () => {
-    setLiked((prev) => !prev);
-    setLikeCount((prev) => (liked ? prev - 1 : prev + 1));
-  };
+  const { liked, likeCount, loading, toggleFavorite } = useFestivalFavorite(
+    festival.eventId,
+    festival.likes
+  );
 
   return (
     <div className="bg-background overflow-hidden">
@@ -19,7 +16,7 @@ export default function FestivalCard({ festival }) {
         style={{ backgroundImage: `url(${festival.thumbnail})` }}
       >
         <div className="absolute top-3 right-3 flex flex-col items-center gap-0.5">
-          <button onClick={handleLike}>
+          <button onClick={toggleFavorite} disabled={loading}>
             {liked ? (
               <GoHeartFill className="text-main-100 w-5 h-5 drop-shadow" />
             ) : (
