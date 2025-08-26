@@ -14,6 +14,7 @@ export default function HeaderNavigationBar({
   onEditClick,
   onDeleteClick,
   regionId = null,
+  onBackClick,
 }) {
   const [isOpen, setIsOpen] = useState(false);
   const [showDiaryMenu, setShowDiaryMenu] = useState(false);
@@ -33,7 +34,7 @@ export default function HeaderNavigationBar({
 
         {/* 뒤로가기 버튼 */}
         {showBackButton && (
-          <div className="absolute left-[16px]">
+          <div className="absolute left-[16px]" onClick={onBackClick}>
             <BackButton />
           </div>
         )}
