@@ -40,8 +40,36 @@ export async function verifySignupCode({ email, code }) {
 
   return data;
 }
-//  회원정보 제출(회원가입)
 
+// 4) 아이디 중복 확인
+export async function checkUsernameAvailable(username) {
+  const res = await axiosInstance.get('/users/check-username', {
+    params: { username },
+  });
+  const data = res?.data || {};
+
+  if (typeof data.statusCode === 'number' && data.statusCode !== 200) {
+    throw data.error || '아이디 중복 확인 실패';
+  }
+
+  return { available: true };
+}
+
+// 5) 닉네임 중복 확인
+export async function checkNicknameAvailable(nickname) {
+  const res = await axiosInstance.get('/users/check-nickname', {
+    params: { nickname },
+  });
+  const data = res?.data || {};
+
+  if (typeof data.statusCode === 'number' && data.statusCode !== 200) {
+    throw data.error || '닉네임 중복 확인 실패';
+  }
+
+  return { available: true };
+}
+
+//  6) 회원정보 제출(회원가입)
 export async function submitSignupProfile({
   email,
   username,
@@ -55,47 +83,4 @@ export async function submitSignupProfile({
   } catch (e) {
     throw toReadableError(e);
   }
-}
-
-// // 4) 아이디 중복 확인
-//
-// export async function checkUsernameAvailable(username) {
-//   try {
-//     const res = await axiosInstance.get('/users/check-username', {
-//       params: { username },
-//     });
-//     // 기대 응답 예: { available: true | false }
-//     if (typeof res?.data?.available === 'boolean')
-//       return { available: res.data.available };
-//     // 형태가 다르면 기본 변환
-//     return { available: !!res?.data?.available };
-//   } catch (e) {
-//     // 엔드포인트 미구현(404) 시, 프론트 작업 진행을 위해 임시 true 반환
-//     if (e?.response?.status === 404) return { available: true };
-//     throw toReadableError(e);
-//   }
-// }
-//
-// // 5) 닉네임 중복 확인
-// export async function checkNicknameAvailable(nickname) {
-//   try {
-//     const res = await axiosInstance.get('/users/check-nickname', {
-//       params: { nickname },
-//     });
-//     if (typeof res?.data?.available === 'boolean')
-//       return { available: res.data.available };
-//     return { available: !!res?.data?.available };
-//   } catch (e) {
-//     if (e?.response?.status === 404) return { available: true };
-//     throw toReadableError(e);
-//   }
-// }
-export async function checkUsernameAvailable(username) {
-  const taken = ['yeonn4', 'admin', 'testuser'];
-  return { available: username && !taken.includes(username.toLowerCase()) };
-}
-
-export async function checkNicknameAvailable(nickname) {
-  const taken = ['도리도리', '관리자'];
-  return { available: nickname && !taken.includes(nickname) };
 }
