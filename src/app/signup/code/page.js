@@ -8,6 +8,7 @@ import HeaderNavigationBar from '@/app/_components/HeaderNavigationBar';
 import PrimaryButton from '@/app/_components/PrimaryButton';
 // 확인: 모킹 훅 경로 맞추기
 import { sendSignupEmail, verifySignupCode } from '@/hooks/auth/useSignup';
+import LoadingModal from '@/app/_components/LoadingModal';
 
 export default function SignupCodePage() {
   const router = useRouter();
@@ -218,10 +219,11 @@ export default function SignupCodePage() {
             onClick={undefined}
             form="signup-code-form"
           >
-            {loading ? '확인 중...' : '입력 완료'}
+            입력 완료
           </PrimaryButton>
         </div>
       </div>
+      <LoadingModal open={loading} />
     </div>
   );
 }

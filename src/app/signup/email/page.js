@@ -8,6 +8,7 @@ import { sendSignupEmail } from '@/hooks/auth/useSignup';
 import HeaderNavigationBar from '@/app/_components/HeaderNavigationBar';
 import TextInput from '@/app/auth/_components/TextInput';
 import PrimaryButton from '@/app/_components/PrimaryButton';
+import LoadingModal from '@/app/_components/LoadingModal';
 
 export default function SignupEmailPage() {
   const router = useRouter();
@@ -111,9 +112,11 @@ export default function SignupEmailPage() {
             if (formEl?.tagName === 'FORM') formEl.requestSubmit();
           }}
         >
-          {loading ? '전송 중...' : '인증코드 발송하기'}
+          인증코드 발송하기
         </PrimaryButton>
       </div>
+
+      <LoadingModal open={loading} />
     </div>
   );
 }

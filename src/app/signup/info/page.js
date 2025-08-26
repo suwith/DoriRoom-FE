@@ -13,6 +13,7 @@ import HeaderNavigationBar from '@/app/_components/HeaderNavigationBar';
 import TextInput from '@/app/auth/_components/TextInput';
 import PasswordInput from '@/app/auth/_components/PasswordInput';
 import PrimaryButton from '@/app/_components/PrimaryButton';
+import LoadingModal from '@/app/_components/LoadingModal';
 
 function validPassword(pw) {
   if (!pw) return false;
@@ -260,7 +261,19 @@ export default function SignupInfoPage() {
       className="min-h-full flex flex-col px-4 pt-28"
       style={{ minHeight: 'calc(var(--vh, 1vh) * 100)' }}
     >
-      <HeaderNavigationBar title="회원가입" className="bg-background" />
+      <HeaderNavigationBar
+        title="회원가입"
+        className="bg-background"
+        onBackClick={() => {
+          setProfile({
+            username: '',
+            password: '',
+            passwordConfirm: '',
+            nickname: '',
+            avatarFile: null,
+          });
+        }}
+      />
       <form onSubmit={onSubmit} className="flex-1 flex flex-col">
         {/* 아이디 */}
         <div className="mb-7">
@@ -282,32 +295,25 @@ export default function SignupInfoPage() {
                 usernameFormatOk ? 'bg-main-100' : 'bg-neutral-300'
               }`}
             >
-              {uid.checking ? '확인 중' : '중복 확인'}
+              중복 확인
             </button>
           </div>
 
           {/* 형식 안내 */}
-          {!usernameFormatOk ? (
-            <p className="mt-2 text-xs text-red-600 items-center flex gap-1">
-              <i className="mgc_warning_fill text-md pb-0.5" />
-              영문 소문자와 숫자 조합으로 4~12자이어야 해요.
-            </p>
-          ) : (
-            <p className="mt-2 text-xs text-neutral-600">
-              영문 소문자 및 숫자 조합으로 4~12자 설정해 주세요.
-            </p>
-          )}
+          <p className="mt-3 text-xs text-neutral-600">
+            영문 소문자 및 숫자 조합으로 4~12자 설정해 주세요.
+          </p>
 
           {/* 중복확인 결과/에러/필요 안내 */}
           {uid.err ? (
-            <p className="mt-2 text-xs text-red-600 items-center flex gap-1">
+            <p className="mt-3 text-xs text-red-600 items-center flex gap-1">
               <i className="mgc_warning_fill text-md pb-0.5" />
               {uid.err}
             </p>
           ) : null}
 
           {uid.tried && uid.ok === false && !uid.err ? (
-            <p className="mt-2 text-xs text-red-600 items-center flex gap-1">
+            <p className="mt-3 text-xs text-red-600 items-center flex gap-1">
               <i className="mgc_warning_fill text-md pb-0.5" />
               이미 등록되어 있는 아이디예요!
             </p>
@@ -389,16 +395,16 @@ export default function SignupInfoPage() {
                 nicknameLenOk ? 'bg-main-100' : 'bg-neutral-300'
               }`}
             >
-              {nick.checking ? '확인 중' : '중복 확인'}
+              중복 확인
             </button>
           </div>
 
-          <p className="mt-2 text-xs text-neutral-600">
+          <p className="mt-3 text-xs text-neutral-600">
             2~10자까지 설정이 가능해요.
           </p>
 
           {nick.err ? (
-            <p className="mt-2 text-xs text-red-600 items-center flex gap-1">
+            <p className="mt-1 text-xs text-red-600 items-center flex gap-1">
               <i className="mgc_warning_fill text-md pb-0.5" />
               {nick.err}
             </p>
@@ -454,6 +460,8 @@ export default function SignupInfoPage() {
           {submitting ? '처리 중...' : '입력 완료'}
         </PrimaryButton>
       </div>
+
+      <LoadingModal open={submitting} />
     </div>
   );
 }
