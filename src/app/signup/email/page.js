@@ -65,7 +65,12 @@ export default function SignupEmailPage() {
       className="min-h-full flex flex-col px-4 pt-28"
       style={{ minHeight: 'calc(var(--vh, 1vh) * 100)' }}
     >
-      <HeaderNavigationBar title="회원가입" />
+      <HeaderNavigationBar
+        title="회원가입"
+        onBackClick={() => {
+          setEmail('');
+        }}
+      />
 
       <form onSubmit={onSubmit} className="flex-1 flex flex-col">
         <TextInput
