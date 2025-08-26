@@ -54,7 +54,7 @@ export default function SignupAvatarPage() {
         profileImage: withImage ? profile.profileImage : null,
       });
       reset();
-      router.replace('/login?from=signup');
+      router.replace('/login');
     } finally {
       setLoading(false);
     }
