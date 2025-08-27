@@ -7,8 +7,8 @@ import BackButton from '@/app/_components/BackButton';
 import TwoButtonModal from '@/app/_components/TwoButtonModal';
 import useFavoriteFestivals from '@/hooks/festival/useFavoriteFestivals';
 import useDeleteFavoriteFestivals from '@/hooks/festival/useDeleteFavoriteFestivals';
-import LoadingModal from '@/app/_components/LoadingModal';
 import ErrorContent from '@/app/_components/ErrorContent';
+import FestivalListItemSkeleton from '@/app/festival/_components/FestivalListItemSkeleton';
 
 const HEADER_TOP_PAD = 50; // 상단 안전 여백
 const TOOLBAR_HEIGHT = 60; // 헤더 툴바 높이
@@ -69,7 +69,6 @@ export default function BookmarkPage() {
     setEditMode(false);
   };
 
-  if (loading) return <LoadingModal open={true} />;
   if (error) {
     const msg =
       error?.response?.data?.error ||
@@ -121,7 +120,15 @@ export default function BookmarkPage() {
           paddingBottom: hasBottomAction ? '92px' : '20px', // 하단 버튼이 있을 때 가리지 않도록 여유
         }}
       >
-        {bookmarks.length === 0 && (
+        {loading && (
+          <div className="space-y-3">
+            {Array.from({ length: 8 }).map((_, i) => (
+              <FestivalListItemSkeleton key={i} />
+            ))}
+          </div>
+        )}
+
+        {!loading && bookmarks.length === 0 && (
           <div className="w-full h-full flex flex-col items-center justify-center gap-3">
             <i className="mgc_sweats_fill text-6xl text-main-100" />
             <p className="text-center text-lg font-semibold">
@@ -139,7 +146,7 @@ export default function BookmarkPage() {
           </div>
         )}
 
-        {bookmarks.length > 0 && (
+        {!loading && bookmarks.length > 0 && (
           <div className="space-y-3">
             {bookmarks.map((festival) => {
               const isSelected = selectedIds.includes(festival.id);
@@ -185,7 +192,7 @@ export default function BookmarkPage() {
             onClick={() => setShowDeleteModal(true)}
             className="w-full py-2 bg-main-100 disabled:opacity-70 text-background text-lg rounded-lg font-medium shadow-md"
           >
-            {deleting ? '삭제 중...' : `${selectedIds.length}개 삭제하기`}
+            {selectedIds.length}개 삭제하기
           </button>
         </div>
       )}
