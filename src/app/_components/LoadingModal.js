@@ -21,7 +21,6 @@ export default function LoadingModal({ open }) {
       aria-modal="true"
       role="dialog"
     >
-      {/* 정사각형 모달 카드 */}
       <div className="relative w-30 h-30 flex flex-col items-center justify-center gap-4">
         <FadeLoader color="#35C284" />
       </div>
