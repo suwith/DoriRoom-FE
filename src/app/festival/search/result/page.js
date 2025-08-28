@@ -182,7 +182,7 @@ export default function FestivalSearchResultPage() {
             value={input}
             onChange={(e) => setInput(e.target.value)}
             onEnter={handleEnter}
-            onClear={() => router.push('/festival/search')}
+            onClear={() => setInput('')}
             withBack
           />
 
