@@ -2,6 +2,7 @@
 
 import BottomSheet from './BottomSheet';
 import { useEffect, useMemo, useState } from 'react';
+import { useToast } from '@/app/_providers/ToastProvider';
 
 export default function RegionFilter({
   open,
@@ -12,6 +13,8 @@ export default function RegionFilter({
 }) {
   const [temp, setTemp] = useState(value);
   const [selectedSido, setSelectedSido] = useState('');
+
+  const { show } = useToast();
 
   const bySido = useMemo(() => {
     const map = {};
@@ -49,7 +52,7 @@ export default function RegionFilter({
       if (sigungu === '전체') {
         const cleared = prev.filter((x) => !x.startsWith(`${sido}/`));
         if (cleared.length + 1 > MAX) {
-          alert(`선택은 최대 ${MAX}개까지 가능합니다.`);
+          show(`선택은 최대 ${MAX}개까지 가능합니다.`);
           return prev;
         }
         return [...cleared, key];
@@ -65,7 +68,7 @@ export default function RegionFilter({
 
       // 일반 추가: 현재 길이 검사
       if (prev.length >= MAX) {
-        alert(`선택은 최대 ${MAX}개까지 가능합니다.`);
+        show(`선택은 최대 ${MAX}개까지 가능합니다.`);
         return prev;
       }
 
@@ -83,7 +86,7 @@ export default function RegionFilter({
       onClose={onClose}
       title="지역"
       footer={
-        <div className="flex items-center gap-2 pb-3">
+        <div className="flex items-center gap-2 pb-3 px-4">
           <button
             type="button"
             className="px-4 py-3 rounded-md bg-main-15 text-main-100 font-semibold shrink-0"
@@ -107,10 +110,10 @@ export default function RegionFilter({
     >
       {/* 상단 탭 바 */}
       <div className="grid grid-cols-2">
-        <div className="text-center py-2 font-semibold text-neutral-600 border-b border-neutral-300">
+        <div className="text-center py-2 text-neutral-600 border-b border-neutral-100">
           시/도
         </div>
-        <div className="text-center py-2 text-neutral-600 border-b border-neutral-300">
+        <div className="text-center py-2 text-neutral-600 border-b border-neutral-100">
           시/구/군
         </div>
       </div>
@@ -188,7 +191,10 @@ export default function RegionFilter({
                       type="button"
                       onClick={() => {
                         if (disabled) {
-                          alert(`선택은 최대 ${MAX}개까지 가능합니다.`);
+                          show({
+                            message: `선택은 최대 ${MAX}개까지 가능합니다.`,
+                            duration: 1500,
+                          });
                           return;
                         }
                         toggle(selectedSido, g);
@@ -218,10 +224,10 @@ export default function RegionFilter({
       </div>
       {/* 선택 칩 영역 */}
       <div className="mt-3">
-        <div className="text-xs text-neutral-400 mb-2 text-right">
+        <div className="text-xs text-neutral-400 mb-2 text-right px-4">
           <span className="text-main-100">{temp.length}</span>/{MAX}
         </div>
-        <div className="flex gap-2 overflow-x-auto pb-1 scrollbar-hide">
+        <div className="flex gap-2 overflow-x-auto pb-1 scrollbar-hide pl-4">
           {temp.map((k) => {
             const [s, g] = k.split('/');
             return (
