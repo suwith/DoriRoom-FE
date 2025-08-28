@@ -107,13 +107,40 @@ export default function FestivalSearchResultPage() {
     return res.sort(sorter);
   }, [searchQuery, regions, categories, period, sort]);
 
-  // 옵션 예시
-  const regionOptions = [
-    { sido: '서울', sigungu: '강남구' },
-    { sido: '서울', sigungu: '광진구' },
-    { sido: '서울', sigungu: '강북구' },
-    { sido: '부산', sigungu: '해운대구' },
-  ];
+  const [regionOptions, setRegionOptions] = useState([]);
+
+  useEffect(() => {
+    fetch('/regions.json')
+      .then((r) => r.json())
+      .then((grouped) => {
+        const list = [];
+        for (const g of grouped) {
+          const sido = g.areaName;
+          const content = Array.isArray(g.content) ? g.content : [];
+          for (const it of content) {
+            list.push({ sido, sigungu: it.name });
+          }
+        }
+        // 중복 방지 및 안정적인 정렬
+        const uniqKey = new Set();
+        const dedup = [];
+        for (const x of list) {
+          const k = `${x.sido}/${x.sigungu}`;
+          if (!uniqKey.has(k)) {
+            uniqKey.add(k);
+            dedup.push(x);
+          }
+        }
+        dedup.sort((a, b) =>
+          a.sido === b.sido
+            ? a.sigungu.localeCompare(b.sigungu)
+            : a.sido.localeCompare(b.sido)
+        );
+        setRegionOptions(dedup);
+      })
+      .catch(() => setRegionOptions([]));
+  }, []);
+
   const categoryOptions = [
     '관광축제',
     '예술축제',

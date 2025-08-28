@@ -13,14 +13,13 @@ export default function RegionFilter({
   const [temp, setTemp] = useState(value);
   const [selectedSido, setSelectedSido] = useState('');
 
-  // options: [{ sido, sigungu }]
   const bySido = useMemo(() => {
     const map = {};
     options.forEach(({ sido, sigungu }) => {
       if (!map[sido]) map[sido] = new Set();
       map[sido].add(sigungu);
     });
-    // Set -> Array, keep stable order
+
     return Object.fromEntries(
       Object.entries(map).map(([k, v]) => [k, Array.from(v)])
     );
@@ -31,16 +30,47 @@ export default function RegionFilter({
   useEffect(() => {
     if (open) {
       setTemp(value);
-      // 초기 진입 시 첫 번째 시/도 선택
       setSelectedSido((prev) => prev || sidoList[0] || '');
     }
   }, [open, value, sidoList]);
 
+  // 최대 선택 10개 상수로 정의해도 되고, prop으로 받아도 됨
+  const MAX = 10;
+
   const toggle = (sido, sigungu) => {
     const key = `${sido}/${sigungu}`;
-    setTemp((prev) =>
-      prev.includes(key) ? prev.filter((x) => x !== key) : [...prev, key]
-    );
+    setTemp((prev) => {
+      const exists = prev.includes(key);
+      if (exists) {
+        return prev.filter((x) => x !== key);
+      }
+
+      // '전체' 선택 시: 같은 시/도 선택 전부 제거 후 '전체'만 추가
+      if (sigungu === '전체') {
+        const cleared = prev.filter((x) => !x.startsWith(`${sido}/`));
+        if (cleared.length + 1 > MAX) {
+          alert(`선택은 최대 ${MAX}개까지 가능합니다.`);
+          return prev;
+        }
+        return [...cleared, key];
+      }
+
+      // 같은 시/도에 '전체'가 이미 선택되어 있으면 교체 처리
+      const hadSidoAll = prev.includes(`${sido}/전체`);
+      if (hadSidoAll) {
+        const replaced = prev.filter((x) => x !== `${sido}/전체`);
+        // 교체이므로 길이 증가 없음 → 제한 체크 불필요
+        return [...replaced, key];
+      }
+
+      // 일반 추가: 현재 길이 검사
+      if (prev.length >= MAX) {
+        alert(`선택은 최대 ${MAX}개까지 가능합니다.`);
+        return prev;
+      }
+
+      return [...prev, key];
+    });
   };
 
   const removeChip = (key) => {
@@ -88,7 +118,7 @@ export default function RegionFilter({
       <div className="grid grid-cols-2 min-h-[340px]">
         {/* 좌측: 시/도 리스트 */}
         <div className="overflow-hidden">
-          <ul className="max-h-[340px] overflow-y-auto">
+          <ul className="max-h-[340px] overflow-y-auto scrollbar-hide">
             {sidoList.map((sido) => {
               const active = selectedSido === sido;
               return (
@@ -115,7 +145,7 @@ export default function RegionFilter({
         <div className="flex flex-col">
           {/* 섹션 헤더 */}
 
-          <div className="max-h-[300px] overflow-y-auto">
+          <div className="max-h-[340px] overflow-y-auto scrollbar-hide">
             <ul>
               {/* 전체 옵션 */}
               {selectedSido && (
@@ -136,7 +166,7 @@ export default function RegionFilter({
                         </span>
                         <span className="ml-3 inline-flex items-center justify-center">
                           <i
-                            className={`mgc_check_fill  text-xl ${active ? 'text-main-100' : 'text-neutral-300'}`}
+                            className={`mgc_check_fill text-lg mb-1 ${active ? 'text-main-100' : 'text-neutral-300'}`}
                           />
                         </span>
                       </button>
@@ -148,12 +178,25 @@ export default function RegionFilter({
               {(bySido[selectedSido] || []).map((g) => {
                 const k = `${selectedSido}/${g}`;
                 const active = temp.includes(k);
+                const atMax = temp.length >= MAX;
+                const sidoAllSelected = temp.includes(`${selectedSido}/전체`);
+                const disabled = !active && atMax && !sidoAllSelected;
+
                 return (
                   <li key={k}>
                     <button
                       type="button"
-                      onClick={() => toggle(selectedSido, g)}
-                      className="w-full px-4 h-10 flex items-center justify-between border-b last:border-b-0"
+                      onClick={() => {
+                        if (disabled) {
+                          alert(`선택은 최대 ${MAX}개까지 가능합니다.`);
+                          return;
+                        }
+                        toggle(selectedSido, g);
+                      }}
+                      className={[
+                        'w-full px-4 h-10 flex items-center justify-between border-b last:border-b-0',
+                        disabled ? 'opacity-50' : '',
+                      ].join(' ')}
                     >
                       <span
                         className={`text-sm ${active ? 'text-main-100' : 'text-neutral-300'}`}
@@ -162,7 +205,7 @@ export default function RegionFilter({
                       </span>
                       <span className="ml-3 inline-flex items-center justify-center">
                         <i
-                          className={`mgc_check_fill  text-xl ${active ? 'text-main-100' : 'text-neutral-300'}`}
+                          className={`mgc_check_fill text-lg mb-1 ${active ? 'text-main-100' : 'text-neutral-300'}`}
                         />
                       </span>
                     </button>
@@ -176,17 +219,17 @@ export default function RegionFilter({
       {/* 선택 칩 영역 */}
       <div className="mt-3">
         <div className="text-xs text-neutral-400 mb-2 text-right">
-          {temp.length}/10
+          <span className="text-main-100">{temp.length}</span>/{MAX}
         </div>
-        <div className="flex gap-2 overflow-x-auto pb-1">
+        <div className="flex gap-2 overflow-x-auto pb-1 scrollbar-hide">
           {temp.map((k) => {
             const [s, g] = k.split('/');
             return (
               <span
                 key={k}
-                className="inline-flex items-center gap-1 px-2 h-6 text-sm rounded-sm bg-main-5 text-main-100 whitespace-nowrap"
+                className="inline-flex items-center gap-1 px-2 h-6 text-[13px] rounded-sm bg-main-5 text-main-100 whitespace-nowrap"
               >
-                {g === '전체' ? `${s} 전체` : g}
+                {g === '전체' ? `${s} 전체` : `${s} ${g}`}
                 <button
                   type="button"
                   className="ml-1 inline-flex items-center justify-center h-3 w-3"
@@ -200,19 +243,5 @@ export default function RegionFilter({
         </div>
       </div>
     </BottomSheet>
-  );
-}
-
-/* 칩 제거 아이콘 */
-function CloseIcon() {
-  return (
-    <svg
-      viewBox="0 0 24 24"
-      width="14"
-      height="14"
-      className="fill-neutral-500"
-    >
-      <path d="M18.3 5.71L12 12.01L5.7 5.71L4.29 7.12L10.59 13.41L4.29 19.71L5.7 21.12L12 14.83L18.29 21.12L19.7 19.71L13.41 13.41L19.71 7.12L18.3 5.71Z" />
-    </svg>
   );
 }
