@@ -37,7 +37,6 @@ export default function RegionFilter({
     }
   }, [open, value, sidoList]);
 
-  // 최대 선택 10개 상수로 정의해도 되고, prop으로 받아도 됨
   const MAX = 10;
 
   const toggle = (sido, sigungu) => {
@@ -48,7 +47,7 @@ export default function RegionFilter({
         return prev.filter((x) => x !== key);
       }
 
-      // '전체' 선택 시: 같은 시/도 선택 전부 제거 후 '전체'만 추가
+      // '전체' 선택 시, 같은 시/도 선택 전부 제거 후 '전체'만 추가
       if (sigungu === '전체') {
         const cleared = prev.filter((x) => !x.startsWith(`${sido}/`));
         if (cleared.length + 1 > MAX) {
