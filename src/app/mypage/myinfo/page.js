@@ -4,6 +4,7 @@ import HeaderNavigationBar from '@/app/_components/HeaderNavigationBar';
 import { MdEditSquare } from 'react-icons/md';
 import useChangeProfile from '@/hooks/mypage/useChangeProfile';
 import { useProfile } from '../_context/UserInfoProvider';
+import { useRouter } from 'next/navigation';
 
 export default function Myinfo() {
   const { info, refetch } = useProfile();
@@ -47,22 +48,35 @@ export default function Myinfo() {
         </div>
       </div>
       <div className="flex-3 flex flex-col divide-y-2 divide-neutral-100">
-        <IconButton title="닉네임" label={info.nickname} showEditBtn={true} />
+        <IconButton
+          title="닉네임"
+          label={info.nickname}
+          showEditBtn={true}
+          href={'/mypage/myinfo/edit-nickname'}
+        />
         <IconButton title="아이디" label={info.username} />
         <IconButton title="이메일" label={info.email} />
-        <IconButton title="비밀번호" showEditBtn={true} />
+        <IconButton
+          title="비밀번호"
+          showEditBtn={true}
+          href={'/mypage/myinfo/edit-password'}
+        />
       </div>
     </div>
   );
 }
 
-function IconButton({ title, label = '', showEditBtn = false }) {
+function IconButton({ title, label = '', showEditBtn = false, href }) {
+  const router = useRouter();
   return (
     <div className="flex items-center space-x-5 py-3 px-4 text-sm">
       <span className="font-semibold">{title}</span>
       {label.length > 0 && <span className="font-normal">{label}</span>}
       {showEditBtn && (
-        <button className="bg-main-100 rounded-lg px-2 py-1 text-background">
+        <button
+          className="bg-main-100 rounded-lg px-2 py-1 text-background"
+          onClick={() => router.push(href)}
+        >
           <p>변경</p>
         </button>
       )}
