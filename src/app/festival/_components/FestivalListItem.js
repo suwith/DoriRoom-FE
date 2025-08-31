@@ -8,7 +8,40 @@ export default function FestivalListItem({
   liked = false,
   onLike = null,
   hideLikeButton = false,
+  mode = 'default',
+  onSelect = null,
 }) {
+  if (mode === 'select') {
+    return (
+      <div className="flex gap-3">
+        <img
+          src={festival.thumbnail}
+          alt={festival.title}
+          className="object-cover w-15 h-15 rounded-lg overflow-hidden "
+        />
+        <div className="flex justify-between flex-1 pr-1 items-center">
+          <div className="flex flex-col justify-center items-start">
+            <div className="flex text-sm font-semibold truncate">
+              {festival.title}
+            </div>
+            <div className="text-neutral-600 mt-0.5 text-xs truncate">
+              {festival.location}
+            </div>
+          </div>
+
+          <button
+            className="text-background text-xs border bg-main-100 px-3 h-8 rounded-md"
+            onClick={(e) => {
+              e.stopPropagation();
+              onSelect?.(festival);
+            }}
+          >
+            선택
+          </button>
+        </div>
+      </div>
+    );
+  }
   return (
     <div className={` flex gap-3 ${hideLikeButton ? 'px-4 py-2' : ''}  `}>
       <div className="relative w-20 h-20 rounded-lg overflow-hidden flex-shrink-0">
@@ -31,20 +64,23 @@ export default function FestivalListItem({
       <div className="flex flex-col justify-between flex-1 pr-1">
         <div>
           <div className="flex flex-wrap gap-1 mb-1 text-[11px]">
-            <span className="text-main-100 bg-main-5 px-1 rounded-full">
-              {festival.region}
+            <span className="text-main-100 bg-main-5 px-1 py-[1px] rounded-sm">
+              {festival.region.slice(0, 2)}
             </span>
-            <span className="text-main-100 bg-main-5 px-1 rounded-full">
+            <span className="text-main-100 bg-main-5 px-1 py-[1px] rounded-sm">
               {festival.category}
             </span>
-            {festival.reviews.length > 0 && (
-              <span className="text-main-100 bg-main-5 px-1 rounded-full">
-                후기 {festival.reviews.length}개
+            {/*{festival.reviews.length > 0 && (*/}
+            {/*  <span className="text-main-100 bg-main-5 px-1 rounded-lg">*/}
+            {/*    후기 {festival.reviews.length}개*/}
+            {/*  </span>*/}
+            {/*)}*/}
+
+            {festival.price === '무료' && (
+              <span className="text-main-100 bg-main-5 px-1 py-[1px] rounded-sm">
+                무료
               </span>
             )}
-            <span className="text-main-100 bg-main-5 px-1 rounded-full">
-              {festival.price === 0 ? '무료' : '유료'}
-            </span>
           </div>
 
           <div className="font-bold text-sm mt-1.5 truncate">

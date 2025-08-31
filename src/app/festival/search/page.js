@@ -1,6 +1,6 @@
 'use client';
 
-import { useState, useEffect } from 'react';
+import { useEffect, useState } from 'react';
 import { useRouter } from 'next/navigation';
 import RegionFilter from '../_components/RegionFilter';
 import 'mingcute_icon/font/Mingcute.css';
@@ -10,6 +10,15 @@ export default function SearchPage() {
   const router = useRouter();
   const [input, setInput] = useState('');
   const [recentSearches, setRecentSearches] = useState([]);
+  const [isSelectMode, setIsSelectMode] = useState(false);
+
+  useEffect(() => {
+    const mode = sessionStorage.getItem('selectMode');
+
+    if (mode === 'true') {
+      setIsSelectMode(true);
+    }
+  }, []);
 
   useEffect(() => {
     const stored = localStorage.getItem('recentSearches');
@@ -48,18 +57,27 @@ export default function SearchPage() {
     });
   };
 
-  return (
-    <div className="max-w-[390px] w-full h-screen bg-background mx-auto pt-4">
-      {/* 검색창 */}
+  const goToResult = (keyword) => {
+    const encoded = encodeURIComponent(keyword);
+    const base = `/festival/search/result?query=${encoded}`;
+    const path = isSelectMode ? `${base}&mode=select` : base;
+    saveRecentSearch(keyword);
+    router.push(path);
+  };
 
+  return (
+    <div className="max-w-[390px] w-full h-screen bg-background mx-auto pt-[50px]">
+      {/* 검색창 */}
       <div className="px-4">
         <SearchInputBar
           value={input}
           onChange={(e) => setInput(e.target.value)}
           onEnter={(text) => {
-            router.push(
-              `/festival/search/result?query=${encodeURIComponent(text)}`
-            );
+            const encoded = encodeURIComponent(text);
+            const base = `/festival/search/result?query=${encoded}`;
+            const path = isSelectMode ? `${base}&mode=select` : base;
+
+            router.push(path);
             saveRecentSearch(text);
           }}
           onClear={() => setInput('')}
@@ -72,29 +90,26 @@ export default function SearchPage() {
       <div className="mt-6 px-4">
         <h3 className="text-sm mb-3 font-semibold">최근 검색어</h3>
         <div className="flex gap-2 flex-wrap">
-          {recentSearches.map((tag) => (
-            <button
-              key={tag}
-              onClick={() => {
-                saveRecentSearch(tag);
-                router.push(
-                  `/festival/search/result?query=${encodeURIComponent(tag)}`
-                );
-              }}
-              className="bg-transparent text-xs px-2 py-1 rounded-full border border-neutral-200 text-neutral-900 flex items-center gap-1"
-            >
-              <span>{tag}</span>
-              <span
-                onClick={(e) => {
-                  e.stopPropagation();
-                  removeTag(tag);
-                }}
-                className="text-[10px] text-neutral-300 cursor-pointer"
+          {recentSearches.map((tag) => {
+            return (
+              <button
+                key={tag}
+                onClick={() => goToResult(tag)}
+                className="bg-transparent text-xs px-2 py-1 rounded-full border border-neutral-200 text-neutral-900 flex items-center justify-center gap-1"
               >
-                ✕
-              </span>
-            </button>
-          ))}
+                <span className="pt-0.5">{tag}</span>
+                <span
+                  onClick={(e) => {
+                    e.stopPropagation();
+                    removeTag(tag);
+                  }}
+                  className="text-[10px] text-neutral-300 cursor-pointer"
+                >
+                  <i className="mgc_close_line flex justify-center items-center text-xs" />
+                </span>
+              </button>
+            );
+          })}
         </div>
       </div>
 
@@ -113,11 +128,12 @@ export default function SearchPage() {
           {/* 왼쪽 컬럼 */}
           <div className="flex-1 space-y-2 text-sm text-gray-800">
             {trending.slice(0, 4).map((item, idx) => (
-              <div
+              <button
                 key={item.keyword}
-                className="flex items-center justify-between pr-4 p-0.5"
+                onClick={() => goToResult(item.keyword)}
+                className="w-full flex items-center justify-between pr-4 p-0.5"
               >
-                <span>
+                <span className="flex items-center">
                   <span className="mr-5 text-neutral-500 text-xs">
                     {idx + 1}
                   </span>
@@ -134,18 +150,19 @@ export default function SearchPage() {
                     <span className="text-neutral-400 px-2.5 py-1">–</span>
                   )}
                 </span>
-              </div>
+              </button>
             ))}
           </div>
 
           {/* 오른쪽 컬럼 */}
           <div className="flex-1 space-y-2 text-sm text-gray-800">
             {trending.slice(4).map((item, idx) => (
-              <div
+              <button
                 key={item.keyword}
-                className="flex items-center justify-between pr-4 p-0.5"
+                onClick={() => goToResult(item.keyword)}
+                className="w-full flex items-center justify-between pr-4 p-0.5"
               >
-                <span>
+                <span className="flex items-center">
                   <span className="mr-5 text-neutral-500 text-xs">
                     {idx + 5}
                   </span>
@@ -162,7 +179,7 @@ export default function SearchPage() {
                     <span className="text-neutral-400 px-2.5 py-1">–</span>
                   )}
                 </span>
-              </div>
+              </button>
             ))}
           </div>
         </div>

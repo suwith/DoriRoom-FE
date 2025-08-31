@@ -34,7 +34,7 @@ export default function BottomNavBar() {
     '/sign-up/',
   ];
 
-  const HIDDEN_PREFIXES = ['/festival/search/result'];
+  const HIDDEN_PREFIXES = ['/festival/search/result', '/diary/'];
 
   const shouldHide =
     HIDDEN_PATHS.includes(pathname) ||
@@ -42,6 +42,7 @@ export default function BottomNavBar() {
       pathname !== '/festival' &&
       pathname !== '/festival/') ||
     (/^\/collection\/.+/.test(pathname) && pathname !== '/collection') ||
+    pathname.endsWith('/guest-book') ||
     HIDDEN_PREFIXES.some((prefix) => pathname.startsWith(prefix));
 
   if (shouldHide) return null;
