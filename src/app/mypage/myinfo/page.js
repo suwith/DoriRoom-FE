@@ -6,9 +6,11 @@ import useChangeProfile from '@/hooks/mypage/useChangeProfile';
 import { useProfile } from '../_context/UserInfoProvider';
 import { useRouter } from 'next/navigation';
 import { useEffect } from 'react';
+import { useToast } from '@/app/_providers/ToastProvider';
 
 export default function Myinfo() {
   const { info, refetch } = useProfile();
+  const { show } = useToast();
   const { mutate, data, loading } = useChangeProfile({
     onSuccess: () => {
       refetch();
@@ -35,6 +37,7 @@ export default function Myinfo() {
   const handlerFile = async (e) => {
     const file = e.target.files[0];
     await mutate(file);
+    show({ message: '프로필 사진이 변경되었어요!', variant: 'success' });
   };
 
   return (
