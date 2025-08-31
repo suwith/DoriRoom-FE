@@ -7,12 +7,14 @@ export default function UserProfile() {
   const { info, loading } = useProfile();
   const router = useRouter();
 
+  const profileImageUrl =
+    info.profileImageUrl || '/images/profileImage_default.svg';
   if (loading) return null;
 
   return (
     <div className="text-center space-y-4">
       <img
-        src={info.profileImageUrl}
+        src={profileImageUrl}
         alt="prifile_image"
         className="rounded-full w-23 h-23"
       />
