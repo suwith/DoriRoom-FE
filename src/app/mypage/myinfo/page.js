@@ -5,6 +5,7 @@ import { MdEditSquare } from 'react-icons/md';
 import useChangeProfile from '@/hooks/mypage/useChangeProfile';
 import { useProfile } from '../_context/UserInfoProvider';
 import { useRouter } from 'next/navigation';
+import { useEffect } from 'react';
 
 export default function Myinfo() {
   const { info, refetch } = useProfile();
@@ -13,6 +14,23 @@ export default function Myinfo() {
       refetch();
     },
   });
+
+  useEffect(() => {
+    const refreshIfDirty = () => {
+      if (localStorage.getItem('profile:dirty')) {
+        refetch(); // 서버에서 최신 프로필 재요청
+        localStorage.removeItem('profile:dirty');
+      }
+    };
+    // 첫 진입, 포커스 복귀, bfcache 복원 모두 커버
+    refreshIfDirty();
+    window.addEventListener('focus', refreshIfDirty);
+    window.addEventListener('pageshow', refreshIfDirty);
+    return () => {
+      window.removeEventListener('focus', refreshIfDirty);
+      window.removeEventListener('pageshow', refreshIfDirty);
+    };
+  }, [refetch]);
 
   const handlerFile = async (e) => {
     const file = e.target.files[0];
