@@ -5,8 +5,10 @@ import { FaFire } from 'react-icons/fa6';
 import { FaCamera } from 'react-icons/fa';
 import Link from 'next/link';
 import useMyCredit from '@/hooks/user/useMyCredit';
+import { useState } from 'react';
 
 export default function HeaderBar() {
+  const [isOpenTogggle, setIsOpenToggle] = useState(false);
   const { credit } = useMyCredit();
   const userId =
     localStorage.getItem('user_id') || sessionStorage.getItem('user_id');
@@ -26,7 +28,10 @@ export default function HeaderBar() {
         </div>
 
         {/* 오른쪽 기능 버튼들 */}
-        <div className="flex flex-col items-center space-y-3 text-green-500 text-sm font-medium">
+        <div
+          className="flex flex-col items-center space-y-3 text-green-500 text-sm font-medium rounded-lg overflow-y-hidden px-4 pt-3 pb-2"
+          style={{ boxShadow: '0 0 3px rgba(0,0,0,0.1)' }}
+        >
           <IconButton
             icon={<img src="/icons/mailbox.png" className="w-5 h-5" />}
             label="방명록"
@@ -44,21 +49,35 @@ export default function HeaderBar() {
             href="/home/decorate"
             textColor="text-[#F97316]"
           />
-          <IconButton
-            icon={<i className="mgc_mail_fill text-[#FFBF47] text-xl" />}
-            label="알림"
-            textColor="text-[#FFBF47]"
-          />
-          <IconButton
-            icon={<i className="mgc_award_fill text-sub2-100 text-xl" />}
-            label="랭킹"
-            textColor="text-sub2-100"
-          />
-          <IconButton
-            icon={<FaCamera className="w-4 h-4 text-[#7595EA]" />}
-            label="촬영"
-            textColor="text-[#7595EA]"
-          />
+          <div
+            className={`w-full overflow-hidden transition-all duration-500 ${isOpenTogggle ? 'max-h-40' : 'max-h-0'}`}
+          >
+            <div className="flex flex-col items-center space-y-3">
+              <IconButton
+                icon={<i className="mgc_mail_fill text-[#FFBF47] text-xl" />}
+                label="알림"
+                textColor="text-[#FFBF47]"
+              />
+              <IconButton
+                icon={<i className="mgc_award_fill text-sub2-100 text-xl" />}
+                label="랭킹"
+                textColor="text-sub2-100"
+              />
+              <IconButton
+                icon={<FaCamera className="w-4 h-4 text-[#7595EA]" />}
+                label="촬영"
+                textColor="text-[#7595EA]"
+              />
+            </div>
+          </div>
+          <button
+            className="inline-block"
+            onClick={() => setIsOpenToggle((prev) => !prev)}
+          >
+            <i
+              className={`mgc_down_line text-neutral-300 text-2xl block transform transition-transform duration-300 ease-in-out ${isOpenTogggle ? 'rotate-180' : 'rotate-0'}`}
+            />
+          </button>
         </div>
       </div>
     </header>
