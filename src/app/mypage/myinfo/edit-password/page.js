@@ -24,7 +24,7 @@ export default function EditNickname() {
   const [verifyPassword, setVerifyPassword] = useState('');
 
   const { show } = useToast();
-  const { mutate, statusCode, loading, error } = useChangePW();
+  const { mutate, statusCode, error } = useChangePW();
 
   const router = useRouter();
   const passwordOk = validPassword(newPassword);
@@ -32,7 +32,6 @@ export default function EditNickname() {
 
   useEffect(() => {
     if (statusCode === 200) {
-      console.log('실행됨');
       show({ message: '비밀번호가 변경되었어요!', variant: 'success' });
       history.back();
     } else if (statusCode === 400 && error) {

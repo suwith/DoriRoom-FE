@@ -13,6 +13,7 @@ export default function TextInput({
   maxLength,
   className = '',
   explanation = '',
+  onClick,
 }) {
   return (
     <div className={className}>
@@ -37,6 +38,7 @@ export default function TextInput({
         />
         <button
           className={`flex-1 rounded-lg px-2 font-semibold text-background ${value.length > 1 ? 'bg-main-100' : 'bg-neutral-300'}`}
+          onClick={onClick}
         >
           중복 확인
         </button>
