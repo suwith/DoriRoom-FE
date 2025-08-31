@@ -18,6 +18,10 @@
   --color-sub-100: #FACC15;
   --color-sub-15: #FDF4D1;
   --color-sub-5: #FEFBF2;
+  --color-sub2-100: #58C1FF;
+  --color-sub2-40: #B5E3FF;
+  --color-sub2-15: #E3F5FF;
+  --color-sub2-5: #F6FCFF;
 }
 
 @theme inline {
