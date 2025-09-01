@@ -3,22 +3,24 @@ import NameCircle from './NameCircle';
 import { FaXmark } from 'react-icons/fa6';
 import GaugeBar from './GaugeBar';
 import { useRouter } from 'next/navigation';
+import useAtlases from '@/hooks/collection/useAtlases';
 
 const regionDetails = [
-  { id: 0, name: '서울' },
-  { id: 1, name: '경기도' },
-  { id: 2, name: '강원도' },
-  { id: 3, name: '충청도' },
-  { id: 4, name: '전라도' },
-  { id: 5, name: '경상도' },
-  { id: 6, name: '제주도' },
+  { atlasId: 1, name: '서울', areaGroup: 'SEOUL' },
+  { atlasId: 2, name: '경기도', areaGroup: 'GYEONGGI' },
+  { atlasId: 3, name: '강원도', areaGroup: 'GANGWON' },
+  { atlasId: 6, name: '충청도', areaGroup: 'CHUNGNAM' },
+  { atlasId: 5, name: '전라도', areaGroup: 'JEOLLA' },
+  { atlasId: 4, name: '경상도', areaGroup: 'GYEONGSANG' },
+  { atlasId: 7, name: '제주도', areaGroup: 'JEJU' },
 ];
 
 export default function UnifiedKoreaMap() {
-  const [clickRegion, setClickRegion] = useState('');
   const [bottomSheetOpen, setBottomSheetOpen] = useState(false);
   const [isVisible, setIsVisible] = useState(false);
   const [viewBox, setViewBox] = useState('0 0 390 623');
+
+  const { atlases, loading, error, refetch } = useAtlases();
 
   const router = useRouter();
   const animRef = useRef();
@@ -49,8 +51,9 @@ export default function UnifiedKoreaMap() {
     animRef.current = requestAnimationFrame(step);
   };
 
-  const clickHandler = (region, to) => {
-    setClickRegion(regionDetails.find((r) => r.name === region));
+  const clickHandler = async (region, to) => {
+    const regionTmp = regionDetails.find((r) => r.name === region);
+    await refetch({ areaGroup: regionTmp.areaGroup.trim() });
     animateViewBox(viewBox, to);
     setIsVisible(true);
     setTimeout(() => setBottomSheetOpen(true), 10);
@@ -299,7 +302,13 @@ export default function UnifiedKoreaMap() {
           className={`fixed bottom-0 w-full max-w-[390px] mx-auto pb-5 z-100 bg-white rounded-t-xl px-4 pt-4 transition-transform duration-300 ease-in-out ${bottomSheetOpen ? 'translate-y-0' : 'translate-y-full'}`}
         >
           <div className="flex items-center justify-between">
-            <span className="font-semibold">{clickRegion.name}</span>
+            <span className="font-semibold">
+              {
+                regionDetails.find(
+                  (region) => region.atlasId === atlases.atlasId
+                ).name
+              }
+            </span>
             <div className="bg-main-5 rounded-full p-1">
               <FaXmark
                 size={13}
@@ -318,15 +327,19 @@ export default function UnifiedKoreaMap() {
               <div className="bg-sub-5 px-1 py-1 text-xs text-sub-100">
                 한정판 ✨
               </div>
-              <p className="text-lg text-main-100">반달가슴곰 인형</p>
+              <p className="text-lg text-main-100"></p>
             </div>
           </div>
           <div className="flex flex-col mt-5">
             <div className="flex justify-between">
-              <span>Lv.5</span>
-              <span>600/1000XP</span>
+              <span>Lv.{atlases.currentLevel}</span>
+              <span>
+                {atlases.currentLevel}/{atlases.nextLevelExp}XP
+              </span>
             </div>
-            <GaugeBar value={60} />
+            <GaugeBar
+              value={(atlases.currentLevel / atlases.nextLevelExp) * 10}
+            />
             <span className="font-regular text-sm text-neutral-400 mt-3">
               Lv.10을 달성하면 반달가슴곰 인형을 얻을 수 있어요!
             </span>
@@ -334,7 +347,7 @@ export default function UnifiedKoreaMap() {
           <button
             className="w-full bg-main-100 font-semibold text-white text-lg rounded-lg py-2 mt-7"
             onClick={() => {
-              router.push(`/collection/${clickRegion.id}`);
+              router.push(`/collection/${atlases.atlasId}`);
             }}
           >
             과제 리스트 보기
