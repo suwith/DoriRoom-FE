@@ -60,14 +60,32 @@ function mapItem(item) {
     likes: typeof item.favoriteCount === 'number' ? item.favoriteCount : 0,
     thumbnail: item.firstImage || item.secondImage || '',
     reviews: Array.isArray(item.reviews) ? item.reviews : [],
+    score: typeof item.score === 'number' ? item.score : 0,
+    createdAt: item.createdAt ?? null,
   };
+}
+
+// 클라이언트 정렬
+function sortItems(list, sort = '추천순') {
+  switch (SORT_TO_PARAM[sort]) {
+    case 'createdAt,desc': // 최신순
+      return [...list].sort(
+        (a, b) => new Date(b.createdAt) - new Date(a.createdAt)
+      );
+    case 'favoriteCount,desc': // 좋아요순
+      return [...list].sort((a, b) => b.likes - a.likes);
+    case 'score,desc': // 추천순
+      return [...list].sort((a, b) => (b.score ?? 0) - (a.score ?? 0));
+    default:
+      return list;
+  }
 }
 
 export function useSearchFestivals({
   keyword = '',
   regions = [], // [{ areaGroupCode, areaCode, sigunguCode }]
   categories = [], // ['문화관광축제', '공연', ...]
-  period = { start: null, end: null }, // Date | null
+  period = { start: null, end: null },
   sort = '추천순',
   size = 20,
 }) {
@@ -104,7 +122,6 @@ export function useSearchFestivals({
     setError(null);
 
     try {
-      // 중복 제거 후 API body에 넣기
       const locations = dedupLocations(regions);
 
       const categoryCodes = (categories || [])
@@ -112,18 +129,14 @@ export function useSearchFestivals({
         .filter(Boolean);
 
       const body = {
-        locations, // [{ areaGroupCode, areaCode, sigunguCode }]
+        locations,
         categoryCodes: categoryCodes.length ? categoryCodes : undefined,
         startDate: period?.start ? formatDateYYYYMMDD(period.start) : undefined,
         endDate: period?.end ? formatDateYYYYMMDD(period.end) : undefined,
         keyword: keyword || undefined,
       };
 
-      const params = {
-        page,
-        size,
-        sort: SORT_TO_PARAM[sort] ? [SORT_TO_PARAM[sort]] : undefined,
-      };
+      const params = { page, size };
 
       const res = await axiosInstance.post('/event/filtered', body, { params });
 
@@ -131,7 +144,7 @@ export function useSearchFestivals({
       const list = Array.isArray(pageData?.content) ? pageData.content : [];
       const mapped = list.map(mapItem);
 
-      setItems((prev) => [...prev, ...mapped]);
+      setItems((prev) => sortItems([...prev, ...mapped], sort));
       setHasMore(!pageData?.last && mapped.length > 0);
       setPage((p) => p + 1);
     } catch (e) {
