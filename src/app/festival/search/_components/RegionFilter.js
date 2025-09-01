@@ -4,6 +4,7 @@ import BottomSheet from './BottomSheet';
 import { useEffect, useMemo, useState } from 'react';
 import { useToast } from '@/app/_providers/ToastProvider';
 
+// options: [{ groupName, areaGroupCode, areaCode, areaName, sigunguCode, sigunguName }]
 export default function RegionFilter({
   open,
   onClose,
@@ -12,71 +13,162 @@ export default function RegionFilter({
   options = [],
 }) {
   const [temp, setTemp] = useState(value);
-  const [selectedSido, setSelectedSido] = useState('');
-
+  const [selectedGroup, setSelectedGroup] = useState(null);
   const { show } = useToast();
+  const MAX = 10;
 
-  const bySido = useMemo(() => {
+  const [overLimit, setOverLimit] = useState(false);
+
+  useEffect(() => {
+    if (overLimit) {
+      show(`선택은 최대 ${MAX}개까지 가능합니다.`);
+      setOverLimit(false);
+    }
+  }, [overLimit, show]);
+
+  // 그룹 → 시도 → 시군구 구조 변환
+  const byGroup = useMemo(() => {
     const map = {};
-    options.forEach(({ sido, sigungu }) => {
-      if (!map[sido]) map[sido] = new Set();
-      map[sido].add(sigungu);
-    });
-
-    return Object.fromEntries(
-      Object.entries(map).map(([k, v]) => [k, Array.from(v)])
-    );
+    for (const it of options) {
+      if (!map[it.areaGroupCode]) {
+        map[it.areaGroupCode] = { groupName: it.groupName, sidos: {} };
+      }
+      if (!map[it.areaGroupCode].sidos[it.areaCode]) {
+        map[it.areaGroupCode].sidos[it.areaCode] = {
+          areaName: it.areaName,
+          sigungus: [],
+        };
+      }
+      if (it.sigunguName) {
+        map[it.areaGroupCode].sidos[it.areaCode].sigungus.push({
+          code: it.sigunguCode,
+          name: it.sigunguName,
+        });
+      }
+    }
+    return map;
   }, [options]);
 
-  const sidoList = useMemo(() => Object.keys(bySido), [bySido]);
+  const groupList = useMemo(
+    () =>
+      Object.entries(byGroup).map(([code, obj]) => ({
+        areaGroupCode: Number(code),
+        name: obj.groupName,
+      })),
+    [byGroup]
+  );
 
   useEffect(() => {
     if (open) {
       setTemp(value);
-      setSelectedSido((prev) => prev || sidoList[0] || '');
+      setSelectedGroup((prev) => prev || groupList[0]?.areaGroupCode || null);
     }
-  }, [open, value, sidoList]);
+  }, [open, value, groupList]);
 
-  const MAX = 10;
+  const isSelected = (group, areaCode, sigunguCode) =>
+    temp.some(
+      (x) =>
+        x.areaGroupCode === group &&
+        x.areaCode === areaCode &&
+        x.sigunguCode === sigunguCode
+    );
 
-  const toggle = (sido, sigungu) => {
-    const key = `${sido}/${sigungu}`;
+  const removeChip = (target) => {
+    setTemp((prev) =>
+      prev.filter(
+        (x) =>
+          !(
+            x.areaGroupCode === target.areaGroupCode &&
+            x.areaCode === target.areaCode &&
+            x.sigunguCode === target.sigunguCode
+          )
+      )
+    );
+  };
+
+  const prettyChip = (sel) => {
+    if (sel.areaCode === 0) {
+      const groupObj = byGroup[sel.areaGroupCode];
+      return groupObj ? `${groupObj.groupName} 전체` : '';
+    }
+    const groupObj = byGroup[sel.areaGroupCode];
+    const sidoObj = groupObj?.sidos[sel.areaCode];
+    if (!sidoObj) return '';
+    if (sel.sigunguCode === null) return `${sidoObj.areaName} 전체`;
+    const sigungu = sidoObj.sigungus.find((s) => s.code === sel.sigunguCode);
+    return `${sidoObj.areaName} ${sigungu?.name ?? ''}`;
+  };
+
+  // 도 전체 토글
+  const toggleGroupAll = (groupCode) => {
     setTemp((prev) => {
-      const exists = prev.includes(key);
+      const exists = isSelected(groupCode, 0, null);
       if (exists) {
-        return prev.filter((x) => x !== key);
+        return prev.filter(
+          (x) => !(x.areaGroupCode === groupCode && x.areaCode === 0)
+        );
       }
-
-      // '전체' 선택 시, 같은 시/도 선택 전부 제거 후 '전체'만 추가
-      if (sigungu === '전체') {
-        const cleared = prev.filter((x) => !x.startsWith(`${sido}/`));
-        if (cleared.length + 1 > MAX) {
-          show(`선택은 최대 ${MAX}개까지 가능합니다.`);
-          return prev;
-        }
-        return [...cleared, key];
-      }
-
-      // 같은 시/도에 '전체'가 이미 선택되어 있으면 교체 처리
-      const hadSidoAll = prev.includes(`${sido}/전체`);
-      if (hadSidoAll) {
-        const replaced = prev.filter((x) => x !== `${sido}/전체`);
-        // 교체이므로 길이 증가 없음 → 제한 체크 불필요
-        return [...replaced, key];
-      }
-
-      // 일반 추가: 현재 길이 검사
-      if (prev.length >= MAX) {
-        show(`선택은 최대 ${MAX}개까지 가능합니다.`);
+      const cleared = prev.filter((x) => x.areaGroupCode !== groupCode);
+      if (cleared.length + 1 > MAX) {
+        setOverLimit(true);
         return prev;
       }
-
-      return [...prev, key];
+      return [
+        ...cleared,
+        { areaGroupCode: groupCode, areaCode: 0, sigunguCode: null },
+      ];
     });
   };
 
-  const removeChip = (key) => {
-    setTemp((prev) => prev.filter((x) => x !== key));
+  // 시/도 전체 or 시군구 토글
+  const toggle = (groupCode, areaCode, sigunguCode) => {
+    setTemp((prev) => {
+      const exists = isSelected(groupCode, areaCode, sigunguCode);
+      if (exists) {
+        return prev.filter(
+          (x) =>
+            !(
+              x.areaGroupCode === groupCode &&
+              x.areaCode === areaCode &&
+              x.sigunguCode === sigunguCode
+            )
+        );
+      }
+
+      if (sigunguCode === null) {
+        // 시/도 전체 선택 → 해당 시도의 모든 선택 제거 후 전체만 추가
+        const cleared = prev.filter(
+          (x) => !(x.areaGroupCode === groupCode && x.areaCode === areaCode)
+        );
+        if (cleared.length + 1 > MAX) {
+          setOverLimit(true);
+          return prev;
+        }
+        return [
+          ...cleared,
+          { areaGroupCode: groupCode, areaCode, sigunguCode: null },
+        ];
+      }
+      // 개별 시군구 선택 → 같은 시도의 전체 + 같은 그룹의 도 전체 제거
+      const cleared = prev.filter(
+        (x) =>
+          !(
+            (x.areaGroupCode === groupCode &&
+              x.areaCode === areaCode &&
+              x.sigunguCode === null) ||
+            (x.areaGroupCode === groupCode &&
+              x.areaCode === 0 &&
+              x.sigunguCode === null)
+          )
+      );
+
+      if (cleared.length >= MAX) {
+        setOverLimit(true);
+        return prev;
+      }
+
+      return [...cleared, { areaGroupCode: groupCode, areaCode, sigunguCode }];
+    });
   };
 
   return (
@@ -93,7 +185,6 @@ export default function RegionFilter({
           >
             초기화
           </button>
-
           <button
             type="button"
             className="flex-1 py-3 rounded-md bg-main-100 text-white font-semibold"
@@ -107,35 +198,35 @@ export default function RegionFilter({
         </div>
       }
     >
-      {/* 상단 탭 바 */}
+      {/* 상단 탭 */}
       <div className="grid grid-cols-2">
         <div className="text-center py-2 text-neutral-600 border-b border-neutral-100">
           시/도
         </div>
         <div className="text-center py-2 text-neutral-600 border-b border-neutral-100">
-          시/구/군
+          시/군/구
         </div>
       </div>
 
       <div className="grid grid-cols-2 min-h-[340px]">
-        {/* 좌측: 시/도 리스트 */}
+        {/* 좌측: 도 그룹 */}
         <div className="overflow-hidden">
           <ul className="max-h-[340px] overflow-y-auto scrollbar-hide">
-            {sidoList.map((sido) => {
-              const active = selectedSido === sido;
+            {groupList.map((g) => {
+              const active = selectedGroup === g.areaGroupCode;
               return (
-                <li key={sido}>
+                <li key={g.areaGroupCode}>
                   <button
                     type="button"
-                    onClick={() => setSelectedSido(sido)}
+                    onClick={() => setSelectedGroup(g.areaGroupCode)}
                     className={[
                       'w-full px-4 h-10 text-sm text-center',
                       active
-                        ? 'bg-main-5 text-main-100 border-main-10'
-                        : 'bg-neutral-100 text-neutral-500 ',
+                        ? 'bg-main-5 text-main-100'
+                        : 'bg-neutral-100 text-neutral-500',
                     ].join(' ')}
                   >
-                    {sido}
+                    {g.name}
                   </button>
                 </li>
               );
@@ -143,108 +234,129 @@ export default function RegionFilter({
           </ul>
         </div>
 
-        {/* 우측: 시/구/군 멀티선택 리스트 */}
-        <div className="flex flex-col">
-          {/* 섹션 헤더 */}
-
-          <div className="max-h-[340px] overflow-y-auto scrollbar-hide">
-            <ul>
-              {/* 전체 옵션 */}
-              {selectedSido && (
-                <li>
-                  {(() => {
-                    const k = `${selectedSido}/전체`;
-                    const active = temp.includes(k);
-                    return (
-                      <button
-                        type="button"
-                        onClick={() => toggle(selectedSido, '전체')}
-                        className="w-full px-4 h-10 flex items-center justify-between"
-                      >
-                        <span
-                          className={`text-sm ${active ? 'text-main-100' : 'text-neutral-300'}`}
-                        >
-                          전체
-                        </span>
-                        <span className="ml-3 inline-flex items-center justify-center">
-                          <i
-                            className={`mgc_check_fill text-lg mb-1 ${active ? 'text-main-100' : 'text-neutral-300'}`}
-                          />
-                        </span>
-                      </button>
-                    );
-                  })()}
-                </li>
+        {/* 우측: 시도 + 시군구 */}
+        <div className="max-h-[340px] overflow-y-auto scrollbar-hide">
+          {selectedGroup && (
+            <>
+              {/* 도 전체 (시도가 2개 이상일 때만) */}
+              {Object.keys(byGroup[selectedGroup].sidos).length > 1 && (
+                <div className="border-b border-neutral-100">
+                  <button
+                    type="button"
+                    onClick={() => toggleGroupAll(selectedGroup)}
+                    className="w-full px-4 h-10 flex items-center justify-between"
+                  >
+                    <span
+                      className={`text-sm ${
+                        isSelected(selectedGroup, 0, null)
+                          ? 'text-main-100'
+                          : 'text-neutral-300'
+                      }`}
+                    >
+                      {byGroup[selectedGroup].groupName} 전체
+                    </span>
+                    <i
+                      className={`mgc_check_fill text-lg mb-1 ${
+                        isSelected(selectedGroup, 0, null)
+                          ? 'text-main-100'
+                          : 'text-neutral-300'
+                      }`}
+                    />
+                  </button>
+                </div>
               )}
 
-              {(bySido[selectedSido] || []).map((g) => {
-                const k = `${selectedSido}/${g}`;
-                const active = temp.includes(k);
-                const atMax = temp.length >= MAX;
-                const sidoAllSelected = temp.includes(`${selectedSido}/전체`);
-                const disabled = !active && atMax && !sidoAllSelected;
-
-                return (
-                  <li key={k}>
+              {Object.entries(byGroup[selectedGroup].sidos).map(
+                ([areaCode, { areaName, sigungus }]) => (
+                  <div
+                    key={areaCode}
+                    className="py-1 border-b last:border-b-0 border-neutral-100"
+                  >
+                    <div className="px-4 py-2 text-[13px] text-neutral-500">
+                      {areaName}
+                    </div>
+                    {/* 시도 전체 */}
                     <button
                       type="button"
-                      onClick={() => {
-                        if (disabled) {
-                          show({
-                            message: `선택은 최대 ${MAX}개까지 가능합니다.`,
-                            duration: 1500,
-                          });
-                          return;
-                        }
-                        toggle(selectedSido, g);
-                      }}
-                      className={[
-                        'w-full px-4 h-10 flex items-center justify-between border-b last:border-b-0',
-                        disabled ? 'opacity-50' : '',
-                      ].join(' ')}
+                      onClick={() =>
+                        toggle(selectedGroup, Number(areaCode), null)
+                      }
+                      className="w-full px-4 h-9 flex items-center justify-between"
                     >
                       <span
-                        className={`text-sm ${active ? 'text-main-100' : 'text-neutral-300'}`}
+                        className={`text-sm ${
+                          isSelected(selectedGroup, Number(areaCode), null)
+                            ? 'text-main-100'
+                            : 'text-neutral-300'
+                        }`}
                       >
-                        {g}
+                        전체
                       </span>
-                      <span className="ml-3 inline-flex items-center justify-center">
-                        <i
-                          className={`mgc_check_fill text-lg mb-1 ${active ? 'text-main-100' : 'text-neutral-300'}`}
-                        />
-                      </span>
+                      <i
+                        className={`mgc_check_fill text-lg mb-1 ${
+                          isSelected(selectedGroup, Number(areaCode), null)
+                            ? 'text-main-100'
+                            : 'text-neutral-300'
+                        }`}
+                      />
                     </button>
-                  </li>
-                );
-              })}
-            </ul>
-          </div>
+                    {/* 개별 시군구 */}
+                    {sigungus.map((s) => (
+                      <button
+                        key={`${selectedGroup}-${areaCode}-${s.code}`}
+                        type="button"
+                        onClick={() =>
+                          toggle(selectedGroup, Number(areaCode), s.code)
+                        }
+                        className="w-full px-4 h-9 flex items-center justify-between"
+                      >
+                        <span
+                          className={`text-sm ${
+                            isSelected(selectedGroup, Number(areaCode), s.code)
+                              ? 'text-main-100'
+                              : 'text-neutral-300'
+                          }`}
+                        >
+                          {s.name}
+                        </span>
+                        <i
+                          className={`mgc_check_fill text-lg mb-1 ${
+                            isSelected(selectedGroup, Number(areaCode), s.code)
+                              ? 'text-main-100'
+                              : 'text-neutral-300'
+                          }`}
+                        />
+                      </button>
+                    ))}
+                  </div>
+                )
+              )}
+            </>
+          )}
         </div>
       </div>
-      {/* 선택 칩 영역 */}
+
+      {/* 선택 칩 */}
       <div className="mt-3">
         <div className="text-xs text-neutral-400 mb-2 text-right px-4">
           <span className="text-main-100">{temp.length}</span>/{MAX}
         </div>
         <div className="flex gap-2 overflow-x-auto pb-1 scrollbar-hide pl-4">
-          {temp.map((k) => {
-            const [s, g] = k.split('/');
-            return (
-              <span
-                key={k}
-                className="inline-flex items-center gap-1 px-2 h-6 text-[13px] rounded-sm bg-main-5 text-main-100 whitespace-nowrap"
+          {temp.map((sel) => (
+            <span
+              key={`${sel.areaGroupCode}-${sel.areaCode}-${sel.sigunguCode ?? 'ALL'}`}
+              className="inline-flex items-center gap-1 px-2 h-6 text-[13px] rounded-sm bg-main-5 text-main-100 whitespace-nowrap"
+            >
+              {prettyChip(sel)}
+              <button
+                type="button"
+                className="ml-1 inline-flex items-center justify-center h-3 w-3"
+                onClick={() => removeChip(sel)}
               >
-                {g === '전체' ? `${s} 전체` : `${s} ${g}`}
-                <button
-                  type="button"
-                  className="ml-1 inline-flex items-center justify-center h-3 w-3"
-                  onClick={() => removeChip(k)}
-                >
-                  <i className="mgc_close_fill text-sm text-main-40 flex justify-center items-center" />
-                </button>
-              </span>
-            );
-          })}
+                <i className="mgc_close_fill text-sm text-main-40 flex justify-center items-center" />
+              </button>
+            </span>
+          ))}
         </div>
       </div>
     </BottomSheet>
