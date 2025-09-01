@@ -5,12 +5,14 @@ import { useRouter } from 'next/navigation';
 import RegionFilter from '../_components/RegionFilter';
 import 'mingcute_icon/font/Mingcute.css';
 import SearchInputBar from '@/app/festival/_components/SearchInputBar';
+import useSearchPopulars from '@/hooks/festival/useSearchPopulars';
 
 export default function SearchPage() {
   const router = useRouter();
   const [input, setInput] = useState('');
   const [recentSearches, setRecentSearches] = useState([]);
   const [isSelectMode, setIsSelectMode] = useState(false);
+  const { trending, loading, error } = useSearchPopulars();
 
   useEffect(() => {
     const mode = sessionStorage.getItem('selectMode');
@@ -37,17 +39,6 @@ export default function SearchPage() {
       return updated;
     });
   };
-
-  const trending = [
-    { keyword: '바다', status: 'up' },
-    { keyword: '수영', status: 'up' },
-    { keyword: '해수욕장', status: 'same' },
-    { keyword: '속초', status: 'same' },
-    { keyword: '강릉', status: 'same' },
-    { keyword: '캠핑', status: 'same' },
-    { keyword: '야외', status: 'same' },
-    { keyword: '피크닉', status: 'down' },
-  ];
 
   const removeTag = (tag) => {
     setRecentSearches((prev) => {
