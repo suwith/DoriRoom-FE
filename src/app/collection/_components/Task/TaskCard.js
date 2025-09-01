@@ -2,6 +2,7 @@ import { FaCirclePlus } from 'react-icons/fa6';
 import { FaFire } from 'react-icons/fa6';
 
 export default function TaskCard({
+  challengeId,
   title,
   content,
   challengeType,

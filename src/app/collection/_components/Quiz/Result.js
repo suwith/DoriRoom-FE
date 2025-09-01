@@ -5,8 +5,6 @@ import { useQuizStore } from '@/stores/useQuizStore';
 
 export default function Result({ quiz }) {
   const { exp, credit } = quiz.reward;
-  const score = useQuizStore((s) => s.score);
-  const reset = useQuizStore((s) => s.reset);
   return (
     <div className="max-w-[390px] w-screen h-screen mx-auto bg-linear-to-t from-main-100/15 to-background flex flex-col">
       <div className="flex-1 flex flex-col items-center justify-center px-[16px] text-center">

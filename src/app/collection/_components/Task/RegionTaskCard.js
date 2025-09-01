@@ -1,6 +1,7 @@
 import { FaCirclePlus } from 'react-icons/fa6';
 import { FaFire } from 'react-icons/fa6';
 import { IoIosArrowForward } from 'react-icons/io';
+import { useRouter } from 'next/navigation';
 
 export default function RegionTaskCard({
   challengeId,
@@ -16,7 +17,16 @@ export default function RegionTaskCard({
   rewards,
   currentProgress,
   status,
+  regionId,
 }) {
+  const router = useRouter();
+
+  const onClick = () => {
+    if (challengeType === 'REGIONAL_QUIZ') {
+      router.push(`/collection/${regionId}/quiz/${challengeId}`);
+    }
+  };
+
   return (
     <div
       className={`rounded-xl p-3 ${status === 'COMPLETED' ? 'bg-sub-5' : status === 'IN_PROGRESS' ? 'bg-[#35C284]/15' : status === 'WAIT_REWARD' ? 'bg-sub2-5' : 'bg-neutral-100'}`}
@@ -50,11 +60,17 @@ export default function RegionTaskCard({
           )}
         </div>
         {status === 'IN_PROGRESS' ? (
-          <button className="mr-1 bg-main-5 text-main-100 rounded-sm px-2 py-1">
+          <button
+            className="mr-1 bg-main-5 text-main-100 rounded-sm px-2 py-1"
+            onClick={onClick}
+          >
             도전 중
           </button>
         ) : status === 'NOT_STARTED' ? (
-          <button className="mr-1 bg-main-100 text-background rounded-sm px-2 py-1">
+          <button
+            className="mr-1 bg-main-100 text-background rounded-sm px-2 py-1"
+            onClick={onClick}
+          >
             도전
           </button>
         ) : status === 'WAIT_REWARD' ? (

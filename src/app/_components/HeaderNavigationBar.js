@@ -49,7 +49,6 @@ export default function HeaderNavigationBar({
             onClick={() => setIsOpen(true)}
           />
         )}
-        <TaskInfoModal isOpen={isOpen} setIsOpen={setIsOpen} />
 
         {/* 일기장 토글 버튼 */}
         {type === 'diary' && (

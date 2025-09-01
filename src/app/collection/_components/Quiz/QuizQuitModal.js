@@ -21,7 +21,7 @@ export default function QuizQuitModal({ isOpen, setIsOpen, regionId }) {
           <button
             className="bg-main-100 text-background rounded-xl w-full py-2.5"
             onClick={() => {
-              router.replace(`/collection/${regionId}/quiz`);
+              router.replace(`/collection/${regionId}`);
             }}
           >
             중단할래요

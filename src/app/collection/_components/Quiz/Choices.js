@@ -2,35 +2,31 @@
 
 import { useState } from 'react';
 import { useRouter } from 'next/navigation';
-import { useQuizStore } from '@/stores/useQuizStore';
+import useSubmitQuiz from '@/hooks/collection/useSubmitQuiz';
+import LoadingContent from '@/app/_components/LoadingContent';
 
-export default function Choices({ quiz }) {
+export default function Choices({ quiz, setSequence, setIsStart }) {
   const router = useRouter();
-  const { quizId, regionId, title, options, answer, explanation } = quiz;
+  const { questionId, sequence, content, option1, option2, option3, option4 } =
+    quiz;
+  const { mutate, data, loading, error } = useSubmitQuiz({
+    onSuccess: () => {},
+    onError: () => {},
+  });
+
   const [selectBtn, setSelectBtn] = useState(null);
   const [bottomSheetOpen, setBottomSheetOpen] = useState(false);
-  const isCurrect = selectBtn === answer;
 
-  const setAnswer = useQuizStore((s) => s.setAnswer);
-  const already = useQuizStore((s) => s.answers[quizId]);
-  const reset = useQuizStore((s) => s.reset);
-
-  const routeHandler = () => {
-    if (isCurrect) router.push(`/collection/${regionId}/quiz/${quizId + 1}`);
-    else {
-      reset();
-      router.push(`/collection/${regionId}/quiz/`);
-    }
-  };
+  const options = [option1, option2, option3, option4];
   return (
     <div className="h-screen mx-4 flex flex-col">
-      {quizId !== 5 && (
+      {sequence !== 5 && (
         <div className="flex gap-2 pt-28">
-          {[0, 1, 2, 3, 4].map((i) => (
+          {[1, 2, 3, 4, 5].map((i) => (
             <hr
               key={i}
               className={`w-full py-1 border-none rounded-xl ${
-                i <= Number(quizId) ? 'bg-sub-100' : 'bg-sub-15'
+                i <= Number(sequence) ? 'bg-sub-100' : 'bg-sub-15'
               }`}
             />
           ))}
@@ -38,8 +34,8 @@ export default function Choices({ quiz }) {
       )}
 
       <div className="flex-1 flex flex-col justify-center mb-20">
-        <p className="font-bold text-2xl text-main-100">Q{quizId + 1}.</p>
-        <p className="font-semibold text-xl">{title}</p>
+        <p className="font-bold text-2xl text-main-100">Q{sequence}.</p>
+        <p className="font-semibold text-xl">{content}</p>
         <div className="flex flex-col gap-2 mt-10 font-bold text-xl w-full">
           {Object.entries(options).map(([key, value]) => (
             <div
@@ -61,10 +57,13 @@ export default function Choices({ quiz }) {
         className="mb-10 bg-main-100 text-background text-center text-xl font-semibold rounded-md w-full py-2.5"
         onClick={() => {
           if (selectBtn === null) return;
-          setAnswer(quizId, selectBtn, isCurrect);
+          mutate({
+            questionId: questionId,
+            submittedAnswer: Number(selectBtn) + 1,
+          });
           setBottomSheetOpen(true);
         }}
-        disabled={selectBtn === null || already}
+        disabled={selectBtn === null}
       >
         제출하기
       </button>
@@ -78,18 +77,35 @@ export default function Choices({ quiz }) {
           bottomSheetOpen ? 'translate-y-0' : 'translate-y-full'
         }`}
       >
-        <p className="text-neutral-900 font-semibold text-lg text-center">
-          {isCurrect ? '정답이에요!' : '오답이에요 😭'}
-        </p>
-        <p className="mt-5 text-base font-normal text-neutral-600 text-justify">
-          {explanation}
-        </p>
-        <button
-          className="w-full bg-main-100 font-semibold text-white text-lg rounded-lg py-2 mt-7"
-          onClick={routeHandler}
-        >
-          {isCurrect ? '다음 퀴즈로' : '처음으로 돌아가기'}
-        </button>
+        {loading ? (
+          <LoadingContent loading={loading} />
+        ) : (
+          <>
+            <p className="text-neutral-900 font-semibold text-lg text-center">
+              {data?.isCorrect ? '정답이에요!' : '오답이에요 😭'}
+            </p>
+            <p className="mt-5 text-base font-normal text-neutral-600 text-justify">
+              {data?.commentary}
+            </p>
+            <button
+              className="w-full bg-main-100 font-semibold text-white text-lg rounded-lg py-2 mt-7"
+              onClick={
+                data?.isCorrect
+                  ? () => {
+                      setSequence((prev) => prev + 1);
+                      setBottomSheetOpen(false);
+                      setSelectBtn(null);
+                    }
+                  : () => {
+                      setSequence(1);
+                      setIsStart(false);
+                    }
+              }
+            >
+              {data?.isCorrect ? '다음 퀴즈로' : '처음으로 돌아가기'}
+            </button>
+          </>
+        )}
       </div>
     </div>
   );
