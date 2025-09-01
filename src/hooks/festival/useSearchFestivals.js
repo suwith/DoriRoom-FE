@@ -20,7 +20,7 @@ function dedupLocations(locs) {
   const seen = new Set();
   const out = [];
   for (const l of locs) {
-    const key = `${l.areaCode}-${l.sigunguCode ?? 'ALL'}`;
+    const key = `${l.areaGroupCode}-${l.areaCode}-${l.sigunguCode ?? 'ALL'}`;
     if (seen.has(key)) continue;
     seen.add(key);
     out.push(l);
@@ -143,13 +143,17 @@ export function useSearchFestivals({
       setPage((p) => p + 1);
       setTotal(pageData?.totalElements ?? 0);
 
-      // 검색 키워드 최근검색어로 저장
-      const stored = JSON.parse(localStorage.getItem('recentSearches') || '[]');
-      const updated = [keyword, ...stored.filter((t) => t !== keyword)].slice(
-        0,
-        8
-      );
-      localStorage.setItem('recentSearches', JSON.stringify(updated));
+      // 검색 키워드 있을 때 최근검색어로 저장
+      if (keyword !== '') {
+        const stored = JSON.parse(
+          localStorage.getItem('recentSearches') || '[]'
+        );
+        const updated = [keyword, ...stored.filter((t) => t !== keyword)].slice(
+          0,
+          8
+        );
+        localStorage.setItem('recentSearches', JSON.stringify(updated));
+      }
     } catch (e) {
       setError(e);
       setHasMore(false);
