@@ -160,15 +160,14 @@ export default function FestivalSearchResultPage() {
         : 'border-neutral-200 text-neutral-900'
     }`;
 
-  const { items, loading, error, hasMore, loadMore, total } =
-    useSearchFestivals({
-      keyword: searchQuery,
-      regions,
-      categories,
-      period,
-      sort,
-      size: 20,
-    });
+  const { items, loading, error, loadMore, total } = useSearchFestivals({
+    keyword: searchQuery,
+    regions,
+    categories,
+    period,
+    sort,
+    size: 20,
+  });
 
   // 무한스크롤 옵저버
   const sentinelRef = useRef(null);

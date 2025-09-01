@@ -2,6 +2,12 @@
 
 import { useEffect, useMemo, useState } from 'react';
 import BottomSheet from './BottomSheet';
+import { useFestivalFilterStore } from '@/stores/useFestivalFilterStore';
+import {
+  CATEGORY_NAME_TO_CODE,
+  formatDateYYYYMMDD,
+} from '@/lib/festivalConstants';
+import axiosInstance from '@/lib/axiosInstance';
 
 // 월요일 시작 달력 그리드
 function getMonthDaysMonStart(year, month) {
@@ -19,13 +25,14 @@ export default function DateFilter({
   onClose,
   value = { start: null, end: null },
   onChange,
-  resultCount, // 선택: 오른쪽 버튼에 갯수 표시
 }) {
   const now = new Date();
   const [ym, setYm] = useState({ y: now.getFullYear(), m: now.getMonth() });
   const [temp, setTemp] = useState(value);
+  const [filteredCount, setFilteredCount] = useState(0);
 
-  // 시트 열릴 때마다 외부 value 동기화
+  const { keyword, regions, categories, sort } = useFestivalFilterStore();
+
   useEffect(() => {
     if (!open) return;
     setTemp({
@@ -34,7 +41,38 @@ export default function DateFilter({
     });
     const base = value?.start ?? value?.end ?? now;
     setYm({ y: base.getFullYear(), m: base.getMonth() });
-  }, [open]); // eslint-disable-line
+  }, [open, value]);
+
+  // count 조회
+  useEffect(() => {
+    if (!open) return;
+
+    async function fetchCount() {
+      try {
+        const categoryCodes = (categories || [])
+          .map((n) => CATEGORY_NAME_TO_CODE[n])
+          .filter(Boolean);
+
+        const res = await axiosInstance.post(
+          '/event/filtered',
+          {
+            locations: regions,
+            categoryCodes: categoryCodes.length ? categoryCodes : undefined,
+            startDate: temp?.start ? formatDateYYYYMMDD(temp.start) : undefined,
+            endDate: temp?.end ? formatDateYYYYMMDD(temp.end) : undefined,
+            keyword: keyword || undefined,
+          },
+          { params: { page: 0, size: 0 } }
+        );
+
+        setFilteredCount(res?.data?.content?.totalElements ?? 0);
+      } catch {
+        setFilteredCount(0);
+      }
+    }
+
+    fetchCount();
+  }, [temp, keyword, regions, categories, sort, open]);
 
   const grid = useMemo(() => getMonthDaysMonStart(ym.y, ym.m), [ym]);
 
@@ -109,9 +147,7 @@ export default function DateFilter({
               onClose();
             }}
           >
-            {typeof resultCount === 'number'
-              ? `총 ${resultCount}개 결과 보기`
-              : '적용'}
+            총 {filteredCount}개 결과 보기
           </button>
         </div>
       }

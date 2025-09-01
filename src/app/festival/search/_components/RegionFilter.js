@@ -3,6 +3,12 @@
 import BottomSheet from './BottomSheet';
 import { useEffect, useMemo, useState } from 'react';
 import { useToast } from '@/app/_providers/ToastProvider';
+import axiosInstance from '@/lib/axiosInstance';
+import { useFestivalFilterStore } from '@/stores/useFestivalFilterStore';
+import {
+  CATEGORY_NAME_TO_CODE,
+  formatDateYYYYMMDD,
+} from '@/lib/festivalConstants';
 
 // options: [{ groupName, areaGroupCode, areaCode, areaName, sigunguCode, sigunguName }]
 export default function RegionFilter({
@@ -14,7 +20,10 @@ export default function RegionFilter({
 }) {
   const [temp, setTemp] = useState(value);
   const [selectedGroup, setSelectedGroup] = useState(null);
+  const [filteredCount, setFilteredCount] = useState(0);
+
   const { show } = useToast();
+  const { keyword, categories, period, sort } = useFestivalFilterStore();
   const MAX = 10;
 
   const [overLimit, setOverLimit] = useState(false);
@@ -25,6 +34,38 @@ export default function RegionFilter({
       setOverLimit(false);
     }
   }, [overLimit, show]);
+
+  // count 조회: temp + 다른 필터 값 조합
+  useEffect(() => {
+    if (!open) return;
+
+    async function fetchCount() {
+      try {
+        const categoryCodes = (categories || [])
+          .map((n) => CATEGORY_NAME_TO_CODE[n])
+          .filter(Boolean);
+
+        const res = await axiosInstance.post(
+          '/event/filtered',
+          {
+            locations: temp,
+            categoryCodes: categoryCodes.length ? categoryCodes : undefined,
+            startDate: period?.start
+              ? formatDateYYYYMMDD(period.start)
+              : undefined,
+            endDate: period?.end ? formatDateYYYYMMDD(period.end) : undefined,
+            keyword: keyword || undefined,
+          },
+          { params: { page: 0, size: 0 } }
+        );
+        setFilteredCount(res?.data?.content?.totalElements ?? 0);
+      } catch {
+        setFilteredCount(0);
+      }
+    }
+
+    fetchCount();
+  }, [temp, keyword, categories, period, sort, open]);
 
   // 그룹 → 시도 → 시군구 구조 변환
   const byGroup = useMemo(() => {
@@ -193,7 +234,7 @@ export default function RegionFilter({
               onClose();
             }}
           >
-            총 {temp.length}개 결과 보기
+            총 {filteredCount}개 결과 보기
           </button>
         </div>
       }
