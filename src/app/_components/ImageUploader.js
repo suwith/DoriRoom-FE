@@ -99,7 +99,7 @@ export default function ImageUploader({
         <button
           type="button"
           onClick={handleReset}
-          className="mt-10 text-sm font-light text-background px-2 pb-0.5 pt-1.5 justify-center items-center bg-main-100 rounded-[6px]  whitespace-nowrap"
+          className="mt-10 text-sm font-light text-background px-2 py-1 justify-center items-center bg-main-100 rounded-[6px]  whitespace-nowrap"
         >
           기본 프로필로 바꿀래요
         </button>
