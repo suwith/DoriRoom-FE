@@ -30,11 +30,16 @@ export default function BottomNavBar() {
     '/home/decorate/',
     '/festival/search/',
     '/festival/bookmarks/',
-    '/sign-in/',
-    '/sign-up/',
+    '/login',
   ];
 
-  const HIDDEN_PREFIXES = ['/festival/search/result', '/diary/'];
+  const HIDDEN_PREFIXES = [
+    '/festival/search/result',
+    '/diary/',
+    '/signup/',
+    '/auth',
+    '/mypage/myinfo',
+  ];
 
   const shouldHide =
     HIDDEN_PATHS.includes(pathname) ||

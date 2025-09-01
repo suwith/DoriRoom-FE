@@ -10,25 +10,22 @@ import BackButton from '@/app/_components/BackButton';
 import { MdEditSquare } from 'react-icons/md';
 import ReviewItem from '@/app/festival/_components/ReviewItem';
 import { useRouter } from 'next/navigation';
+import useFestivalFavorite from '@/hooks/festival/useFestivalFavorite';
+import { useToast } from '@/app/_providers/ToastProvider';
 
 export default function FestivalDetail({ festival }) {
   const router = useRouter();
   const [activeTab, setActiveTab] = useState('설명');
-  const [liked, setLiked] = useState(false);
-  const [likeCount, setLikeCount] = useState(festival.likes || 0);
   const [likedReviews, setLikedReviews] = useState([]);
   const [reviewSort, setReviewSort] = useState('latest');
-  const [showToast, setShowToast] = useState(false);
 
   // 헤더 전환 상태
   const [isScrolled, setIsScrolled] = useState(false);
   const sentinelRef = useRef(null);
   const HEADER_H = 70; // 헤더 높이(px): h-12(=48) + 상단 패딩 보정 등이 있으면 맞춰 조정
 
-  const handleLike = () => {
-    setLiked((prev) => !prev);
-    setLikeCount((prev) => (liked ? prev - 1 : prev + 1));
-  };
+  const { liked, likeCount, loading, mutating, toggleFavorite } =
+    useFestivalFavorite(festival.id, festival.likes);
 
   const toggleReviewLike = (reviewId) => {
     setLikedReviews((prev) =>
@@ -43,11 +40,22 @@ export default function FestivalDetail({ festival }) {
     return new Date(b.date) - new Date(a.date);
   });
 
+  const { show } = useToast();
+  const didShowRef = useRef(false); // StrictMode 중복 실행 가드
+
   useEffect(() => {
-    setShowToast(true);
-    const timer = setTimeout(() => setShowToast(false), 3000);
-    return () => clearTimeout(timer);
-  }, []);
+    if (didShowRef.current) return;
+    didShowRef.current = true;
+
+    show({
+      message:
+        festival.visitedFriend > 0
+          ? `${festival.visitedFriend}명의 친구가 해당 장소에 방문했어요!`
+          : '아직 방문한 친구가 없어요',
+      variant: 'festival',
+      duration: 2500,
+    });
+  }, [show, festival.visitedFriend]);
 
   // 이미지 하단 센티넬이 헤더 뒤로 넘어가면 isScrolled = true
   useEffect(() => {
@@ -106,13 +114,14 @@ export default function FestivalDetail({ festival }) {
             {festival.title}
           </h1>
           <div className="flex flex-col items-center mt-2">
-            <button onClick={handleLike}>
+            <button onClick={toggleFavorite} disabled={loading || mutating}>
               {liked ? (
                 <GoHeartFill className="text-main-100 w-5 h-5" />
               ) : (
                 <GoHeart className="text-neutral-400 w-5 h-5" />
               )}
             </button>
+
             <span
               className={`text-[11px] ${liked ? 'text-main-100' : 'text-neutral-400'}`}
             >
@@ -141,14 +150,6 @@ export default function FestivalDetail({ festival }) {
               {festival.startDate} ~ {festival.endDate}
             </span>{' '}
           </div>
-        </div>
-        <div className="flex flex-row gap-3 text-sm">
-          <p className="text-neutral-500">시간</p>
-          <span>
-            {festival.startTime === ''
-              ? '-'
-              : `${festival.startTime} ~ ${festival.endTime}`}
-          </span>
         </div>
         <div className="flex flex-row gap-3 text-sm">
           <p className=" text-neutral-500 whitespace-nowrap">위치</p>
@@ -274,17 +275,6 @@ export default function FestivalDetail({ festival }) {
               <span className="text-lg">일기 작성하기</span>
             </div>
           </button>
-        </div>
-      )}
-
-      {showToast && (
-        <div className="fixed bottom-7 left-1/2 -translate-x-1/2 bg-sub-5 px-4 py-2 rounded-full text-xs text-sub-100 whitespace-nowrap flex items-center gap-2 z-50">
-          <i className="mgc_user_follow_fill text-lg text-sub-100" />
-          <span>
-            {festival.visitedFriend > 0
-              ? `${festival.visitedFriend}명의 친구가 해당 장소에 방문했어요!`
-              : '아직 방문한 친구가 없어요'}
-          </span>
         </div>
       )}
     </div>

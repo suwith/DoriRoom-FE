@@ -67,14 +67,16 @@ export default function FestivalListItem({
             <span className="text-main-100 bg-main-5 px-1 py-[1px] rounded-sm">
               {festival.region.slice(0, 2)}
             </span>
+
             <span className="text-main-100 bg-main-5 px-1 py-[1px] rounded-sm">
               {festival.category}
             </span>
-            {/*{festival.reviews.length > 0 && (*/}
-            {/*  <span className="text-main-100 bg-main-5 px-1 rounded-lg">*/}
-            {/*    후기 {festival.reviews.length}개*/}
-            {/*  </span>*/}
-            {/*)}*/}
+
+            {festival.reviews > 0 && (
+              <span className="text-main-100 bg-main-5 px-1 py-[1px] rounded-sm">
+                일기 {festival.reviews}개
+              </span>
+            )}
 
             {festival.price === '무료' && (
               <span className="text-main-100 bg-main-5 px-1 py-[1px] rounded-sm">

@@ -31,8 +31,6 @@ function normalizeFestival(api) {
     status: calcStatus(api.startDate, api.endDate),
     startDate,
     endDate,
-    startTime: '',
-    endTime: '',
     location: api.addr1 || '',
     host,
     price: api.useTimeFestival || '',

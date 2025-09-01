@@ -58,3 +58,13 @@
 .scrollbar-hide::-webkit-scrollbar {
   display: none; /* Chrome, Safari, Opera */
 }
+
+/* input 입력값이 있을 때 브라우저가 자동 적용하는 파란 배경 제거 */
+input:-webkit-autofill,
+input:-webkit-autofill:hover,
+input:-webkit-autofill:focus,
+input:-webkit-autofill:active {
+  -webkit-box-shadow: 0 0 0px 1000px #f5f5f5 inset !important; /* #f5f5f5 : bg-neutral-100 */
+  box-shadow: 0 0 0px 1000px #f5f5f5 inset !important;
+  caret-color: #171717; /* #171717 : bg-neutral-900 */
+}
