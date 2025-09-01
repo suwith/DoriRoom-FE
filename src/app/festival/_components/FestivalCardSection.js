@@ -3,7 +3,7 @@
 import { useRouter } from 'next/navigation';
 import FestivalCard from './FestivalCard';
 
-export default function FestivalCardListSection({ title, festivals }) {
+export default function FestivalCardSection({ title, festivals }) {
   const router = useRouter();
 
   return (
