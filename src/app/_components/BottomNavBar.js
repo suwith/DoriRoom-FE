@@ -38,6 +38,7 @@ export default function BottomNavBar() {
     '/diary/',
     '/signup/',
     '/auth',
+    '/mypage/myinfo',
   ];
 
   const shouldHide =

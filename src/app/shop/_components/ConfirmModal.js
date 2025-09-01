@@ -26,7 +26,7 @@ export default function ConfirmModal({ isOpen, setIsOpen, itemId, refetch }) {
       await mutate({ itemId });
       show({
         message: `'${items.name}' 아이템을 구입하였어요!`,
-        variant: 'purchase',
+        variant: 'success',
       });
     } else {
       show({
