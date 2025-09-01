@@ -15,6 +15,15 @@ const filterList = [
   { id: 3, name: '달성 과제' },
 ];
 
+const order = [
+  'WAIT_REWARD',
+  'IN_PROGRESS',
+  'NOT_STARTED',
+  'COMPLETED',
+  'EXPIRED',
+];
+const orderMap = Object.fromEntries(order.map((k, i) => [k, i]));
+
 export default function TasksPage({ type }) {
   const [selectFilter, setSelectFilter] = useState(filterList[0]);
   const [bottomSheetOpen, setBottomSheetOpen] = useState(false);
@@ -31,7 +40,13 @@ export default function TasksPage({ type }) {
       case 3:
         return challenges.filter((t) => t.status === 'COMPLETED');
       default:
-        return challenges; // 전체
+        return challenges
+          .slice()
+          .sort(
+            (a, b) =>
+              (orderMap[a.status] ?? Infinity) -
+              (orderMap[b.status] ?? Infinity)
+          ); // 전체
     }
   }, [challenges, selectFilter.id]);
 

@@ -12,12 +12,12 @@ export default function TaskCard({
 }) {
   return (
     <div
-      className={`rounded-xl p-3 ${status === 'COMPLETED' ? 'bg-sub-5' : status === 'IN_PROGRESS' ? 'bg-[#35C284]/15' : 'bg-neutral-100'}`}
+      className={`rounded-xl p-3 ${status === 'COMPLETED' ? 'bg-sub-5' : status === 'IN_PROGRESS' ? 'bg-[#35C284]/15' : status === 'WAIT_REWARD' ? 'bg-sub2-5' : 'bg-neutral-100'}`}
     >
       <div className="flex justify-between items-center">
         <div className="flex gap-1 items-center text-xs">
           <div
-            className={`flex items-center gap-1 bg-background px-2 py-1 rounded-sm font-normal ${status === 'COMPLETED' ? 'text-sub-100' : 'text-main-100'}`}
+            className={`flex items-center gap-1 bg-background px-2 py-1 rounded-sm font-normal ${status === 'COMPLETED' ? 'text-sub-100' : status === 'WAIT_REWARD' ? 'text-sub2-100' : 'text-main-100'}`}
           >
             <FaFire size={15} className="scale-x-[-1]" />
             <span className="text-neutral-900">{rewards[0].amount}</span>
@@ -28,7 +28,15 @@ export default function TaskCard({
         className={`flex justify-between items-center text-sm font-semibold mt-2 ${status === 'COMPLETED' ? 'text-neutral-400' : 'text-neutral-900'}`}
       >
         {title}
-        {status !== 'COMPLETED' ? (
+        {status === 'COMPLETED' ? (
+          <div className="mr-2 bg-sub-15 text-sub-100 rounded-sm px-2 py-1">
+            달성
+          </div>
+        ) : status === 'WAIT_REWARD' ? (
+          <div className="mr-2 bg-sub2-15 text-sub2-100 rounded-sm px-2 py-1">
+            보상 받기
+          </div>
+        ) : (
           <div className="w-[30%]">
             <p className="text-xs text-main-100 font-medium text-end">
               {currentProgress}/{targetCount}
@@ -40,10 +48,6 @@ export default function TaskCard({
               />
             </div>
           </div>
-        ) : (
-          <button className="mr-2 bg-sub-15 text-sub-100 rounded-sm px-2 py-1">
-            달성
-          </button>
         )}
       </div>
     </div>
