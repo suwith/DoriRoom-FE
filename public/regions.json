@@ -1,5 +1,7 @@
 [
   {
+    "areaGroupCode": 1,
+    "areaGroupName": "서울",
     "areaCode": 1,
     "areaName": "서울",
     "content": [
@@ -31,6 +33,8 @@
     ]
   },
   {
+    "areaGroupCode": 2,
+    "areaGroupName": "경기",
     "areaCode": 2,
     "areaName": "인천",
     "content": [
@@ -47,83 +51,8 @@
     ]
   },
   {
-    "areaCode": 3,
-    "areaName": "대전",
-    "content": [
-      { "code": 1, "name": "대덕구" },
-      { "code": 2, "name": "동구" },
-      { "code": 3, "name": "서구" },
-      { "code": 4, "name": "유성구" },
-      { "code": 5, "name": "중구" }
-    ]
-  },
-  {
-    "areaCode": 4,
-    "areaName": "대구",
-    "content": [
-      { "code": 1, "name": "남구" },
-      { "code": 2, "name": "달서구" },
-      { "code": 3, "name": "달성군" },
-      { "code": 4, "name": "동구" },
-      { "code": 5, "name": "북구" },
-      { "code": 6, "name": "서구" },
-      { "code": 7, "name": "수성구" },
-      { "code": 8, "name": "중구" },
-      { "code": 9, "name": "군위군" }
-    ]
-  },
-  {
-    "areaCode": 5,
-    "areaName": "광주",
-    "content": [
-      { "code": 1, "name": "광산구" },
-      { "code": 2, "name": "남구" },
-      { "code": 3, "name": "동구" },
-      { "code": 4, "name": "북구" },
-      { "code": 5, "name": "서구" }
-    ]
-  },
-  {
-    "areaCode": 6,
-    "areaName": "부산",
-    "content": [
-      { "code": 1, "name": "강서구" },
-      { "code": 2, "name": "금정구" },
-      { "code": 3, "name": "기장군" },
-      { "code": 4, "name": "남구" },
-      { "code": 5, "name": "동구" },
-      { "code": 6, "name": "동래구" },
-      { "code": 7, "name": "부산진구" },
-      { "code": 8, "name": "북구" },
-      { "code": 9, "name": "사상구" },
-      { "code": 10, "name": "사하구" },
-      { "code": 11, "name": "서구" },
-      { "code": 12, "name": "수영구" },
-      { "code": 13, "name": "연제구" },
-      { "code": 14, "name": "영도구" },
-      { "code": 15, "name": "중구" },
-      { "code": 16, "name": "해운대구" }
-    ]
-  },
-  {
-    "areaCode": 7,
-    "areaName": "울산",
-    "content": [
-      { "code": 1, "name": "중구" },
-      { "code": 2, "name": "남구" },
-      { "code": 3, "name": "동구" },
-      { "code": 4, "name": "북구" },
-      { "code": 5, "name": "울주군" }
-    ]
-  },
-  {
-    "areaCode": 8,
-    "areaName": "세종",
-    "content": [
-      { "code": 1, "name": "세종특별자치시" }
-    ]
-  },
-  {
+    "areaGroupCode": 2,
+    "areaGroupName": "경기",
     "areaCode": 31,
     "areaName": "경기",
     "content": [
@@ -161,6 +90,8 @@
     ]
   },
   {
+    "areaGroupCode": 3,
+    "areaGroupName": "강원",
     "areaCode": 32,
     "areaName": "강원",
     "content": [
@@ -185,45 +116,62 @@
     ]
   },
   {
-    "areaCode": 33,
-    "areaName": "충북",
+    "areaGroupCode": 4,
+    "areaGroupName": "경상",
+    "areaCode": 4,
+    "areaName": "대구",
     "content": [
-      { "code": 1, "name": "괴산군" },
-      { "code": 2, "name": "단양군" },
-      { "code": 3, "name": "보은군" },
-      { "code": 4, "name": "영동군" },
-      { "code": 5, "name": "옥천군" },
-      { "code": 6, "name": "음성군" },
-      { "code": 7, "name": "제천시" },
-      { "code": 8, "name": "진천군" },
-      { "code": 9, "name": "청원군" },
-      { "code": 10, "name": "청주시" },
-      { "code": 11, "name": "충주시" },
-      { "code": 12, "name": "증평군" }
+      { "code": 1, "name": "남구" },
+      { "code": 2, "name": "달서구" },
+      { "code": 3, "name": "달성군" },
+      { "code": 4, "name": "동구" },
+      { "code": 5, "name": "북구" },
+      { "code": 6, "name": "서구" },
+      { "code": 7, "name": "수성구" },
+      { "code": 8, "name": "중구" },
+      { "code": 9, "name": "군위군" }
     ]
   },
   {
-    "areaCode": 34,
-    "areaName": "충남",
+    "areaGroupCode": 4,
+    "areaGroupName": "경상",
+    "areaCode": 6,
+    "areaName": "부산",
     "content": [
-      { "code": 1, "name": "공주시" },
-      { "code": 2, "name": "금산군" },
-      { "code": 3, "name": "논산시" },
-      { "code": 4, "name": "당진시" },
-      { "code": 5, "name": "보령시" },
-      { "code": 6, "name": "부여군" },
-      { "code": 7, "name": "서산시" },
-      { "code": 8, "name": "서천군" },
-      { "code": 9, "name": "아산시" },
-      { "code": 11, "name": "예산군" },
-      { "code": 12, "name": "천안시" },
-      { "code": 13, "name": "청양군" },
-      { "code": 14, "name": "태안군" },
-      { "code": 15, "name": "홍성군" },
-      { "code": 16, "name": "계룡시" }
+      { "code": 1, "name": "강서구" },
+      { "code": 2, "name": "금정구" },
+      { "code": 3, "name": "기장군" },
+      { "code": 4, "name": "남구" },
+      { "code": 5, "name": "동구" },
+      { "code": 6, "name": "동래구" },
+      { "code": 7, "name": "부산진구" },
+      { "code": 8, "name": "북구" },
+      { "code": 9, "name": "사상구" },
+      { "code": 10, "name": "사하구" },
+      { "code": 11, "name": "서구" },
+      { "code": 12, "name": "수영구" },
+      { "code": 13, "name": "연제구" },
+      { "code": 14, "name": "영도구" },
+      { "code": 15, "name": "중구" },
+      { "code": 16, "name": "해운대구" }
     ]
   },
   {
+    "areaGroupCode": 4,
+    "areaGroupName": "경상",
+    "areaCode": 7,
+    "areaName": "울산",
+    "content": [
+      { "code": 1, "name": "중구" },
+      { "code": 2, "name": "남구" },
+      { "code": 3, "name": "동구" },
+      { "code": 4, "name": "북구" },
+      { "code": 5, "name": "울주군" }
+    ]
+  },
+  {
+    "areaGroupCode": 4,
+    "areaGroupName": "경상",
     "areaCode": 35,
     "areaName": "경북",
     "content": [
@@ -252,6 +200,8 @@
     ]
   },
   {
+    "areaGroupCode": 4,
+    "areaGroupName": "경상",
     "areaCode": 36,
     "areaName": "경남",
     "content": [
@@ -278,6 +228,21 @@
     ]
   },
   {
+    "areaGroupCode": 5,
+    "areaGroupName": "전라",
+    "areaCode": 5,
+    "areaName": "광주",
+    "content": [
+      { "code": 1, "name": "광산구" },
+      { "code": 2, "name": "남구" },
+      { "code": 3, "name": "동구" },
+      { "code": 4, "name": "북구" },
+      { "code": 5, "name": "서구" }
+    ]
+  },
+  {
+    "areaGroupCode": 5,
+    "areaGroupName": "전라",
     "areaCode": 37,
     "areaName": "전북",
     "content": [
@@ -298,6 +263,8 @@
     ]
   },
   {
+    "areaGroupCode": 5,
+    "areaGroupName": "전라",
     "areaCode": 38,
     "areaName": "전남",
     "content": [
@@ -326,6 +293,73 @@
     ]
   },
   {
+    "areaGroupCode": 6,
+    "areaGroupName": "충청",
+    "areaCode": 3,
+    "areaName": "대전",
+    "content": [
+      { "code": 1, "name": "대덕구" },
+      { "code": 2, "name": "동구" },
+      { "code": 3, "name": "서구" },
+      { "code": 4, "name": "유성구" },
+      { "code": 5, "name": "중구" }
+    ]
+  },
+  {
+    "areaGroupCode": 6,
+    "areaGroupName": "충청",
+    "areaCode": 8,
+    "areaName": "세종",
+    "content": [
+      { "code": 1, "name": "세종특별자치시" }
+    ]
+  },
+  {
+    "areaGroupCode": 6,
+    "areaGroupName": "충청",
+    "areaCode": 33,
+    "areaName": "충북",
+    "content": [
+      { "code": 1, "name": "괴산군" },
+      { "code": 2, "name": "단양군" },
+      { "code": 3, "name": "보은군" },
+      { "code": 4, "name": "영동군" },
+      { "code": 5, "name": "옥천군" },
+      { "code": 6, "name": "음성군" },
+      { "code": 7, "name": "제천시" },
+      { "code": 8, "name": "진천군" },
+      { "code": 9, "name": "청원군" },
+      { "code": 10, "name": "청주시" },
+      { "code": 11, "name": "충주시" },
+      { "code": 12, "name": "증평군" }
+    ]
+  },
+  {
+    "areaGroupCode": 6,
+    "areaGroupName": "충청",
+    "areaCode": 34,
+    "areaName": "충남",
+    "content": [
+      { "code": 1, "name": "공주시" },
+      { "code": 2, "name": "금산군" },
+      { "code": 3, "name": "논산시" },
+      { "code": 4, "name": "당진시" },
+      { "code": 5, "name": "보령시" },
+      { "code": 6, "name": "부여군" },
+      { "code": 7, "name": "서산시" },
+      { "code": 8, "name": "서천군" },
+      { "code": 9, "name": "아산시" },
+      { "code": 11, "name": "예산군" },
+      { "code": 12, "name": "천안시" },
+      { "code": 13, "name": "청양군" },
+      { "code": 14, "name": "태안군" },
+      { "code": 15, "name": "홍성군" },
+      { "code": 16, "name": "계룡시" }
+    ]
+  },
+  {
+    "areaGroupCode": 7,
+    "areaGroupName": "제주",
     "areaCode": 39,
     "areaName": "제주",
     "content": [
