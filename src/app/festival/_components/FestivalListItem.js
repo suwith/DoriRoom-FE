@@ -46,7 +46,7 @@ export default function FestivalListItem({
     <div className={` flex gap-3 ${hideLikeButton ? 'px-4 py-2' : ''}  `}>
       <div className="relative w-20 h-20 rounded-lg overflow-hidden flex-shrink-0">
         <img
-          src={festival.thumbnail}
+          src={festival.thumbnail || '/images/festivalImage_default.svg'}
           alt={festival.title}
           className="w-full h-full object-cover"
         />

@@ -18,7 +18,11 @@ export default function FestivalCard({ festival }) {
     <div className="bg-background overflow-hidden">
       <div
         className="relative bg-neutral-100 w-full h-40 bg-cover bg-center rounded-lg"
-        style={{ backgroundImage: `url(${festival.thumbnail})` }}
+        style={{
+          backgroundImage: `url(${
+            festival.thumbnail || '/images/festivalImage_default.svg'
+          })`,
+        }}
       >
         <div className="absolute top-3 right-3 flex flex-col items-center gap-0.5">
           <button onClick={onLikeClick} disabled={loading}>
