@@ -142,6 +142,14 @@ export function useSearchFestivals({
       setHasMore(!pageData?.last && mapped.length > 0);
       setPage((p) => p + 1);
       setTotal(pageData?.totalElements ?? 0);
+
+      // 검색 키워드 최근검색어로 저장
+      const stored = JSON.parse(localStorage.getItem('recentSearches') || '[]');
+      const updated = [keyword, ...stored.filter((t) => t !== keyword)].slice(
+        0,
+        8
+      );
+      localStorage.setItem('recentSearches', JSON.stringify(updated));
     } catch (e) {
       setError(e);
       setHasMore(false);

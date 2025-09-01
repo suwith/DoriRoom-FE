@@ -79,7 +79,7 @@ export default function FestivalSearchResultPage() {
     if (categories.length) query.set('categories', categories.join(','));
     if (period.start) query.set('start', period.start.toISOString());
     if (period.end) query.set('end', period.end.toISOString());
-    router.replace(`/festival/search/result?${query.toString()}`);
+    router.push(`/festival/search/result?${query.toString()}`);
   };
 
   const toggleLike = (id) => {
