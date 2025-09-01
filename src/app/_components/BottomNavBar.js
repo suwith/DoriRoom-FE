@@ -31,7 +31,6 @@ export default function BottomNavBar() {
     '/festival/search/',
     '/festival/bookmarks/',
     '/login',
-    '/mypage/myinfo',
   ];
 
   const HIDDEN_PREFIXES = [
@@ -39,6 +38,7 @@ export default function BottomNavBar() {
     '/diary/',
     '/signup/',
     '/auth',
+    '/mypage/myinfo',
   ];
 
   const shouldHide =
