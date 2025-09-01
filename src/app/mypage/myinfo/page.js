@@ -14,6 +14,11 @@ export default function Myinfo() {
   const { mutate, data, loading } = useChangeProfile({
     onSuccess: () => {
       refetch();
+      show({ message: '프로필 사진이 변경되었어요!', variant: 'success' });
+    },
+    onError: (err) => {
+      const msg = err?.message ?? '프로필 사진 변경에 실패했어요.';
+      show({ message: msg, variant: 'error' });
     },
   });
 
@@ -36,8 +41,8 @@ export default function Myinfo() {
 
   const handlerFile = async (e) => {
     const file = e.target.files[0];
+    if (!file) return;
     await mutate(file);
-    show({ message: '프로필 사진이 변경되었어요!', variant: 'success' });
   };
 
   return (

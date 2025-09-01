@@ -10,8 +10,10 @@ export default function useChangePW() {
 
   const mountedRef = useRef(true);
   useEffect(() => {
+    mountedRef.current = true;
+
     return () => {
-      mountedRef.current = true;
+      mountedRef.current = false;
     };
   }, []);
 
@@ -40,7 +42,7 @@ export default function useChangePW() {
         if (mountedRef.current) setLoading(false);
       }
     },
-    [loading]
+    []
   );
 
   const reset = () => {

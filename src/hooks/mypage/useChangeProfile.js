@@ -11,7 +11,7 @@ function normalizeProfileImage(api) {
 }
 
 export default function useChangeProfile(handler) {
-  const { onSuccess } = handler;
+  const { onSuccess, onError } = handler;
   const [data, setData] = useState(null);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState(null);
@@ -43,6 +43,7 @@ export default function useChangeProfile(handler) {
       } catch (err) {
         if (!mountedRef.current) return;
         setError(err);
+        onError?.();
       } finally {
         if (mountedRef.current) setLoading(false);
       }

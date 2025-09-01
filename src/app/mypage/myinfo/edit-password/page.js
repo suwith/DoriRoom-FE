@@ -5,7 +5,6 @@ import EditHeaderNavBar from '../../_components/EditHeaderNavBar';
 import PasswordInput from '../../_components/PasswordInput';
 import useChangePW from '@/hooks/mypage/useChangePW';
 import { useToast } from '@/app/_providers/ToastProvider';
-import { useRouter } from 'next/navigation';
 
 function validPassword(pw) {
   if (!pw) return false;
@@ -18,7 +17,7 @@ function validPassword(pw) {
   return lenOk && types >= 2;
 }
 
-export default function EditNickname() {
+export default function EditPassword() {
   const [password, setPassword] = useState('');
   const [newPassword, setNewPassword] = useState('');
   const [verifyPassword, setVerifyPassword] = useState('');
@@ -26,7 +25,6 @@ export default function EditNickname() {
   const { show } = useToast();
   const { mutate, statusCode, error } = useChangePW();
 
-  const router = useRouter();
   const passwordOk = validPassword(newPassword);
   const passwordMatch = newPassword && newPassword === verifyPassword;
 
@@ -43,20 +41,21 @@ export default function EditNickname() {
     <div className="flex flex-col h-full max-w-[390px] w-screen h-screen px-4 pt-28">
       <EditHeaderNavBar
         title="비밀번호 변경"
-        onClick={async () =>
+        onClick={async () => {
+          if (!password || !passwordOk || !passwordMatch) return;
           await mutate({
             currentPassword: password,
             newPassword: newPassword,
             confirmPassword: verifyPassword,
-          })
-        }
+          });
+        }}
       />
       <div className="mb-7">
         <PasswordInput
           id="password"
           label="기존 비밀번호를 입력해 주세요."
           placeholder="비밀번호"
-          autoComplete="password"
+          autoComplete="current-password"
           value={password}
           onChange={(e) => setPassword(e.target.value)}
           className="mb-2"
@@ -73,7 +72,7 @@ export default function EditNickname() {
         <PasswordInput
           id="confirm-password"
           placeholder="비밀번호 확인"
-          autoComplete="confirm-password"
+          autoComplete="new-password"
           value={verifyPassword}
           onChange={(e) => setVerifyPassword(e.target.value)}
         />

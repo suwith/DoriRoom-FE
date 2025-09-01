@@ -12,7 +12,7 @@ function normalizeInfo(item) {
 }
 
 export default function useUserInfo() {
-  const [info, setInfo] = useState([]);
+  const [info, setInfo] = useState({});
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
   const mountedRef = useRef(true);

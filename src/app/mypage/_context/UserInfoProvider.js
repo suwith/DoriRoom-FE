@@ -2,7 +2,17 @@
 import { createContext, useContext } from 'react';
 import useUserInfo from '@/hooks/mypage/useUserInfo';
 
-const Ctx = createContext(null);
+const Ctx = createContext({
+  info: {
+    userId: null,
+    profileImageUrl: null,
+    nickname: '',
+    username: '',
+    email: '',
+  },
+  loading: true,
+  refetch: () => {},
+});
 export const useProfile = () => useContext(Ctx);
 
 export default function UserInfoProvider({ children }) {

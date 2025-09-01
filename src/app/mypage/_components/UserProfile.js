@@ -15,7 +15,7 @@ export default function UserProfile() {
     <div className="text-center space-y-4">
       <img
         src={profileImageUrl}
-        alt="prifile_image"
+        alt="profile_image"
         className="rounded-full w-23 h-23"
       />
       <p className="font-semibold text-xl text-black">{info.nickname}</p>

@@ -35,7 +35,7 @@ export default function EditNickname() {
       <EditHeaderNavBar
         title="닉네임 변경"
         onClick={() => {
-          if (canChangeNickname) mutate({ nickname });
+          if (canChangeNickname) mutate({ nickname: nickname.trim() });
         }}
       />
       <TextInput
@@ -50,7 +50,8 @@ export default function EditNickname() {
         minLength={2}
         maxLength={10}
         onClick={async () => {
-          await refetch({ nickname });
+          if (!nicknameOk) return;
+          await refetch({ nickname: nickname.trim() });
         }}
       />
       {CNStatusCode === 409 ? (
