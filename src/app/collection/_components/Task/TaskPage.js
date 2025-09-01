@@ -24,7 +24,7 @@ const order = [
 ];
 const orderMap = Object.fromEntries(order.map((k, i) => [k, i]));
 
-export default function TasksPage({ type }) {
+export default function TasksPage({ type, regionId, area = '' }) {
   const [selectFilter, setSelectFilter] = useState(filterList[0]);
   const [bottomSheetOpen, setBottomSheetOpen] = useState(false);
 
