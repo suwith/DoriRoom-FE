@@ -19,7 +19,7 @@ export default function TwoButtonModal({
           <div className="flex gap-3 mt-8">
             <button
               onClick={onCancel}
-              className="flex-1 py-2.5 bg-main-5 text-main-100 font-semibold rounded-md shadow-[0_0_3px_rgba(0,0,0,0.1)]"
+              className="flex-1 py-2.5 bg-main-5 text-main-100 font-semibold rounded-md"
             >
               {cancelText}
             </button>

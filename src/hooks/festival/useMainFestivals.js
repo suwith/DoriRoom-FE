@@ -17,11 +17,13 @@ function normalizeFestival(item) {
     category: item.categoryName,
 
     likes: typeof item.favoriteCount === 'number' ? item.favoriteCount : 0,
+    reviews: typeof item.diaryCount === 'number' ? item.diaryCount : 0,
     thumbnail: item.firstImage || item.secondImage || '',
   };
 }
 
 export default function useMainFestivals() {
+  const [popular, setPopular] = useState([]); // 지금 뜨는 축제
   const [upcoming, setUpcoming] = useState([]); // 따끈따끈 신규
   const [endingSoon, setEndingSoon] = useState([]); // 마감 임박
   const [loading, setLoading] = useState(true);
@@ -34,15 +36,18 @@ export default function useMainFestivals() {
       setLoading(true);
       setError(null);
       try {
-        const [upRes, endRes] = await Promise.all([
+        const [popRes, upRes, endRes] = await Promise.all([
+          axiosInstance.get('event/popular'),
           axiosInstance.get('event/upcoming'),
           axiosInstance.get('event/ending-soon'),
         ]);
 
+        const pop = (popRes?.data?.content || []).map(normalizeFestival);
         const up = (upRes?.data?.content || []).map(normalizeFestival);
         const end = (endRes?.data?.content || []).map(normalizeFestival);
 
         if (!mounted) return;
+        setPopular(pop);
         setUpcoming(up);
         setEndingSoon(end);
       } catch (e) {
@@ -59,5 +64,5 @@ export default function useMainFestivals() {
     };
   }, []);
 
-  return { upcoming, endingSoon, loading, error };
+  return { popular, upcoming, endingSoon, loading, error };
 }
