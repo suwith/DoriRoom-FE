@@ -132,6 +132,7 @@ function ToastItem({ toast }) {
     default: <></>,
     success: <i className="mgc_check_circle_fill text-main-100" />,
     error: <i className="mgc_close_circle_fill text-red-400" />,
+    festival: <i className="mgc_user_follow_fill text-lg text-main-100" />,
   };
 
   const anim =

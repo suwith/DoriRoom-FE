@@ -3,14 +3,14 @@
 import { useRouter } from 'next/navigation';
 import { GoHeartFill } from 'react-icons/go';
 import RegionFilter from './_components/RegionFilter';
-import FestivalCardListSection from './_components/FestivalCardListSection';
+import FestivalCardSection from './_components/FestivalCardSection';
 import 'mingcute_icon/font/Mingcute.css';
-import { mockFestivals } from './mockData';
 import useMainFestivals from '@/hooks/festival/useMainFestivals';
+import FestivalCardSectionSkeleton from '@/app/festival/_components/FestivalCardSectionSkeleton';
 
 export default function FestivalPage() {
   const router = useRouter();
-  const { upcoming, endingSoon, loading, error } = useMainFestivals();
+  const { popular, upcoming, endingSoon, loading, error } = useMainFestivals();
 
   return (
     <div className="pb-24 pt-[50px] max-w-[390px] ">
@@ -44,18 +44,30 @@ export default function FestivalPage() {
         <RegionFilter />
       </div>
 
+      {/* 로딩 시 스켈레톤 */}
+      {loading && (
+        <>
+          <FestivalCardSectionSkeleton title="지금 뜨는 축제 🔥" count={4} />
+          <FestivalCardSectionSkeleton
+            title="따끈따끈 신규 축제 🌟"
+            count={4}
+          />
+          <FestivalCardSectionSkeleton
+            title="곧 있으면 끝나요! 마감 임박 축제 🚨"
+            count={4}
+          />
+        </>
+      )}
+
       {/* 섹션 */}
       {!loading && !error && (
         <>
-          <FestivalCardListSection
-            title="지금 뜨는 축제 🔥"
-            festivals={mockFestivals}
-          />
-          <FestivalCardListSection
+          <FestivalCardSection title="지금 뜨는 축제 🔥" festivals={popular} />
+          <FestivalCardSection
             title="따끈따끈 신규 축제 🌟"
             festivals={upcoming}
           />
-          <FestivalCardListSection
+          <FestivalCardSection
             title="곧 있으면 끝나요! 마감 임박 축제 🚨"
             festivals={endingSoon}
           />
