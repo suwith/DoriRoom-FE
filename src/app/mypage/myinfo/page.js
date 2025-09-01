@@ -10,9 +10,13 @@ import { useToast } from '@/app/_providers/ToastProvider';
 import LoadingContent from '@/app/_components/LoadingContent';
 
 export default function Myinfo() {
-  const { info, refetch } = useProfile();
+  const { info, loading: PLoading, refetch } = useProfile();
   const { show } = useToast();
-  const { mutate, data, loading } = useChangeProfile({
+  const {
+    mutate,
+    data,
+    loading: CPLoading,
+  } = useChangeProfile({
     onSuccess: () => {
       refetch();
       show({ message: '프로필 사진이 변경되었어요!', variant: 'success' });
@@ -46,13 +50,15 @@ export default function Myinfo() {
     await mutate(file);
   };
 
+  if (PLoading) return <LoadingContent loading={PLoading} />;
+
   return (
     <div className="flex flex-col h-full max-w-[390px] w-screen h-screen">
       <HeaderNavigationBar title="내 정보" />
       <div className="flex-2 flex items-end justify-center px-4">
         <div className="relative mb-12">
           <img
-            src={info.profileImageUrl}
+            src={info.profileImageUrl || '/images/profileImage_default.svg'}
             alt="profile_image"
             className="rounded-full w-30 h-30 bg-main-5"
           />
@@ -89,9 +95,9 @@ export default function Myinfo() {
           href={'/mypage/myinfo/edit-password'}
         />
       </div>
-      {loading && (
+      {CPLoading && (
         <LoadingContent
-          loading={loading}
+          loading={CPLoading}
           className="max-w-[390px] w-full h-full fixed top-0 bottom-0 bg-black/50 z-50"
         />
       )}
