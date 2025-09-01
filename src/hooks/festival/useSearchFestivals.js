@@ -2,18 +2,11 @@
 
 import { useCallback, useEffect, useMemo, useRef, useState } from 'react';
 import axiosInstance from '@/lib/axiosInstance';
-
-// 카테고리 한글 → 코드 매핑
-const CATEGORY_NAME_TO_CODE = {
-  문화관광축제: 'EV010100',
-  문화예술축제: 'EV010200',
-  지역특산물축제: 'EV010300',
-  전통역사축제: 'EV010400',
-  생태자연축제: 'EV010500',
-  기타축제: 'EV010600',
-  공연: 'EV02',
-  행사: 'EV03',
-};
+import {
+  CATEGORY_NAME_TO_CODE,
+  formatDateYYYYMMDD,
+} from '@/lib/festivalConstants';
+import { useFestivalFilterStore } from '@/stores/useFestivalFilterStore';
 
 // 정렬 매핑
 const SORT_TO_PARAM = {
@@ -33,15 +26,6 @@ function dedupLocations(locs) {
     out.push(l);
   }
   return out;
-}
-
-// 날짜 포맷: YYYY-MM-DD
-function formatDateYYYYMMDD(d) {
-  if (!d) return null;
-  const y = d.getFullYear();
-  const m = String(d.getMonth() + 1).padStart(2, '0');
-  const day = String(d.getDate()).padStart(2, '0');
-  return `${y}-${m}-${day}`;
 }
 
 // 서버 응답 → 리스트 아이템 매핑
@@ -94,6 +78,7 @@ export function useSearchFestivals({
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState(null);
   const [hasMore, setHasMore] = useState(true);
+  const [total, setTotal] = useState(0);
 
   // 의존값이 바뀌면 리셋
   const depsKey = useMemo(() => {
@@ -122,6 +107,15 @@ export function useSearchFestivals({
     setError(null);
 
     try {
+      const { setKeyword, setRegions, setCategories, setPeriod, setSort } =
+        useFestivalFilterStore.getState();
+
+      setKeyword(keyword);
+      setRegions(regions);
+      setCategories(categories);
+      setPeriod(period);
+      setSort(sort);
+
       const locations = dedupLocations(regions);
 
       const categoryCodes = (categories || [])
@@ -147,6 +141,7 @@ export function useSearchFestivals({
       setItems((prev) => sortItems([...prev, ...mapped], sort));
       setHasMore(!pageData?.last && mapped.length > 0);
       setPage((p) => p + 1);
+      setTotal(pageData?.totalElements ?? 0);
     } catch (e) {
       setError(e);
       setHasMore(false);
@@ -178,5 +173,5 @@ export function useSearchFestivals({
     setError(null);
   }, []);
 
-  return { items, loading, error, hasMore, loadMore, reset };
+  return { items, loading, error, hasMore, loadMore, reset, total };
 }

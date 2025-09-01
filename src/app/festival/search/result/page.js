@@ -160,14 +160,15 @@ export default function FestivalSearchResultPage() {
         : 'border-neutral-200 text-neutral-900'
     }`;
 
-  const { items, loading, error, hasMore, loadMore } = useSearchFestivals({
-    keyword: searchQuery,
-    regions, // 객체 배열
-    categories,
-    period,
-    sort,
-    size: 20,
-  });
+  const { items, loading, error, hasMore, loadMore, total } =
+    useSearchFestivals({
+      keyword: searchQuery,
+      regions,
+      categories,
+      period,
+      sort,
+      size: 20,
+    });
 
   // 무한스크롤 옵저버
   const sentinelRef = useRef(null);
@@ -242,9 +243,7 @@ export default function FestivalSearchResultPage() {
 
       {/* 스크롤 영역 */}
       <main className="flex-1 overflow-y-auto p-4 scrollbar-hide">
-        <div className="text-xs text-neutral-600 mb-3">
-          검색결과 ({items.length})
-        </div>
+        <div className="text-xs text-neutral-600 mb-3">검색결과 ({total})</div>
         <div className="space-y-4">
           {items.length === 0 && !loading ? (
             <div className="flex flex-col flex-1 items-center justify-center gap-3 min-h-[calc(100vh-200px)]">
