@@ -7,6 +7,7 @@ import { useProfile } from '../_context/UserInfoProvider';
 import { useRouter } from 'next/navigation';
 import { useEffect } from 'react';
 import { useToast } from '@/app/_providers/ToastProvider';
+import LoadingContent from '@/app/_components/LoadingContent';
 
 export default function Myinfo() {
   const { info, refetch } = useProfile();
@@ -88,6 +89,12 @@ export default function Myinfo() {
           href={'/mypage/myinfo/edit-password'}
         />
       </div>
+      {loading && (
+        <LoadingContent
+          loading={loading}
+          className="max-w-[390px] w-full h-full fixed top-0 bottom-0 bg-black/50 z-50"
+        />
+      )}
     </div>
   );
 }
