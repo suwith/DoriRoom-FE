@@ -1,15 +1,17 @@
 'use client';
 
-import { useState } from 'react';
 import { GoHeart, GoHeartFill } from 'react-icons/go';
+import useFestivalFavorite from '@/hooks/festival/useFestivalFavorite';
 
 export default function FestivalCard({ festival }) {
-  const [liked, setLiked] = useState(false);
-  const [likeCount, setLikeCount] = useState(festival.likes || 0);
+  const { liked, likeCount, loading, toggleFavorite } = useFestivalFavorite(
+    festival.eventId,
+    festival.likes
+  );
 
-  const handleLike = () => {
-    setLiked((prev) => !prev);
-    setLikeCount((prev) => (liked ? prev - 1 : prev + 1));
+  const onLikeClick = (e) => {
+    e.stopPropagation();
+    toggleFavorite();
   };
 
   return (
@@ -19,7 +21,7 @@ export default function FestivalCard({ festival }) {
         style={{ backgroundImage: `url(${festival.thumbnail})` }}
       >
         <div className="absolute top-3 right-3 flex flex-col items-center gap-0.5">
-          <button onClick={handleLike}>
+          <button onClick={onLikeClick} disabled={loading}>
             {liked ? (
               <GoHeartFill className="text-main-100 w-5 h-5 drop-shadow" />
             ) : (
@@ -42,11 +44,11 @@ export default function FestivalCard({ festival }) {
           <span className="text-main-100 bg-main-5 px-1 py-[1px] rounded-sm">
             {festival.category}
           </span>
-          {/*{festival.reviews.length > 0 && (*/}
-          {/*  <span className="text-main-100 bg-main-5 px-1 rounded-lg">*/}
-          {/*    후기 {festival.reviews.length}개*/}
-          {/*  </span>*/}
-          {/*)}*/}
+          {festival.reviews > 0 && (
+            <span className="text-main-100 bg-main-5 px-1 py-[1px] rounded-sm">
+              일기 {festival.reviews}개
+            </span>
+          )}
 
           {festival.price === '무료' && (
             <span className="text-main-100 bg-main-5 px-1 py-[1px] rounded-sm">
