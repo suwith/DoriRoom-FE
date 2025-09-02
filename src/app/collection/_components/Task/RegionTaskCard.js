@@ -2,13 +2,13 @@
 
 import { FaCirclePlus } from 'react-icons/fa6';
 import { FaFire } from 'react-icons/fa6';
-import { IoIosArrowForward } from 'react-icons/io';
 import { useRouter } from 'next/navigation';
 import useChallengesClaim from '@/hooks/collection/useChallengesClaim';
 import TaskCompleteModal from './TaskCompleteModal';
 import { useState } from 'react';
 import { IoMdMap } from 'react-icons/io';
 import LoadingModal from '@/app/_components/LoadingModal';
+import MapModal from '../Map/MapModal';
 
 const regionDetails = [
   { atlasId: 1, name: '서울', areaGroup: 'SEOUL' },
@@ -38,6 +38,7 @@ export default function RegionTaskCard({
   refetch,
 }) {
   const [isOpen, setIsOpen] = useState(false);
+  const [isMapOpen, setIsMapOpen] = useState(false);
   const { mutate, loading } = useChallengesClaim({
     onSuccess: () => {
       setIsOpen(true);
@@ -84,7 +85,10 @@ export default function RegionTaskCard({
           </div>
         </div>
         {challengeType === 'VISIT_EVENT' && (
-          <div className="self-start flex items-center justify-center bg-white p-0.5 mr-1 rounded-md">
+          <div
+            className="self-start flex items-center justify-center bg-white p-0.5 mr-1 rounded-md"
+            onClick={() => setIsMapOpen(true)}
+          >
             <IoMdMap className="text-main-100 text-lg" />
           </div>
         )}
@@ -135,6 +139,20 @@ export default function RegionTaskCard({
         exp={exp}
         credit={credit}
         title={title}
+      />
+
+      <MapModal
+        isOpen={isMapOpen}
+        setIsOpen={setIsMapOpen}
+        coordinates={[
+          [126.93058863174969, 37.38487638219797],
+          [126.93108699436652, 37.38421177044464],
+          [126.93111905277988, 37.38422334909711],
+          [126.93129100245449, 37.384010301607134],
+          [126.93235184451322, 37.38457070783717],
+          [126.93163781620433, 37.385432150569585],
+          [126.93058863174969, 37.38487638219797],
+        ]}
       />
     </div>
   );
