@@ -17,25 +17,23 @@ export default function DiaryCard({ item, onClick }) {
           alt={item.title}
           className="w-full h-full object-cover"
         />
-        {item.images.length > 0 && (
-          <div className="absolute top-2 right-1 flex flex-col items-center px-2 py-0.5">
-            <button
-              onClick={() => setIsLiked((prev) => !prev)}
-              className="cursor-pointer h-6"
-            >
-              {isLiked ? (
-                <i className="mgc_emoji_2_fill text-xl text-main-100 drop-shadow" />
-              ) : (
-                <i className="mgc_emoji_2_line text-xl text-background drop-shadow" />
-              )}
-            </button>
-            <span
-              className={`text-[10px] ${isLiked ? 'text-main-100' : 'text-background drop-shadow'}`}
-            >
-              {item.likes}
-            </span>
-          </div>
-        )}
+        <div className="absolute top-2 right-1 flex flex-col items-center px-2 py-0.5">
+          <button
+            onClick={() => setIsLiked((prev) => !prev)}
+            className="cursor-pointer h-6"
+          >
+            {isLiked ? (
+              <i className="mgc_emoji_2_fill text-xl text-main-100 drop-shadow" />
+            ) : (
+              <i className="mgc_emoji_2_line text-xl text-background drop-shadow" />
+            )}
+          </button>
+          <span
+            className={`text-[10px] ${isLiked ? 'text-main-100' : 'text-background drop-shadow'}`}
+          >
+            {item.likes}
+          </span>
+        </div>
       </div>
 
       <div className="mt-3 space-y-1">
