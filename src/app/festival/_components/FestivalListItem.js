@@ -23,7 +23,7 @@ export default function FestivalListItem({
 
   if (mode === 'select') {
     return (
-      <div className="flex gap-3">
+      <div className="flex gap-3 items-center">
         <img
           ref={imgRef}
           src={festival.thumbnail || '/images/festivalImage_default.svg'}
@@ -36,8 +36,8 @@ export default function FestivalListItem({
             e.currentTarget.src = '/images/festivalImage_default.svg';
           }}
         />
-        <div className="flex justify-between flex-1 pr-1 items-center">
-          <div className="flex flex-col justify-center items-start min-w-0">
+        <div className="flex justify-between flex-1 gap-2 items-center">
+          <div className="flex-3 flex-col justify-center items-start min-w-0">
             <div className="text-sm font-semibold line-clamp-1 break-keep">
               {festival.title}
             </div>
@@ -47,7 +47,7 @@ export default function FestivalListItem({
           </div>
 
           <button
-            className="text-background text-xs border bg-main-100 px-3 h-8 rounded-md"
+            className="flex text-background text-sm bg-main-100 px-3 py-1.5 rounded-sm "
             onClick={(e) => {
               e.stopPropagation();
               onSelect?.(festival);
