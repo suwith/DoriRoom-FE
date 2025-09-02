@@ -7,6 +7,7 @@ import { useRouter } from 'next/navigation';
 import useChallengesClaim from '@/hooks/collection/useChallengesClaim';
 import TaskCompleteModal from './TaskCompleteModal';
 import { useState } from 'react';
+import { IoMdMap } from 'react-icons/io';
 import LoadingModal from '@/app/_components/LoadingModal';
 
 const regionDetails = [
@@ -82,7 +83,11 @@ export default function RegionTaskCard({
             <span className="text-neutral-900">{credit}</span>
           </div>
         </div>
-        <IoIosArrowForward className="mr-1 text-neutral-500 self-start" />
+        {challengeType === 'VISIT_EVENT' && (
+          <div className="self-start flex items-center justify-center bg-white p-0.5 mr-1 rounded-md">
+            <IoMdMap className="text-main-100 text-lg" />
+          </div>
+        )}
       </div>
       <div
         className={`flex justify-between items-center text-xs font-semibold mt-2 ${status === '달성' ? 'text-neutral-400' : 'text-neutral-900'}`}

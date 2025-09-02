@@ -27,12 +27,13 @@ export default function Result({ quiz, regionId }) {
       </div>
 
       <div className="px-[16px] pb-10">
-        <Link
+        <button
           className="block w-full bg-main-100 text-background text-center text-xl font-semibold rounded-md py-2.5"
-          href={`/collection/${regionId}`}
+          onClick={() => history.back()}
+          // href={`/collection/${regionId}`}
         >
           보상 받기
-        </Link>
+        </button>
       </div>
     </div>
   );
