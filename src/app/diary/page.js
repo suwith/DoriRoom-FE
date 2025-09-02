@@ -43,7 +43,7 @@ function DiaryTabs({ tab, onChange }) {
 }
 
 // 일기 모아보기 탭 전용 섹션
-function CollectTabSection({ recentPublicDiaries, likedIds, onLike }) {
+function CollectTabSection({ likedIds, onLike, onItemClick }) {
   return (
     <div className="space-y-10">
       <section className="px-4 mt-4">
@@ -53,11 +53,7 @@ function CollectTabSection({ recentPublicDiaries, likedIds, onLike }) {
 
         <div className="flex gap-3 overflow-x-auto scrollbar-hide pb-2">
           {mockDiaries.map((it) => (
-            <DiaryCard
-              key={it.id}
-              item={it}
-              onClick={(id) => router.push(`/diary/${id}`)}
-            />
+            <DiaryCard key={it.id} item={it} onClick={onItemClick} />
           ))}
         </div>
       </section>
@@ -116,10 +112,9 @@ function MyDiaryTabSection({ diaries, onDateClick, likedIds, onLike }) {
 
 export default function DiaryPage() {
   const router = useRouter();
-  const [tab, setTab] = useState('collect'); // 'collect' | 'mine'
+  const [tab, setTab] = useState('collect');
   const [likedIds, setLikedIds] = useState([]);
 
-  // 마지막으로 보던 탭 복원
   useEffect(() => {
     const saved = sessionStorage.getItem('diaryTab');
     if (saved === 'collect' || saved === 'mine') setTab(saved);
@@ -159,8 +154,6 @@ export default function DiaryPage() {
       router.push(`/diary/${diariesForDate[0].id}`);
     } else if (diariesForDate.length > 1) {
       router.push(`/diary/date/${formatted}`);
-    } else {
-      // 선택 날짜에 작성된 일기가 없을 때는 동작 없음
     }
   };
 
@@ -178,9 +171,9 @@ export default function DiaryPage() {
 
       {tab === 'collect' ? (
         <CollectTabSection
-          recentPublicDiaries={recentPublicDiaries}
           likedIds={likedIds}
           onLike={handleLike}
+          onItemClick={(id) => router.push(`/diary/${id}`)}
         />
       ) : (
         <MyDiaryTabSection

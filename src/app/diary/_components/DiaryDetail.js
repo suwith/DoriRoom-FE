@@ -1,3 +1,4 @@
+// app/diary/_components/DiaryDetail.jsx
 'use client';
 
 import HeaderNavigationBar from '@/app/_components/HeaderNavigationBar';
@@ -13,15 +14,17 @@ export default function DiaryDetail({ diary }) {
   const router = useRouter();
   const [likedIds, setLikedIds] = useState([]);
   const [isBottomOpen, setIsBottomOpen] = useState(true);
-
-  const isLiked = likedIds.includes(diary.id);
-  const likeCount = diary.likes + (isLiked ? 1 : 0);
-  const displayLikeText = likeCount === 0 ? '좋아요' : likeCount;
   const [showDeleteModal, setShowDeleteModal] = useState(false);
 
+  const isLiked = likedIds.includes(diary.id);
+  const likeCount = (diary.likes ?? 0) + (isLiked ? 1 : 0);
+  const displayLikeText = likeCount === 0 ? '좋아요' : likeCount;
+
   const handleDelete = () => {
+    // TODO: API 연동 시 실제 삭제 처리
     console.log('삭제 완료');
     setShowDeleteModal(false);
+    router.back();
   };
 
   const handleLike = (id) => {
@@ -35,7 +38,7 @@ export default function DiaryDetail({ diary }) {
   return (
     <div className="pt-20 pb-28">
       <HeaderNavigationBar
-        title={festival.title}
+        title={festival?.title || '연결된 축제'}
         type="diary"
         onEditClick={() => console.log('수정 클릭')}
         onDeleteClick={() => setShowDeleteModal(true)}
@@ -43,10 +46,10 @@ export default function DiaryDetail({ diary }) {
       />
 
       <div className="p-5 space-y-5 whitespace-pre-line">
-        <div className="text-sm">{diary.content}</div>
+        <div className="text-sm text-neutral-800">{diary.content}</div>
         {diary.images?.length > 0 && (
           <div className="flex overflow-x-scroll gap-2 scrollbar-hide">
-            {diary.images?.map((src, idx) => (
+            {diary.images.map((src, idx) => (
               <img
                 key={idx}
                 src={src}
@@ -77,30 +80,42 @@ export default function DiaryDetail({ diary }) {
       </div>
 
       {/* 관련 축제 바텀시트 */}
-      {festival && isBottomOpen && (
-        <div className="fixed bottom-0 left-1/2 transform -translate-x-1/2 w-full max-w-[390px] mx-auto pb-16 z-30 rounded-t-xl px-4 pt-4 bg-main-5 shadow-[0_-4px_12px_rgba(0,0,0,0.1)] transition-transform duration-300 ease-in-out ">
-          <div className="w-20 h-1 bg-main-40 rounded-full mx-auto mb-2" />
+      {festival && (
+        <div
+          className={`fixed bottom-0 left-1/2 transform -translate-x-1/2 w-full max-w-[390px] mx-auto z-30 rounded-t-xl px-4 pt-4 pb-16 bg-main-5 shadow-[0_-4px_12px_rgba(0,0,0,0.1)] transition-transform duration-300 ease-in-out ${
+            isBottomOpen ? 'translate-y-0' : 'translate-y-[85%]'
+          }`}
+        >
+          <button
+            type="button"
+            className="w-20 h-1 bg-main-40 rounded-full mx-auto mb-3 block"
+            onClick={() => setIsBottomOpen((v) => !v)}
+            aria-label="관련 축제 패널 열기/닫기"
+          />
           <div className="text-sm font-bold text-main-100 flex items-center gap-1 mb-3">
             <Icon path={mdiTree} className="w-4 h-4 text-main-100" />
             관련 축제
           </div>
-          <div
-            className="bg-background rounded-xl py-1"
-            style={{
-              boxShadow: '0 0 8px rgba(0, 0, 0, 0.1)',
-            }}
+          <button
+            type="button"
             onClick={() => router.push(`/festival/${festival.id}`)}
+            className="w-full text-left"
           >
-            <FestivalListItem festival={festival} hideLikeButton={true} />
-          </div>
+            <div
+              className="bg-background rounded-xl py-1"
+              style={{ boxShadow: '0 0 8px rgba(0, 0, 0, 0.1)' }}
+            >
+              <FestivalListItem festival={festival} hideLikeButton={true} />
+            </div>
+          </button>
         </div>
       )}
 
       {/* 삭제 모달 */}
       {showDeleteModal && (
         <TwoButtonModal
-          title="즐겨찾기를 삭제하시겠어요?"
-          description="삭제된 즐겨찾기는 복구가 불가능해요!"
+          title="일기를 삭제하시겠어요?"
+          description="삭제된 일기는 복구가 불가능해요!"
           cancelText="취소할래요"
           confirmText="삭제할래요"
           onCancel={() => setShowDeleteModal(false)}

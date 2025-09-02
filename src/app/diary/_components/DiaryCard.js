@@ -19,7 +19,10 @@ export default function DiaryCard({ item, onClick }) {
         />
         <div className="absolute top-2 right-1 flex flex-col items-center px-2 py-0.5">
           <button
-            onClick={() => setIsLiked((prev) => !prev)}
+            onClick={(e) => {
+              e.stopPropagation();
+              setIsLiked((prev) => !prev);
+            }}
             className="cursor-pointer h-6"
           >
             {isLiked ? (
