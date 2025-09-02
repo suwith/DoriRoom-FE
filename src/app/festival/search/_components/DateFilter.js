@@ -5,7 +5,9 @@ import BottomSheet from './BottomSheet';
 import { useFestivalFilterStore } from '@/stores/useFestivalFilterStore';
 import {
   CATEGORY_NAME_TO_CODE,
+  dedupLocations,
   formatDateYYYYMMDD,
+  toApiLocation,
 } from '@/lib/festivalConstants';
 import axiosInstance from '@/lib/axiosInstance';
 
@@ -53,10 +55,15 @@ export default function DateFilter({
           .map((n) => CATEGORY_NAME_TO_CODE[n])
           .filter(Boolean);
 
+        // 1) UI 중복 제거
+        const uiLocations = dedupLocations(regions);
+        // 2) API 전송용으로 변환
+        const locations = uiLocations.map(toApiLocation);
+
         const res = await axiosInstance.post(
           '/event/filtered',
           {
-            locations: regions,
+            locations,
             categoryCodes: categoryCodes.length ? categoryCodes : undefined,
             startDate: temp?.start ? formatDateYYYYMMDD(temp.start) : undefined,
             endDate: temp?.end ? formatDateYYYYMMDD(temp.end) : undefined,

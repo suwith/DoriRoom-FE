@@ -6,7 +6,9 @@ import axiosInstance from '@/lib/axiosInstance';
 import { useFestivalFilterStore } from '@/stores/useFestivalFilterStore';
 import {
   CATEGORY_NAME_TO_CODE,
+  dedupLocations,
   formatDateYYYYMMDD,
+  toApiLocation,
 } from '@/lib/festivalConstants';
 
 export default function CategoryFilter({
@@ -35,10 +37,15 @@ export default function CategoryFilter({
           .map((n) => CATEGORY_NAME_TO_CODE[n])
           .filter(Boolean);
 
+        // 1) UI 중복 제거
+        const uiLocations = dedupLocations(regions);
+        // 2) API 전송용으로 변환
+        const locations = uiLocations.map(toApiLocation);
+
         const res = await axiosInstance.post(
           '/event/filtered',
           {
-            locations: regions,
+            locations,
             categoryCodes: categoryCodes.length ? categoryCodes : undefined,
             startDate: period?.start
               ? formatDateYYYYMMDD(period.start)
