@@ -1,22 +1,5 @@
 import axios from 'axios';
-
-function readTokens() {
-  if (typeof window === 'undefined')
-    return { access: '', refresh: '', kind: null };
-  const la = localStorage.getItem('access_token');
-  const lr = localStorage.getItem('refresh_token');
-  if (lr) return { access: la || '', refresh: lr, kind: 'local' };
-  const sa = sessionStorage.getItem('access_token');
-  const sr = sessionStorage.getItem('refresh_token');
-  if (sr) return { access: sa || '', refresh: sr, kind: 'session' };
-  return { access: '', refresh: '', kind: null };
-}
-
-function saveAccess(token, kind) {
-  if (typeof window === 'undefined') return;
-  if (kind === 'local') localStorage.setItem('access_token', token);
-  if (kind === 'session') sessionStorage.setItem('access_token', token);
-}
+import { useAuthStore } from '@/stores/useAuthStore';
 
 const axiosInstance = axios.create({
   baseURL: '/api/',
@@ -25,17 +8,34 @@ const axiosInstance = axios.create({
   headers: { Accept: 'application/json' },
 });
 
-// 요청 인터셉터: 세션에 토큰이 있을 때만 Authorization 부착
+// 리프레시 락/큐
+let isRefreshing = false;
+let refreshQueue = [];
+
+async function refreshTokenRequest(refreshToken) {
+  const re = await axios.post(
+    '/api/auth/reissue',
+    { refreshToken },
+    {
+      headers: { 'Content-Type': 'application/json' },
+      withCredentials: false,
+      _skipAuthRefresh: true,
+    }
+  );
+  return re.data?.content;
+}
+
+// 요청 인터셉터
 axiosInstance.interceptors.request.use((config) => {
-  const { access } = readTokens();
-  if (access) {
+  const { accessToken } = useAuthStore.getState();
+  if (accessToken) {
     config.headers = config.headers || {};
-    config.headers.Authorization = `Bearer ${access}`;
+    config.headers.Authorization = `Bearer ${accessToken}`;
   }
   return config;
 });
 
-// 응답 인터셉터: 401이면 리프레시 시도 후 원요청 재시도
+// 응답 인터셉터
 axiosInstance.interceptors.response.use(
   (res) => res,
   async (err) => {
@@ -44,45 +44,61 @@ axiosInstance.interceptors.response.use(
     if (err?.response?.status !== 401 || original._retry)
       return Promise.reject(err);
 
-    const { refresh, kind } = readTokens();
-    if (!refresh) return Promise.reject(err);
+    const { refreshToken, kind, setTokens, clearTokens } =
+      useAuthStore.getState();
+    if (!refreshToken) return Promise.reject(err);
 
     original._retry = true;
-    try {
-      const re = await axios.post(
-        '/api/auth/reissue',
-        { refreshToken: refresh },
-        {
-          headers: { 'Content-Type': 'application/json' },
-          withCredentials: false,
-          _skipAuthRefresh: true,
-        }
-      );
 
-      const newAccess = re.data?.content?.accessToken;
+    // 이미 리프레시 중 → 큐에 대기
+    if (isRefreshing) {
+      return new Promise((resolve, reject) => {
+        refreshQueue.push({ resolve, reject });
+      })
+        .then((newAccess) => {
+          original.headers = {
+            ...original.headers,
+            Authorization: `Bearer ${newAccess}`,
+          };
+          return axiosInstance(original);
+        })
+        .catch((e) => Promise.reject(e));
+    }
+
+    // 리프레시 시작
+    isRefreshing = true;
+    try {
+      const data = await refreshTokenRequest(refreshToken);
+      const newAccess = data?.accessToken;
+      const newRefresh = data?.refreshToken;
 
       if (!newAccess) {
-        if (typeof window !== 'undefined') {
-          localStorage.removeItem('access_token');
-          localStorage.removeItem('refresh_token');
-          sessionStorage.removeItem('access_token');
-          sessionStorage.removeItem('refresh_token');
-        }
+        clearTokens();
+        refreshQueue.forEach(({ reject }) =>
+          reject(new Error('No access token in refresh response'))
+        );
+        refreshQueue = [];
         return Promise.reject(new Error('No access token in refresh response'));
       }
 
-      saveAccess(newAccess, kind);
-      original.headers = original.headers || {};
-      original.headers.Authorization = `Bearer ${newAccess}`;
+      setTokens(newAccess, newRefresh, kind);
+
+      // 대기중 요청 처리
+      refreshQueue.forEach(({ resolve }) => resolve(newAccess));
+      refreshQueue = [];
+
+      original.headers = {
+        ...original.headers,
+        Authorization: `Bearer ${newAccess}`,
+      };
       return axiosInstance(original);
     } catch (e) {
-      if (typeof window !== 'undefined') {
-        localStorage.removeItem('access_token');
-        localStorage.removeItem('refresh_token');
-        sessionStorage.removeItem('access_token');
-        sessionStorage.removeItem('refresh_token');
-      }
+      clearTokens();
+      refreshQueue.forEach(({ reject }) => reject(e));
+      refreshQueue = [];
       return Promise.reject(e);
+    } finally {
+      isRefreshing = false;
     }
   }
 );
