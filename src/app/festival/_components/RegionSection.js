@@ -21,7 +21,7 @@ export default function RegionSection() {
     const regionsParam = JSON.stringify([
       {
         areaGroupCode,
-        areaGroupName: regions[index].name,
+        areaGroupName: regions[index].name.slice(0, 2),
         areaCode: 0,
         sigunguCode: null,
       },
