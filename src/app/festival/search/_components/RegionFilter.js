@@ -10,7 +10,8 @@ import {
   formatDateYYYYMMDD,
 } from '@/lib/festivalConstants';
 
-// options: [{ groupName, areaGroupCode, areaCode, areaName, sigunguCode, sigunguName }]
+const SINGLE_AREA_GROUPS = new Set([1, 3, 7]);
+
 export default function RegionFilter({
   open,
   onClose,
@@ -34,38 +35,6 @@ export default function RegionFilter({
       setOverLimit(false);
     }
   }, [overLimit, show]);
-
-  // count 조회: temp + 다른 필터 값 조합
-  useEffect(() => {
-    if (!open) return;
-
-    async function fetchCount() {
-      try {
-        const categoryCodes = (categories || [])
-          .map((n) => CATEGORY_NAME_TO_CODE[n])
-          .filter(Boolean);
-
-        const res = await axiosInstance.post(
-          '/event/filtered',
-          {
-            locations: temp,
-            categoryCodes: categoryCodes.length ? categoryCodes : undefined,
-            startDate: period?.start
-              ? formatDateYYYYMMDD(period.start)
-              : undefined,
-            endDate: period?.end ? formatDateYYYYMMDD(period.end) : undefined,
-            keyword: keyword || undefined,
-          },
-          { params: { page: 0, size: 0 } }
-        );
-        setFilteredCount(res?.data?.content?.totalElements ?? 0);
-      } catch {
-        setFilteredCount(0);
-      }
-    }
-
-    fetchCount();
-  }, [temp, keyword, categories, period, sort, open]);
 
   // 그룹 → 시도 → 시군구 구조 변환
   const byGroup = useMemo(() => {
@@ -102,17 +71,33 @@ export default function RegionFilter({
   useEffect(() => {
     if (open) {
       setTemp(value);
-      setSelectedGroup((prev) => prev || groupList[0]?.areaGroupCode || null);
+      const preferred =
+        value?.[0]?.areaGroupCode || groupList[0]?.areaGroupCode || null;
+      setSelectedGroup((prev) => prev || preferred);
     }
   }, [open, value, groupList]);
 
-  const isSelected = (group, areaCode, sigunguCode) =>
-    temp.some(
+  // 선택 표시: 기존 로직 그대로 (단일 그룹일 때 group 전체가 있으면 해당 시/도 전체도 선택 표시)
+  const isSelected = (group, areaCode, sigunguCode) => {
+    const exact = temp.some(
       (x) =>
         x.areaGroupCode === group &&
         x.areaCode === areaCode &&
         x.sigunguCode === sigunguCode
     );
+    if (exact) return true;
+
+    if (sigunguCode === null && areaCode > 0 && SINGLE_AREA_GROUPS.has(group)) {
+      const hasGroupAll = temp.some(
+        (x) =>
+          x.areaGroupCode === group &&
+          x.areaCode === 0 &&
+          x.sigunguCode === null
+      );
+      if (hasGroupAll) return true;
+    }
+    return false;
+  };
 
   const removeChip = (target) => {
     setTemp((prev) =>
@@ -128,25 +113,37 @@ export default function RegionFilter({
   };
 
   const prettyChip = (sel) => {
-    if (sel.areaCode === 0) {
-      const groupObj = byGroup[sel.areaGroupCode];
-      return groupObj ? `${groupObj.groupName} 전체` : '';
-    }
     const groupObj = byGroup[sel.areaGroupCode];
+    if (sel.areaCode === 0) return groupObj ? `${groupObj.groupName} 전체` : '';
     const sidoObj = groupObj?.sidos[sel.areaCode];
     if (!sidoObj) return '';
-    if (sel.sigunguCode === null) return `${sidoObj.areaName} 전체`;
+    if (sel.sigunguCode === null) {
+      if (SINGLE_AREA_GROUPS.has(sel.areaGroupCode)) {
+        return groupObj ? `${groupObj.groupName} 전체` : '';
+      }
+      return `${sidoObj.areaName} 전체`;
+    }
     const sigungu = sidoObj.sigungus.find((s) => s.code === sel.sigunguCode);
     return `${sidoObj.areaName} ${sigungu?.name ?? ''}`;
   };
 
-  // 도 전체 토글
+  // 도 전체 토글 (기존 그대로)
   const toggleGroupAll = (groupCode) => {
     setTemp((prev) => {
-      const exists = isSelected(groupCode, 0, null);
+      const exists = prev.some(
+        (x) =>
+          x.areaGroupCode === groupCode &&
+          x.areaCode === 0 &&
+          x.sigunguCode === null
+      );
       if (exists) {
         return prev.filter(
-          (x) => !(x.areaGroupCode === groupCode && x.areaCode === 0)
+          (x) =>
+            !(
+              x.areaGroupCode === groupCode &&
+              x.areaCode === 0 &&
+              x.sigunguCode === null
+            )
         );
       }
       const cleared = prev.filter((x) => x.areaGroupCode !== groupCode);
@@ -161,12 +158,37 @@ export default function RegionFilter({
     });
   };
 
-  // 시/도 전체 or 시군구 토글
+  // 수정된 토글: group 전체가 있을 때 area/시군구 선택 시 group 전체를 먼저 해제
   const toggle = (groupCode, areaCode, sigunguCode) => {
     setTemp((prev) => {
-      const exists = isSelected(groupCode, areaCode, sigunguCode);
+      // 1) 그룹 전체가 선택된 상태라면 우선 제거
+      let base = prev;
+      const hasGroupAll = prev.some(
+        (x) =>
+          x.areaGroupCode === groupCode &&
+          x.areaCode === 0 &&
+          x.sigunguCode === null
+      );
+      if (hasGroupAll && (areaCode > 0 || sigunguCode != null)) {
+        base = prev.filter(
+          (x) =>
+            !(
+              x.areaGroupCode === groupCode &&
+              x.areaCode === 0 &&
+              x.sigunguCode === null
+            )
+        );
+      }
+
+      // 2) 동일 항목이면 해제
+      const exists = base.some(
+        (x) =>
+          x.areaGroupCode === groupCode &&
+          x.areaCode === areaCode &&
+          x.sigunguCode === sigunguCode
+      );
       if (exists) {
-        return prev.filter(
+        return base.filter(
           (x) =>
             !(
               x.areaGroupCode === groupCode &&
@@ -176,9 +198,9 @@ export default function RegionFilter({
         );
       }
 
+      // 3) 시/도 전체 선택 시: 해당 시도의 기존 선택만 제거하고 추가
       if (sigunguCode === null) {
-        // 시/도 전체 선택 → 해당 시도의 모든 선택 제거 후 전체만 추가
-        const cleared = prev.filter(
+        const cleared = base.filter(
           (x) => !(x.areaGroupCode === groupCode && x.areaCode === areaCode)
         );
         if (cleared.length + 1 > MAX) {
@@ -190,27 +212,77 @@ export default function RegionFilter({
           { areaGroupCode: groupCode, areaCode, sigunguCode: null },
         ];
       }
-      // 개별 시군구 선택 → 같은 시도의 전체 + 같은 그룹의 도 전체 제거
-      const cleared = prev.filter(
+
+      // 4) 개별 시군구 선택 시: 같은 시/도 전체 선택은 제거
+      const cleared = base.filter(
         (x) =>
           !(
-            (x.areaGroupCode === groupCode &&
-              x.areaCode === areaCode &&
-              x.sigunguCode === null) ||
-            (x.areaGroupCode === groupCode &&
-              x.areaCode === 0 &&
-              x.sigunguCode === null)
+            x.areaGroupCode === groupCode &&
+            x.areaCode === areaCode &&
+            x.sigunguCode === null
           )
       );
-
       if (cleared.length >= MAX) {
         setOverLimit(true);
         return prev;
       }
-
       return [...cleared, { areaGroupCode: groupCode, areaCode, sigunguCode }];
     });
   };
+
+  // 카운트 API 변환 (기존 그대로)
+  const toApiLocationByGroup = (sel) => {
+    const areaGroupCode = Number(sel.areaGroupCode);
+    const sidos = byGroup[areaGroupCode]?.sidos || {};
+    const keys = Object.keys(sidos);
+
+    if (sel.areaCode === 0 && sel.sigunguCode == null) {
+      if (keys.length === 1) {
+        const onlyArea = Number(keys[0]);
+        return { areaGroupCode, areaCode: onlyArea, sigunguCode: null };
+      }
+      return { areaGroupCode, areaCode: null, sigunguCode: null };
+    }
+
+    return {
+      areaGroupCode,
+      areaCode: sel.areaCode == null ? null : Number(sel.areaCode),
+      sigunguCode: sel.sigunguCode == null ? null : Number(sel.sigunguCode),
+    };
+  };
+
+  useEffect(() => {
+    if (!open) return;
+
+    async function fetchCount() {
+      try {
+        const categoryCodes = (categories || [])
+          .map((n) => CATEGORY_NAME_TO_CODE[n])
+          .filter(Boolean);
+
+        const locations = (temp || []).map(toApiLocationByGroup);
+
+        const res = await axiosInstance.post(
+          '/event/filtered',
+          {
+            locations,
+            categoryCodes: categoryCodes.length ? categoryCodes : undefined,
+            startDate: period?.start
+              ? formatDateYYYYMMDD(period.start)
+              : undefined,
+            endDate: period?.end ? formatDateYYYYMMDD(period.end) : undefined,
+            keyword: keyword || undefined,
+          },
+          { params: { page: 0, size: 0 } }
+        );
+        setFilteredCount(res?.data?.content?.totalElements ?? 0);
+      } catch {
+        setFilteredCount(0);
+      }
+    }
+
+    fetchCount();
+  }, [temp, keyword, categories, period, sort, open]);
 
   return (
     <BottomSheet
@@ -279,7 +351,7 @@ export default function RegionFilter({
         <div className="max-h-[340px] overflow-y-auto scrollbar-hide">
           {selectedGroup && (
             <>
-              {/* 도 전체 (시도가 2개 이상일 때만) */}
+              {/* 도 전체: 시도가 2개 이상일 때만 노출 */}
               {Object.keys(byGroup[selectedGroup].sidos).length > 1 && (
                 <div className="border-b border-neutral-100">
                   <button

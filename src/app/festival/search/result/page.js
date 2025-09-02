@@ -10,6 +10,51 @@ import RegionFilter from '@/app/festival/search/_components/RegionFilter';
 import CategoryFilter from '@/app/festival/search/_components/CategoryFilter';
 import DateFilter from '@/app/festival/search/_components/DateFilter';
 import { useSearchFestivals } from '@/hooks/festival/useSearchFestivals';
+import ErrorContent from '@/app/_components/ErrorContent';
+import LoadingContent from '@/app/_components/LoadingContent';
+
+const SINGLE_AREA_GROUPS = new Set([1, 3, 7]);
+const GROUP_CODE_TO_NAME = {
+  1: '서울',
+  2: '경기',
+  3: '강원',
+  4: '경상',
+  5: '전라',
+  6: '충청',
+  7: '제주',
+};
+
+// URL -> UI 정규화
+function normalizeRegion(sel) {
+  const areaGroupCode = Number(sel.areaGroupCode);
+  const areaCode = sel.areaCode == null ? 0 : Number(sel.areaCode);
+  const sigunguCode = sel.sigunguCode == null ? null : Number(sel.sigunguCode);
+  return {
+    areaGroupCode,
+    areaCode,
+    sigunguCode,
+    areaGroupName: sel.areaGroupName,
+    areaName: sel.areaName,
+    sigunguName: sel.sigunguName,
+  };
+}
+
+// 옵션 리스트에서 이름 찾기
+function findAreaName(regionOptions, groupCode, areaCode) {
+  const hit = regionOptions.find(
+    (o) => o.areaGroupCode === groupCode && o.areaCode === areaCode
+  );
+  return hit?.areaName;
+}
+function findSigunguName(regionOptions, groupCode, areaCode, sigunguCode) {
+  const hit = regionOptions.find(
+    (o) =>
+      o.areaGroupCode === groupCode &&
+      o.areaCode === areaCode &&
+      o.sigunguCode === sigunguCode
+  );
+  return hit?.sigunguName;
+}
 
 export default function FestivalSearchResultPage() {
   const router = useRouter();
@@ -24,7 +69,7 @@ export default function FestivalSearchResultPage() {
 
   // 필터 상태
   const [sort, setSort] = useState('');
-  const [regions, setRegions] = useState([]); // [{ areaGroupCode, areaCode, sigunguCode }]
+  const [regions, setRegions] = useState([]); // [{ areaGroupCode, areaCode, sigunguCode, *Name }]
   const [categories, setCategories] = useState([]);
   const [period, setPeriod] = useState({ start: null, end: null });
 
@@ -42,13 +87,24 @@ export default function FestivalSearchResultPage() {
 
     setSort(params.get('sort') || '');
 
-    // regions: JSON 직렬화된 객체 배열
-    const r = params.get('regions');
-    if (r) {
-      try {
-        setRegions(JSON.parse(r));
-      } catch {
-        setRegions([]);
+    const g = params.get('areaGroupCode');
+    if (g) {
+      // 단일 파라미터도 UI 표준으로 정규화
+      setRegions([
+        { areaGroupCode: Number(g), areaCode: 0, sigunguCode: null },
+      ]);
+    } else {
+      const r = params.get('regions');
+      if (r) {
+        try {
+          const parsed = JSON.parse(r);
+          const normalized = Array.isArray(parsed)
+            ? parsed.map(normalizeRegion)
+            : [];
+          setRegions(normalized);
+        } catch {
+          setRegions([]);
+        }
       }
     }
 
@@ -88,8 +144,9 @@ export default function FestivalSearchResultPage() {
     );
   };
 
-  // regionOptions: RegionFilter에서 쓰이는 옵션
+  // RegionFilter 옵션
   const [regionOptions, setRegionOptions] = useState([]);
+
   useEffect(() => {
     fetch('/regions.json')
       .then((r) => r.json())
@@ -97,8 +154,8 @@ export default function FestivalSearchResultPage() {
         const list = [];
         for (const g of grouped) {
           const groupName = g.areaGroupName;
-          const areaGroupCode = g.areaGroupCode;
-          const areaCode = g.areaCode;
+          const areaGroupCode = Number(g.areaGroupCode);
+          const areaCode = Number(g.areaCode);
           const areaName = g.areaName;
           const content = Array.isArray(g.content) ? g.content : [];
           for (const it of content) {
@@ -107,7 +164,7 @@ export default function FestivalSearchResultPage() {
               areaGroupCode,
               areaCode,
               areaName,
-              sigunguCode: it.code,
+              sigunguCode: Number(it.code),
               sigunguName: it.name,
             });
           }
@@ -132,15 +189,44 @@ export default function FestivalSearchResultPage() {
   const regionLabel = regions.length
     ? (() => {
         const first = regions[0];
-        const area = regionOptions.find(
-          (o) =>
-            o.areaGroupCode === first.areaGroupCode &&
-            o.areaCode === first.areaCode &&
-            o.sigunguCode === first.sigunguCode
-        );
-        if (!area) return '지역';
-        if (first.sigunguCode === null) return `${area.areaName} 전체`;
-        return `${area.areaName} ${area.sigunguName}`;
+
+        // 단일 시/도 그룹에서 UI가 시/도 전체로 들어온 경우에도 칩은 그룹명 전체로 노출
+        if (first.sigunguCode == null) {
+          const isGroupAll = first.areaCode === 0 || first.areaCode == null;
+          const isSingleGroup = SINGLE_AREA_GROUPS.has(first.areaGroupCode);
+
+          if (isGroupAll) {
+            const gName =
+              first.areaGroupName || GROUP_CODE_TO_NAME[first.areaGroupCode];
+            return gName ? `${gName} 전체` : '지역';
+          }
+
+          if (isSingleGroup) {
+            const gName =
+              first.areaGroupName || GROUP_CODE_TO_NAME[first.areaGroupCode];
+            if (gName) return `${gName} 전체`;
+          }
+
+          const aName =
+            first.areaName ||
+            findAreaName(regionOptions, first.areaGroupCode, first.areaCode);
+          return aName ? `${aName} 전체` : '지역';
+        }
+
+        // 개별 시군구
+        const aName =
+          first.areaName ||
+          findAreaName(regionOptions, first.areaGroupCode, first.areaCode);
+        const sName =
+          first.sigunguName ||
+          findSigunguName(
+            regionOptions,
+            first.areaGroupCode,
+            first.areaCode,
+            first.sigunguCode
+          );
+        if (!aName) return '지역';
+        return sName ? `${aName} ${sName}` : aName;
       })() + (regions.length > 1 ? ` 외 ${regions.length - 1}` : '')
     : '지역';
 
@@ -152,7 +238,6 @@ export default function FestivalSearchResultPage() {
     d ? `${String(d.getMonth() + 1)}/${String(d.getDate())}` : '';
   const sortLabel = sort || '정렬';
 
-  // chip 버튼 스타일
   const chip = (active) =>
     `px-2 py-0.5 rounded-full border text-xs inline-flex items-center gap-1 whitespace-nowrap shrink-0 ${
       active
@@ -286,17 +371,9 @@ export default function FestivalSearchResultPage() {
               </div>
             ))
           )}
-          {loading && (
-            <div className="py-4 text-center text-neutral-500 text-sm">
-              로딩중...
-            </div>
-          )}
+          {loading && <LoadingContent />}
           <div ref={sentinelRef} />
-          {error && (
-            <div className="py-3 text-center text-red-500 text-xs">
-              오류가 발생했습니다.
-            </div>
-          )}
+          {error && <ErrorContent />}
         </div>
       </main>
 
