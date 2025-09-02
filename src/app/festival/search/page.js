@@ -41,7 +41,12 @@ export default function SearchPage() {
     const encoded = encodeURIComponent(keyword);
     const base = `/festival/search/result?query=${encoded}`;
     const path = isSelectMode ? `${base}&mode=select` : base;
-    router.push(path);
+
+    if (isSelectMode) {
+      router.replace(path);
+    } else {
+      router.push(path);
+    }
   };
 
   const SkeletonItem = ({ idx }) => (
@@ -66,7 +71,11 @@ export default function SearchPage() {
             const base = `/festival/search/result?query=${encoded}`;
             const path = isSelectMode ? `${base}&mode=select` : base;
 
-            router.push(path);
+            if (isSelectMode) {
+              router.replace(path);
+            } else {
+              router.push(path);
+            }
           }}
           onClear={() => setInput('')}
           withBack

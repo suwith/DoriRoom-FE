@@ -2,8 +2,10 @@
 
 import { GoHeart, GoHeartFill } from 'react-icons/go';
 import { FaCommentAlt } from 'react-icons/fa';
-import { useRef } from 'react';
+import { useRef, useState } from 'react';
 import useFestivalFavorite from '@/hooks/festival/useFestivalFavorite';
+import TwoButtonModal from '@/app/_components/TwoButtonModal';
+import { useRouter } from 'next/navigation';
 
 export default function FestivalListItem({
   festival,
@@ -11,7 +13,9 @@ export default function FestivalListItem({
   mode = 'default',
   onSelect = null,
 }) {
+  const router = useRouter();
   const imgRef = useRef(null);
+  const [showAlreadyWrittenModal, setShowAlreadyWrittenModal] = useState(false);
 
   const { liked, likeCount, loading, mutating, toggleFavorite } =
     useFestivalFavorite(festival.eventId, festival.likes || 0);
@@ -19,6 +23,18 @@ export default function FestivalListItem({
   const handleLike = (e) => {
     e.stopPropagation();
     if (!loading && !mutating) toggleFavorite();
+  };
+
+  // 선택 버튼 클릭 시 확인 로직 (추후 API 연결 예정)
+  const handleSelect = () => {
+    // TODO: 나중에 여기서 API 호출해서 확인
+    const alreadyWritten = false;
+
+    if (alreadyWritten) {
+      setShowAlreadyWrittenModal(true);
+    } else {
+      onSelect?.(festival);
+    }
   };
 
   if (mode === 'select') {
@@ -50,12 +66,27 @@ export default function FestivalListItem({
             className="flex text-background text-sm bg-main-100 px-3 py-1.5 rounded-sm "
             onClick={(e) => {
               e.stopPropagation();
-              onSelect?.(festival);
+              handleSelect();
             }}
           >
             선택
           </button>
         </div>
+        {showAlreadyWrittenModal && (
+          <TwoButtonModal
+            title="방문한 축제에 대해서는 하나의 일기만 작성할 수 있어요! 😭"
+            description="다른 축제를 선택하시겠습니까?"
+            cancelText="작성 취소하기"
+            confirmText="다른 축제 검색"
+            onCancel={() => {
+              setShowAlreadyWrittenModal(false);
+              router.replace(`/diary`);
+            }}
+            onConfirm={() => {
+              setShowAlreadyWrittenModal(false);
+            }}
+          />
+        )}
       </div>
     );
   }

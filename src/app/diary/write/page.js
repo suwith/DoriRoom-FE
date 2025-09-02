@@ -80,7 +80,6 @@ export default function DiaryWrite() {
         const saved = JSON.parse(
           sessionStorage.getItem('diaryWriteForm') || '{}'
         );
-        console;
 
         if (saved.selectedDate) {
           const d = new Date(saved.selectedDate);
