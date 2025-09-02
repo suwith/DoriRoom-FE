@@ -2,7 +2,7 @@
 
 import Link from 'next/link';
 
-export default function Result({ quiz }) {
+export default function Result({ quiz, regionId }) {
   const { success, rewards } = quiz;
   const exp = rewards.find((r) => r.rewardType === 'EXP')?.amount;
   const credit = rewards.find((r) => r.rewardType === 'CREDIT')?.amount;
@@ -29,7 +29,7 @@ export default function Result({ quiz }) {
       <div className="px-[16px] pb-10">
         <Link
           className="block w-full bg-main-100 text-background text-center text-xl font-semibold rounded-md py-2.5"
-          href={`/collection/`}
+          href={`/collection/${regionId}`}
         >
           보상 받기
         </Link>

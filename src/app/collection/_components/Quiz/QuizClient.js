@@ -3,7 +3,7 @@
 import OX from './OX';
 import Choices from './Choices';
 import Result from './Result';
-import { useEffect } from 'react';
+import { useEffect, useMemo, useRef } from 'react';
 import useCompleteQuiz from '@/hooks/collection/useCompleteQuiz';
 import LoadingContent from '@/app/_components/LoadingContent';
 
@@ -14,37 +14,47 @@ export default function QuizClient({
   setIsStart,
   challengeId,
   quizCount,
+  regionId,
 }) {
-  const type = quiz?.option3 === null ? true : false;
+  const isOX = useMemo(() => quiz?.option3 === null, [quiz]);
+  const finished = sequence === Number(quizCount) + 1;
 
   const { mutate, data, loading, error } = useCompleteQuiz({
     onSuccess: () => {},
     onError: () => {},
   });
 
+  // finished가 되는 순간에 딱 한 번만 mutate 실행
+  const submittedRef = useRef(false);
   useEffect(() => {
-    const post = async () => {
-      await mutate({ challengeId });
-    };
-
-    if (sequence === Number(quizCount) + 1) {
-      post();
+    if (finished && !submittedRef.current) {
+      submittedRef.current = true;
+      mutate({ challengeId });
     }
-  }, [sequence]);
+  }, [finished, mutate, challengeId]);
 
-  if (loading) return <LoadingContent loading={loading} />;
-
-  if (sequence === Number(quizCount) + 1) return <Result quiz={data} />;
+  // 끝난 상태라면: data가 올 때까지 로딩 → data 오면 Result
+  if (finished) {
+    if (loading || !data) return <LoadingContent loading={true} />;
+    if (error) return <div>제출 중 오류가 발생했어요. 다시 시도해주세요.</div>;
+    return <Result quiz={data} regionId={regionId} />;
+  }
 
   return (
     <div>
-      {type ? (
-        <OX quiz={quiz} setSequence={setSequence} setIsStart={setIsStart} />
+      {isOX ? (
+        <OX
+          quiz={quiz}
+          setSequence={setSequence}
+          setIsStart={setIsStart}
+          quizCount={quizCount}
+        />
       ) : (
         <Choices
           quiz={quiz}
           setSequence={setSequence}
           setIsStart={setIsStart}
+          quizCount={quizCount}
         />
       )}
     </div>

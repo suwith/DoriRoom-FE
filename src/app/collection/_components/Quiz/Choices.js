@@ -5,7 +5,7 @@ import { useRouter } from 'next/navigation';
 import useSubmitQuiz from '@/hooks/collection/useSubmitQuiz';
 import LoadingContent from '@/app/_components/LoadingContent';
 
-export default function Choices({ quiz, setSequence, setIsStart }) {
+export default function Choices({ quiz, setSequence, setIsStart, quizCount }) {
   const router = useRouter();
   const { questionId, sequence, content, option1, option2, option3, option4 } =
     quiz;
@@ -22,7 +22,7 @@ export default function Choices({ quiz, setSequence, setIsStart }) {
     <div className="h-screen mx-4 flex flex-col">
       {sequence !== 5 && (
         <div className="flex gap-2 pt-28">
-          {[1, 2, 3, 4, 5].map((i) => (
+          {Array.from({ length: quizCount }, (v, i) => i + 1).map((i) => (
             <hr
               key={i}
               className={`w-full py-1 border-none rounded-xl ${

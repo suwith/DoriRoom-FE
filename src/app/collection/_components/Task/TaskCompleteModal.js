@@ -5,8 +5,8 @@ export default function TaskCompleteModal({
   isOpen,
   setIsOpen,
   title,
-  exp,
-  credit,
+  exp = null,
+  credit = null,
 }) {
   if (!isOpen) return null;
 
@@ -23,14 +23,18 @@ export default function TaskCompleteModal({
         </span>
         <div className="flex gap-2 my-4">
           <span className="text-neutral-500 font-normal text-base">보상: </span>
-          <div className="flex items-center gap-1 text-background px-1 py-0.5 rounded-sm font-semibold bg-main-100">
-            <FaCirclePlus size={15} />
-            <span className="font-semibold text-xs">{exp}xp</span>
-          </div>
-          <div className="flex items-center gap-1 bg-background border border-main-5 px-1 rounded-sm font-normal text-main-100">
-            <FaFire size={15} className="scale-x-[-1]" />
-            <span className="text-neutral-900 text-xs">{credit}</span>
-          </div>
+          {exp && (
+            <div className="flex items-center gap-1 text-background px-1 py-0.5 rounded-sm font-semibold bg-main-100">
+              <FaCirclePlus size={15} />
+              <span className="font-semibold text-xs">{exp}xp</span>
+            </div>
+          )}
+          {credit && (
+            <div className="flex items-center gap-1 bg-background border border-main-5 px-1 rounded-sm font-normal text-main-100">
+              <FaFire size={15} className="scale-x-[-1]" />
+              <span className="text-neutral-900 text-xs">{credit}</span>
+            </div>
+          )}
         </div>
       </div>
     </div>

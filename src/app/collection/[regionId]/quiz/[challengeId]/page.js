@@ -57,6 +57,7 @@ export default function page() {
           setIsStart={setIsStart}
           challengeId={challengeId}
           quizCount={quizCount}
+          regionId={regionId}
         />
       ) : (
         <StartPage
