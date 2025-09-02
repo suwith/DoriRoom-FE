@@ -27,7 +27,7 @@ function mapToReviewItem(row) {
     content: row.content ?? '',
     images: parseImageUrls(row.imageUrls),
     likes: row.likes ?? 0,
-    authorImage: row.userInfo?.profileImage ?? null,
+    authorImage: row.userInfo?.profileImageUrl ?? null,
   };
 }
 
@@ -116,8 +116,22 @@ export default function useFestivalReviews({
   }, [enabled, eventId]);
 
   const reload = () => loadPage(0);
+
   const loadMore = () => {
-    if (!loading && hasMore) loadPage(page + 1);
+    if (!loading && hasMore) {
+      const next = page + 1;
+      console.log(
+        '[loadMore] page:',
+        page,
+        'next:',
+        next,
+        'loading:',
+        loading,
+        'hasMore:',
+        hasMore
+      );
+      loadPage(next);
+    }
   };
 
   return {

@@ -19,13 +19,8 @@ import LoadingContent from '@/app/_components/LoadingContent';
 export default function FestivalDetail({ festival }) {
   const router = useRouter();
 
-  const listSentinelRef = useRef(null);
-  const fetchLockRef = useRef(0);
-
-  // Tabs
   const [activeTab, setActiveTab] = useState('설명');
 
-  // Review like (client only)
   const [likedReviews, setLikedReviews] = useState([]);
   const toggleReviewLike = (reviewId) => {
     setLikedReviews((prev) =>
@@ -101,37 +96,6 @@ export default function FestivalDetail({ festival }) {
   useEffect(() => {
     setSort(reviewSort);
   }, [reviewSort, setSort]);
-
-  // 추가: 일기장 탭에서만 동작
-  useEffect(() => {
-    if (activeTab !== '일기장') return;
-    const el = listSentinelRef.current;
-    if (!el) return;
-
-    const throttleMs = 500;
-    const io = new IntersectionObserver(
-      ([entry]) => {
-        const now = Date.now();
-        if (
-          entry.isIntersecting &&
-          hasMore &&
-          !listLoading &&
-          now - fetchLockRef.current > throttleMs
-        ) {
-          fetchLockRef.current = now;
-          loadMore();
-        }
-      },
-      {
-        root: null,
-        threshold: 0.1,
-        rootMargin: '0px 0px 100px 0px',
-      }
-    );
-
-    io.observe(el);
-    return () => io.disconnect();
-  }, [activeTab, hasMore, listLoading, loadMore]);
 
   return (
     <div className="max-w-[390px] w-screen min-h-screen pb-10">
@@ -338,7 +302,19 @@ export default function FestivalDetail({ festival }) {
               type="festival"
             />
           ))}
-          <div ref={listSentinelRef} className="h-6" />
+
+          {hasMore && (
+            <div className="py-3">
+              <button
+                type="button"
+                onClick={loadMore}
+                disabled={listLoading}
+                className="w-full py-2 text-sm rounded-md border border-main-100 text-main-100 disabled:opacity-60"
+              >
+                {listLoading ? '불러오는 중...' : '더 불러오기'}
+              </button>
+            </div>
+          )}
 
           <button
             className="fixed bottom-7 left-1/2 -translate-x-1/2 w-[350px] py-2 bg-main-100 text-background rounded-lg text-sm font-medium shadow-md"
