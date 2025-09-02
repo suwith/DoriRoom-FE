@@ -135,6 +135,7 @@ export default function FestivalSearchResultPage() {
     if (categories.length) query.set('categories', categories.join(','));
     if (period.start) query.set('start', period.start.toISOString());
     if (period.end) query.set('end', period.end.toISOString());
+    if (mode === 'select') query.set('mode', 'select');
     router.push(`/festival/search/result?${query.toString()}`);
   };
 
@@ -371,9 +372,17 @@ export default function FestivalSearchResultPage() {
               </div>
             ))
           )}
-          {loading && <LoadingContent />}
+          {loading && <LoadingContent loading={loading} />}
           <div ref={sentinelRef} />
-          {error && <ErrorContent />}
+          {error && (
+            <ErrorContent
+              error={
+                typeof error === 'string'
+                  ? error
+                  : (error?.message ?? '알 수 없는 오류가 발생했어요.')
+              }
+            />
+          )}
         </div>
       </main>
 
