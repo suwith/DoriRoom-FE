@@ -2,7 +2,9 @@
 
 import TasksPage from '../_components/Task/TaskPage';
 import HeaderNavigationBar from '@/app/_components/HeaderNavigationBar';
+import useAtlases from '@/hooks/collection/useAtlases';
 import { useParams } from 'next/navigation';
+import { useEffect } from 'react';
 
 const regionDetails = [
   { atlasId: 1, name: '서울', areaGroup: 'SEOUL' },
@@ -21,6 +23,11 @@ export default function Page() {
     : params.regionId;
 
   const region = regionDetails.find((r) => r.atlasId === Number(regionId)); // 배열에서 첫 번째 항목 찾기
+  const { atlases, loading, error, refetch } = useAtlases();
+
+  useEffect(() => {
+    refetch({ areaGroup: region.areaGroup });
+  }, []);
 
   return (
     <div className="max-w-[390px] w-screen mx-auto h-screen">
@@ -28,6 +35,7 @@ export default function Page() {
         title={region.name}
         className="bg-background"
         type="collection"
+        atlases={atlases}
       />
       <div className="pt-20">
         <TasksPage type="region" regionId={regionId} area={region.areaGroup} />

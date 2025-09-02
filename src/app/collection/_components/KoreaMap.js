@@ -327,7 +327,10 @@ export default function UnifiedKoreaMap() {
               <div className="bg-sub-5 px-1 py-1 text-xs text-sub-100">
                 한정판 ✨
               </div>
-              <p className="text-lg text-main-100"></p>
+              <p className="text-lg text-main-100">
+                {atlases?.nextRewardItem?.itemName ||
+                  atlases?.claimableRewardItems?.[0]?.itemName}
+              </p>
             </div>
           </div>
           <div className="flex flex-col mt-5">
@@ -338,18 +341,34 @@ export default function UnifiedKoreaMap() {
               </span>
             </div>
             <GaugeBar
-              value={(atlases.currentExp / atlases.nextLevelExp) * 10}
+              value={(atlases.currentExp / atlases.nextLevelExp) * 100}
             />
-            <div className="flex justify-between items-center mt-3">
-              <span className="font-regular text-sm text-neutral-400">
-                Lv.10을 달성하면 반달가슴곰 인형을 얻을 수 있어요!
-              </span>
-              {atlases.currentExp === atlases.nextLevelExp && (
-                <button className="px-1.5 py-0.5 rounded-sm bg-sub2-100 text-background font-regular text-sm">
+            {atlases?.claimableRewardItems.length ? (
+              <div className="flex justify-between items-center mt-3">
+                <span className="flex-1 min-w-0 leading-5 font-regular text-sm text-neutral-400">
+                  Lv.{atlases?.claimableRewardItems?.[0]?.targetLevel}을
+                  달성하여 {atlases?.claimableRewardItems?.[0]?.itemName}을 받을
+                  수 있어요!
+                </span>
+                <button className="shrink-0 self-center inline-flex items-center justify-center h-7 px-2 rounded-sm bg-sub2-100 text-background text-sm leading-none whitespace-nowrap">
                   보상 받기
                 </button>
-              )}
-            </div>
+              </div>
+            ) : Object.keys(atlases?.nextRewardItem).length ? (
+              <div className="flex justify-between items-center mt-3">
+                <span className="font-regular text-sm text-neutral-400">
+                  Lv.{atlases?.nextRewardItem?.targetLevel}을 달성하면{' '}
+                  {atlases?.nextRewardItem?.itemName}을 얻을 수 있어요!
+                </span>
+              </div>
+            ) : (
+              <div className="flex justify-between items-center mt-3">
+                <div />
+                <div className="shrink-0 self-center inline-flex items-center justify-center h-7 px-2 rounded-sm bg-neutral-300 text-background text-sm leading-none whitespace-nowrap">
+                  수령 완료
+                </div>
+              </div>
+            )}
           </div>
           <button
             className="w-full bg-main-100 font-semibold text-white text-lg rounded-lg py-2 mt-7"
