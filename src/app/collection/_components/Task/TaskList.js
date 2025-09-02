@@ -1,7 +1,7 @@
 import TaskCard from './TaskCard';
 import RegionTaskCard from './RegionTaskCard';
 
-export default function TaskList({ type, tasks, regionId }) {
+export default function TaskList({ type, tasks, regionId, refetch }) {
   return (
     <div className="space-y-3 max-h-screen overflow-y-auto scrollbar-hide mb-16">
       {tasks.map((task) => {
@@ -13,6 +13,7 @@ export default function TaskList({ type, tasks, regionId }) {
               key={task.challengeId}
               {...task}
               regionId={regionId}
+              refetch={refetch}
             />
           );
       })}

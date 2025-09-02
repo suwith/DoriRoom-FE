@@ -59,7 +59,11 @@ export default function page() {
           quizCount={quizCount}
         />
       ) : (
-        <StartPage name={region.name} setIsStart={setIsStart} />
+        <StartPage
+          name={region.name}
+          setIsStart={setIsStart}
+          quizCount={quizCount}
+        />
       )}
     </div>
   );

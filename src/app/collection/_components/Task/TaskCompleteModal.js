@@ -5,13 +5,13 @@ export default function TaskCompleteModal({
   isOpen,
   setIsOpen,
   title,
-  xp,
-  reward,
+  exp,
+  credit,
 }) {
   if (!isOpen) return null;
 
   return (
-    <div className="max-w-[390px] w-full fixed top-0 bottom-0 bg-black/50 flex justify-center items-center z-50">
+    <div className="max-w-[390px] w-full fixed top-0 bottom-0 left-1/2 transform -translate-x-1/2 tr bg-black/25 flex justify-center items-center z-50">
       <div className="flex flex-col items-center bg-background p-6 rounded-lg w-[90%]">
         <img src="/firecracker.png" />
         <span className="text-neutral-500 font-normal text-base">
@@ -25,19 +25,13 @@ export default function TaskCompleteModal({
           <span className="text-neutral-500 font-normal text-base">보상: </span>
           <div className="flex items-center gap-1 text-background px-1 py-0.5 rounded-sm font-semibold bg-main-100">
             <FaCirclePlus size={15} />
-            <span className="font-semibold text-xs">{200}xp</span>
+            <span className="font-semibold text-xs">{exp}xp</span>
           </div>
-          <div className="flex items-center gap-1 bg-background px-1 rounded-sm font-normal text-main-100">
+          <div className="flex items-center gap-1 bg-background border border-main-5 px-1 rounded-sm font-normal text-main-100">
             <FaFire size={15} className="scale-x-[-1]" />
-            <span className="text-neutral-900 text-xs">{10}</span>
+            <span className="text-neutral-900 text-xs">{credit}</span>
           </div>
         </div>
-        <button
-          className="bg-main-100 w-full text-background rounded-lg py-2.5 font-semibold text-xl"
-          onClick={() => setIsOpen(false)}
-        >
-          보상 받기
-        </button>
       </div>
     </div>
   );

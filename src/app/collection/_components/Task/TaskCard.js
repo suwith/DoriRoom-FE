@@ -1,5 +1,11 @@
+'use client';
+
 import { FaCirclePlus } from 'react-icons/fa6';
 import { FaFire } from 'react-icons/fa6';
+import LoadingModal from '@/app/_components/LoadingModal';
+import useChallengesClaim from '@/hooks/collection/useChallengesClaim';
+import TaskCompleteModal from './TaskCompleteModal';
+import { useState } from 'react';
 
 export default function TaskCard({
   challengeId,
@@ -10,7 +16,20 @@ export default function TaskCard({
   rewards,
   currentProgress,
   status,
+  refetch,
 }) {
+  const [isOpen, setIsOpen] = useState(false);
+  const { mutate, loading } = useChallengesClaim({
+    onSuccess: () => {
+      setIsOpen(true);
+      setTimeout(() => {
+        setIsOpen(false);
+        refetch({ group: 'COMMON', area: '' });
+      }, 3000);
+    },
+    onError: () => {},
+  });
+
   return (
     <div
       className={`rounded-xl p-3 ${status === 'COMPLETED' ? 'bg-sub-5' : status === 'IN_PROGRESS' ? 'bg-[#35C284]/15' : status === 'WAIT_REWARD' ? 'bg-sub2-5' : 'bg-neutral-100'}`}
@@ -34,7 +53,12 @@ export default function TaskCard({
             달성
           </div>
         ) : status === 'WAIT_REWARD' ? (
-          <div className="mr-2 bg-sub2-15 text-sub2-100 rounded-sm px-2 py-1">
+          <div
+            className="mr-2 bg-sub2-15 text-sub2-100 rounded-sm px-2 py-1"
+            onClick={async () => {
+              await mutate({ challengeId });
+            }}
+          >
             보상 받기
           </div>
         ) : (
@@ -51,6 +75,15 @@ export default function TaskCard({
           </div>
         )}
       </div>
+      {loading && <LoadingModal open={loading} />}
+
+      <TaskCompleteModal
+        isOpen={isOpen}
+        setIsOpen={setIsOpen}
+        exp={exp}
+        credit={credit}
+        title={title}
+      />
     </div>
   );
 }

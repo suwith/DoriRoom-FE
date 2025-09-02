@@ -57,7 +57,14 @@ export default function TasksPage({ type, regionId, area = '' }) {
   }, [type, refetch]);
 
   if (loading || !tasks)
-    return <LoadingContent loading={loading} className={'h-screen'} />;
+    return (
+      <LoadingContent
+        loading={loading}
+        className={
+          'fixed top-0 bottom-0 left-1/2 transform -translate-x-1/2 h-screen'
+        }
+      />
+    );
 
   return (
     <div className="flex flex-col gap-3 p-4 h-[calc(100vh-86px)]">
@@ -68,7 +75,12 @@ export default function TasksPage({ type, regionId, area = '' }) {
         <span>{selectFilter.name}</span>
         <IoIosArrowDown />
       </div>
-      <TaskList type={type} tasks={tasks} regionId={regionId} />
+      <TaskList
+        type={type}
+        tasks={tasks}
+        regionId={regionId}
+        refetch={refetch}
+      />
       <div
         className={`fixed bottom-0 left-1/2 transform -translate-x-1/2 w-full max-w-[390px] mx-auto pb-10 z-100 bg-background rounded-t-xl px-3 pt-4 shadow-[0_-4px_12px_rgba(0,0,0,0.1)] transition-transform duration-300 ease-in-out ${bottomSheetOpen ? 'translate-y-0' : 'translate-y-full'}`}
       >
