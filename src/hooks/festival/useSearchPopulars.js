@@ -14,7 +14,7 @@ export default function useSearchPopulars() {
       try {
         const res = await axiosInstance.get('/search/popular');
         const data = res.data?.content || [];
-        const mapped = data.map((item) => ({
+        const mapped = data.slice(0, 8).map((item) => ({
           keyword: item.keyword,
           status: item.change?.toLowerCase() || 'same', // up, down, same
           rank: item.rank,
