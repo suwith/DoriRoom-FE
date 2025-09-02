@@ -33,6 +33,8 @@ export default function page() {
   const [sequence, setSequence] = useState(1);
   const { quiz, loading, error, refetch } = useGetQuiz(challengeId);
 
+  const quizCount = quiz.questions?.length;
+
   if (!region) {
     return <div>해당 지역을 찾을 수 없습니다.</div>; // region이 없다면 에러 처리
   }
@@ -53,6 +55,8 @@ export default function page() {
           sequence={sequence}
           setSequence={setSequence}
           setIsStart={setIsStart}
+          challengeId={challengeId}
+          quizCount={quizCount}
         />
       ) : (
         <StartPage name={region.name} setIsStart={setIsStart} />

@@ -1,10 +1,14 @@
 'use client';
 
 import Link from 'next/link';
-import { useQuizStore } from '@/stores/useQuizStore';
 
 export default function Result({ quiz }) {
-  const { exp, credit } = quiz.reward;
+  const { success, rewards } = quiz;
+  const exp = rewards.find((r) => r.rewardType === 'EXP')?.amount;
+  const credit = rewards.find((r) => r.rewardType === 'CREDIT')?.amount;
+
+  if (!success) return null;
+
   return (
     <div className="max-w-[390px] w-screen h-screen mx-auto bg-linear-to-t from-main-100/15 to-background flex flex-col">
       <div className="flex-1 flex flex-col items-center justify-center px-[16px] text-center">
@@ -26,7 +30,6 @@ export default function Result({ quiz }) {
         <Link
           className="block w-full bg-main-100 text-background text-center text-xl font-semibold rounded-md py-2.5"
           href={`/collection/`}
-          onClick={() => reset()}
         >
           보상 받기
         </Link>

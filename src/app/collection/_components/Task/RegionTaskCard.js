@@ -40,7 +40,7 @@ export default function RegionTaskCard({
             {rewards.find((reward) => reward.rewardType === 'EXP').amount}xp
           </div>
           <div
-            className={`flex items-center gap-1 bg-background px-2 py-1 rounded-sm font-normal ${status === 'COMPLETED' ? 'text-sub-100' : 'text-main-100'}`}
+            className={`flex items-center gap-1 bg-background px-2 py-1 rounded-sm font-normal ${status === 'COMPLETED' ? 'text-sub-100' : status === 'WAIT_REWARD' ? 'text-sub2-100' : 'text-main-100'}`}
           >
             <FaFire size={15} className="scale-x-[-1]" />
             <span className="text-neutral-900">

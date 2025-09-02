@@ -1,4 +1,4 @@
-export default function StartPage({ name, setIsStart }) {
+export default function StartPage({ name, setIsStart, quizCount }) {
   return (
     <>
       {/* 콘텐츠 영역 */}
@@ -8,7 +8,7 @@ export default function StartPage({ name, setIsStart }) {
           <b>경험치</b>와 <b>도깨비불</b> 받아가세요! ✏️
         </p>
         <p className="mt-2 font-regular text-lg text-main-100">
-          5문제를 모두 맞혀야 보상을 받을 수 있어요.
+          {quizCount}문제를 모두 맞혀야 보상을 받을 수 있어요.
           <br />
           여러 번 재도전이 가능하니 참여해 보세요!
         </p>
