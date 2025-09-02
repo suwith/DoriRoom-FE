@@ -162,11 +162,15 @@ export function useSearchFestivals({
         locations,
         categoryCodes: categoryCodes.length ? categoryCodes : undefined,
         startDate: period?.start ? formatDateYYYYMMDD(period.start) : undefined,
-        endDate: period?.end ? formatDateYYYYMMDD(period.end) : undefined,
+        endDate: period?.end
+          ? formatDateYYYYMMDD(period.end)
+          : formatDateYYYYMMDD(period.start),
         keyword: keyword || undefined,
       };
 
       const params = { page, size };
+
+      console.log('body', body);
 
       const res = await axiosInstance.post('/event/filtered', body, { params });
 

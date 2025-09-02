@@ -43,7 +43,9 @@ export default function CategoryFilter({
             startDate: period?.start
               ? formatDateYYYYMMDD(period.start)
               : undefined,
-            endDate: period?.end ? formatDateYYYYMMDD(period.end) : undefined,
+            endDate: period?.end
+              ? formatDateYYYYMMDD(period.end)
+              : formatDateYYYYMMDD(period.start),
             keyword: keyword || undefined,
           },
           { params: { page: 0, size: 0 } }
