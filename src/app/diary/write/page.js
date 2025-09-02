@@ -292,7 +292,7 @@ export default function DiaryWrite() {
               />
             </label>
             <label className="flex items-center gap-1">
-              이웃공개
+              단짝공개
               <input
                 type="radio"
                 name="visibility"
@@ -317,9 +317,9 @@ export default function DiaryWrite() {
         </div>
 
         <div className="flex flex-col text-xs text-neutral-400 gap-1">
-          <p>• 일기 업로드 시 기본으로 10 도깨비불이 지급돼요.</p>
+          <p>• 일기 업로드 시 기본으로 3 도깨비불이 지급돼요.</p>
           <p>
-            • 사진이 함께 첨부된 일기의 경우 추가로 5 도깨비불을 지급 받을 수
+            • 사진이 함께 첨부된 일기의 경우 추가로 2 도깨비불을 지급 받을 수
             있어요.
           </p>
         </div>
@@ -341,12 +341,16 @@ export default function DiaryWrite() {
       </div>
 
       {showCalendar && (
-        <div className="fixed top-0 bottom-0 left-1/2 transform -translate-x-1/2 w-full max-w-[390px] bg-black/25 z-99" />
+        <button
+          className="fixed inset-0 bg-black/25 z-[99]"
+          onClick={() => setShowCalendar(null)}
+          aria-label="필터 닫기"
+        />
       )}
       <div
-        className={`fixed bottom-0 left-1/2 transform -translate-x-1/2 w-full max-w-[390px] mx-auto z-100 transition-transform duration-300 ease-in-out ${
-          showCalendar ? 'translate-y-0' : 'translate-y-full'
-        }`}
+        className={`fixed bottom-0 left-1/2 -translate-x-1/2 w-full max-w-[390px] z-[100]
+        bg-background rounded-t-xl px-4 py-8 transition-transform duration-300 ease-in-out
+        ${showCalendar ? 'translate-y-0' : 'translate-y-[100vh]'}`}
       >
         <SelectDate
           open={showCalendar}
