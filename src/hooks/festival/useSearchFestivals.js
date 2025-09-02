@@ -76,7 +76,7 @@ function mapItem(item) {
     category: item.categoryName,
     likes: typeof item.favoriteCount === 'number' ? item.favoriteCount : 0,
     thumbnail: item.firstImage || item.secondImage || '',
-    reviews: Array.isArray(item.reviews) ? item.reviews : [],
+    reviews: typeof item.diaryCount === 'number' ? item.diaryCount : 0,
     score: typeof item.score === 'number' ? item.score : 0,
     createdAt: item.createdAt ?? null,
   };
