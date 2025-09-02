@@ -13,10 +13,8 @@ export default function FestivalListItem({
 }) {
   const imgRef = useRef(null);
 
-  const { liked, loading, mutating, toggleFavorite } = useFestivalFavorite(
-    festival.eventId,
-    festival.likes || 0
-  );
+  const { liked, likeCount, loading, mutating, toggleFavorite } =
+    useFestivalFavorite(festival.eventId, festival.likes || 0);
 
   const handleLike = (e) => {
     e.stopPropagation();
@@ -134,10 +132,10 @@ export default function FestivalListItem({
           <div className="text-neutral-400 text-[11px] font-thin">
             {festival.startDate}~{festival.endDate}
           </div>
-          <div className="flex gap-3 text-[11px]">
+          <div className="flex gap-3 text-[11px] ">
             <div className="flex items-center gap-1 text-main-100">
               <GoHeartFill className="w-3.5 h-3.5" />
-              <span>{festival.likes}</span>
+              <span>{likeCount}</span>
             </div>
             <div className="flex items-center gap-1 text-main-100">
               <FaCommentAlt className="w-3.5 h-3.5" />
