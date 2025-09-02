@@ -21,7 +21,7 @@ export default function DiaryListItem({ diary }) {
 
   return (
     <div
-      className="bg-main-5 rounded-lg p-3 space-y-2"
+      className="bg-background rounded-lg p-3 space-y-2"
       onClick={() => {
         if (showDiaryMenu) return;
         router.push(`/diary/${diary.id}`);
@@ -29,7 +29,7 @@ export default function DiaryListItem({ diary }) {
     >
       <div className="flex items-center justify-between">
         {/* 축제명 */}
-        <div className="inline-block text-[13px] font-bold text-main-100 bg-background px-2 py-0.5 rounded-md">
+        <div className="inline-block text-[13px] font-medium text-main-100 bg-main-5 px-2 py-0.5 rounded-md">
           {festival.title}
         </div>
         <div>
@@ -99,8 +99,8 @@ export default function DiaryListItem({ diary }) {
       {/* 삭제 모달 */}
       {showDeleteModal && (
         <TwoButtonModal
-          title="즐겨찾기를 삭제하시겠어요?"
-          description="삭제된 즐겨찾기는 복구가 불가능해요!"
+          title="일기를 삭제하시겠어요?"
+          description="삭제된 일기는 복구가 불가능해요!"
           cancelText="취소할래요"
           confirmText="삭제할래요"
           onCancel={() => setShowDeleteModal(false)}

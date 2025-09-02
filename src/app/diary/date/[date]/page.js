@@ -1,19 +1,14 @@
 import { mockDiaries } from '../../mockData';
 import DiaryList from '../../_components/DiaryList';
 
-export function generateStaticParams() {
-  const uniqueDates = [...new Set(mockDiaries.map((d) => d.date))];
+export default function Page({ params }) {
+  const raw = params?.date;
+  const asString = Array.isArray(raw) ? raw.join('.') : String(raw || '');
 
-  return uniqueDates.map((date) => ({
-    date,
-  }));
-}
+  // 하이픈으로 들어와도 내부 데이터 포맷(yyyy.MM.dd)과 맞춤
+  const date = asString.replace(/-/g, '.');
 
-export default async function Page({ params }) {
-  const { date } = await params;
   const diariesForDate = mockDiaries.filter((d) => d.date === date);
-
-  if (diariesForDate.length === 0) return <p>해당 날짜의 일기가 없습니다.</p>;
 
   return <DiaryList date={date} diaries={diariesForDate} />;
 }

@@ -9,8 +9,12 @@ export default function DiaryList({ date, diaries }) {
   const router = useRouter();
 
   return (
-    <div className="min-h-screen pt-20 pb-28">
-      <HeaderNavigationBar title={`${date} 일기`} showBackButton={true} />
+    <div className="min-h-screen pt-20 pb-28 bg-neutral-100">
+      <HeaderNavigationBar
+        title={`${date} 일기`}
+        showBackButton={true}
+        className="bg-neutral-100"
+      />
 
       <div className="px-4 space-y-4 pt-5">
         {diaries.map((diary) => (
