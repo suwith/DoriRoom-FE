@@ -1,14 +1,18 @@
 'use client';
 
 import { useState } from 'react';
+import useDiaryLike from '@/hooks/diary/useDiaryLike';
 
-export default function ReviewItem({
-  review,
-  isLiked,
-  onLike,
-  type = 'diary',
-}) {
+export default function ReviewItem({ review, isLiked, type = 'diary' }) {
   const [expanded, setExpanded] = useState(false);
+
+  const {
+    liked,
+    likeCount,
+    loading: likeLoading,
+    mutating: likeMutating,
+    toggleLike,
+  } = useDiaryLike(review.id, review.likes || 0);
 
   const text =
     expanded || review.content.length <= 70
@@ -17,7 +21,6 @@ export default function ReviewItem({
 
   const displayedText = text.replace(/\n/g, '<br />');
 
-  const likeCount = review.likes + (isLiked ? 1 : 0);
   const displayLikeText = likeCount === 0 ? '좋아요' : likeCount;
 
   return (
@@ -89,8 +92,13 @@ export default function ReviewItem({
       <div className="flex items-center mt-2 gap-2">
         <div className="text-xs text-neutral-400 ">{review.date} •</div>
         <div className="flex items-center gap-1 text-main-100 text-xs">
-          <button onClick={() => onLike(review.id)}>
-            {isLiked ? (
+          <button
+            onClick={toggleLike}
+            disabled={likeLoading || likeMutating}
+            aria-disabled={likeLoading || likeMutating}
+            aria-pressed={liked}
+          >
+            {liked ? (
               <i className="mgc_emoji_2_fill text-lg text-main-100" />
             ) : (
               <i className="mgc_emoji_2_line text-lg text-neutral-400" />
