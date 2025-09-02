@@ -2,7 +2,7 @@
 
 import { useEffect, useState } from 'react';
 import { useRouter } from 'next/navigation';
-import RegionFilter from '../_components/RegionFilter';
+import RegionSection from '../_components/RegionSection';
 import 'mingcute_icon/font/Mingcute.css';
 import SearchInputBar from '@/app/festival/_components/SearchInputBar';
 import useSearchPopulars from '@/hooks/festival/useSearchPopulars';
@@ -106,7 +106,7 @@ export default function SearchPage() {
       {/* 카테고리 */}
       <div className="mt-6 px-4">
         <h3 className="text-sm mb-3 font-semibold">카테고리</h3>
-        <RegionFilter />
+        <RegionSection />
       </div>
 
       {/* 실시간 검색어 */}
