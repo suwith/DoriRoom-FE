@@ -98,7 +98,7 @@ export default function FestivalDetail({ festival }) {
       {/* 썸네일 */}
       <div className="relative">
         <img
-          src={festival.thumbnail}
+          src={festival.thumbnail || '/images/festivalImage_default.svg'}
           alt={festival.title}
           className="w-full h-[370px] object-cover"
         />
@@ -195,9 +195,11 @@ export default function FestivalDetail({ festival }) {
       {/* 설명 탭 */}
       {activeTab === '설명' && (
         <div className="px-4 py-6 space-y-6 text-sm text-neutral-800">
-          <div>
-            <img src={festival.thumbnail} alt={festival.title} />
-          </div>
+          {festival.thumbnail && (
+            <div>
+              <img src={festival.thumbnail} alt={festival.title} />
+            </div>
+          )}
 
           <div>
             <div className="text-main-100 font-medium mb-1 flex items-center gap-1">

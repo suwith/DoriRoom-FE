@@ -81,6 +81,11 @@ export default function ToastProvider({ children }) {
 
   const show = useCallback(
     (input) => {
+      if (toasts.length > 0) {
+        // 이미 토스트가 떠 있으면 무시
+        return null;
+      }
+
       const id = genId();
       const toast =
         typeof input === 'string'
@@ -101,7 +106,7 @@ export default function ToastProvider({ children }) {
       }
       return id;
     },
-    [dismiss]
+    [dismiss, toasts.length]
   );
 
   const value = useMemo(

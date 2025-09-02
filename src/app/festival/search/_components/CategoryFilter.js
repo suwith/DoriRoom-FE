@@ -2,6 +2,14 @@
 
 import BottomSheet from './BottomSheet';
 import { useEffect, useState } from 'react';
+import axiosInstance from '@/lib/axiosInstance';
+import { useFestivalFilterStore } from '@/stores/useFestivalFilterStore';
+import {
+  CATEGORY_NAME_TO_CODE,
+  dedupLocations,
+  formatDateYYYYMMDD,
+  toApiLocation,
+} from '@/lib/festivalConstants';
 
 export default function CategoryFilter({
   open,
@@ -11,11 +19,53 @@ export default function CategoryFilter({
   options = [],
 }) {
   const [temp, setTemp] = useState(value);
+  const [filteredCount, setFilteredCount] = useState(0);
 
-  // 바텀시트 열릴 때마다 현재 값으로 리셋
+  const { keyword, regions, period, sort } = useFestivalFilterStore();
+
   useEffect(() => {
     if (open) setTemp(value);
   }, [open, value]);
+
+  // count 조회
+  useEffect(() => {
+    if (!open) return;
+
+    async function fetchCount() {
+      try {
+        const categoryCodes = (temp || [])
+          .map((n) => CATEGORY_NAME_TO_CODE[n])
+          .filter(Boolean);
+
+        // 1) UI 중복 제거
+        const uiLocations = dedupLocations(regions);
+        // 2) API 전송용으로 변환
+        const locations = uiLocations.map(toApiLocation);
+
+        const res = await axiosInstance.post(
+          '/event/filtered',
+          {
+            locations,
+            categoryCodes: categoryCodes.length ? categoryCodes : undefined,
+            startDate: period?.start
+              ? formatDateYYYYMMDD(period.start)
+              : undefined,
+            endDate: period?.end
+              ? formatDateYYYYMMDD(period.end)
+              : formatDateYYYYMMDD(period.start),
+            keyword: keyword || undefined,
+          },
+          { params: { page: 0, size: 0 } }
+        );
+
+        setFilteredCount(res?.data?.content?.totalElements ?? 0);
+      } catch {
+        setFilteredCount(0);
+      }
+    }
+
+    fetchCount();
+  }, [temp, keyword, regions, period, sort, open]);
 
   const toggle = (k) => {
     setTemp((prev) =>
@@ -46,7 +96,7 @@ export default function CategoryFilter({
               onClose();
             }}
           >
-            총 {temp.length}개 결과 보기
+            총 {filteredCount}개 결과 보기
           </button>
         </div>
       }
@@ -63,16 +113,16 @@ export default function CategoryFilter({
                 'h-12 w-full rounded-lg px-4',
                 'flex items-center justify-between text-[15px]',
                 active
-                  ? 'bg-main-5 0 text-main-100'
-                  : 'bg-neutral-100  text-neutral-800',
+                  ? 'bg-main-5 text-main-100'
+                  : 'bg-neutral-100 text-neutral-800',
               ].join(' ')}
             >
               <span className="truncate">{c}</span>
-
-              {/* 우측 체크 인디케이터 */}
               <span className="ml-3 inline-flex items-center justify-center">
                 <i
-                  className={`mgc_check_fill  text-xl ${active ? 'text-main-100' : 'text-neutral-300'}`}
+                  className={`mgc_check_fill text-xl ${
+                    active ? 'text-main-100' : 'text-neutral-300'
+                  }`}
                 />
               </span>
             </button>
