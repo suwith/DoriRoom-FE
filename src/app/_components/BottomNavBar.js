@@ -35,7 +35,7 @@ export default function BottomNavBar() {
 
   const HIDDEN_PREFIXES = [
     '/festival/search/result',
-    '/diary/',
+    '/diary',
     '/signup/',
     '/auth',
     '/mypage/myinfo',
