@@ -1,22 +1,28 @@
 'use client';
 
-import { mockFestivals } from '@/app/festival/mockData';
 import { useState } from 'react';
 import { useRouter } from 'next/navigation';
 import TwoButtonModal from '@/app/_components/TwoButtonModal';
+import axiosInstance from '@/lib/axiosInstance';
 
-export default function DiaryListItem({ diary }) {
+export default function DiaryListItem({ diary, onDeleted }) {
   const router = useRouter();
-  const festival = mockFestivals.find((f) => f.id === diary.festivalId);
-
   const [showDiaryMenu, setShowDiaryMenu] = useState(false);
   const [showDeleteModal, setShowDeleteModal] = useState(false);
 
-  const handleDelete = (e) => {
+  const handleDelete = async (e) => {
     e.stopPropagation();
-    setShowDiaryMenu(false);
-    setShowDeleteModal(false);
-    console.log('삭제 완료');
+    try {
+      // 실제 삭제 API 연동
+      await axiosInstance.delete(`/diary/${diary.id}`);
+      console.log('삭제 완료');
+      onDeleted?.(diary.id); // 부모에서 목록 갱신
+    } catch (err) {
+      console.error('삭제 실패:', err);
+    } finally {
+      setShowDiaryMenu(false);
+      setShowDeleteModal(false);
+    }
   };
 
   return (
@@ -30,7 +36,7 @@ export default function DiaryListItem({ diary }) {
       <div className="flex items-center justify-between">
         {/* 축제명 */}
         <div className="inline-block text-[13px] font-medium text-main-100 bg-main-5 px-2 py-0.5 rounded-md">
-          {festival.title}
+          {diary.festivalName || '연결된 축제 없음'}
         </div>
         <div>
           <i
@@ -47,7 +53,7 @@ export default function DiaryListItem({ diary }) {
                 onClick={(e) => {
                   e.stopPropagation();
                   setShowDiaryMenu(false);
-                  console.log('수정 완료');
+                  router.push(`/diary/write?editId=${diary.id}`);
                 }}
               >
                 수정
@@ -96,6 +102,7 @@ export default function DiaryListItem({ diary }) {
         </div>
         <div>{diary.date}</div>
       </div>
+
       {/* 삭제 모달 */}
       {showDeleteModal && (
         <TwoButtonModal
