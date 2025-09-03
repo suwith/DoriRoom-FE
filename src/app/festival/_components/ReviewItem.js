@@ -2,8 +2,10 @@
 
 import { useState } from 'react';
 import useDiaryLike from '@/hooks/diary/useDiaryLike';
+import { useRouter } from 'next/navigation';
 
 export default function ReviewItem({ review, type = 'diary', onLikeSync }) {
+  const router = useRouter();
   const [expanded, setExpanded] = useState(false);
 
   const {
@@ -45,7 +47,10 @@ export default function ReviewItem({ review, type = 'diary', onLikeSync }) {
           </div>
         )}
         {type === 'mine' ? (
-          <button className="text-[11px] px-3 py-0.5 bg-main-5 text-main-100 rounded">
+          <button
+            className="text-[11px] px-3 py-0.5 bg-main-5 text-main-100 rounded"
+            onClick={() => router.push(`/festival/${review.festivalId}`)}
+          >
             축제 보기
           </button>
         ) : (
