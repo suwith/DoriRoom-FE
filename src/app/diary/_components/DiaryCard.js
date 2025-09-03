@@ -7,13 +7,13 @@ export default function DiaryCard({ item, onClick }) {
   const [isLiked, setIsLiked] = useState(false);
 
   return (
-    <button
+    <div
       className="w-[150px] shrink-0 text-left"
       onClick={() => onClick?.(item.id)}
     >
       <div className="relative w-[150px] h-[150px] rounded-lg overflow-hidden bg-neutral-100">
         <img
-          src={item.images[0] || '/images/festivalImage_default.svg'}
+          src={item.images[0] || '/images/diaryImage_default.svg'}
           alt={item.title}
           className="w-full h-full object-cover"
         />
@@ -57,6 +57,6 @@ export default function DiaryCard({ item, onClick }) {
           <div className="text-[11px] text-neutral-600">{item.date}</div>
         </div>
       </div>
-    </button>
+    </div>
   );
 }
