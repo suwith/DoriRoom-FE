@@ -4,19 +4,29 @@ import { useState } from 'react';
 import { useRouter } from 'next/navigation';
 import TwoButtonModal from '@/app/_components/TwoButtonModal';
 import axiosInstance from '@/lib/axiosInstance';
+import useDiaryLike from '@/hooks/diary/useDiaryLike';
 
 export default function DiaryListItem({ diary, onDeleted }) {
   const router = useRouter();
   const [showDiaryMenu, setShowDiaryMenu] = useState(false);
   const [showDeleteModal, setShowDeleteModal] = useState(false);
 
+  // 좋아요 훅
+  const {
+    liked,
+    loading: likeLoading,
+    mutating: likeMutating,
+    toggleLike,
+  } = useDiaryLike(diary.id);
+
+  const [likeCount, setLikeCount] = useState(diary.likes ?? 0);
+
   const handleDelete = async (e) => {
     e.stopPropagation();
     try {
-      // 실제 삭제 API 연동
       await axiosInstance.delete(`/diary/${diary.id}`);
       console.log('삭제 완료');
-      onDeleted?.(diary.id); // 부모에서 목록 갱신
+      onDeleted?.(diary.id);
     } catch (err) {
       console.error('삭제 실패:', err);
     } finally {
@@ -97,8 +107,31 @@ export default function DiaryListItem({ diary, onDeleted }) {
       {/* 날짜 + 좋아요 개수 */}
       <div className="flex items-center justify-between text-[11px] text-neutral-400">
         <div className="flex items-center gap-1 text-main-100">
-          <i className="mgc_emoji_2_fill text-md text-main-100" />
-          <span className="pt-1">{diary.likes ?? 0}</span>
+          <button
+            onClick={async (e) => {
+              e.stopPropagation();
+              const nextLiked = !liked;
+              await toggleLike();
+              setLikeCount((prev) =>
+                nextLiked ? prev + 1 : Math.max(0, prev - 1)
+              );
+            }}
+            disabled={likeLoading || likeMutating}
+            aria-disabled={likeLoading || likeMutating}
+            aria-pressed={liked}
+            className="flex items-center"
+          >
+            {liked ? (
+              <i className="mgc_emoji_2_fill text-md text-main-100" />
+            ) : (
+              <i className="mgc_emoji_2_line text-md text-neutral-400" />
+            )}
+          </button>
+          <span
+            className={`flex items-center ${liked ? 'text-main-100' : 'text-neutral-400'}`}
+          >
+            {likeCount}
+          </span>
         </div>
         <div>{diary.date}</div>
       </div>

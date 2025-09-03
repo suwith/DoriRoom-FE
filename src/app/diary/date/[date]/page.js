@@ -1,14 +1,22 @@
-import { mockDiaries } from '../../mockData';
+'use client';
+
+import { useParams } from 'next/navigation';
+import useDailyDiaries from '@/hooks/diary/useDailyDiaries';
 import DiaryList from '../../_components/DiaryList';
+import LoadingContent from '@/app/_components/LoadingContent';
+import ErrorContent from '@/app/_components/ErrorContent';
 
-export default function Page({ params }) {
+export default function Page() {
+  const params = useParams();
   const raw = params?.date;
-  const asString = Array.isArray(raw) ? raw.join('.') : String(raw || '');
+  const asString = Array.isArray(raw) ? raw.join('-') : String(raw || '');
+  const { diaries, loading, error } = useDailyDiaries(asString);
 
-  // 하이픈으로 들어와도 내부 데이터 포맷(yyyy.MM.dd)과 맞춤
-  const date = asString.replace(/-/g, '.');
+  console.log(diaries);
 
-  const diariesForDate = mockDiaries.filter((d) => d.date === date);
+  if (loading) return <LoadingContent loading={loading} />;
+  if (error)
+    return <ErrorContent error="일기를 불러오는 중 오류가 발생했어요." />;
 
-  return <DiaryList date={date} diaries={diariesForDate} />;
+  return <DiaryList date={asString} diaries={diaries} />;
 }
