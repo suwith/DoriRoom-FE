@@ -12,7 +12,7 @@ export default function UserProfile() {
   if (loading) return null;
 
   return (
-    <div className="text-center space-y-4">
+    <div className="flex flex-col items-center text-center space-y-4">
       <img
         src={profileImageUrl}
         alt="profile_image"
