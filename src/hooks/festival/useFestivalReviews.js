@@ -124,6 +124,7 @@ export default function useFestivalReviews({
 
   return {
     reviews: items,
+    setReviews: setItems,
     loading,
     error,
     sort,

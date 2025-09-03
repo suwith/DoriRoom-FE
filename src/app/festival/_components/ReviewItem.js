@@ -3,16 +3,17 @@
 import { useState } from 'react';
 import useDiaryLike from '@/hooks/diary/useDiaryLike';
 
-export default function ReviewItem({ review, isLiked, type = 'diary' }) {
+export default function ReviewItem({ review, type = 'diary', onLikeSync }) {
   const [expanded, setExpanded] = useState(false);
 
   const {
     liked,
-    likeCount,
     loading: likeLoading,
     mutating: likeMutating,
     toggleLike,
-  } = useDiaryLike(review.id, review.likes || 0);
+  } = useDiaryLike(review.id);
+
+  const [likeCount, setLikeCount] = useState(review.likes || 0);
 
   const text =
     expanded || review.content.length <= 70
@@ -93,7 +94,14 @@ export default function ReviewItem({ review, isLiked, type = 'diary' }) {
         <div className="text-xs text-neutral-400 ">{review.date} •</div>
         <div className="flex items-center gap-1 text-main-100 text-xs">
           <button
-            onClick={toggleLike}
+            onClick={async () => {
+              const nextLiked = !liked;
+              await toggleLike();
+              setLikeCount((prev) =>
+                nextLiked ? prev + 1 : Math.max(0, prev - 1)
+              );
+              onLikeSync?.(review.id, nextLiked); // 부모에도 반영
+            }}
             disabled={likeLoading || likeMutating}
             aria-disabled={likeLoading || likeMutating}
             aria-pressed={liked}
@@ -106,7 +114,7 @@ export default function ReviewItem({ review, isLiked, type = 'diary' }) {
           </button>
           <span
             className={`text-[11px] ${
-              isLiked ? 'text-main-100' : 'text-neutral-400'
+              liked ? 'text-main-100' : 'text-neutral-400'
             }`}
           >
             {displayLikeText}

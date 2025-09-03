@@ -3,9 +3,8 @@
 import { useEffect, useRef, useState } from 'react';
 import axiosInstance from '@/lib/axiosInstance';
 
-export default function useDiaryLike(diaryId, initialLikes = 0) {
+export default function useDiaryLike(diaryId) {
   const [liked, setLiked] = useState(false);
-  const [likeCount, setLikeCount] = useState(initialLikes);
   const [loading, setLoading] = useState(true);
   const [mutating, setMutating] = useState(false);
 
@@ -65,7 +64,6 @@ export default function useDiaryLike(diaryId, initialLikes = 0) {
 
     safeSet(() => {
       setLiked(nextLiked);
-      setLikeCount((prev) => (nextLiked ? prev + 1 : Math.max(0, prev - 1)));
     });
 
     try {
@@ -79,12 +77,11 @@ export default function useDiaryLike(diaryId, initialLikes = 0) {
       // 실패 시 롤백
       safeSet(() => {
         setLiked((prev) => !prev);
-        setLikeCount((prev) => (nextLiked ? Math.max(0, prev - 1) : prev + 1));
       });
     } finally {
       safeSet(() => setMutating(false));
     }
   };
 
-  return { liked, likeCount, loading, mutating, toggleLike, refetch };
+  return { liked, loading, mutating, toggleLike, refetch };
 }

@@ -21,15 +21,6 @@ export default function FestivalDetail({ festival }) {
 
   const [activeTab, setActiveTab] = useState('설명');
 
-  const [likedReviews, setLikedReviews] = useState([]);
-  const toggleReviewLike = (reviewId) => {
-    setLikedReviews((prev) =>
-      prev.includes(reviewId)
-        ? prev.filter((id) => id !== reviewId)
-        : [...prev, reviewId]
-    );
-  };
-
   // Header color transition
   const [isScrolled, setIsScrolled] = useState(false);
   const sentinelRef = useRef(null);
@@ -83,6 +74,7 @@ export default function FestivalDetail({ festival }) {
     reviews,
     loading: listLoading,
     error: listError,
+    setReviews,
     setSort,
     loadMore,
     hasMore,
@@ -92,6 +84,16 @@ export default function FestivalDetail({ festival }) {
     initialSort: reviewSort,
     pageSize: 20,
   });
+
+  const handleLikeSync = (id, liked) => {
+    setReviews((prev) =>
+      prev.map((r) =>
+        r.id === id
+          ? { ...r, likes: liked ? r.likes + 1 : Math.max(0, r.likes - 1) }
+          : r
+      )
+    );
+  };
 
   useEffect(() => {
     setSort(reviewSort);
@@ -297,9 +299,8 @@ export default function FestivalDetail({ festival }) {
             <ReviewItem
               key={review.id}
               review={review}
-              isLiked={likedReviews.includes(review.id)}
-              onLike={toggleReviewLike}
               type="festival"
+              onLikeSync={handleLikeSync}
             />
           ))}
 
