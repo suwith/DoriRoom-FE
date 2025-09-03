@@ -1,8 +1,8 @@
-// hooks/auth/useLogin.js
 'use client';
 
 import { useCallback, useState } from 'react';
 import axiosInstance from '@/lib/axiosInstance';
+import useUserInfo from '../mypage/useUserInfo';
 
 function saveTokens({ accessToken, refreshToken }, remember) {
   try {
@@ -18,8 +18,8 @@ function saveTokens({ accessToken, refreshToken }, remember) {
 export default function useLogin() {
   const [loggingIn, setLoggingIn] = useState(false);
   const [error, setError] = useState(null);
+  const { refetch } = useUserInfo(); // 로그인 성공 후 유저 정보 불러오기
 
-  // credentials는 login 호출 시 인자로 받음
   const login = useCallback(
     async ({ username, password, remember = true } = {}) => {
       setLoggingIn(true);
@@ -47,6 +47,10 @@ export default function useLogin() {
 
         saveTokens({ accessToken, refreshToken }, remember);
         axiosInstance.defaults.headers.Authorization = `Bearer ${accessToken}`;
+
+        // 로그인 성공 후 유저 정보 갱신
+        await refetch();
+
         return { accessToken, refreshToken };
       } catch (e) {
         setError(e);
@@ -55,7 +59,7 @@ export default function useLogin() {
         setLoggingIn(false);
       }
     },
-    []
+    [refetch]
   );
 
   return { login, loggingIn, error };
