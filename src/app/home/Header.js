@@ -17,7 +17,7 @@ export default function HeaderBar({ credit }) {
         {/* 왼쪽 포인트 */}
         <div className="sticky flex z-10">
           <div
-            className="flex justify-center items-center gap-1 py-0.5 rounded-lg w-auto px-2"
+            className="flex justify-center items-center gap-1 py-0.5 rounded-lg w-auto px-2 bg-background"
             style={{ boxShadow: '0 0 10px rgba(0,0,0,0.1)' }}
           >
             <FaFire className="trnsform scale-x-[-1] text-main-100 w-5 h-5" />
@@ -27,7 +27,7 @@ export default function HeaderBar({ credit }) {
 
         {/* 오른쪽 기능 버튼들 */}
         <div
-          className="flex flex-col items-center space-y-3 text-green-500 text-sm font-medium rounded-lg overflow-y-hidden px-4 pt-3 pb-2"
+          className="flex flex-col items-center space-y-3 text-green-500 text-sm font-medium rounded-lg overflow-y-hidden px-4 pt-3 pb-2 bg-background"
           style={{ boxShadow: '0 0 3px rgba(0,0,0,0.1)' }}
         >
           <IconButton
