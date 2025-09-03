@@ -3,6 +3,8 @@
 import { useState } from 'react';
 import { GoCircleSlash } from 'react-icons/go';
 import Item from './Item';
+import useEquipItems from '@/hooks/decorate/useEquipItems';
+import usePostEquipItem from '@/hooks/decorate/usePostEquipItem';
 
 export default function CategoryItemPanel({
   items,
@@ -10,6 +12,17 @@ export default function CategoryItemPanel({
   onItemSelect,
   isShop,
 }) {
+  const {
+    equip,
+    loading: EILoading,
+    error: EIError,
+    refetch,
+  } = useEquipItems();
+  const {
+    mutate,
+    loading: PEILoading,
+    error: PEIError,
+  } = usePostEquipItem({ onSuccess: () => refetch() });
   const [selectedCategoryId, setSelectedCategoryId] = useState('APPAREL');
   const categoryBtns = [
     { id: 1, name: '의상', type: 'APPAREL', icon: 'mgc_t_shirt_fill' },
@@ -22,7 +35,7 @@ export default function CategoryItemPanel({
     { id: 3, name: '선반', type: 'SHELF', icon: 'mgc_layout_5_fill' },
     { id: 4, name: '창문', type: 'WINDOW', icon: 'mgc_curtain_fill' },
     { id: 5, name: '벽지', type: 'WALL', icon: 'mgc_paint_2_fill' },
-    { id: 6, name: '바닥', type: 'FLOOR', icon: 'mgc_paint_2_fill' },
+    { id: 6, name: '바닥', type: 'FLOOR', icon: 'mgc_map_2_fill' },
   ];
 
   return (
@@ -55,13 +68,20 @@ export default function CategoryItemPanel({
       </div>
 
       {/* 아이템 리스트 */}
-      <div className="overflow-y-auto bg-background h-screen px-3 pt-3 pb-[80px] grid grid-cols-3 gap-2 scrollbar-hide">
+      <div className="overflow-y-auto bg-background h-screen px-3 pt-3 pb-[80px] grid grid-cols-3 content-start gap-2 scrollbar-hide">
         {/* 선택 안 함 */}
         {!isShop && (
           <Item
-            onClick={() => onItemSelect(0)}
-            isSelected={selectedItemId === 0}
-            icon={GoCircleSlash}
+            onClick={async () => {
+              onItemSelect(0);
+              const tmp = equip.find((e) => e.itemType === selectedCategoryId);
+              if (tmp) await mutate(tmp.itemId);
+            }}
+            isSelected={
+              selectedItemId === 0 ||
+              !equip.some((e) => e.itemType === selectedCategoryId)
+            }
+            Icon={GoCircleSlash}
             name="선택안함"
           />
         )}
@@ -71,9 +91,16 @@ export default function CategoryItemPanel({
           .map((item) => (
             <Item
               key={item.itemId}
-              onClick={() => onItemSelect(item.itemId)}
-              isSelected={selectedItemId === item.itemId}
-              icon={item.imageUrl}
+              onClick={async () => {
+                onItemSelect(item.itemId);
+                console.log(item.itemId);
+                await mutate(item.itemId);
+              }}
+              isSelected={
+                selectedItemId === item.itemId ||
+                equip.some((e) => e.itemId == item.itemId)
+              }
+              imageUrl={item.imageUrl}
               name={item.name}
               price={isShop ? item.price : null}
               isOwned={item.isOwned}
