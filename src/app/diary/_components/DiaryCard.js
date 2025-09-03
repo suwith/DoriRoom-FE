@@ -2,26 +2,22 @@
 
 import { useState } from 'react';
 import { useRouter } from 'next/navigation';
-import axiosInstance from '@/lib/axiosInstance';
+import useDiaryLike from '@/hooks/diary/useDiaryLike';
 
 export default function DiaryCard({ item }) {
-  const [isLiked, setIsLiked] = useState(false);
-  const [likeCount, setLikeCount] = useState(item.likes || 0);
   const router = useRouter();
+  const {
+    liked,
+    loading: likeLoading,
+    mutating: likeMutating,
+    toggleLike,
+  } = useDiaryLike(item.id);
 
+  const [likeCount, setLikeCount] = useState(item.likes || 0);
+
+  // 카드 클릭 → 상세 이동
   const handleCardClick = () => {
     router.push(`/diary/${item.id}`);
-  };
-
-  const toggleLike = async (e) => {
-    e.stopPropagation();
-    try {
-      await axiosInstance.post(`/api/diary/${item.id}/like`);
-      setIsLiked((prev) => !prev);
-      setLikeCount((prev) => (isLiked ? prev - 1 : prev + 1));
-    } catch (err) {
-      console.error('Failed to toggle like:', err);
-    }
   };
 
   // date 포맷 변환: 2025-08-10 → 2025.08.10
@@ -39,15 +35,30 @@ export default function DiaryCard({ item }) {
           className="w-full h-full object-cover"
         />
         <div className="absolute top-2 right-1 flex flex-col items-center px-2 py-0.5">
-          <button onClick={toggleLike} className="cursor-pointer h-6">
-            {isLiked ? (
+          <button
+            onClick={async (e) => {
+              e.stopPropagation();
+              const nextLiked = !liked;
+              await toggleLike();
+              setLikeCount((prev) =>
+                nextLiked ? prev + 1 : Math.max(0, prev - 1)
+              );
+            }}
+            disabled={likeLoading || likeMutating}
+            aria-disabled={likeLoading || likeMutating}
+            aria-pressed={liked}
+            className="cursor-pointer h-6"
+          >
+            {liked ? (
               <i className="mgc_emoji_2_fill text-xl text-main-100 drop-shadow" />
             ) : (
               <i className="mgc_emoji_2_line text-xl text-background drop-shadow" />
             )}
           </button>
           <span
-            className={`text-[10px] ${isLiked ? 'text-main-100' : 'text-background drop-shadow'}`}
+            className={`text-[10px] ${
+              liked ? 'text-main-100' : 'text-background drop-shadow'
+            }`}
           >
             {likeCount}
           </span>
