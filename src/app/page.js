@@ -9,6 +9,8 @@ import manifest from '../../public/manifest.json' assert { type: 'json' };
 export default function Home() {
   const { data, loading, error } = useMyRoom();
   const zIndex = manifest.defaults.zIndex;
+  const equippedItems = data.equippedItems;
+
   if (loading)
     return (
       <LoadingContent
@@ -17,43 +19,48 @@ export default function Home() {
       />
     );
 
-  console.log(manifest.items[1].asset.src);
+  const selectFLOOR = equippedItems.find((item) => item.itemType === 'FLOOR');
+  const selectWALL = equippedItems.find((item) => item.itemType === 'WALL');
+  const selectSHELF = equippedItems.find((item) => item.itemType === 'SHELF');
+  const selectOBJECT = equippedItems.find((item) => item.itemType === 'OBJECT');
+  const selectWINDOW = equippedItems.find((item) => item.itemType === 'WINDOW');
+  const selectAPPAREL = equippedItems.find(
+    (item) => item.itemType === 'APPAREL'
+  );
 
   return (
     <>
       <HeaderBar credit={data.credit} />
 
       <div className="relative flex-1 h-full flex justify-center items-center p-4 max-w-[390px] w-screen">
-        <p className="text-main">캐릭터 위치</p>
         {/* FLOOR */}
         <img
-          src={`/images${manifest.items[19].asset.src}`}
+          src={manifest.items[selectFLOOR?.itemId]?.asset.src}
           className={`absolute top-130 z-${zIndex.FLOOR}`}
         />
         {/* WALL */}
         <img
-          src={`/images${manifest.items[25].asset.src}`}
+          src={manifest.items[selectWALL?.itemId]?.asset.src}
           className={`absolute top-0 z-${zIndex.WALL}`}
         />
-        {/* <img src="/character.png" /> */}
         {/* 선반 */}
         <img
-          src={`/images${manifest.items[1].asset.src}`}
+          src={manifest.items[selectSHELF?.itemId]?.asset.src}
           className={`absolute top-75 left-3 z-${zIndex.SHELF}`}
         />
         {/* OBJECT */}
         <img
-          src={`/images${manifest.items[7].asset.src}`}
+          src={manifest.items[selectOBJECT?.itemId]?.asset.src}
           className={`absolute top-109 right-2 z-${zIndex.OBJECT}`}
         />
         {/* WINDOW */}
         <img
-          src={`/images${manifest.items[13].asset.src}`}
+          src={manifest.items[selectWINDOW?.itemId]?.asset.src}
           className={`absolute top-37 z-${zIndex.WINDOW}`}
         />
         {/* APPAREL */}
         <img
-          src={`/images${manifest.items[31].asset.src}`}
+          src={manifest.items[selectAPPAREL?.itemId]?.asset.src}
           className={`absolute top-82 z-${zIndex.APPAREL}`}
         />
       </div>
