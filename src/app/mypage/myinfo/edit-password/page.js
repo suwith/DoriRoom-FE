@@ -5,6 +5,7 @@ import EditHeaderNavBar from '../../_components/EditHeaderNavBar';
 import PasswordInput from '../../_components/PasswordInput';
 import useChangePW from '@/hooks/mypage/useChangePW';
 import { useToast } from '@/app/_providers/ToastProvider';
+import useUserInfo from '@/hooks/mypage/useUserInfo';
 
 function validPassword(pw) {
   if (!pw) return false;
@@ -24,6 +25,7 @@ export default function EditPassword() {
 
   const { show } = useToast();
   const { mutate, statusCode, error } = useChangePW();
+  const { refetch: refetchUser } = useUserInfo();
 
   const passwordOk = validPassword(newPassword);
   const passwordMatch = newPassword && newPassword === verifyPassword;
@@ -31,6 +33,7 @@ export default function EditPassword() {
   useEffect(() => {
     if (statusCode === 200) {
       show({ message: '비밀번호가 변경되었어요!', variant: 'success' });
+      refetchUser(); //전역 user 갱신
       history.back();
     } else if (statusCode === 400 && error) {
       show({ message: error, variant: 'error' });
@@ -38,7 +41,7 @@ export default function EditPassword() {
   }, [statusCode, error]);
 
   return (
-    <div className="flex flex-col h-full max-w-[390px] w-screen h-screen px-4 pt-28">
+    <div className="flex flex-col max-w-[390px] w-screen h-screen px-4 pt-28">
       <EditHeaderNavBar
         title="비밀번호 변경"
         onClick={async () => {

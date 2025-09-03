@@ -4,6 +4,7 @@ export const useAuthStore = create((set) => ({
   accessToken: null,
   refreshToken: null,
   kind: null, // 'local' | 'session'
+  user: null,
 
   // 토큰 저장 (상태 + 스토리지)
   setTokens: (access, refresh, kind) => {
@@ -44,4 +45,7 @@ export const useAuthStore = create((set) => ({
 
     return null;
   },
+  // 유저 정보 관리
+  setUser: (user) => set({ user }),
+  clearUser: () => set({ user: null }),
 }));

@@ -7,6 +7,7 @@ import useCheckNickname from '@/hooks/mypage/useCheckNickname';
 import useChangeNickname from '@/hooks/mypage/useChangeNickname';
 import { useToast } from '@/app/_providers/ToastProvider';
 import { useRouter } from 'next/navigation';
+import useUserInfo from '@/hooks/mypage/useUserInfo';
 
 export default function EditNickname() {
   const [nickname, setNickname] = useState('');
@@ -14,6 +15,7 @@ export default function EditNickname() {
   const { statusCode: CNStatusCode, refetch } = useCheckNickname();
   const { mutate, statusCode: CHNStatusCode, error } = useChangeNickname();
   const { show } = useToast();
+  const { refetch: refetchUser } = useUserInfo();
 
   const router = useRouter();
   const nicknameOk = nickname.length > 1 && nickname.length < 11;
@@ -24,6 +26,7 @@ export default function EditNickname() {
     if (CHNStatusCode === 200) {
       show({ message: '닉네임이 변경되었어요!', variant: 'success' });
       localStorage.setItem('profile:dirty', '1'); // 변경 플래그
+      refetchUser(); //전역 user 갱신
       router.back(); //원래 페이지로
     } else if (CHNStatusCode === 409 && error) {
       show({ message: error, variant: 'error' });
@@ -31,7 +34,7 @@ export default function EditNickname() {
   }, [CHNStatusCode, error]);
 
   return (
-    <div className="flex flex-col h-full max-w-[390px] w-screen h-screen px-4 pt-28">
+    <div className="flex flex-col max-w-[390px] w-screen h-screen px-4 pt-28">
       <EditHeaderNavBar
         title="닉네임 변경"
         onClick={() => {
