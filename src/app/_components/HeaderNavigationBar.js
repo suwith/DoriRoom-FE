@@ -30,7 +30,7 @@ export default function HeaderNavigationBar({
             Lv.{lv}
           </div>
         )}
-        <h1 className="text-xl font-semibold text-gray-800">{title}</h1>
+        <h1 className="text-lg font-semibold text-gray-800">{title}</h1>
 
         {/* 뒤로가기 버튼 */}
         {showBackButton && (

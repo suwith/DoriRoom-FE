@@ -151,7 +151,7 @@ export default function FestivalListItem({
           </div>
 
           {/* 제목/위치: 카드 내 넘침 방지 */}
-          <div className="font-bold text-sm mt-1.5 line-clamp-1 break-keep">
+          <div className="font-bold text-sm mt-1 line-clamp-1 break-keep">
             {festival.title}
           </div>
           <div className="text-neutral-600 mt-0.5 text-xs line-clamp-1 break-keep">
