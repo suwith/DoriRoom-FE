@@ -3,7 +3,6 @@
 
 import HeaderNavigationBar from '@/app/_components/HeaderNavigationBar';
 import { useState } from 'react';
-import { mockFestivals } from '@/app/festival/mockData';
 import FestivalListItem from '@/app/festival/_components/FestivalListItem';
 import Icon from '@mdi/react';
 import { mdiTree } from '@mdi/js';
@@ -33,12 +32,10 @@ export default function DiaryDetail({ diary }) {
     );
   };
 
-  const festival = mockFestivals.find((f) => f.id === diary.festivalId);
-
   return (
     <div className="pt-20 pb-28">
       <HeaderNavigationBar
-        title={festival?.title || '연결된 축제'}
+        title={diary.festival?.title || '연결된 축제'}
         type="diary"
         onEditClick={() => console.log('수정 클릭')}
         onDeleteClick={() => setShowDeleteModal(true)}
@@ -80,7 +77,7 @@ export default function DiaryDetail({ diary }) {
       </div>
 
       {/* 관련 축제 바텀시트 */}
-      {festival && (
+      {diary.festival && (
         <div
           className={`fixed bottom-0 left-1/2 transform -translate-x-1/2 w-full max-w-[390px] mx-auto z-30 rounded-t-xl px-4 pt-4 pb-16 bg-main-5 shadow-[0_-4px_12px_rgba(0,0,0,0.1)] transition-transform duration-300 ease-in-out ${
             isBottomOpen ? 'translate-y-0' : 'translate-y-[85%]'
@@ -98,14 +95,17 @@ export default function DiaryDetail({ diary }) {
           </div>
           <button
             type="button"
-            onClick={() => router.push(`/festival/${festival.id}`)}
+            onClick={() => router.push(`/festival/${diary.festival.id}`)}
             className="w-full text-left"
           >
             <div
               className="bg-background rounded-xl py-1"
               style={{ boxShadow: '0 0 8px rgba(0, 0, 0, 0.1)' }}
             >
-              <FestivalListItem festival={festival} hideLikeButton={true} />
+              <FestivalListItem
+                festival={diary.festival}
+                hideLikeButton={true}
+              />
             </div>
           </button>
         </div>
