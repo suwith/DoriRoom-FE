@@ -4,12 +4,14 @@ import UserProfile from './_components/UserProfile';
 import Link from 'next/link';
 import TwoButtonModal from '../_components/TwoButtonModal';
 import { useState } from 'react';
+import useLogout from '@/hooks/auth/useLogout';
 
 export default function Mypage() {
   const [isOpen, setIsOpen] = useState(false);
+  const logout = useLogout();
 
   return (
-    <div className="flex flex-col h-full max-w-[390px] w-screen h-screen">
+    <div className="flex flex-col max-w-[390px] w-screen h-screen">
       <div className="flex-2 flex items-center justify-center bg-main-5 px-4">
         <UserProfile />
       </div>
@@ -24,13 +26,16 @@ export default function Mypage() {
           label="이용약관"
           textColor="text-neutral-900"
         />
-        <IconButton
-          icon={<i className="mgc_entrance_fill text-main-100 text-xl" />}
-          label="로그아웃"
-          textColor="text-neutral-900"
-        />
+        {/* 로그아웃 버튼 */}
         <div
-          className="flex items-center space-x-2 py-3 px-4"
+          className="flex items-center space-x-2 py-3 px-4 cursor-pointer"
+          onClick={logout}
+        >
+          <i className="mgc_entrance_fill text-main-100 text-xl" />
+          <span className="text-sm font-normal text-neutral-900">로그아웃</span>
+        </div>
+        <div
+          className="flex items-center space-x-2 py-3 px-4 cursor-pointer"
           onClick={() => setIsOpen(true)}
         >
           <i className="mgc_delete_2_fill text-main-100 text-xl" />

@@ -58,16 +58,5 @@ export default function useLogin() {
     []
   );
 
-  // 나중에 로그아웃 api 훅 분리했을 때 삭제
-  const logout = useCallback(() => {
-    try {
-      localStorage.removeItem('access_token');
-      localStorage.removeItem('refresh_token');
-      sessionStorage.removeItem('access_token');
-      sessionStorage.removeItem('refresh_token');
-      delete axiosInstance.defaults.headers.Authorization;
-    } catch (_) {}
-  }, []);
-
-  return { login, logout, loggingIn, error };
+  return { login, loggingIn, error };
 }
