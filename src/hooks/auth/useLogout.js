@@ -1,6 +1,6 @@
 'use client';
 
-import { useCallback } from 'react';
+import { useCallback, useState } from 'react';
 import { useRouter } from 'next/navigation';
 import axiosInstance from '@/lib/axiosInstance';
 import { useAuthStore } from '@/stores/useAuthStore';
@@ -10,7 +10,10 @@ export default function useLogout() {
   const clearUser = useAuthStore((s) => s.clearUser);
   const router = useRouter();
 
+  const [loggingOut, setLoggingOut] = useState(false);
+
   const logout = useCallback(async () => {
+    setLoggingOut(true);
     try {
       await axiosInstance.post('/auth/logout');
     } catch (_) {
@@ -19,9 +22,10 @@ export default function useLogout() {
       clearTokens();
       clearUser();
       delete axiosInstance.defaults.headers.Authorization;
+      setLoggingOut(false);
       router.replace('/auth'); // 로그아웃 후 /auth 화면으로 이동
     }
   }, [clearTokens, clearUser, router]);
 
-  return logout;
+  return { logout, loggingOut };
 }

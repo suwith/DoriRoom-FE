@@ -5,10 +5,11 @@ import Link from 'next/link';
 import TwoButtonModal from '../_components/TwoButtonModal';
 import { useState } from 'react';
 import useLogout from '@/hooks/auth/useLogout';
+import LoadingModal from '@/app/_components/LoadingModal';
 
 export default function Mypage() {
   const [isOpen, setIsOpen] = useState(false);
-  const logout = useLogout();
+  const { logout, loggingOut } = useLogout();
 
   return (
     <div className="flex flex-col max-w-[390px] w-screen h-screen">
@@ -42,6 +43,7 @@ export default function Mypage() {
           <span className="text-sm font-normal text-neutral-900">탈퇴하기</span>
         </div>
       </div>
+
       {isOpen && (
         <TwoButtonModal
           description={
@@ -60,6 +62,8 @@ export default function Mypage() {
           }}
         />
       )}
+
+      {loggingOut && <LoadingModal open={loggingOut} />}
     </div>
   );
 }
