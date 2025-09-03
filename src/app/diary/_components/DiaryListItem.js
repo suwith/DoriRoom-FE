@@ -3,8 +3,8 @@
 import { useState } from 'react';
 import { useRouter } from 'next/navigation';
 import TwoButtonModal from '@/app/_components/TwoButtonModal';
-import axiosInstance from '@/lib/axiosInstance';
 import useDiaryLike from '@/hooks/diary/useDiaryLike';
+import useDiaryDelete from '@/hooks/diary/useDiaryDelete';
 
 export default function DiaryListItem({ diary, onDeleted }) {
   const router = useRouter();
@@ -21,20 +21,17 @@ export default function DiaryListItem({ diary, onDeleted }) {
 
   const [likeCount, setLikeCount] = useState(diary.likes ?? 0);
 
+  const { deleteDiary, loading: deleteLoading } = useDiaryDelete();
+
   const handleDelete = async (e) => {
     e.stopPropagation();
-    try {
-      await axiosInstance.delete(`/diary/${diary.id}`);
-      console.log('삭제 완료');
+    const success = await deleteDiary(diary.id);
+    if (success) {
       onDeleted?.(diary.id);
-    } catch (err) {
-      console.error('삭제 실패:', err);
-    } finally {
-      setShowDiaryMenu(false);
-      setShowDeleteModal(false);
     }
+    setShowDiaryMenu(false);
+    setShowDeleteModal(false);
   };
-
   return (
     <div
       className="bg-background rounded-lg p-3 space-y-2"
