@@ -64,3 +64,16 @@ export function toApiLocation(l) {
     sigunguCode: l.sigunguCode == null ? null : Number(l.sigunguCode),
   };
 }
+
+// imageUrls 안전 파싱
+export function parseImageUrls(raw) {
+  if (!raw) return [];
+  if (Array.isArray(raw)) return raw;
+  try {
+    const s = String(raw).replace(/'/g, '"').replace(/\s/g, '');
+    const arr = JSON.parse(s);
+    return Array.isArray(arr) ? arr : [];
+  } catch {
+    return [];
+  }
+}

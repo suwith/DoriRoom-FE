@@ -2,19 +2,7 @@
 
 import { useEffect, useMemo, useRef, useState } from 'react';
 import axiosInstance from '@/lib/axiosInstance';
-
-// imageUrls 안전 파싱
-function parseImageUrls(raw) {
-  if (!raw) return [];
-  if (Array.isArray(raw)) return raw;
-  try {
-    const s = String(raw).replace(/'/g, '"').replace(/\s/g, '');
-    const arr = JSON.parse(s);
-    return Array.isArray(arr) ? arr : [];
-  } catch {
-    return [];
-  }
-}
+import { parseImageUrls } from '@/lib/festivalConstants';
 
 function mapToReviewItem(row) {
   const createdAtMs = row.createdAt ? Date.parse(row.createdAt) : 0;
