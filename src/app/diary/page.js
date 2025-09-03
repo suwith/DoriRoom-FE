@@ -2,10 +2,8 @@
 
 import { useEffect, useState } from 'react';
 import { useRouter } from 'next/navigation';
-import { subDays } from 'date-fns';
 
 import HeaderNavigationBar from '@/app/_components/HeaderNavigationBar';
-import { mockDiaries } from './mockData';
 import { MdEditSquare } from 'react-icons/md';
 import CollectTabSection from '@/app/diary/_components/CollectTabSection';
 import MyDiaryTabSection from '@/app/diary/_components/MyDiaryTabSection';
@@ -52,20 +50,6 @@ export default function DiaryPage() {
     sessionStorage.setItem('diaryTab', tab);
   }, [tab]);
 
-  const today = new Date();
-  const oneWeekAgo = subDays(today, 6);
-
-  const handleDateClick = (isoDate) => {
-    const formatted = isoDate.replace(/-/g, '.');
-    const diariesForDate = mockDiaries.filter((d) => d.date === formatted);
-
-    if (diariesForDate.length === 1) {
-      router.push(`/diary/${diariesForDate[0].id}`);
-    } else if (diariesForDate.length > 1) {
-      router.push(`/diary/date/${formatted}`);
-    }
-  };
-
   return (
     <div className="min-h-screen pt-24">
       <HeaderNavigationBar
@@ -74,18 +58,9 @@ export default function DiaryPage() {
         className="bg-background"
       />
 
-      <div className="mt-1">
-        <DiaryTabs tab={tab} onChange={setTab} />
-      </div>
+      <DiaryTabs tab={tab} onChange={setTab} />
 
-      {tab === 'collect' ? (
-        <CollectTabSection />
-      ) : (
-        <MyDiaryTabSection
-          diaries={mockDiaries}
-          onDateClick={handleDateClick}
-        />
-      )}
+      {tab === 'collect' ? <CollectTabSection /> : <MyDiaryTabSection />}
 
       <button
         className="fixed bottom-7 left-1/2 -translate-x-1/2 w-[350px] py-2 bg-main-100 text-background rounded-lg text-sm font-medium shadow-md"
