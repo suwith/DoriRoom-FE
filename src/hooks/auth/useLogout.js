@@ -1,4 +1,3 @@
-// hooks/auth/useLogout.js
 'use client';
 
 import { useCallback } from 'react';

@@ -1,4 +1,3 @@
-// app/login/page.jsx
 'use client';
 
 import { useEffect, useLayoutEffect, useRef, useState } from 'react';
