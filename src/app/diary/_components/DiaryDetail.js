@@ -1,22 +1,28 @@
-// app/diary/_components/DiaryDetail.jsx
 'use client';
 
 import HeaderNavigationBar from '@/app/_components/HeaderNavigationBar';
-import { useState } from 'react';
 import FestivalListItem from '@/app/festival/_components/FestivalListItem';
 import Icon from '@mdi/react';
 import { mdiTree } from '@mdi/js';
 import TwoButtonModal from '@/app/_components/TwoButtonModal';
 import { useRouter } from 'next/navigation';
+import { useState } from 'react';
+import useDiaryLike from '@/hooks/diary/useDiaryLike';
 
 export default function DiaryDetail({ diary }) {
   const router = useRouter();
-  const [likedIds, setLikedIds] = useState([]);
   const [isBottomOpen, setIsBottomOpen] = useState(true);
   const [showDeleteModal, setShowDeleteModal] = useState(false);
 
-  const isLiked = likedIds.includes(diary.id);
-  const likeCount = (diary.likes ?? 0) + (isLiked ? 1 : 0);
+  // 좋아요 훅 사용
+  const {
+    liked,
+    loading: likeLoading,
+    mutating: likeMutating,
+    toggleLike,
+  } = useDiaryLike(diary.id);
+
+  const [likeCount, setLikeCount] = useState(diary.likes || 0);
   const displayLikeText = likeCount === 0 ? '좋아요' : likeCount;
 
   const handleDelete = () => {
@@ -24,12 +30,6 @@ export default function DiaryDetail({ diary }) {
     console.log('삭제 완료');
     setShowDeleteModal(false);
     router.back();
-  };
-
-  const handleLike = (id) => {
-    setLikedIds((prev) =>
-      prev.includes(id) ? prev.filter((i) => i !== id) : [...prev, id]
-    );
   };
 
   return (
@@ -60,16 +60,27 @@ export default function DiaryDetail({ diary }) {
         <div className="flex items-center gap-2">
           <div className="text-xs text-neutral-400">{diary.date} •</div>
           <div className="flex items-center gap-1 text-xs">
-            <button onClick={() => handleLike(diary.id)}>
+            <button
+              onClick={async () => {
+                const nextLiked = !liked;
+                await toggleLike();
+                setLikeCount((prev) =>
+                  nextLiked ? prev + 1 : Math.max(0, prev - 1)
+                );
+              }}
+              disabled={likeLoading || likeMutating}
+              aria-disabled={likeLoading || likeMutating}
+              aria-pressed={liked}
+            >
               <i
                 className={`text-lg ${
-                  isLiked
+                  liked
                     ? 'mgc_emoji_2_fill text-main-100'
                     : 'mgc_emoji_2_line text-neutral-400'
                 }`}
               />
             </button>
-            <span className={isLiked ? 'text-main-100' : 'text-neutral-400'}>
+            <span className={liked ? 'text-main-100' : 'text-neutral-400'}>
               {displayLikeText}
             </span>
           </div>
