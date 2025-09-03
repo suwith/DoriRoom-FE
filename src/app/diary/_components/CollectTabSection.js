@@ -3,8 +3,12 @@
 import DiaryCard from './DiaryCard';
 import ReviewItem from '@/app/festival/_components/ReviewItem';
 import { mockDiaries } from '../mockData';
+import usePopularDiaries from '@/hooks/diary/usePopularDiaries';
+import LoadingContent from '@/app/_components/LoadingContent';
 
 export default function CollectTabSection() {
+  const { populars, loading } = usePopularDiaries();
+
   return (
     <div className="space-y-10">
       <section className="px-4 mt-4">
@@ -12,7 +16,8 @@ export default function CollectTabSection() {
           <div className="text-md font-bold">이달의 인기글 ✨</div>
         </div>
         <div className="flex gap-3 overflow-x-auto scrollbar-hide pb-2">
-          {mockDiaries.map((it) => (
+          {loading && <LoadingContent loading={loading} />}
+          {populars.map((it) => (
             <DiaryCard key={it.id} item={it} />
           ))}
         </div>
