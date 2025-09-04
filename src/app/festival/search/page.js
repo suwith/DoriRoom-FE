@@ -113,13 +113,15 @@ export default function SearchPage() {
       <div className="mt-6 w-full h-2 p-0 bg-neutral-100"></div>
 
       {/* 카테고리 */}
-      <div className="mt-6 px-4">
-        <h3 className="text-sm mb-3 font-semibold">카테고리</h3>
-        <RegionSection />
-      </div>
+      {!isSelectMode && (
+        <div className="mt-6 px-4 mb-4">
+          <h3 className="text-sm mb-3 font-semibold">카테고리</h3>
+          <RegionSection />
+        </div>
+      )}
 
       {/* 실시간 검색어 */}
-      <div className="mt-10 mb-20 px-4">
+      <div className="mt-6 mb-20 px-4">
         <h3 className="text-sm mb-3 font-semibold">실시간 검색어</h3>
         <div className="flex gap-6 pl-3">
           <div className="flex-1 space-y-2 text-sm text-neutral-800">
