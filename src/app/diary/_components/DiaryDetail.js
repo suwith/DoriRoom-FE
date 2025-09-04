@@ -17,11 +17,7 @@ export default function DiaryDetail({ diary }) {
   const [showDeleteModal, setShowDeleteModal] = useState(false);
 
   const user = useAuthStore((state) => state.user);
-  console.log(user);
-
-  console.log(diary);
   const isMine = diary.author.id === user.userId;
-  console.log(isMine);
 
   // 좋아요 훅 사용
   const {

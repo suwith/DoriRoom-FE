@@ -20,8 +20,6 @@ export default function HeaderNavigationBar({
   const [isOpen, setIsOpen] = useState(false);
   const [showDiaryMenu, setShowDiaryMenu] = useState(false);
 
-  console.log(isMine);
-
   return (
     <header
       className={`fixed top-0 left-1/2 transform -translate-x-1/2 z-50 max-w-[390px] w-full pt-[50px] pb-[20px] ${className}`}

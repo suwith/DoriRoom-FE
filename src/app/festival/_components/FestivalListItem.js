@@ -21,8 +21,6 @@ export default function FestivalListItem({
     festival.eventId
   );
 
-  console.log('written', written);
-
   const { liked, likeCount, loading, mutating, toggleFavorite } =
     useFestivalFavorite(festival.eventId, festival.likes || 0);
 
