@@ -27,7 +27,7 @@ export default function ReviewItem({ review, type = 'diary', onLikeSync }) {
       : `${review.content.slice(0, 70)}...`;
 
   const displayedText = text.replace(/\n/g, '<br />');
-
+  const formattedDate = review.date ? review.date.replace(/-/g, '.') : '';
   const displayLikeText = likeCount === 0 ? '좋아요' : likeCount;
 
   return (
@@ -109,7 +109,7 @@ export default function ReviewItem({ review, type = 'diary', onLikeSync }) {
         )}
       </div>
       <div className="flex items-center mt-2 gap-2">
-        <div className="text-xs text-neutral-400 ">{review.date} •</div>
+        <div className="text-xs text-neutral-400 ">{formattedDate} •</div>
         <div className="flex items-center gap-1 text-main-100 text-xs">
           <button
             onClick={async () => {
