@@ -3,10 +3,14 @@
 import { useState } from 'react';
 import useDiaryLike from '@/hooks/diary/useDiaryLike';
 import { useRouter } from 'next/navigation';
+import { useAuthStore } from '@/stores/useAuthStore';
 
 export default function ReviewItem({ review, type = 'diary', onLikeSync }) {
   const router = useRouter();
   const [expanded, setExpanded] = useState(false);
+  const user = useAuthStore((state) => state.user);
+
+  const isMine = review.authorId === user.id;
 
   const {
     liked,
@@ -44,8 +48,14 @@ export default function ReviewItem({ review, type = 'diary', onLikeSync }) {
             <div className="text-sm font-semibold text-neutral-800">
               {review.authorName}
             </div>
+            {isMine && (
+              <div className="text-[10px] bg-sub2-5 text-sub2-100 rounded-sm px-1 flex items-center justify-center">
+                내 리뷰
+              </div>
+            )}
           </div>
         )}
+
         {type === 'mine' ? (
           <button
             className="text-[11px] px-3 py-0.5 bg-main-5 text-main-100 rounded"
@@ -58,17 +68,12 @@ export default function ReviewItem({ review, type = 'diary', onLikeSync }) {
             <button className="text-[11px] px-3 py-0.5 bg-main-5 text-main-100 rounded">
               방문
             </button>
-            {type === 'diary' && (
-              <button className="text-[11px] px-2 py-0.5 bg-main-5 text-main-100 rounded">
-                팔로우
-              </button>
-            )}
           </div>
         )}
       </div>
 
       {review.images.length > 0 && (
-        <div className="flex overflow-x-scroll gap-2 scrollbar-hide mb-4">
+        <div className="flex overflow-x-scroll gap-2 scrollbar-hide mb-3">
           {review.images.map((src, idx) => (
             <img
               key={idx}
@@ -77,6 +82,14 @@ export default function ReviewItem({ review, type = 'diary', onLikeSync }) {
               className="w-[110px] h-[110px] object-cover rounded-lg"
             />
           ))}
+        </div>
+      )}
+
+      {type === 'diary' && (
+        <div className="mb-2">
+          <span className="bg-sub2-5 text-sub2-100 rounded-sm px-1.5 py-1 text-[11px]">
+            {review.festivalName}
+          </span>
         </div>
       )}
 
