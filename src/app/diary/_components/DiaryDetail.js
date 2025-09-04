@@ -9,6 +9,7 @@ import { useRouter } from 'next/navigation';
 import { useState } from 'react';
 import useDiaryLike from '@/hooks/diary/useDiaryLike';
 import { useAuthStore } from '@/stores/useAuthStore';
+import useDiaryDelete from '@/hooks/diary/useDiaryDelete';
 
 export default function DiaryDetail({ diary }) {
   const router = useRouter();
@@ -16,8 +17,11 @@ export default function DiaryDetail({ diary }) {
   const [showDeleteModal, setShowDeleteModal] = useState(false);
 
   const user = useAuthStore((state) => state.user);
+  console.log(user);
 
-  const isMine = diary.author.id === user.id;
+  console.log(diary);
+  const isMine = diary.author.id === user.userId;
+  console.log(isMine);
 
   // 좋아요 훅 사용
   const {
@@ -30,28 +34,33 @@ export default function DiaryDetail({ diary }) {
   const [likeCount, setLikeCount] = useState(diary.likes || 0);
   const displayLikeText = likeCount === 0 ? '좋아요' : likeCount;
 
-  const handleDelete = () => {
-    // TODO: API 연동 시 실제 삭제 처리
-    console.log('삭제 완료');
+  const { deleteDiary, loading: deleteLoading } = useDiaryDelete();
+
+  const handleDelete = async (e) => {
+    e.stopPropagation();
+    const success = await deleteDiary(diary.id);
+    if (success) {
+      router.back(); // 삭제 후 뒤로가기
+    }
     setShowDeleteModal(false);
-    router.back();
   };
 
   return (
     <div className="pt-20 pb-60">
       <HeaderNavigationBar
-        title={diary.festival?.title || '연결된 축제'}
+        title={diary.festival?.title || ''}
         type="diary"
         onEditClick={() => console.log('수정 클릭')}
         onDeleteClick={() => setShowDeleteModal(true)}
         className="bg-background"
+        isMine={isMine}
       />
 
       <div className="p-5 space-y-5 whitespace-pre-line">
         <div className="flex items-center justify-between">
           <div className="flex items-center gap-2">
             <img
-              src={diary.profileImage || '/images/profileImage_default.svg'}
+              src={diary.author.image || '/images/profileImage_default.svg'}
               alt="profile"
               className="w-8 h-8 rounded-full oobject-cover"
             />

@@ -28,7 +28,7 @@ export default function useDiaryDetail(diaryId) {
               .slice(0, 10),
             author: {
               id: d.userInfo?.userId,
-              name: d.userInfo?.nickname ?? '익명',
+              name: d.userInfo?.nickname ?? '',
               image: d.userInfo?.profileImageUrl ?? null,
             },
             festival: {
