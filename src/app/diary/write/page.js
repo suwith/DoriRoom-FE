@@ -9,23 +9,57 @@ import { useRouter } from 'next/navigation';
 import { DoriroomImagePicker } from 'doriroom-image-picker';
 import { Capacitor } from '@capacitor/core';
 import SelectDate from '@/app/diary/write/_components/SelectDate';
+import useDiaryCreate from '@/hooks/diary/useDiaryCreate';
 
 const MAX_IMAGES = 5;
 
 export default function DiaryWrite() {
   const router = useRouter();
   const [selectedDate, setSelectedDate] = useState(null);
-  const [selectedFestival, setSelectedFestival] = useState('');
+  const [selectedFestival, setSelectedFestival] = useState(null);
   const [images, setImages] = useState([]);
   const [diaryText, setDiaryText] = useState('');
-  const [visibility, setVisibility] = useState('public');
+  const [visibility, setVisibility] = useState('PUBLIC');
+
   const [showLeaveModal, setShowLeaveModal] = useState(false);
   const [showCalendar, setShowCalendar] = useState(false);
 
   const isFormValid =
-    selectedDate && selectedFestival && diaryText.trim() !== '';
+    selectedDate && selectedFestival?.id && diaryText.trim() !== '';
 
   const isWriting = selectedDate || selectedFestival || diaryText.trim() !== '';
+
+  const { createDiary, loading: createLoading } = useDiaryCreate();
+
+  const handleSubmit = async () => {
+    try {
+      const formData = new FormData();
+
+      // diary JSON을 Blob으로 추가해야 함
+      const diaryPayload = {
+        eventId: selectedFestival.id,
+        visitedAt: selectedDate ? format(selectedDate, 'yyyy-MM-dd') : '',
+        content: diaryText,
+        visibility,
+      };
+      formData.append(
+        'diary',
+        new Blob([JSON.stringify(diaryPayload)], { type: 'application/json' })
+      );
+
+      // 이미지 파일 추가
+      images.forEach((img) => {
+        if (img.file) formData.append('images', img.file);
+      });
+
+      const newDiary = await createDiary(formData);
+      if (newDiary) {
+        router.replace(`/diary/${newDiary.diaryId}`);
+      }
+    } catch (err) {
+      console.error('일기 작성 중 오류:', err);
+    }
+  };
 
   const toDisplay = (uri) => {
     if (!uri) return '';
@@ -38,6 +72,7 @@ export default function DiaryWrite() {
     }
   };
 
+  /** 이미지 선택 */
   const handleSelectImages = async () => {
     const remaining = MAX_IMAGES - images.length;
     if (remaining <= 0) return;
@@ -47,21 +82,24 @@ export default function DiaryWrite() {
 
       let raw = [];
       if (Array.isArray(res?.items)) {
-        raw = res.items
-          .map((it) => it.webPath || it.path || it.uri)
-          .filter(Boolean);
+        raw = res.items.filter(Boolean);
       } else if (Array.isArray(res?.paths)) {
-        raw = res.paths;
+        raw = res.paths.map((p) => ({ path: p }));
       } else {
         console.warn('알 수 없는 응답 형태:', res);
         return;
       }
 
-      const selected = raw.map((u) => ({ uri: toDisplay(u) }));
+      const selected = raw.map((it) => {
+        const uri = it.webPath || it.path || it.uri;
+        return {
+          uri: toDisplay(uri),
+          file: it.file || null, // File 객체를 직접 받는 경우
+        };
+      });
 
       setImages((prev) => {
         const merged = [...prev, ...selected];
-        // 중복 제거
         const uniq = merged.filter(
           (x, i, a) => a.findIndex((y) => y.uri === x.uri) === i
         );
@@ -72,6 +110,7 @@ export default function DiaryWrite() {
     }
   };
 
+  /** 세션스토리지 복원 */
   useEffect(() => {
     const shouldRestore = sessionStorage.getItem('selectMode') === 'true';
 
@@ -86,15 +125,16 @@ export default function DiaryWrite() {
           if (!isNaN(d.getTime())) setSelectedDate(d);
         }
 
-        if (typeof saved.selectedFestival === 'string') {
+        if (saved.selectedFestival?.id) {
           setSelectedFestival(saved.selectedFestival);
         }
 
         if (Array.isArray(saved.images)) {
           setImages(
-            saved.images
-              .map((it) => ({ uri: toDisplay(it?.uri) }))
-              .filter((x) => !!x.uri)
+            saved.images.map((it) => ({
+              uri: toDisplay(it?.uri),
+              file: null, // 복원 시에는 파일 없음
+            }))
           );
         }
 
@@ -108,12 +148,12 @@ export default function DiaryWrite() {
       }
     }
 
-    // 검색 페이지에서 선택해 준 값 병합
+    // 검색 페이지에서 선택된 축제 불러오기
     const picked = sessionStorage.getItem('selectedFestival');
     if (picked) {
       try {
         const f = JSON.parse(picked);
-        setSelectedFestival(f?.title || '');
+        setSelectedFestival(f); // {id, title, thumbnail}
       } catch {}
       sessionStorage.removeItem('selectedFestival');
     }
@@ -150,9 +190,15 @@ export default function DiaryWrite() {
               type="text"
               className="flex-1 text-sm bg-neutral-100 rounded-md px-3 py-2 placeholder:text-neutral-300 focus:outline-none"
               placeholder="페스티벌 찾기"
-              value={selectedFestival}
-              onChange={(e) => setSelectedFestival(e.target.value)}
+              value={selectedFestival?.title || ''}
+              onChange={(e) =>
+                setSelectedFestival((prev) => ({
+                  ...(prev || {}),
+                  title: e.target.value,
+                }))
+              }
             />
+
             <button
               className="bg-main-100 text-background px-5 py-3 text-[15px] rounded-lg"
               onClick={() => {
@@ -284,9 +330,9 @@ export default function DiaryWrite() {
               <input
                 type="radio"
                 name="visibility"
-                value="public"
-                checked={visibility === 'public'}
-                onChange={() => setVisibility('public')}
+                value="PUBLIC"
+                checked={visibility === 'PUBLIC'}
+                onChange={() => setVisibility('PUBLIC')}
                 className="w-4 h-4 appearance-none border-1 border-neutral-300 rounded-full checked:bg-main-100 checked:border-2"
               />
             </label>
@@ -295,9 +341,9 @@ export default function DiaryWrite() {
               <input
                 type="radio"
                 name="visibility"
-                value="friends"
-                checked={visibility === 'friends'}
-                onChange={() => setVisibility('friends')}
+                value="FRIENDS"
+                checked={visibility === 'FRIENDS'}
+                onChange={() => setVisibility('FRIENDS')}
                 className="w-4 h-4 appearance-none border-1 border-neutral-300 rounded-full checked:bg-main-100 checked:border-2"
               />
             </label>
@@ -306,9 +352,9 @@ export default function DiaryWrite() {
               <input
                 type="radio"
                 name="visibility"
-                value="private"
-                checked={visibility === 'private'}
-                onChange={() => setVisibility('private')}
+                value="PRIVATE"
+                checked={visibility === 'PRIVATE'}
+                onChange={() => setVisibility('PRIVATE')}
                 className="w-4 h-4 appearance-none border-1 border-neutral-300 rounded-full checked:bg-main-100 checked:border-2"
               />
             </label>
@@ -323,18 +369,18 @@ export default function DiaryWrite() {
           </p>
         </div>
 
-        {/* 업로드 버튼 */}
         <button
-          disabled={!isFormValid}
-          className={`w-full py-2 mt-3 rounded-lg font-bold text-sm text-background ${isFormValid ? 'bg-main-100' : 'bg-neutral-300 cursor-not-allowed'}`}
-          onClick={() => {
-            console.log('일기 업로드 완료');
-            history.back();
-          }}
+          disabled={!isFormValid || createLoading}
+          className={`w-full py-2 mt-3 rounded-lg font-bold text-sm text-background ${
+            isFormValid ? 'bg-main-100' : 'bg-neutral-300 cursor-not-allowed'
+          }`}
+          onClick={handleSubmit}
         >
           <div className="flex items-center justify-center gap-2">
             <MdEditSquare className="text-background w-5 h-5" />
-            <span className="text-lg">업로드하기</span>
+            <span className="text-lg">
+              {createLoading ? '업로드 중...' : '업로드하기'}
+            </span>
           </div>
         </button>
       </div>
