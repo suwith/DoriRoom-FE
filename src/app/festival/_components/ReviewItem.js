@@ -10,7 +10,7 @@ export default function ReviewItem({ review, type = 'diary', onLikeSync }) {
   const [expanded, setExpanded] = useState(false);
   const user = useAuthStore((state) => state.user);
 
-  const isMine = review.authorId === user.id;
+  const isMine = review.authorId === user.userId;
 
   const {
     liked,
