@@ -10,7 +10,6 @@ import { useAuthStore } from '@/stores/useAuthStore';
 export default function MyDiaryTabSection() {
   const router = useRouter();
   const user = useAuthStore((s) => s.user);
-  console.log(user);
 
   // 캘린더용 → 전체 일기 조회
   const { diaries: allDiaries, loading: calendarLoading } = useUserDiaries({
@@ -27,7 +26,7 @@ export default function MyDiaryTabSection() {
 
   const handleDateClick = (isoDate) => {
     const formatted = isoDate.replace(/-/g, '.');
-    const diariesForDate = allDiaries.filter((d) => d.date === formatted);
+    const diariesForDate = allDiaries.filter((d) => d.date === isoDate);
 
     if (diariesForDate.length === 1) {
       router.push(`/diary/${diariesForDate[0].id}`);
