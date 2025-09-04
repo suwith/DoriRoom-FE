@@ -6,6 +6,7 @@ import { useRef, useState } from 'react';
 import useFestivalFavorite from '@/hooks/festival/useFestivalFavorite';
 import TwoButtonModal from '@/app/_components/TwoButtonModal';
 import { useRouter } from 'next/navigation';
+import useDiaryWritten from '@/hooks/diary/useDiaryWritten';
 
 export default function FestivalListItem({
   festival,
@@ -16,6 +17,11 @@ export default function FestivalListItem({
   const router = useRouter();
   const imgRef = useRef(null);
   const [showAlreadyWrittenModal, setShowAlreadyWrittenModal] = useState(false);
+  const { written, loading: writtenLoading } = useDiaryWritten(
+    festival.eventId
+  );
+
+  console.log('written', written);
 
   const { liked, likeCount, loading, mutating, toggleFavorite } =
     useFestivalFavorite(festival.eventId, festival.likes || 0);
@@ -27,10 +33,7 @@ export default function FestivalListItem({
 
   // 선택 버튼 클릭 시 확인 로직 (추후 API 연결 예정)
   const handleSelect = () => {
-    // TODO: 나중에 여기서 API 호출해서 확인
-    const alreadyWritten = false;
-
-    if (alreadyWritten) {
+    if (written) {
       setShowAlreadyWrittenModal(true);
     } else {
       onSelect?.(festival);
