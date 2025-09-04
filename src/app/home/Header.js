@@ -39,7 +39,7 @@ export default function HeaderBar({ credit }) {
           <IconButton
             icon={<i className="mgc_user_follow_fill text-[#F36693] text-xl" />}
             label="이웃"
-            textColor="text-[#FFBF47]"
+            textColor="text-[#F36693]"
           />
           <IconButton
             icon={<MdChair className="w-5 h-5 text-[#F97316]" />}

@@ -10,6 +10,10 @@ import manifest from '@/../public/manifest.json' assert { type: 'json' };
 import LoadingContent from '@/app/_components/LoadingContent';
 import useEquipItems from '@/hooks/decorate/useEquipItems';
 
+const DEFAULT_FLOOR = 39;
+const DEFAULT_SHELF = 38;
+const DEFAULT_APPAREL = 31;
+
 export default function Decorate() {
   const [selectedItemIdx, setSelectedItemIdx] = useState(null);
   const { items, loading: UILoading, error } = useUserItems();
@@ -33,32 +37,47 @@ export default function Decorate() {
         <div className="relative flex justify-center max-w-[390px] w-screen h-150">
           {/* FLOOR */}
           <img
-            src={manifest.items?.[selectFLOOR?.itemId]?.asset?.shop}
+            src={
+              manifest.items?.[selectFLOOR?.itemId]?.asset?.shop ||
+              manifest.items?.[DEFAULT_FLOOR]?.asset?.shop
+            }
             className={`absolute top-60 z-${zIndex.FLOOR}`}
           />
           {/* WALL */}
-          <img
-            src={manifest.items?.[selectWALL?.itemId]?.asset?.shop}
-            className={`absolute -top-21 z-${zIndex.WALL}`}
-          />
+          {selectWALL && (
+            <img
+              src={manifest.items?.[selectWALL?.itemId]?.asset?.shop}
+              className={`absolute -top-21 z-${zIndex.WALL}`}
+            />
+          )}
           {/* 선반 */}
           <img
-            src={manifest.items[selectSHELF?.itemId]?.asset?.src}
+            src={
+              manifest.items[selectSHELF?.itemId]?.asset?.src ||
+              manifest.items?.[DEFAULT_SHELF]?.asset?.src
+            }
             className={`absolute top-12 left-3 w-[90px] h-[237px] z-${zIndex.SHELF}`}
           />
           {/* OBJECT */}
-          <img
-            src={manifest.items[selectOBJECT?.itemId]?.asset?.src}
-            className={`absolute top-44 right-2 w-[90px] h-[110px] z-${zIndex.OBJECT}`}
-          />
+          {selectOBJECT && (
+            <img
+              src={manifest.items[selectOBJECT?.itemId]?.asset?.src}
+              className={`absolute top-44 right-2 w-[90px] h-[110px] z-${zIndex.OBJECT}`}
+            />
+          )}
           {/* WINDOW */}
-          <img
-            src={manifest.items[selectWINDOW?.itemId]?.asset?.src}
-            className={`absolute -top-8 w-[214px] h-[131px] z-${zIndex.WINDOW}`}
-          />
+          {selectWINDOW && (
+            <img
+              src={manifest.items[selectWINDOW?.itemId]?.asset?.src}
+              className={`absolute -top-8 w-[214px] h-[131px] z-${zIndex.WINDOW}`}
+            />
+          )}
           {/* APPAREL */}
           <img
-            src={manifest.items[selectAPPAREL?.itemId]?.asset?.src}
+            src={
+              manifest.items[selectAPPAREL?.itemId]?.asset?.src ||
+              manifest.items?.[DEFAULT_APPAREL]?.asset?.src
+            }
             className={`absolute top-30 w-[150px] h-[184px] z-${zIndex.APPAREL}`}
           />
           <Link href="/shop" className="absolute bottom-0 right-2">
@@ -73,6 +92,7 @@ export default function Decorate() {
           selectedItemId={selectedItemIdx}
           onItemSelect={setSelectedItemIdx}
           isShop={false}
+          equip={equip}
           onEquipped={refetch}
         />
       </div>

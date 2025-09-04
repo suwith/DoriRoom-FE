@@ -690,6 +690,43 @@
         "ox": 0,
         "oy": 0
       }
+    },
+    "38": {
+      "id": "38",
+      "name": "기본 선반",
+      "type": "SHELF",
+      "group": "COMMON",
+      "slot": "apparel",
+      "theme": null,
+      "price": null,
+      "purchasable": false,
+      "defaultOwned": true,
+      "asset": {
+        "src": "/images/items/SHELF/기본-선반.svg",
+        "thumb": "/images/thumb/SHELF/기본-선반.svg",
+        "z": 10,
+        "ox": 0,
+        "oy": 0
+      }
+    },
+    "39": {
+      "id": "39",
+      "name": "기본 바닥",
+      "type": "FLOOR",
+      "group": "COMMON",
+      "slot": "apparel",
+      "theme": null,
+      "price": null,
+      "purchasable": false,
+      "defaultOwned": true,
+      "asset": {
+        "src": "/images/items/FLOOR/기본-바닥.svg",
+        "thumb": "/images/thumb/FLOOR/기본-바닥.svg",
+        "shop": "/images/shop/FLOOR/기본-바닥.svg",
+        "z": 10,
+        "ox": 0,
+        "oy": 0
+      }
     }
   }
 }

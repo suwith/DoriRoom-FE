@@ -2,23 +2,23 @@
 
 import { useState } from 'react';
 import Item from './Item';
-import useEquipItems from '@/hooks/decorate/useEquipItems';
 import usePostEquipItem from '@/hooks/decorate/usePostEquipItem';
 import manifest from '@/../public/manifest.json' assert { type: 'json' };
+
+const DEFAULT = {
+  FLOOR: 39,
+  SHELF: 38,
+  APPAREL: 31,
+};
 
 export default function CategoryItemPanel({
   items,
   selectedItemId,
   onItemSelect,
   isShop,
+  equip,
   onEquipped,
 }) {
-  const {
-    equip,
-    loading: EILoading,
-    error: EIError,
-    refetch,
-  } = useEquipItems();
   const {
     mutate,
     loading: PEILoading,
@@ -26,7 +26,6 @@ export default function CategoryItemPanel({
   } = usePostEquipItem({
     onSuccess: () => {
       onEquipped();
-      refetch();
     },
   });
   const [selectedCategoryId, setSelectedCategoryId] = useState('APPAREL');
@@ -44,6 +43,7 @@ export default function CategoryItemPanel({
     { id: 6, name: '바닥', type: 'FLOOR', icon: 'mgc_map_2_fill' },
   ];
 
+  console.log(DEFAULT[selectedCategoryId]);
   return (
     <div className="flex flex-col overflow-y-auto z-15">
       {/* 탭 영역 */}
@@ -77,22 +77,36 @@ export default function CategoryItemPanel({
       <div className="overflow-y-auto bg-background h-screen px-3 pt-3 pb-[80px] grid grid-cols-3 content-start gap-2 scrollbar-hide">
         {/* 선택 안 함 */}
         {!isShop &&
-          !['APPAREL', 'SHELF', 'WINDOW'].includes(selectedCategoryId) && (
-            <Item
-              onClick={async () => {
-                onItemSelect(0);
-                const tmp = equip.find(
-                  (e) => e.itemType === selectedCategoryId
-                );
-                if (tmp) await mutate(tmp.itemId);
-              }}
-              isSelected={
-                selectedItemId === 0 ||
-                !equip.some((e) => e.itemType === selectedCategoryId)
-              }
-              name="선택안함"
-            />
-          )}
+        ['APPAREL', 'SHELF', 'WINDOW'].includes(selectedCategoryId) ? (
+          <Item
+            onClick={async () => {
+              onItemSelect(0);
+              const tmp = equip.find((e) => e.itemType === selectedCategoryId);
+              if (tmp) await mutate(tmp.itemId);
+            }}
+            isSelected={
+              selectedItemId === 0 ||
+              !equip.some((e) => e.itemType === selectedCategoryId)
+            }
+            imageUrl={
+              manifest.items?.[DEFAULT[selectedCategoryId]]?.asset.thumb
+            }
+            name={manifest.items?.[DEFAULT[selectedCategoryId]]?.name}
+          />
+        ) : (
+          <Item
+            onClick={async () => {
+              onItemSelect(0);
+              const tmp = equip.find((e) => e.itemType === selectedCategoryId);
+              if (tmp) await mutate(tmp.itemId);
+            }}
+            isSelected={
+              selectedItemId === 0 ||
+              !equip.some((e) => e.itemType === selectedCategoryId)
+            }
+            name="선택안함"
+          />
+        )}
         {/* 선택된 카테고리 아이템 */}
         {items
           .filter((item) => item.itemType === selectedCategoryId)

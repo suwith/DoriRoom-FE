@@ -6,6 +6,10 @@ import useMyRoom from '@/hooks/user/useMyRoom';
 import LoadingContent from './_components/LoadingContent';
 import manifest from '../../public/manifest.json' assert { type: 'json' };
 
+const DEFAULT_FLOOR = 39;
+const DEFAULT_SHELF = 38;
+const DEFAULT_APPAREL = 31;
+
 export default function Home() {
   const { data, loading, error } = useMyRoom();
   const zIndex = manifest.defaults.zIndex;
@@ -35,7 +39,10 @@ export default function Home() {
       <div className="relative flex-1 h-full flex justify-center items-center p-4 max-w-[390px] w-screen">
         {/* FLOOR */}
         <img
-          src={manifest.items[selectFLOOR?.itemId]?.asset.src}
+          src={
+            manifest.items[selectFLOOR?.itemId]?.asset.src ||
+            manifest.items[DEFAULT_FLOOR]?.asset.src
+          }
           className={`absolute top-130 z-${zIndex.FLOOR}`}
         />
         {/* WALL */}
@@ -45,7 +52,10 @@ export default function Home() {
         />
         {/* 선반 */}
         <img
-          src={manifest.items[selectSHELF?.itemId]?.asset.src}
+          src={
+            manifest.items[selectSHELF?.itemId]?.asset.src ||
+            manifest.items[DEFAULT_SHELF]?.asset.src
+          }
           className={`absolute top-75 left-3 z-${zIndex.SHELF}`}
         />
         {/* OBJECT */}
@@ -60,7 +70,10 @@ export default function Home() {
         />
         {/* APPAREL */}
         <img
-          src={manifest.items[selectAPPAREL?.itemId]?.asset.src}
+          src={
+            manifest.items[selectAPPAREL?.itemId]?.asset.src ||
+            manifest.items[DEFAULT_APPAREL]?.asset.src
+          }
           className={`absolute top-82 z-${zIndex.APPAREL}`}
         />
       </div>
