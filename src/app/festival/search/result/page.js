@@ -364,7 +364,10 @@ export default function FestivalSearchResultPage() {
                   onSelect={() => {
                     sessionStorage.setItem(
                       'selectedFestival',
-                      JSON.stringify(festival)
+                      JSON.stringify({
+                        id: festival.id,
+                        title: festival.title,
+                      })
                     );
                     router.push('/diary/write');
                   }}
