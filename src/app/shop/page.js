@@ -60,7 +60,7 @@ export default function Shop() {
     <div className="flex justify-center h-screen pt-21 bg-neutral-100">
       <div className="flex flex-col max-w-[390px] w-screen mx-auto">
         {/* 상단 고정: 보유 포인트 (왼쪽 정렬) */}
-        <div className="fixed max-w-[390px] w-screen flex justify-between px-4">
+        <div className="fixed max-w-[390px] w-screen flex justify-between px-4 z-1">
           <div
             className="flex justify-center items-center gap-2 rounded-lg w-auto px-2 h-8"
             style={{ boxShadow: '0 0 10px rgba(0,0,0,0.1)' }}
@@ -70,14 +70,12 @@ export default function Shop() {
               {MYLoading ? '' : credit}
             </p>
           </div>
-          <div>
-            <Link href="/home/decorate">
-              <div className="flex flex-col items-center space-y-1">
-                <MdChair className="w-6 h-6 text-[#F97316]" />
-                <span className="text-xs text-[#F97316]">꾸미기</span>
-              </div>
-            </Link>
-          </div>
+          <Link href="/home/decorate">
+            <div className="flex flex-col items-center space-y-1">
+              <MdChair className="w-6 h-6 text-[#F97316]" />
+              <span className="text-xs text-[#F97316]">꾸미기</span>
+            </div>
+          </Link>
         </div>
         {/* 캐릭터 */}
         <div className="relative flex justify-center max-w-[390px] w-screen h-140">
