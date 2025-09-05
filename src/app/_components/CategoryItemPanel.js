@@ -74,7 +74,7 @@ export default function CategoryItemPanel({
       </div>
 
       {/* 아이템 리스트 */}
-      <div className="overflow-y-auto bg-background h-screen px-3 pt-3 pb-[80px] grid grid-cols-3 content-start gap-2 scrollbar-hide">
+      <div className="overflow-y-auto bg-background h-screen px-3 pt-6 pb-[80px] grid grid-cols-3 content-start gap-2 scrollbar-hide">
         {/* 선택 안 함 */}
         {!isShop &&
           (['APPAREL', 'SHELF', 'WINDOW'].includes(selectedCategoryId) ? (
