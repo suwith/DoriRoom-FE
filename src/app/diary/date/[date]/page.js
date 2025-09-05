@@ -5,12 +5,20 @@ import useDailyDiaries from '@/hooks/diary/useDailyDiaries';
 import DiaryList from '../../_components/DiaryList';
 import LoadingContent from '@/app/_components/LoadingContent';
 import ErrorContent from '@/app/_components/ErrorContent';
+import { useAuthStore } from '@/stores/useAuthStore';
 
 export default function Page() {
   const params = useParams();
   const raw = params?.date;
   const asString = Array.isArray(raw) ? raw.join('-') : String(raw || '');
-  const { diaries, loading, error } = useDailyDiaries(asString);
+
+  const { user } = useAuthStore();
+  console.log(user);
+  const userId = user?.userId;
+
+  console.log(userId);
+
+  const { diaries, loading, error } = useDailyDiaries(userId, asString);
 
   console.log(diaries);
 

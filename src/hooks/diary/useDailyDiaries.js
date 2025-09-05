@@ -22,13 +22,13 @@ function mapToDiaryItem(d) {
   };
 }
 
-export default function useDailyDiaries(date) {
+export default function useDailyDiaries(userId, date) {
   const [diaries, setDiaries] = useState([]);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState(null);
 
   useEffect(() => {
-    if (!date) return;
+    if (!date || !userId) return;
 
     const fetchDiaries = async () => {
       try {
@@ -36,9 +36,14 @@ export default function useDailyDiaries(date) {
         setError(null);
 
         const apiDate = date.replace(/\./g, '-');
-        const { data } = await axiosInstance.get('/diary/daily', {
+        console.log('apiDate:', apiDate);
+        console.log('userId:', userId);
+
+        const { data } = await axiosInstance.get(`/diary/${userId}/daily`, {
           params: { date: apiDate }, // yyyy-MM-dd
         });
+
+        console.log('data:', data);
 
         const list = data?.content?.diaries ?? [];
         setDiaries(list.map(mapToDiaryItem));
@@ -51,7 +56,7 @@ export default function useDailyDiaries(date) {
     };
 
     fetchDiaries();
-  }, [date]);
+  }, [userId, date]);
 
   return { diaries, loading, error };
 }
