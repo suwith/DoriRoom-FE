@@ -109,7 +109,7 @@ export default function ReviewItem({ review, type = 'diary', onLikeSync }) {
         )}
       </div>
       <div className="flex items-center mt-2 gap-2">
-        <div className="text-xs text-neutral-400 ">{formattedDate} •</div>
+        <div className="text-xs text-neutral-400">{formattedDate} 방문 •</div>
         <div className="flex items-center gap-1 text-main-100 text-xs">
           <button
             onClick={async () => {
