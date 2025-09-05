@@ -77,36 +77,40 @@ export default function CategoryItemPanel({
       <div className="overflow-y-auto bg-background h-screen px-3 pt-3 pb-[80px] grid grid-cols-3 content-start gap-2 scrollbar-hide">
         {/* 선택 안 함 */}
         {!isShop &&
-        ['APPAREL', 'SHELF', 'WINDOW'].includes(selectedCategoryId) ? (
-          <Item
-            onClick={async () => {
-              onItemSelect(0);
-              const tmp = equip.find((e) => e.itemType === selectedCategoryId);
-              if (tmp) await mutate(tmp.itemId);
-            }}
-            isSelected={
-              selectedItemId === 0 ||
-              !equip.some((e) => e.itemType === selectedCategoryId)
-            }
-            imageUrl={
-              manifest.items?.[DEFAULT[selectedCategoryId]]?.asset.thumb
-            }
-            name={manifest.items?.[DEFAULT[selectedCategoryId]]?.name}
-          />
-        ) : (
-          <Item
-            onClick={async () => {
-              onItemSelect(0);
-              const tmp = equip.find((e) => e.itemType === selectedCategoryId);
-              if (tmp) await mutate(tmp.itemId);
-            }}
-            isSelected={
-              selectedItemId === 0 ||
-              !equip.some((e) => e.itemType === selectedCategoryId)
-            }
-            name="선택안함"
-          />
-        )}
+          (['APPAREL', 'SHELF', 'WINDOW'].includes(selectedCategoryId) ? (
+            <Item
+              onClick={async () => {
+                onItemSelect(0);
+                const tmp = equip.find(
+                  (e) => e.itemType === selectedCategoryId
+                );
+                if (tmp) await mutate(tmp.itemId);
+              }}
+              isSelected={
+                selectedItemId === 0 ||
+                !equip.some((e) => e.itemType === selectedCategoryId)
+              }
+              imageUrl={
+                manifest.items?.[DEFAULT[selectedCategoryId]]?.asset.thumb
+              }
+              name={manifest.items?.[DEFAULT[selectedCategoryId]]?.name}
+            />
+          ) : (
+            <Item
+              onClick={async () => {
+                onItemSelect(0);
+                const tmp = equip.find(
+                  (e) => e.itemType === selectedCategoryId
+                );
+                if (tmp) await mutate(tmp.itemId);
+              }}
+              isSelected={
+                selectedItemId === 0 ||
+                !equip.some((e) => e.itemType === selectedCategoryId)
+              }
+              name="선택안함"
+            />
+          ))}
         {/* 선택된 카테고리 아이템 */}
         {items
           .filter((item) => item.itemType === selectedCategoryId)
