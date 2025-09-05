@@ -1,4 +1,3 @@
-// hooks/diary/useDiaryDelete.js
 'use client';
 
 import { useState } from 'react';

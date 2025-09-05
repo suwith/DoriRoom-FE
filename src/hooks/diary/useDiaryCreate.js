@@ -1,4 +1,3 @@
-// hooks/diary/useDiaryCreate.js
 'use client';
 
 import { useState } from 'react';
