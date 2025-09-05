@@ -51,7 +51,7 @@ export default function DiaryPage() {
   }, [tab]);
 
   return (
-    <div className="min-h-screen pt-24">
+    <div className="min-h-screen pt-24 max-w-[390px] w-screen flex flex-col bg-background">
       <HeaderNavigationBar
         title="일기장"
         showBackButton={true}
