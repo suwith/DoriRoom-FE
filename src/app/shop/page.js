@@ -124,12 +124,12 @@ export default function Shop() {
             <img
               src={itemSrc(displayIds.APPAREL)}
               alt=""
-              className={`absolute top-30 w-[150px] h-[184px] z-${zIndex.APPAREL} block`}
+              className={`absolute top-26 w-[150px] h-[184px] z-${zIndex.APPAREL} block`}
             />
           )}
           <button
             disabled={selectedItemIdx === null}
-            className={`absolute bottom-0 right-2 flex gap-2 items-center justify-center rounded-xl px-4 py-2 text-background ${selectedItemIdx === null || credit - selectedItem.price < 0 ? 'bg-neutral-300' : 'bg-main-100'}`}
+            className={`absolute z-15 bottom-0 right-2 flex gap-2 items-center justify-center rounded-xl px-4 py-2 text-background ${selectedItemIdx === null || credit - selectedItem.price < 0 ? 'bg-neutral-300' : 'bg-main-100'}`}
             onClick={() => {
               if (credit - selectedItem.price >= 0) setIsOpenBuyModal(true);
               else

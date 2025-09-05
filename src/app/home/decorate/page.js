@@ -78,7 +78,7 @@ export default function Decorate() {
               manifest.items[selectAPPAREL?.itemId]?.asset?.src ||
               manifest.items?.[DEFAULT_APPAREL]?.asset?.src
             }
-            className={`absolute top-30 w-[150px] h-[184px] z-${zIndex.APPAREL}`}
+            className={`absolute top-25 w-[150px] h-[184px] z-${zIndex.APPAREL}`}
           />
           <Link href="/shop" className="absolute bottom-0 right-2">
             <div className="flex gap-2 items-center justify-center rounded-xl px-4 py-2 bg-main-100 text-background">
