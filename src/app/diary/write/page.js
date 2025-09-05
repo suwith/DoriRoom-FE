@@ -10,11 +10,16 @@ import { DoriroomImagePicker } from 'doriroom-image-picker';
 import { Capacitor } from '@capacitor/core';
 import SelectDate from '@/app/diary/write/_components/SelectDate';
 import useDiaryCreate from '@/hooks/diary/useDiaryCreate';
+import useDiaryUpdate from '@/hooks/diary/useDiaryUpdate';
+import { parseDateString } from '@/lib/festivalConstants';
 
 const MAX_IMAGES = 5;
 
-export default function DiaryWrite() {
+export default function DiaryWrite({ mode = 'create' }) {
   const router = useRouter();
+  const { createDiary, loading: createLoading } = useDiaryCreate();
+  const { updateDiary, loading: updateLoading } = useDiaryUpdate();
+
   const [selectedDate, setSelectedDate] = useState(null);
   const [selectedFestival, setSelectedFestival] = useState(null);
   const [images, setImages] = useState([]);
@@ -29,37 +34,29 @@ export default function DiaryWrite() {
 
   const isWriting = selectedDate || selectedFestival || diaryText.trim() !== '';
 
-  const { createDiary, loading: createLoading } = useDiaryCreate();
-
-  const handleSubmit = async () => {
-    try {
-      const formData = new FormData();
-
-      // diary JSON을 Blob으로 추가해야 함
-      const diaryPayload = {
-        eventId: selectedFestival.id,
-        visitedAt: selectedDate ? format(selectedDate, 'yyyy-MM-dd') : '',
-        content: diaryText,
-        visibility,
-      };
-      formData.append(
-        'diary',
-        new Blob([JSON.stringify(diaryPayload)], { type: 'application/json' })
-      );
-
-      // 이미지 파일 추가
-      images.forEach((img) => {
-        if (img.file) formData.append('images', img.file);
-      });
-
-      const newDiary = await createDiary(formData);
-      if (newDiary) {
-        router.replace(`/diary/${newDiary.diaryId}`);
+  // 수정 모드일 때 기존 데이터 불러오기
+  useEffect(() => {
+    if (mode === 'edit') {
+      try {
+        const saved = JSON.parse(
+          sessionStorage.getItem('editingDiary') || '{}'
+        );
+        console.log('saved', saved);
+        if (saved?.festival) setSelectedFestival(saved.festival);
+        if (saved?.date) {
+          const d = parseDateString(saved.date);
+          if (d) setSelectedDate(d);
+        }
+        if (saved?.images) {
+          setImages(saved.images.map((uri) => ({ uri, file: null })));
+        }
+        if (saved?.content) setDiaryText(saved.content);
+        if (saved?.visibility) setVisibility(saved.visibility);
+      } catch (e) {
+        console.warn('수정 데이터 로드 실패:', e);
       }
-    } catch (err) {
-      console.error('일기 작성 중 오류:', err);
     }
-  };
+  }, [mode]);
 
   const toDisplay = (uri) => {
     if (!uri) return '';
@@ -79,7 +76,6 @@ export default function DiaryWrite() {
 
     try {
       const res = await DoriroomImagePicker.pickImages({ limit: remaining });
-
       let raw = [];
       if (Array.isArray(res?.items)) {
         raw = res.items.filter(Boolean);
@@ -92,10 +88,7 @@ export default function DiaryWrite() {
 
       const selected = raw.map((it) => {
         const uri = it.webPath || it.path || it.uri;
-        return {
-          uri: toDisplay(uri),
-          file: it.file || null, // File 객체를 직접 받는 경우
-        };
+        return { uri: toDisplay(uri), file: it.file || null };
       });
 
       setImages((prev) => {
@@ -107,6 +100,43 @@ export default function DiaryWrite() {
       });
     } catch (err) {
       console.error('이미지 선택 실패:', err);
+    }
+  };
+
+  /** 제출 */
+  const handleSubmit = async () => {
+    try {
+      const formData = new FormData();
+
+      // diary JSON을 Blob으로 추가
+      const diaryPayload = {
+        eventId: selectedFestival.id,
+        visitedAt: selectedDate ? format(selectedDate, 'yyyy-MM-dd') : '',
+        content: diaryText,
+        visibility,
+      };
+      formData.append(
+        'diary',
+        new Blob([JSON.stringify(diaryPayload)], { type: 'application/json' })
+      );
+
+      // 이미지 파일 추가
+      images.forEach((img) => {
+        if (img.file) formData.append('images', img.file);
+      });
+
+      if (mode === 'create') {
+        const newDiary = await createDiary(formData);
+        if (newDiary) router.replace(`/diary/${newDiary.diaryId}`);
+      } else {
+        const saved = JSON.parse(
+          sessionStorage.getItem('editingDiary') || '{}'
+        );
+        const updated = await updateDiary(saved.id, formData);
+        if (updated) router.replace(`/diary/${updated.diaryId}`);
+      }
+    } catch (err) {
+      console.error('제출 실패:', err);
     }
   };
 
@@ -163,23 +193,24 @@ export default function DiaryWrite() {
     <div className="min-h-screen pt-20">
       <header className="fixed top-0 left-1/2 transform -translate-x-1/2 z-50 max-w-[390px] w-full pt-[50px] pb-[10px] bg-background">
         <div className="relative flex items-center justify-center mx-auto">
-          <h1 className="text-lg font-semibold">일기 작성하기</h1>
-
-          {/* 뒤로가기 버튼 */}
+          <h1 className="text-lg font-semibold">
+            {mode === 'edit' ? '일기 수정하기' : '일기 작성하기'}
+          </h1>
           <div className="absolute left-5">
             <button
               onClick={() => {
                 isWriting ? setShowLeaveModal(true) : history.back();
               }}
-              className={`cursor-pointer flex items-center gap-1 text-neutral-500`}
+              className="cursor-pointer flex items-center gap-1 text-neutral-500"
             >
               <i className="mgc_left_line text-3xl" />
             </button>
           </div>
         </div>
       </header>
+
       <div className="space-y-5 px-4 pt-7 pb-7">
-        {/* 축제 검색 */}
+        {/* 축제 선택 */}
         <div>
           <p className="text-[15px] font-semibold mb-3">
             🧐 어떤 페스티벌에 방문하셨나요?
@@ -188,7 +219,8 @@ export default function DiaryWrite() {
             <input
               readOnly
               type="text"
-              className="flex-1 text-sm bg-neutral-100 rounded-md px-3 py-2 placeholder:text-neutral-300 focus:outline-none"
+              disabled={mode === 'edit'}
+              className="flex-1 text-sm bg-neutral-100 rounded-md px-3 py-3 placeholder:text-neutral-300 focus:outline-none"
               placeholder="페스티벌 찾기"
               value={selectedFestival?.title || ''}
               onChange={(e) =>
@@ -198,28 +230,27 @@ export default function DiaryWrite() {
                 }))
               }
             />
-
-            <button
-              className="bg-main-100 text-background px-5 py-3 text-[15px] rounded-lg"
-              onClick={() => {
-                sessionStorage.setItem('selectMode', 'true');
-                sessionStorage.setItem(
-                  'diaryWriteForm',
-                  JSON.stringify({
-                    selectedDate: selectedDate?.toISOString?.() || null,
-                    selectedFestival,
-                    images: images
-                      .map((it) => ({ uri: it?.uri }))
-                      .filter(Boolean),
-                    diaryText,
-                    visibility,
-                  })
-                );
-                router.push('/festival/search');
-              }}
-            >
-              검색
-            </button>
+            {mode === 'create' && (
+              <button
+                className="bg-main-100 text-background px-5 py-3 text-[15px] rounded-lg"
+                onClick={() => {
+                  sessionStorage.setItem('selectMode', 'true');
+                  sessionStorage.setItem(
+                    'diaryWriteForm',
+                    JSON.stringify({
+                      selectedDate: selectedDate?.toISOString?.() || null,
+                      selectedFestival,
+                      images: images.map((it) => ({ uri: it?.uri })),
+                      diaryText,
+                      visibility,
+                    })
+                  );
+                  router.push('/festival/search');
+                }}
+              >
+                검색
+              </button>
+            )}
           </div>
         </div>
 
@@ -236,7 +267,6 @@ export default function DiaryWrite() {
               placeholder="00-00-00"
               value={selectedDate ? format(selectedDate, 'yy-MM-dd') : ''}
             />
-
             <button
               className="bg-main-100 text-background px-5 py-3 text-[15px] rounded-lg"
               onClick={() => setShowCalendar(true)}
@@ -321,65 +351,39 @@ export default function DiaryWrite() {
 
         {/* 공개 범위 */}
         <div>
-          <p className="text-[15px] font-semibold mb-3">
-            🔒 공개 범위를 설정해 주세요
-          </p>
-          <div className="flex items-center gap-4 text-sm">
-            <label className="flex items-center gap-1">
-              전체공개
-              <input
-                type="radio"
-                name="visibility"
-                value="PUBLIC"
-                checked={visibility === 'PUBLIC'}
-                onChange={() => setVisibility('PUBLIC')}
-                className="w-4 h-4 appearance-none border-1 border-neutral-300 rounded-full checked:bg-main-100 checked:border-2"
-              />
-            </label>
-            <label className="flex items-center gap-1">
-              단짝공개
-              <input
-                type="radio"
-                name="visibility"
-                value="FRIENDS"
-                checked={visibility === 'FRIENDS'}
-                onChange={() => setVisibility('FRIENDS')}
-                className="w-4 h-4 appearance-none border-1 border-neutral-300 rounded-full checked:bg-main-100 checked:border-2"
-              />
-            </label>
-            <label className="flex items-center gap-1">
-              나만보기
-              <input
-                type="radio"
-                name="visibility"
-                value="PRIVATE"
-                checked={visibility === 'PRIVATE'}
-                onChange={() => setVisibility('PRIVATE')}
-                className="w-4 h-4 appearance-none border-1 border-neutral-300 rounded-full checked:bg-main-100 checked:border-2"
-              />
-            </label>
+          <p className="text-[15px] font-semibold mb-3">🔒 공개 범위</p>
+          <div className="flex gap-4 text-sm">
+            {['PUBLIC', 'FRIENDS', 'PRIVATE'].map((v) => (
+              <label key={v} className="flex items-center gap-1">
+                {v === 'PUBLIC'
+                  ? '전체공개'
+                  : v === 'FRIENDS'
+                    ? '단짝공개'
+                    : '나만보기'}
+                <input
+                  type="radio"
+                  name="visibility"
+                  value={v}
+                  checked={visibility === v}
+                  className="w-4 h-4 appearance-none border-1 border-neutral-300 rounded-full checked:bg-main-100 checked:border-2"
+                  onChange={() => setVisibility(v)}
+                />
+              </label>
+            ))}
           </div>
         </div>
 
-        <div className="flex flex-col text-xs text-neutral-400 gap-1">
-          <p>• 일기 업로드 시 기본으로 3 도깨비불이 지급돼요.</p>
-          <p>
-            • 사진이 함께 첨부된 일기의 경우 추가로 2 도깨비불을 지급 받을 수
-            있어요.
-          </p>
-        </div>
-
         <button
-          disabled={!isFormValid || createLoading}
+          disabled={!isFormValid || createLoading || updateLoading}
           className={`w-full py-2 mt-3 rounded-lg font-bold text-sm text-background ${
             isFormValid ? 'bg-main-100' : 'bg-neutral-300 cursor-not-allowed'
           }`}
-          onClick={handleSubmit}
+          onClick={() => handleSubmit()}
         >
           <div className="flex items-center justify-center gap-2">
             <MdEditSquare className="text-background w-5 h-5" />
             <span className="text-lg">
-              {createLoading ? '업로드 중...' : '업로드하기'}
+              {mode === 'edit' ? '수정하기' : '업로드하기'}
             </span>
           </div>
         </button>
@@ -415,7 +419,8 @@ export default function DiaryWrite() {
           onConfirm={() => {
             sessionStorage.removeItem('diaryWriteForm');
             sessionStorage.removeItem('selectMode');
-            router.push('/diary/');
+            sessionStorage.removeItem('editingDiary');
+            router.back();
           }}
         />
       )}

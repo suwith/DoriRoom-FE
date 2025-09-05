@@ -77,3 +77,13 @@ export function parseImageUrls(raw) {
     return [];
   }
 }
+
+// 날짜 파싱 안전 함수
+export function parseDateString(dateStr) {
+  if (!dateStr) return null;
+  const normalized = dateStr.replace(/\./g, '-');
+  const parts = normalized.split('-');
+  if (parts.length !== 3) return null;
+  const [y, m, d] = parts.map((n) => parseInt(n, 10));
+  return new Date(y, m - 1, d);
+}

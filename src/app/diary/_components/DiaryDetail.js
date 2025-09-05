@@ -41,12 +41,17 @@ export default function DiaryDetail({ diary }) {
     setShowDeleteModal(false);
   };
 
+  const handleEdit = () => {
+    sessionStorage.setItem('editingDiary', JSON.stringify(diary));
+    router.push(`/diary/${diary.id}/edit`);
+  };
+
   return (
     <div className="pt-20 pb-60">
       <HeaderNavigationBar
         title={diary.festival?.title || ''}
         type="diary"
-        onEditClick={() => console.log('수정 클릭')}
+        onEditClick={() => handleEdit()}
         onDeleteClick={() => setShowDeleteModal(true)}
         className="bg-background"
         isMine={isMine}
@@ -64,7 +69,7 @@ export default function DiaryDetail({ diary }) {
               {diary.author.name}
             </div>
             {isMine && (
-              <div className="text-[10px] bg-sub2-5 text-sub2-100 rounded-sm px-1 flex items-center justify-center">
+              <div className="text-[10px] bg-sub2-5 text-sub2-100 rounded-sm px-1 py-0.5 flex items-center justify-center">
                 내 리뷰
               </div>
             )}
