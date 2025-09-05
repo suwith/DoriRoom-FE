@@ -84,7 +84,7 @@ export default function Shop() {
             <img
               src={shopSrc(displayIds.FLOOR)}
               alt=""
-              className={`absolute top-60 z-[${zIndex.FLOOR}] block`}
+              className={`absolute top-60 z-${zIndex.FLOOR} block`}
             />
           )}
           {/* WALL (shop 이미지) */}
@@ -92,7 +92,7 @@ export default function Shop() {
             <img
               src={shopSrc(displayIds.WALL)}
               alt=""
-              className={`absolute -top-21 z-[${zIndex.WALL}] block`}
+              className={`absolute -top-21 z-${zIndex.WALL} block`}
             />
           )}
           {/* SHELF (src 이미지) */}
@@ -100,7 +100,7 @@ export default function Shop() {
             <img
               src={itemSrc(displayIds.SHELF)}
               alt=""
-              className={`absolute top-12 left-3 w-[90px] h-[237px] z-[${zIndex.SHELF}] block`}
+              className={`absolute top-12 left-3 w-[90px] h-[237px] z-${zIndex.SHELF} block`}
             />
           )}
           {/* OBJECT */}
@@ -108,7 +108,7 @@ export default function Shop() {
             <img
               src={itemSrc(displayIds.OBJECT)}
               alt=""
-              className={`absolute top-44 right-2 w-[90px] h-[110px] z-[${zIndex.OBJECT}] block`}
+              className={`absolute top-44 right-2 w-[90px] h-[110px] z-${zIndex.OBJECT} block`}
             />
           )}
           {/* WINDOW */}
@@ -116,7 +116,7 @@ export default function Shop() {
             <img
               src={itemSrc(displayIds.WINDOW)}
               alt=""
-              className={`absolute -top-8 w-[214px] h-[131px] z-[${zIndex.WINDOW}] block`}
+              className={`absolute -top-8 w-[214px] h-[131px] z-${zIndex.WINDOW} block`}
             />
           )}
           {/* APPAREL */}
@@ -124,7 +124,7 @@ export default function Shop() {
             <img
               src={itemSrc(displayIds.APPAREL)}
               alt=""
-              className={`absolute top-30 w-[150px] h-[184px] z-[${zIndex.APPAREL}] block`}
+              className={`absolute top-30 w-[150px] h-[184px] z-${zIndex.APPAREL} block`}
             />
           )}
           <button
