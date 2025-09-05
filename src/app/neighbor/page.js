@@ -1,7 +1,6 @@
 'use client';
 
 import { useState } from 'react';
-import { useRouter } from 'next/navigation';
 import useFollowers from '@/hooks/follow/useFollowers';
 import useFollowings from '@/hooks/follow/useFollowings';
 import HeaderNavigationBar from '@/app/_components/HeaderNavigationBar';
@@ -14,9 +13,7 @@ export default function NeighborPage() {
   const [tab, setTab] = useState('followers');
   const { followers, loading: followersLoading } = useFollowers({});
   const { followings, loading: followingsLoading } = useFollowings({});
-  const [removing, setRemoving] = useState(null);
   const [search, setSearch] = useState('');
-  const router = useRouter();
 
   const currentList = tab === 'followers' ? followers : followings;
   const loading = tab === 'followers' ? followersLoading : followingsLoading;
