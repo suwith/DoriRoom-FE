@@ -4,8 +4,8 @@ import { useRouter } from 'next/navigation';
 
 export default function NeighborListItem({
   user,
-  mode = 'list', // 'list' | 'manage'
-  checked = false, // manage 모드일 때만 사용
+  mode = 'list',
+  checked = false,
   onUnfollow,
   onToggle,
 }) {
@@ -13,7 +13,12 @@ export default function NeighborListItem({
 
   return (
     <li
-      onClick={() => mode === 'list' && router.push(`/neighbor/${user.userId}`)}
+      onClick={(e) => {
+        if (mode !== 'manage') {
+          e.stopPropagation();
+          router.push(`/neighbor/${user.userId}`);
+        }
+      }}
       className="flex items-center justify-between py-3 cursor-pointer"
     >
       {/* 왼쪽: 프로필 + 닉네임 + 단짝 표시 */}
@@ -77,7 +82,12 @@ export default function NeighborListItem({
       )}
 
       {mode === 'manage' && (
-        <button onClick={() => onToggle?.(user.userId, !checked)}>
+        <button
+          onClick={(e) => {
+            e.stopPropagation();
+            onToggle?.(user.userId, !checked);
+          }}
+        >
           {checked ? (
             <i
               className={`flex mgc_check_circle_fill text-main-100 text-xl }`}
