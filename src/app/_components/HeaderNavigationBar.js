@@ -4,6 +4,7 @@ import BackButton from '../_components/BackButton';
 import TaskInfoModal from '../collection/_components/Task/TaskInfoModal';
 import { useState } from 'react';
 import QuizQuitModal from '../collection/_components/Quiz/QuizQuitModal';
+import { useRouter } from 'next/navigation';
 
 export default function HeaderNavigationBar({
   title = '제목 없음',
@@ -18,6 +19,8 @@ export default function HeaderNavigationBar({
 }) {
   const [isOpen, setIsOpen] = useState(false);
   const [showDiaryMenu, setShowDiaryMenu] = useState(false);
+
+  const router = useRouter();
 
   return (
     <header
@@ -48,6 +51,14 @@ export default function HeaderNavigationBar({
             className="absolute right-[16px] mgc_information_fill text-neutral-500 text-xl"
             onClick={() => setIsOpen(true)}
           />
+        )}
+        {type === 'neighbor' && (
+          <button
+            onClick={() => router.push('/neighbor/manage')}
+            className="absolute right-[16px] text-main-100 text-xs"
+          >
+            단짝 도리 관리
+          </button>
         )}
         <TaskInfoModal isOpen={isOpen} setIsOpen={setIsOpen} />
 
