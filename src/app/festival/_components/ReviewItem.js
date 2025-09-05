@@ -49,7 +49,7 @@ export default function ReviewItem({ review, type = 'diary', onLikeSync }) {
               {review.authorName}
             </div>
             {isMine && (
-              <div className="text-[10px] bg-sub2-5 text-sub2-100 rounded-sm px-1 flex items-center justify-center">
+              <div className="text-[10px] bg-sub2-5 text-sub2-100 rounded-sm px-1 py-0.5 flex items-center justify-center">
                 내 리뷰
               </div>
             )}
