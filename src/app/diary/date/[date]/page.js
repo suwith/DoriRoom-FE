@@ -13,14 +13,9 @@ export default function Page() {
   const asString = Array.isArray(raw) ? raw.join('-') : String(raw || '');
 
   const { user } = useAuthStore();
-  console.log(user);
   const userId = user?.userId;
 
-  console.log(userId);
-
   const { diaries, loading, error } = useDailyDiaries(userId, asString);
-
-  console.log(diaries);
 
   if (loading) return <LoadingContent loading={loading} />;
   if (error)

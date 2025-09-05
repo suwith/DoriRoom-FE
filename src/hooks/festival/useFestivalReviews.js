@@ -108,16 +108,7 @@ export default function useFestivalReviews({
   const loadMore = () => {
     if (!loading && hasMore) {
       const next = page + 1;
-      console.log(
-        '[loadMore] page:',
-        page,
-        'next:',
-        next,
-        'loading:',
-        loading,
-        'hasMore:',
-        hasMore
-      );
+
       loadPage(next);
     }
   };

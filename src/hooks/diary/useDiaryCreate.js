@@ -13,12 +13,6 @@ export default function useDiaryCreate() {
     setError(null);
 
     try {
-      // 개발 확인용
-      for (let [key, value] of formData.entries()) {
-        console.log('FormData entry:', key, value);
-      }
-
-      // Content-Type은 axios가 자동 세팅 → 따로 넣지 말 것!
       const { data } = await axiosInstance.post('/diary/create', formData);
 
       if (data?.statusCode !== 200) {

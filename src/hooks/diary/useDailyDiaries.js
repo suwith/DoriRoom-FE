@@ -36,14 +36,10 @@ export default function useDailyDiaries(userId, date) {
         setError(null);
 
         const apiDate = date.replace(/\./g, '-');
-        console.log('apiDate:', apiDate);
-        console.log('userId:', userId);
 
         const { data } = await axiosInstance.get(`/diary/${userId}/daily`, {
           params: { date: apiDate }, // yyyy-MM-dd
         });
-
-        console.log('data:', data);
 
         const list = data?.content?.diaries ?? [];
         setDiaries(list.map(mapToDiaryItem));
