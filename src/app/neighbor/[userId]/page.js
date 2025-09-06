@@ -1,19 +1,35 @@
 'use client';
 
 import { useEffect } from 'react';
-import { useParams } from 'next/navigation';
+import { useParams, useRouter } from 'next/navigation';
 import useFollow from '@/hooks/follow/useFollow';
 import useNeighborRoom from '@/hooks/follow/useNeighborRoom';
 import BackButton from '@/app/_components/BackButton';
 import LoadingModal from '@/app/_components/LoadingModal';
+import manifest from '@/data/manifest.json';
+
+import useMyRoom from '@/hooks/user/useMyRoom';
+import RoomStatsCard from '@/app/_components/RoomStatsCard';
+import Link from 'next/link';
+
+const DEFAULT_FLOOR = 39;
+const DEFAULT_SHELF = 38;
+const DEFAULT_APPAREL = 31;
+const DEFAULT_WINDOW = 40;
 
 export default function NeighborHome() {
   const params = useParams();
   const userId = params.userId;
 
-  const { status, follow, unfollow, toggleBestFriend, fetchStatus, loading } =
-    useFollow(userId);
+  const { status, follow, unfollow, fetchStatus, loading } = useFollow(userId);
   const { room, fetchRoom, loading: roomLoading } = useNeighborRoom(userId);
+
+  const router = useRouter();
+  const { data, error } = useMyRoom();
+  const zIndex = manifest.defaults.zIndex;
+  const equippedItems = Array.isArray(data?.equippedItems)
+    ? data.equippedItems
+    : [];
 
   useEffect(() => {
     fetchStatus();
@@ -24,8 +40,18 @@ export default function NeighborHome() {
     return <LoadingModal open={roomLoading} />;
   }
 
+  const byType = Object.fromEntries(
+    equippedItems.map((it) => [it.itemType, it])
+  );
+  const selectFLOOR = byType.FLOOR;
+  const selectWALL = byType.WALL;
+  const selectSHELF = byType.SHELF;
+  const selectOBJECT = byType.OBJECT;
+  const selectWINDOW = byType.WINDOW;
+  const selectAPPAREL = byType.APPAREL;
+
   return (
-    <div className="min-h-screen flex flex-col bg-background pt-20">
+    <div className="min-h-screen flex flex-col bg-background">
       {/* 헤더 */}
       <header
         className={`fixed top-0 left-1/2 transform -translate-x-1/2 z-50 max-w-[390px] w-full pt-[50px] pb-[20px]`}
@@ -60,21 +86,94 @@ export default function NeighborHome() {
       </header>
 
       {/* 캐릭터 + 배경 */}
-      <div className="flex-1 flex flex-col items-center justify-center pt-[60px]">
-        <img src="/character.png" alt="캐릭터" className="w-36 h-36" />
+
+      <div className="relative flex-1 h-screen flex justify-center items-center p-4 max-w-[390px]">
+        <Link
+          href={`/home/${userId}/guest-book`}
+          className={`absolute top-25 right-5`}
+          style={{ zIndex: 1000 }}
+        >
+          <div className="flex flex-col items-center space-y-1">
+            <img src="/icons/mailbox.png" className="w-5 h-5" />
+            <span className={`text-xs text-[#FD6161]`}>방명록</span>
+          </div>
+        </Link>
+
+        {/* FLOOR */}
+        <img
+          src={
+            manifest.items[selectFLOOR?.itemId]?.asset.src ||
+            manifest.items[DEFAULT_FLOOR]?.asset.src
+          }
+          className={`absolute bottom-0`}
+          style={{ zIndex: zIndex.FLOOR }}
+        />
+        {/* WALL */}
+        {manifest.items[selectWALL?.itemId]?.asset.src && (
+          <img
+            src={manifest.items[selectWALL?.itemId]?.asset.src}
+            className={`absolute top-0`}
+            style={{ zIndex: zIndex.WALL }}
+          />
+        )}
+        {/* 선반 */}
+        <img
+          src={
+            manifest.items[selectSHELF?.itemId]?.asset.src ||
+            manifest.items[DEFAULT_SHELF]?.asset.src
+          }
+          className={`absolute bottom-[33%] left-3`}
+          style={{ zIndex: zIndex.SHELF }}
+          onClick={() => router.push(`/diary/${room.userId}`)}
+        />
+        {/* OBJECT */}
+        {manifest.items[selectOBJECT?.itemId]?.asset.src && (
+          <img
+            src={manifest.items[selectOBJECT?.itemId]?.asset.src}
+            className={`absolute bottom-[33%] right-2`}
+            style={{ zIndex: zIndex.OBJECT }}
+          />
+        )}
+        {/* WINDOW */}
+        <div className="absolute top-37">
+          <div className="relative w-[214px] h-[131px]">
+            {/* 창문 */}
+            <img
+              src={
+                manifest.items[selectWINDOW?.itemId]?.asset.src ||
+                manifest.items[DEFAULT_WINDOW]?.asset.src
+              }
+              alt=""
+              className="absolute inset-0"
+              style={{ zIndex: zIndex.WINDOW }} // 기준 레이어
+            />
+            {/* 날씨(가운데) */}
+            <img
+              src={manifest.items[41]?.asset.src}
+              alt=""
+              className="absolute left-1/2 top-11 -translate-x-1/2"
+              style={{ zIndex: zIndex.WINDOW - 1 }} // 창문 아래
+            />
+          </div>
+        </div>
+
+        {/* APPAREL */}
+        <img
+          src={
+            manifest.items[selectAPPAREL?.itemId]?.asset.src ||
+            manifest.items[DEFAULT_APPAREL]?.asset.src
+          }
+          className={`absolute bottom-[33%]`}
+          style={{ zIndex: zIndex.APPAREL }}
+        />
       </div>
 
       {/* 하단 정보 */}
-      <div className="flex justify-center gap-3 px-4 py-4">
-        <div className="flex items-center gap-1 px-3 py-2 bg-background rounded-lg border text-sm font-medium">
-          <i className="mgc_gift_fill text-green-500" />
-          투데이 {room.viewCount ?? 0}
-        </div>
-        <div className="flex items-center gap-1 px-3 py-2 bg-background rounded-lg border text-sm font-medium">
-          <i className="mgc_thumb_up_fill text-yellow-500" />
-          좋아요 {room.likeCount ?? 0}
-        </div>
-      </div>
+      <RoomStatsCard
+        today={room.viewCount}
+        like={room.likeCount}
+        className="fixed bottom-12 z-10"
+      />
     </div>
   );
 }
