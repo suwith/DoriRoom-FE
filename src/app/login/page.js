@@ -130,7 +130,7 @@ export default function LoginPage() {
             className="mb-2"
           />
           {error?.field === 'username' ? (
-            <p className="mt-1 mb-4 text-xs text-red-600 items-center flex gap-1">
+            <p className="mt-1 text-xs text-red-600 items-center flex gap-1 mb-3">
               <i className="mgc_warning_fill text-md pb-0.5" />
               {error.message}
             </p>
@@ -151,14 +151,13 @@ export default function LoginPage() {
             className="mb-2"
           />
           {error?.field === 'password' ? (
-            <p className="mt-1 mb-4 text-xs text-red-600 items-center flex gap-1">
+            <p className="mt-1 text-xs text-red-600 items-center flex gap-1 mb-3">
               <i className="mgc_warning_fill text-md pb-0.5" />
               {error.message}
             </p>
           ) : (
             <div className="mb-4" />
           )}
-
           <label className="inline-flex items-center gap-2 text-sm text-gray-600">
             <input
               type="checkbox"

@@ -18,7 +18,7 @@ function saveTokens({ accessToken, refreshToken }, remember) {
 export default function useLogin() {
   const [loggingIn, setLoggingIn] = useState(false);
   const [error, setError] = useState(null);
-  const { refetch } = useUserInfo(); // 로그인 성공 후 유저 정보 불러오기
+  const { refetch } = useUserInfo();
 
   const login = useCallback(
     async ({ username, password, remember = true } = {}) => {
@@ -35,25 +35,37 @@ export default function useLogin() {
           }
         );
 
-        const content = res?.data?.content || {};
+        const data = res?.data;
+        const content = data?.content || {};
         const accessToken = content.accessToken;
         const refreshToken = content.refreshToken;
 
+        // 백엔드 statusCode 분기 처리
+        if (data?.statusCode === 400) {
+          setError({ field: 'password', message: data.error });
+          return Promise.reject(new Error(data.error));
+        }
+        if (data?.statusCode === 404) {
+          setError({ field: 'username', message: data.error });
+          return Promise.reject(new Error(data.error));
+        }
+
         if (!accessToken || !refreshToken) {
           const err = new Error('Invalid login response');
-          setError(err);
+          setError({ field: 'form', message: err.message });
           return Promise.reject(err);
         }
 
         saveTokens({ accessToken, refreshToken }, remember);
         axiosInstance.defaults.headers.Authorization = `Bearer ${accessToken}`;
 
-        // 로그인 성공 후 유저 정보 갱신
         await refetch();
-
         return { accessToken, refreshToken };
       } catch (e) {
-        setError(e);
+        // 다른 네트워크 에러
+        if (!error) {
+          setError({ field: 'form', message: e.message });
+        }
         return Promise.reject(e);
       } finally {
         setLoggingIn(false);

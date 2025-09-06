@@ -17,6 +17,8 @@ export default function GuestBookPage() {
     ? params.roomOwnerId[0]
     : params.roomOwnerId;
 
+  const isOwner = String(userId ?? '') === String(roomOwnerId ?? '');
+
   const [content, setContent] = useState('');
   const {
     guestBook,
@@ -48,6 +50,23 @@ export default function GuestBookPage() {
       <HeaderNavigationBar title="방명록" className="bg-[#F7F7F7]" />
       {GBLoading ? (
         <div className="text-center">로딩중...</div>
+      ) : guestBook.length === 0 && !isOwner ? (
+        <div className="flex flex-col items-center justify-center gap-3 min-h-screen">
+          <i className="mgc_sweats_fill text-6xl text-main-100" />
+          <p className="text-center text-lg font-semibold">
+            앗, 아직 작성된 방명록이 없어요!
+          </p>
+          <p className="text-center text-sm text-neutral-500">
+            첫번째 방명록을 남겨 주세요 😢
+          </p>
+        </div>
+      ) : guestBook.length === 0 && !isOwner ? (
+        <div className="flex flex-col items-center justify-center gap-3 min-h-screen">
+          <i className="mgc_sweats_fill text-6xl text-main-100" />
+          <p className="text-center text-lg font-semibold">
+            앗, 아직 작성된 방명록이 없어요!
+          </p>
+        </div>
       ) : (
         <div className="h-[calc(100vh-98px)] pt-[98px] pb-2 space-y-5 bg-[#F7F7F7] overflow-y-auto scrollbar-hide">
           {guestBook.map((data, idx) => (

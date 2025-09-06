@@ -1,38 +1,41 @@
-import { useEffect, useState, useMemo } from 'react';
+import { useEffect, useState, useMemo, useCallback, useRef } from 'react';
 import axiosInstance from '@/lib/axiosInstance';
 
 export default function useMyCredit() {
-  const [credit, setCredit] = useState([]);
+  const [credit, setCredit] = useState(0);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
 
-  useEffect(() => {
-    let mounted = true;
+  const mountedRef = useRef(true);
 
-    async function fetchCredit() {
-      try {
-        setLoading(true);
-        setError(null);
-        const res = await axiosInstance.get('users/me/credit');
-        const apiContent = res.data?.content || null;
+  const refetch = useCallback(async () => {
+    try {
+      setLoading(true);
+      setError(null);
+      const res = await axiosInstance.get('users/me/credit');
+      const apiContent = res.data?.content || null;
 
-        if (!mounted) return;
-        setCredit(apiContent.userCredit);
-      } catch (e) {
-        if (!mounted) return;
-        setError(e);
-      } finally {
-        if (mounted) setLoading(false);
-      }
+      if (!mountedRef.current) return;
+      const userCredit = Number(apiContent?.userCredit ?? 0);
+      setCredit(userCredit);
+    } catch (e) {
+      if (!mountedRef.current) return;
+      setError(e);
+    } finally {
+      if (mountedRef.current) setLoading(false);
     }
+  }, []);
 
-    fetchCredit();
+  useEffect(() => {
+    mountedRef.current = true;
+
+    refetch();
     return () => {
-      mounted = false;
+      mountedRef.current = false;
     };
   }, []);
 
   const data = useMemo(() => credit, [credit]);
 
-  return { credit: data, loading, error };
+  return { credit: data, loading, error, refetch };
 }
