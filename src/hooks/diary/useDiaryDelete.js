@@ -11,8 +11,12 @@ export default function useDiaryDelete() {
     setLoading(true);
     setError(null);
     try {
-      await axiosInstance.delete(`/diary/${diaryId}`);
-      return true; // 성공 여부 반환
+      const { data } = await axiosInstance.delete(`/diary/${diaryId}`);
+      if (data?.statusCode !== 200) {
+        setError(data?.error || '일기 삭제 실패');
+        return null;
+      }
+      return true;
     } catch (err) {
       console.error('삭제 실패:', err);
       setError(err);
