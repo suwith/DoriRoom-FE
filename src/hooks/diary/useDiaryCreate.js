@@ -16,9 +16,9 @@ export default function useDiaryCreate() {
 
       if (data?.statusCode !== 200) {
         setError(data?.error || '일기 작성 실패');
+        return null;
       }
-
-      return data?.content || null; // content 안에 diaryId 있음
+      return data?.content ?? null; // content 안에 diaryId 있음
     } catch (err) {
       console.error('일기 작성 실패:', err);
       setError(err);
