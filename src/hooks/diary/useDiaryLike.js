@@ -35,6 +35,8 @@ export default function useDiaryLike(diaryId) {
     if (diaryId) {
       setLoading(true);
       refetch();
+    } else {
+      setLoading(false);
     }
     return () => {
       mountedRef.current = false;
