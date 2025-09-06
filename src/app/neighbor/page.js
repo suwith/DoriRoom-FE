@@ -23,7 +23,7 @@ export default function NeighborPage() {
   );
 
   return (
-    <div className="min-h-screen pt-20 flex flex-col">
+    <div className="min-h-screen pt-20 flex flex-col pb-7">
       <HeaderNavigationBar
         title={'이웃'}
         showBackButton={true}
@@ -77,10 +77,6 @@ export default function NeighborPage() {
       <div className="flex-1 overflow-y-auto px-4">
         {loading ? (
           <LoadingContent loading={loading} />
-        ) : filteredList.length === 0 ? (
-          <div className="text-center py-6 text-neutral-400 text-sm">
-            검색 결과가 없습니다
-          </div>
         ) : (
           <ul className="flex flex-col">
             <div className="text-sm mb-2">
