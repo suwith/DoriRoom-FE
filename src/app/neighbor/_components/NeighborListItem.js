@@ -1,6 +1,10 @@
 'use client';
 
 import { useRouter } from 'next/navigation';
+import React, { useEffect } from 'react';
+import TwoButtonModal from '@/app/_components/TwoButtonModal';
+import { useToast } from '@/app/_providers/ToastProvider';
+import useFollow from '@/hooks/follow/useFollow';
 
 export default function NeighborListItem({
   user,
@@ -10,6 +14,18 @@ export default function NeighborListItem({
   onToggle,
 }) {
   const router = useRouter();
+
+  const { status, follow, unfollow, fetchStatus, loading } = useFollow(
+    user.userId
+  );
+
+  const [showUnfollowModal, setShowUnfollowModal] = React.useState(false);
+
+  const { show } = useToast();
+
+  useEffect(() => {
+    fetchStatus();
+  }, [fetchStatus]);
 
   return (
     <li
@@ -38,44 +54,60 @@ export default function NeighborListItem({
 
       {/* 오른쪽: 모드별 UI */}
       {mode === 'followers' && (
-        <>
-          {user.isMutualFollow ? (
+        <div className="flex items-center gap-2">
+          {!user.isMutualFollow && (
             <span
-              onClick={(e) => e.stopPropagation()}
-              className="px-3 py-1 text-xs bg-green-100 text-green-600 rounded"
+              onClick={(e) => {
+                e.stopPropagation();
+                follow();
+                show({
+                  message: `${user.nickname}님을 팔로우 했어요!`,
+                  variant: 'success',
+                });
+              }}
+              className="px-2 py-1 text-xs bg-main-100 text-background rounded"
             >
               맞팔로우
             </span>
-          ) : (
-            <button
-              onClick={(e) => {
-                e.stopPropagation();
-                onUnfollow?.(user.userId);
-              }}
-            >
-              <i className="mgc_close_fill text-neutral-400" />
-            </button>
           )}
-        </>
+
+          <button
+            onClick={(e) => {
+              e.stopPropagation();
+              onUnfollow?.(user.userId);
+            }}
+          >
+            <i className="mgc_close_fill text-neutral-400" />
+          </button>
+        </div>
       )}
       {mode === 'followings' && (
         <>
-          {user.isMutualFollow ? (
-            <span
-              onClick={(e) => e.stopPropagation()}
-              className="px-3 py-1 text-xs bg-green-100 text-green-600 rounded-[4px]"
+          {status.isFollowing ? (
+            <button
+              onClick={(e) => {
+                e.stopPropagation();
+                setShowUnfollowModal(true);
+              }}
+              className="px-2 py-1 rounded bg-main-5 text-main-100 text-xs"
+              disabled={loading}
             >
-              맞팔로우
-            </span>
+              팔로잉
+            </button>
           ) : (
             <button
               onClick={(e) => {
                 e.stopPropagation();
-                onUnfollow?.(user.userId);
+                follow();
+                show({
+                  message: `${user.nickname}님을 팔로우 했어요!`,
+                  variant: 'success',
+                });
               }}
-              className="px-2 py-1 text-xs bg-main-5 text-main-100 rounded-[4px]"
+              className="px-2 py-1 rounded bg-main-100 text-background text-xs"
+              disabled={loading}
             >
-              팔로잉
+              + 팔로우
             </button>
           )}
         </>
@@ -100,6 +132,24 @@ export default function NeighborListItem({
             />
           )}
         </button>
+      )}
+
+      {showUnfollowModal && (
+        <TwoButtonModal
+          title="정말 팔로우를 취소하시겠어요?"
+          cancelText="아니오"
+          onCancel={() => setShowUnfollowModal(false)}
+          confirmText="네, 취소할래요"
+          onConfirm={(e) => {
+            e.stopPropagation();
+            unfollow();
+            setShowUnfollowModal(false);
+            show({
+              message: '취소가 완료되었습니다.',
+              variant: 'success',
+            });
+          }}
+        />
       )}
     </li>
   );
