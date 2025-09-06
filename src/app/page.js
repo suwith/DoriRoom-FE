@@ -4,7 +4,7 @@ import HeaderBar from './home/Header';
 import RoomStatsCard from './_components/RoomStatsCard';
 import useMyRoom from '@/hooks/user/useMyRoom';
 import LoadingContent from './_components/LoadingContent';
-import manifest from '../../public/manifest.json' assert { type: 'json' };
+import manifest from '@/data/manifest.json';
 
 const DEFAULT_FLOOR = 39;
 const DEFAULT_SHELF = 38;

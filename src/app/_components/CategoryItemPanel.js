@@ -3,7 +3,7 @@
 import { useState } from 'react';
 import Item from './Item';
 import usePostEquipItem from '@/hooks/decorate/usePostEquipItem';
-import manifest from '@/../public/manifest.json' assert { type: 'json' };
+import manifest from '@/data/manifest.json';
 
 const DEFAULT = {
   FLOOR: 39,

@@ -11,7 +11,7 @@ import useMyCredit from '@/hooks/user/useMyCredit';
 import { MdChair } from 'react-icons/md';
 import Link from 'next/link';
 import useEquipItems from '@/hooks/decorate/useEquipItems';
-import manifest from '@/../public/manifest.json' assert { type: 'json' };
+import manifest from '@/data/manifest.json';
 
 const DEFAULT_FLOOR = 39;
 const DEFAULT_SHELF = 38;

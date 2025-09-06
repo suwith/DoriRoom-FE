@@ -6,7 +6,7 @@ import { FaStore } from 'react-icons/fa';
 import Link from 'next/link';
 import CategoryItemPanel from '@/app/_components/CategoryItemPanel';
 import useUserItems from '@/hooks/decorate/useUserItems';
-import manifest from '@/../public/manifest.json' assert { type: 'json' };
+import manifest from '@/data/manifest.json';
 import LoadingContent from '@/app/_components/LoadingContent';
 import useEquipItems from '@/hooks/decorate/useEquipItems';
 
