@@ -42,14 +42,27 @@ export default function DiaryWrite({ mode = 'create' }) {
           sessionStorage.getItem('editingDiary') || '{}'
         );
         console.log('saved', saved);
-        if (saved?.festival) setSelectedFestival(saved.festival);
+
+        if (saved?.festival || saved?.festivalId) {
+          // festivalName / festivalId -> title / id 로 매핑
+          const f = saved.festival
+            ? saved.festival
+            : {
+                id: saved.festivalId,
+                title: saved.festivalName,
+              };
+          setSelectedFestival(f);
+        }
+
         if (saved?.date) {
           const d = parseDateString(saved.date);
           if (d) setSelectedDate(d);
         }
+
         if (saved?.images) {
           setImages(saved.images.map((uri) => ({ uri, file: null })));
         }
+
         if (saved?.content) setDiaryText(saved.content);
         if (saved?.visibility) setVisibility(saved.visibility);
       } catch (e) {
@@ -245,7 +258,7 @@ export default function DiaryWrite({ mode = 'create' }) {
                       visibility,
                     })
                   );
-                  router.push('/festival/search');
+                  router.replace('/festival/search');
                 }}
               >
                 검색
