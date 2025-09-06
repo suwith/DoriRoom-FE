@@ -60,6 +60,11 @@ export default function NeighborHome() {
         className={`fixed top-0 left-1/2 transform -translate-x-1/2 z-50 max-w-[390px] w-full pt-[50px] pb-[20px]`}
       >
         <div className="relative flex items-center justify-center mx-auto">
+          {/*{room.isBestFriend && (*/}
+          {/*  <div className="w-3.5 h-3.5 rounded-full bg-yellow-400 flex items-center justify-center">*/}
+          {/*    <i className="mgc_star_fill text-background text-[8px]" />*/}
+          {/*  </div>*/}
+          {/*)}*/}
           <h1 className="text-xl font-semibold ">{room.nickname} 님의 방</h1>
 
           <div className="absolute left-[16px]">
