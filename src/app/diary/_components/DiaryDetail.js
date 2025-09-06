@@ -11,7 +11,7 @@ import useDiaryLike from '@/hooks/diary/useDiaryLike';
 import { useAuthStore } from '@/stores/useAuthStore';
 import useDiaryDelete from '@/hooks/diary/useDiaryDelete';
 
-export default function DiaryDetail({ diary }) {
+export default function DiaryDetail({ diary, type }) {
   const router = useRouter();
   const [isBottomOpen, setIsBottomOpen] = useState(true);
   const [showDeleteModal, setShowDeleteModal] = useState(false);
@@ -50,7 +50,7 @@ export default function DiaryDetail({ diary }) {
     <div className="pt-20 pb-60">
       <HeaderNavigationBar
         title={diary.festival?.title || ''}
-        type="diary"
+        type={type === 'neighbor' ? null : 'diary'}
         onEditClick={() => handleEdit()}
         onDeleteClick={() => setShowDeleteModal(true)}
         className="bg-background"

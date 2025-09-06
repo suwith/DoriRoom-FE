@@ -6,7 +6,7 @@ import TwoButtonModal from '@/app/_components/TwoButtonModal';
 import useDiaryLike from '@/hooks/diary/useDiaryLike';
 import useDiaryDelete from '@/hooks/diary/useDiaryDelete';
 
-export default function DiaryListItem({ diary, onDeleted }) {
+export default function DiaryListItem({ diary, onDeleted, type }) {
   const router = useRouter();
   const [showDiaryMenu, setShowDiaryMenu] = useState(false);
   const [showDeleteModal, setShowDeleteModal] = useState(false);
@@ -45,41 +45,46 @@ export default function DiaryListItem({ diary, onDeleted }) {
         <div className="inline-block text-[13px] font-medium text-main-100 bg-main-5 px-2 py-0.5 rounded-md">
           {diary.festivalName || '연결된 축제 없음'}
         </div>
-        <div>
-          <i
-            className="mgc_more_2_line text-neutral-300 text-md"
-            onClick={(e) => {
-              e.stopPropagation();
-              setShowDiaryMenu((prev) => !prev);
-            }}
-          />
-          {showDiaryMenu && (
-            <div className="absolute right-6 mt-0 w-24 bg-background border border-neutral-100 text-neutral-600 rounded shadow-md text-sm z-50">
-              <button
-                className="w-full text-center px-4 py-2 hover:bg-neutral-100"
-                onClick={(e) => {
-                  e.stopPropagation();
-                  setShowDiaryMenu(false);
-                  sessionStorage.setItem('editingDiary', JSON.stringify(diary));
-                  console.log(sessionStorage.getItem('editingDiary'));
-                  router.push(`/diary/${diary.id}/edit`);
-                }}
-              >
-                수정
-              </button>
-              <hr className="text-neutral-100" />
-              <button
-                className="w-full text-center px-4 py-2 hover:bg-neutral-100"
-                onClick={(e) => {
-                  e.stopPropagation();
-                  setShowDeleteModal(true);
-                }}
-              >
-                삭제
-              </button>
-            </div>
-          )}
-        </div>
+        {type !== 'neighbor' && (
+          <div>
+            <i
+              className="mgc_more_2_line text-neutral-300 text-md"
+              onClick={(e) => {
+                e.stopPropagation();
+                setShowDiaryMenu((prev) => !prev);
+              }}
+            />
+            {showDiaryMenu && (
+              <div className="absolute right-6 mt-0 w-24 bg-background border border-neutral-100 text-neutral-600 rounded shadow-md text-sm z-50">
+                <button
+                  className="w-full text-center px-4 py-2 hover:bg-neutral-100"
+                  onClick={(e) => {
+                    e.stopPropagation();
+                    setShowDiaryMenu(false);
+                    sessionStorage.setItem(
+                      'editingDiary',
+                      JSON.stringify(diary)
+                    );
+                    console.log(sessionStorage.getItem('editingDiary'));
+                    router.push(`/diary/${diary.id}/edit`);
+                  }}
+                >
+                  수정
+                </button>
+                <hr className="text-neutral-100" />
+                <button
+                  className="w-full text-center px-4 py-2 hover:bg-neutral-100"
+                  onClick={(e) => {
+                    e.stopPropagation();
+                    setShowDeleteModal(true);
+                  }}
+                >
+                  삭제
+                </button>
+              </div>
+            )}
+          </div>
+        )}
       </div>
 
       {/* 일기 내용 */}
