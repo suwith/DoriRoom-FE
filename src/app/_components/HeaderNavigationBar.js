@@ -15,6 +15,7 @@ export default function HeaderNavigationBar({
   onDeleteClick,
   regionId = null,
   onBackClick,
+  isMine,
 }) {
   const [isOpen, setIsOpen] = useState(false);
   const [showDiaryMenu, setShowDiaryMenu] = useState(false);
@@ -30,7 +31,7 @@ export default function HeaderNavigationBar({
             Lv.{lv}
           </div>
         )}
-        <h1 className="text-xl font-semibold text-gray-800">{title}</h1>
+        <h1 className="text-lg font-semibold text-gray-800">{title}</h1>
 
         {/* 뒤로가기 버튼 */}
         {showBackButton && (
@@ -52,7 +53,7 @@ export default function HeaderNavigationBar({
         <TaskInfoModal isOpen={isOpen} setIsOpen={setIsOpen} />
 
         {/* 일기장 토글 버튼 */}
-        {type === 'diary' && (
+        {type === 'diary' && isMine && (
           <div className="absolute right-5">
             <i
               className="mgc_more_2_fill text-neutral-500 text-2xl"

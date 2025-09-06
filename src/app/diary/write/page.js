@@ -9,23 +9,67 @@ import { useRouter } from 'next/navigation';
 import { DoriroomImagePicker } from 'doriroom-image-picker';
 import { Capacitor } from '@capacitor/core';
 import SelectDate from '@/app/diary/write/_components/SelectDate';
+import useDiaryCreate from '@/hooks/diary/useDiaryCreate';
+import useDiaryUpdate from '@/hooks/diary/useDiaryUpdate';
+import { parseDateString } from '@/lib/festivalConstants';
 
 const MAX_IMAGES = 5;
 
-export default function DiaryWrite() {
+export default function DiaryWrite({ mode = 'create' }) {
   const router = useRouter();
+  const { createDiary, loading: createLoading } = useDiaryCreate();
+  const { updateDiary, loading: updateLoading } = useDiaryUpdate();
+
   const [selectedDate, setSelectedDate] = useState(null);
-  const [selectedFestival, setSelectedFestival] = useState('');
+  const [selectedFestival, setSelectedFestival] = useState(null);
   const [images, setImages] = useState([]);
   const [diaryText, setDiaryText] = useState('');
-  const [visibility, setVisibility] = useState('public');
+  const [visibility, setVisibility] = useState('PUBLIC');
+
   const [showLeaveModal, setShowLeaveModal] = useState(false);
   const [showCalendar, setShowCalendar] = useState(false);
 
   const isFormValid =
-    selectedDate && selectedFestival && diaryText.trim() !== '';
+    selectedDate && selectedFestival?.id && diaryText.trim() !== '';
 
   const isWriting = selectedDate || selectedFestival || diaryText.trim() !== '';
+
+  // 수정 모드일 때 기존 데이터 불러오기
+  useEffect(() => {
+    if (mode === 'edit') {
+      try {
+        const saved = JSON.parse(
+          sessionStorage.getItem('editingDiary') || '{}'
+        );
+        console.log('saved', saved);
+
+        if (saved?.festival || saved?.festivalId) {
+          // festivalName / festivalId -> title / id 로 매핑
+          const f = saved.festival
+            ? saved.festival
+            : {
+                id: saved.festivalId,
+                title: saved.festivalName,
+              };
+          setSelectedFestival(f);
+        }
+
+        if (saved?.date) {
+          const d = parseDateString(saved.date);
+          if (d) setSelectedDate(d);
+        }
+
+        if (saved?.images) {
+          setImages(saved.images.map((uri) => ({ uri, file: null })));
+        }
+
+        if (saved?.content) setDiaryText(saved.content);
+        if (saved?.visibility) setVisibility(saved.visibility);
+      } catch (e) {
+        console.warn('수정 데이터 로드 실패:', e);
+      }
+    }
+  }, [mode]);
 
   const toDisplay = (uri) => {
     if (!uri) return '';
@@ -38,30 +82,30 @@ export default function DiaryWrite() {
     }
   };
 
+  /** 이미지 선택 */
   const handleSelectImages = async () => {
     const remaining = MAX_IMAGES - images.length;
     if (remaining <= 0) return;
 
     try {
       const res = await DoriroomImagePicker.pickImages({ limit: remaining });
-
       let raw = [];
       if (Array.isArray(res?.items)) {
-        raw = res.items
-          .map((it) => it.webPath || it.path || it.uri)
-          .filter(Boolean);
+        raw = res.items.filter(Boolean);
       } else if (Array.isArray(res?.paths)) {
-        raw = res.paths;
+        raw = res.paths.map((p) => ({ path: p }));
       } else {
         console.warn('알 수 없는 응답 형태:', res);
         return;
       }
 
-      const selected = raw.map((u) => ({ uri: toDisplay(u) }));
+      const selected = raw.map((it) => {
+        const uri = it.webPath || it.path || it.uri;
+        return { uri: toDisplay(uri), file: it.file || null };
+      });
 
       setImages((prev) => {
         const merged = [...prev, ...selected];
-        // 중복 제거
         const uniq = merged.filter(
           (x, i, a) => a.findIndex((y) => y.uri === x.uri) === i
         );
@@ -72,6 +116,44 @@ export default function DiaryWrite() {
     }
   };
 
+  /** 제출 */
+  const handleSubmit = async () => {
+    try {
+      const formData = new FormData();
+
+      // diary JSON을 Blob으로 추가
+      const diaryPayload = {
+        eventId: selectedFestival.id,
+        visitedAt: selectedDate ? format(selectedDate, 'yyyy-MM-dd') : '',
+        content: diaryText,
+        visibility,
+      };
+      formData.append(
+        'diary',
+        new Blob([JSON.stringify(diaryPayload)], { type: 'application/json' })
+      );
+
+      // 이미지 파일 추가
+      images.forEach((img) => {
+        if (img.file) formData.append('images', img.file);
+      });
+
+      if (mode === 'create') {
+        const newDiary = await createDiary(formData);
+        if (newDiary) router.replace(`/diary/${newDiary.diaryId}`);
+      } else {
+        const saved = JSON.parse(
+          sessionStorage.getItem('editingDiary') || '{}'
+        );
+        const updated = await updateDiary(saved.id, formData);
+        if (updated) router.replace(`/diary/${updated.diaryId}`);
+      }
+    } catch (err) {
+      console.error('제출 실패:', err);
+    }
+  };
+
+  /** 세션스토리지 복원 */
   useEffect(() => {
     const shouldRestore = sessionStorage.getItem('selectMode') === 'true';
 
@@ -80,22 +162,22 @@ export default function DiaryWrite() {
         const saved = JSON.parse(
           sessionStorage.getItem('diaryWriteForm') || '{}'
         );
-        console;
 
         if (saved.selectedDate) {
           const d = new Date(saved.selectedDate);
           if (!isNaN(d.getTime())) setSelectedDate(d);
         }
 
-        if (typeof saved.selectedFestival === 'string') {
+        if (saved.selectedFestival?.id) {
           setSelectedFestival(saved.selectedFestival);
         }
 
         if (Array.isArray(saved.images)) {
           setImages(
-            saved.images
-              .map((it) => ({ uri: toDisplay(it?.uri) }))
-              .filter((x) => !!x.uri)
+            saved.images.map((it) => ({
+              uri: toDisplay(it?.uri),
+              file: null, // 복원 시에는 파일 없음
+            }))
           );
         }
 
@@ -109,12 +191,12 @@ export default function DiaryWrite() {
       }
     }
 
-    // 검색 페이지에서 선택해 준 값 병합
+    // 검색 페이지에서 선택된 축제 불러오기
     const picked = sessionStorage.getItem('selectedFestival');
     if (picked) {
       try {
         const f = JSON.parse(picked);
-        setSelectedFestival(f?.title || '');
+        setSelectedFestival(f); // {id, title, thumbnail}
       } catch {}
       sessionStorage.removeItem('selectedFestival');
     }
@@ -124,23 +206,24 @@ export default function DiaryWrite() {
     <div className="min-h-screen pt-20">
       <header className="fixed top-0 left-1/2 transform -translate-x-1/2 z-50 max-w-[390px] w-full pt-[50px] pb-[10px] bg-background">
         <div className="relative flex items-center justify-center mx-auto">
-          <h1 className="text-lg font-semibold">일기 작성하기</h1>
-
-          {/* 뒤로가기 버튼 */}
+          <h1 className="text-lg font-semibold">
+            {mode === 'edit' ? '일기 수정하기' : '일기 작성하기'}
+          </h1>
           <div className="absolute left-5">
             <button
               onClick={() => {
                 isWriting ? setShowLeaveModal(true) : history.back();
               }}
-              className={`cursor-pointer flex items-center gap-1 text-neutral-500`}
+              className="cursor-pointer flex items-center gap-1 text-neutral-500"
             >
               <i className="mgc_left_line text-3xl" />
             </button>
           </div>
         </div>
       </header>
+
       <div className="space-y-5 px-4 pt-7 pb-7">
-        {/* 축제 검색 */}
+        {/* 축제 선택 */}
         <div>
           <p className="text-[15px] font-semibold mb-3">
             🧐 어떤 페스티벌에 방문하셨나요?
@@ -149,32 +232,38 @@ export default function DiaryWrite() {
             <input
               readOnly
               type="text"
-              className="flex-1 text-sm bg-neutral-100 rounded-md px-3 py-2 placeholder:text-neutral-300 focus:outline-none"
+              disabled={mode === 'edit'}
+              className="flex-1 text-sm bg-neutral-100 rounded-md px-3 py-3 placeholder:text-neutral-300 focus:outline-none"
               placeholder="페스티벌 찾기"
-              value={selectedFestival}
-              onChange={(e) => setSelectedFestival(e.target.value)}
+              value={selectedFestival?.title || ''}
+              onChange={(e) =>
+                setSelectedFestival((prev) => ({
+                  ...(prev || {}),
+                  title: e.target.value,
+                }))
+              }
             />
-            <button
-              className="bg-main-100 text-background px-5 py-3 text-[15px] rounded-lg"
-              onClick={() => {
-                sessionStorage.setItem('selectMode', 'true');
-                sessionStorage.setItem(
-                  'diaryWriteForm',
-                  JSON.stringify({
-                    selectedDate: selectedDate?.toISOString?.() || null,
-                    selectedFestival,
-                    images: images
-                      .map((it) => ({ uri: it?.uri }))
-                      .filter(Boolean),
-                    diaryText,
-                    visibility,
-                  })
-                );
-                router.push('/festival/search');
-              }}
-            >
-              검색
-            </button>
+            {mode === 'create' && (
+              <button
+                className="bg-main-100 text-background px-5 py-3 text-[15px] rounded-lg"
+                onClick={() => {
+                  sessionStorage.setItem('selectMode', 'true');
+                  sessionStorage.setItem(
+                    'diaryWriteForm',
+                    JSON.stringify({
+                      selectedDate: selectedDate?.toISOString?.() || null,
+                      selectedFestival,
+                      images: images.map((it) => ({ uri: it?.uri })),
+                      diaryText,
+                      visibility,
+                    })
+                  );
+                  router.replace('/festival/search');
+                }}
+              >
+                검색
+              </button>
+            )}
           </div>
         </div>
 
@@ -191,7 +280,6 @@ export default function DiaryWrite() {
               placeholder="00-00-00"
               value={selectedDate ? format(selectedDate, 'yy-MM-dd') : ''}
             />
-
             <button
               className="bg-main-100 text-background px-5 py-3 text-[15px] rounded-lg"
               onClick={() => setShowCalendar(true)}
@@ -276,77 +364,55 @@ export default function DiaryWrite() {
 
         {/* 공개 범위 */}
         <div>
-          <p className="text-[15px] font-semibold mb-3">
-            🔒 공개 범위를 설정해 주세요
-          </p>
-          <div className="flex items-center gap-4 text-sm">
-            <label className="flex items-center gap-1">
-              전체공개
-              <input
-                type="radio"
-                name="visibility"
-                value="public"
-                checked={visibility === 'public'}
-                onChange={() => setVisibility('public')}
-                className="w-4 h-4 appearance-none border-1 border-neutral-300 rounded-full checked:bg-main-100 checked:border-2"
-              />
-            </label>
-            <label className="flex items-center gap-1">
-              이웃공개
-              <input
-                type="radio"
-                name="visibility"
-                value="friends"
-                checked={visibility === 'friends'}
-                onChange={() => setVisibility('friends')}
-                className="w-4 h-4 appearance-none border-1 border-neutral-300 rounded-full checked:bg-main-100 checked:border-2"
-              />
-            </label>
-            <label className="flex items-center gap-1">
-              나만보기
-              <input
-                type="radio"
-                name="visibility"
-                value="private"
-                checked={visibility === 'private'}
-                onChange={() => setVisibility('private')}
-                className="w-4 h-4 appearance-none border-1 border-neutral-300 rounded-full checked:bg-main-100 checked:border-2"
-              />
-            </label>
+          <p className="text-[15px] font-semibold mb-3">🔒 공개 범위</p>
+          <div className="flex gap-4 text-sm">
+            {['PUBLIC', 'FRIENDS', 'PRIVATE'].map((v) => (
+              <label key={v} className="flex items-center gap-1">
+                {v === 'PUBLIC'
+                  ? '전체공개'
+                  : v === 'FRIENDS'
+                    ? '단짝공개'
+                    : '나만보기'}
+                <input
+                  type="radio"
+                  name="visibility"
+                  value={v}
+                  checked={visibility === v}
+                  className="w-4 h-4 appearance-none border-1 border-neutral-300 rounded-full checked:bg-main-100 checked:border-2"
+                  onChange={() => setVisibility(v)}
+                />
+              </label>
+            ))}
           </div>
         </div>
 
-        <div className="flex flex-col text-xs text-neutral-400 gap-1">
-          <p>• 일기 업로드 시 기본으로 10 도깨비불이 지급돼요.</p>
-          <p>
-            • 사진이 함께 첨부된 일기의 경우 추가로 5 도깨비불을 지급 받을 수
-            있어요.
-          </p>
-        </div>
-
-        {/* 업로드 버튼 */}
         <button
-          disabled={!isFormValid}
-          className={`w-full py-2 mt-3 rounded-lg font-bold text-sm text-background ${isFormValid ? 'bg-main-100' : 'bg-neutral-300 cursor-not-allowed'}`}
-          onClick={() => {
-            console.log('일기 업로드 완료');
-            history.back();
-          }}
+          disabled={!isFormValid || createLoading || updateLoading}
+          className={`w-full py-2 mt-3 rounded-lg font-bold text-sm text-background ${
+            isFormValid ? 'bg-main-100' : 'bg-neutral-300 cursor-not-allowed'
+          }`}
+          onClick={() => handleSubmit()}
         >
           <div className="flex items-center justify-center gap-2">
             <MdEditSquare className="text-background w-5 h-5" />
-            <span className="text-lg">업로드하기</span>
+            <span className="text-lg">
+              {mode === 'edit' ? '수정하기' : '업로드하기'}
+            </span>
           </div>
         </button>
       </div>
 
       {showCalendar && (
-        <div className="fixed top-0 bottom-0 left-1/2 transform -translate-x-1/2 w-full max-w-[390px] bg-black/25 z-99" />
+        <button
+          className="fixed inset-0 bg-black/25 z-[99]"
+          onClick={() => setShowCalendar(null)}
+          aria-label="필터 닫기"
+        />
       )}
       <div
-        className={`fixed bottom-0 left-1/2 transform -translate-x-1/2 w-full max-w-[390px] mx-auto z-100 transition-transform duration-300 ease-in-out ${
-          showCalendar ? 'translate-y-0' : 'translate-y-full'
-        }`}
+        className={`fixed bottom-0 left-1/2 -translate-x-1/2 w-full max-w-[390px] z-[100]
+        bg-background rounded-t-xl px-4 py-8 transition-transform duration-300 ease-in-out
+        ${showCalendar ? 'translate-y-0' : 'translate-y-[100vh]'}`}
       >
         <SelectDate
           open={showCalendar}
@@ -366,7 +432,8 @@ export default function DiaryWrite() {
           onConfirm={() => {
             sessionStorage.removeItem('diaryWriteForm');
             sessionStorage.removeItem('selectMode');
-            router.push('/diary/');
+            sessionStorage.removeItem('editingDiary');
+            router.back();
           }}
         />
       )}

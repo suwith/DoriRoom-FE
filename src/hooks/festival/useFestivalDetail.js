@@ -24,6 +24,11 @@ function normalizeFestival(api) {
   if (api.sponsor2) hostParts.push(api.sponsor2);
   const host = hostParts.join(', ');
 
+  const locationParts = [];
+  if (api.addr1) locationParts.push(api.addr1);
+  if (api.addr2) locationParts.push(api.addr2);
+  const location = locationParts.join(' ');
+
   return {
     id: api.eventId,
     title: api.title,
@@ -31,12 +36,11 @@ function normalizeFestival(api) {
     status: calcStatus(api.startDate, api.endDate),
     startDate,
     endDate,
-    location: api.addr1 || '',
+    location,
     host,
     price: api.useTimeFestival || '',
     likes: typeof api.favoriteCount === 'number' ? api.favoriteCount : 0,
     details: [],
-    reviews: [],
     visitedFriend: 0,
     eventIntro: api.eventIntro || '',
     eventContent: api.eventContent || '',
