@@ -60,7 +60,9 @@ export default function DiaryListItem({ diary, onDeleted }) {
                 onClick={(e) => {
                   e.stopPropagation();
                   setShowDiaryMenu(false);
-                  router.push(`/diary/write?editId=${diary.id}`);
+                  sessionStorage.setItem('editingDiary', JSON.stringify(diary));
+                  console.log(sessionStorage.getItem('editingDiary'));
+                  router.push(`/diary/${diary.id}/edit`);
                 }}
               >
                 수정

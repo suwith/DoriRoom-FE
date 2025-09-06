@@ -43,7 +43,7 @@ export default function DiaryDetail({ diary }) {
 
   const handleEdit = () => {
     sessionStorage.setItem('editingDiary', JSON.stringify(diary));
-    router.push(`/diary/${diary.id}/edit`);
+    router.replace(`/diary/${diary.id}/edit`);
   };
 
   return (

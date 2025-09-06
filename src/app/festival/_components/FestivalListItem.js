@@ -29,7 +29,7 @@ export default function FestivalListItem({
     if (!loading && !mutating) toggleFavorite();
   };
 
-  // 선택 버튼 클릭 시 확인 로직 (추후 API 연결 예정)
+  // 선택 버튼 클릭 시 확인 로직
   const handleSelect = () => {
     if (written) {
       setShowAlreadyWrittenModal(true);
