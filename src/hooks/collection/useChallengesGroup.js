@@ -16,6 +16,7 @@ function normalizeChallenges(api) {
     challengeType: api.challengeType,
     targetCount: api.targetCount,
     eventId: api.eventId,
+    polygon: JSON.parse(api.polygon),
     rewards: api.rewards,
     currentProgress: api.currentProgress,
     status: api.status,
@@ -39,7 +40,6 @@ export default function useChallengesGroup() {
       };
       const res = await axiosInstance.get(`challenges/group`, { params });
       const apiContent = (res.data?.content || []).map(normalizeChallenges);
-
       if (!mountedRef.current) return;
       setChallenges(apiContent);
     } catch (e) {
