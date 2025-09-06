@@ -6,7 +6,6 @@ import { useRouter } from 'next/navigation';
 import { useSignupStore } from '@/stores/useSignupStore';
 import HeaderNavigationBar from '@/app/_components/HeaderNavigationBar';
 import PrimaryButton from '@/app/_components/PrimaryButton';
-// 확인: 모킹 훅 경로 맞추기
 import { sendSignupEmail, verifySignupCode } from '@/hooks/auth/useSignup';
 import LoadingModal from '@/app/_components/LoadingModal';
 
@@ -98,7 +97,7 @@ export default function SignupCodePage() {
     const code = digits.join('');
     try {
       await verifySignupCode({ email, code });
-      router.push('/signup/info');
+      router.replace('/signup/info');
     } catch (e2) {
       const msg =
         (typeof e2 === 'string' && e2) ||

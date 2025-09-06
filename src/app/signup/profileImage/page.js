@@ -96,7 +96,7 @@ export default function SignupAvatarPage() {
           <button
             type="button"
             disabled={loading}
-            onClick={() => finishSignup(false)} // 회원가입 진행하되 profileImage는 null로 전송
+            onClick={() => finishSignup(false)}
             className="w-18 text-sm text-neutral-400 border-b-1 border-neutral-400 mb-4"
           >
             다음에 하기
@@ -105,7 +105,7 @@ export default function SignupAvatarPage() {
           <PrimaryButton
             type="button"
             disabled={loading}
-            onClick={() => finishSignup(true)} // 현재 선택된 이미지까지 함께 전송
+            onClick={() => finishSignup(true)}
           >
             가입 완료
           </PrimaryButton>
