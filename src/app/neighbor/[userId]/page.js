@@ -1,16 +1,16 @@
 'use client';
 
-import { useEffect } from 'react';
+import React, { useEffect } from 'react';
 import { useParams, useRouter } from 'next/navigation';
 import useFollow from '@/hooks/follow/useFollow';
 import useNeighborRoom from '@/hooks/follow/useNeighborRoom';
 import BackButton from '@/app/_components/BackButton';
 import LoadingModal from '@/app/_components/LoadingModal';
 import manifest from '@/data/manifest.json';
-
-import useMyRoom from '@/hooks/user/useMyRoom';
 import RoomStatsCard from '@/app/_components/RoomStatsCard';
 import Link from 'next/link';
+import TwoButtonModal from '@/app/_components/TwoButtonModal';
+import { useToast } from '@/app/_providers/ToastProvider';
 
 const DEFAULT_FLOOR = 39;
 const DEFAULT_SHELF = 38;
@@ -25,11 +25,14 @@ export default function NeighborHome() {
   const { room, fetchRoom, loading: roomLoading } = useNeighborRoom(userId);
 
   const router = useRouter();
-  const { data, error } = useMyRoom();
   const zIndex = manifest.defaults.zIndex;
-  const equippedItems = Array.isArray(data?.equippedItems)
-    ? data.equippedItems
+  const equippedItems = Array.isArray(room?.equippedItems)
+    ? room.equippedItems
     : [];
+
+  const [showUnfollowModal, setShowUnfollowModal] = React.useState(false);
+
+  const { show } = useToast();
 
   useEffect(() => {
     fetchStatus();
@@ -66,7 +69,7 @@ export default function NeighborHome() {
           <div className="absolute right-[16px] text-main-100 text-xs">
             {status.isFollowing ? (
               <button
-                onClick={unfollow}
+                onClick={() => setShowUnfollowModal(true)}
                 className="px-2 py-1 rounded bg-main-5 text-main-100 text-xs"
                 disabled={loading}
               >
@@ -174,6 +177,19 @@ export default function NeighborHome() {
         like={room.likeCount}
         className="fixed bottom-12 z-10"
       />
+
+      {showUnfollowModal && (
+        <TwoButtonModal
+          title="정말 팔로우를 취소하시겠어요?"
+          cancelText="아니오"
+          onCancel={() => setShowUnfollowModal(false)}
+          confirmText="네, 취소할래요"
+          onConfirm={() => {
+            unfollow();
+            setShowUnfollowModal(false);
+          }}
+        />
+      )}
     </div>
   );
 }
