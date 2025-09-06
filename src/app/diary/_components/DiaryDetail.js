@@ -63,7 +63,7 @@ export default function DiaryDetail({ diary }) {
             <img
               src={diary.author.image || '/images/profileImage_default.svg'}
               alt="profile"
-              className="w-8 h-8 rounded-full oobject-cover"
+              className="w-8 h-8 rounded-full object-cover"
             />
             <div className="text-sm font-semibold text-neutral-800">
               {diary.author.name}

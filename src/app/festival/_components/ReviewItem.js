@@ -41,7 +41,7 @@ export default function ReviewItem({ review, type = 'diary', onLikeSync }) {
         ) : (
           <div className="flex items-center gap-2">
             <img
-              src={review.profileImage || '/images/profileImage_default.svg'}
+              src={review.authorImage || '/images/profileImage_default.svg'}
               alt="profile"
               className="w-8 h-8 rounded-full oobject-cover"
             />
