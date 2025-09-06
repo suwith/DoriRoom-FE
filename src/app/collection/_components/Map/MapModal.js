@@ -2,8 +2,9 @@
 
 import { createPortal } from 'react-dom';
 import { FaXmark } from 'react-icons/fa6';
-import { Map, Polygon } from 'react-kakao-maps-sdk';
-import { useMemo, useRef, useEffect, useState } from 'react';
+import { Map, Polygon, MapMarker } from 'react-kakao-maps-sdk';
+import { useMemo, useEffect, useState } from 'react';
+import { useLocationStore } from '@/stores/useLocationStore';
 
 function polygonCentroid(points) {
   // points: [{lat, lng}, ...] (시계/반시계 상관없음)
@@ -76,6 +77,7 @@ function bboxLevel(path) {
 
 export default function MapModal({ isOpen, setIsOpen, coordinates }) {
   const [portalElement, setPortalElement] = useState(null);
+  const location = useLocationStore((state) => state.location);
 
   useEffect(() => {
     // 'main'이 없으면 body로 폴백
@@ -129,6 +131,7 @@ export default function MapModal({ isOpen, setIsOpen, coordinates }) {
             fillColor="#5B8DEF"
             fillOpacity={0.25}
           />
+          <MapMarker clickable={false} draggable={false} position={location} />
         </Map>
       </div>
     </div>,
