@@ -11,6 +11,8 @@ import RoomStatsCard from '@/app/_components/RoomStatsCard';
 import Link from 'next/link';
 import TwoButtonModal from '@/app/_components/TwoButtonModal';
 import { useToast } from '@/app/_providers/ToastProvider';
+import useRoomLike from '@/hooks/follow/useRoomLike';
+import { useAuthStore } from '@/stores/useAuthStore';
 
 const DEFAULT_FLOOR = 39;
 const DEFAULT_SHELF = 38;
@@ -20,9 +22,16 @@ const DEFAULT_WINDOW = 40;
 export default function NeighborHome() {
   const params = useParams();
   const userId = params.userId;
+  const user = useAuthStore((state) => state.user);
+  const isMine = user.userId === userId;
 
   const { status, follow, unfollow, fetchStatus, loading } = useFollow(userId);
   const { room, fetchRoom, loading: roomLoading } = useNeighborRoom(userId);
+  const { likeCount, isLiked, toggleLike } = useRoomLike(
+    userId,
+    room?.likeCount,
+    room?.isLiked
+  );
 
   const router = useRouter();
   const zIndex = manifest.defaults.zIndex;
@@ -185,8 +194,11 @@ export default function NeighborHome() {
       {/* 하단 정보 */}
       <RoomStatsCard
         today={room.viewCount}
-        like={room.likeCount}
+        like={likeCount}
+        isLiked={isLiked}
+        onLike={toggleLike}
         className="fixed bottom-12 z-10"
+        isMine={isMine}
       />
 
       {showUnfollowModal && (
