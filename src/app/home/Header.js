@@ -1,12 +1,13 @@
 'use client';
 
-import { Mail } from 'lucide-react';
 import { MdChair } from 'react-icons/md';
 import { FaFire } from 'react-icons/fa6';
 import { FaCamera } from 'react-icons/fa';
 import Link from 'next/link';
+import { useState } from 'react';
 
-export default function HeaderBar() {
+export default function HeaderBar({ credit }) {
+  const [isOpenTogggle, setIsOpenToggle] = useState(false);
   const userId =
     localStorage.getItem('user_id') || sessionStorage.getItem('user_id');
 
