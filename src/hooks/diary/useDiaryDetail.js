@@ -16,41 +16,39 @@ export default function useDiaryDetail(diaryId) {
       setLoading(true);
       try {
         const res = await axiosInstance.get(`/diary/${diaryId}`);
-        const d = res.data?.content;
-        if (d) {
-          setDiary({
-            id: d.diaryId,
-            content: d.content,
-            images: parseImageUrls(d.imageUrls),
-            likes: d.likes ?? 0,
-            date: (d.visitedAt || d.createdAt || '')
-              .replace(/-/g, '.')
-              .slice(0, 10),
-            author: {
-              id: d.userInfo?.userId,
-              name: d.userInfo?.nickname ?? '',
-              image: d.userInfo?.profileImageUrl ?? null,
-            },
-            festival: {
-              id: d.eventInfo.eventId,
-              title: d.eventInfo.title,
-              thumbnail: d.eventInfo.firstImage || '',
-              startDate: d.eventInfo.startDate,
-              endDate: d.eventInfo.endDate,
-              location: d.eventInfo.addr1 || '',
-              region: d.eventInfo.areaName || '',
-              category: d.eventInfo.categoryName || '',
-              price: d.eventInfo.useTimeFestival || '',
-              likes:
-                typeof d.eventInfo.favoriteCount === 'number'
-                  ? d.eventInfo.favoriteCount
+        if (res.data.statusCode !== 200) setError(res.data.error);
+        else {
+          const d = res.data?.content;
+          if (d) {
+            setDiary({
+              id: d.diaryId,
+              content: d.content,
+              images: parseImageUrls(d.imageUrls),
+              likes: d.likes ?? 0,
+              date: d.visitedAt?.replace(/-/g, '.').slice(0, 10),
+              createdAt: (d.createdAt || '').slice(0, 10),
+              author: {
+                id: d.userInfo?.userId,
+                name: d.userInfo?.nickname ?? '',
+                image: d.userInfo?.profileImageUrl ?? null,
+              },
+              festival: {
+                id: d.eventInfo?.eventId,
+                title: d.eventInfo?.title,
+                thumbnail: d.eventInfo?.firstImage || '',
+                startDate: d.eventInfo?.startDate,
+                endDate: d.eventInfo?.endDate,
+                location: d.eventInfo?.addr1 || '',
+                region: d.eventInfo?.areaName || '',
+                category: d.eventInfo?.categoryName || '',
+                price: d.eventInfo?.useTimeFestival || '',
+                likes: d.eventInfo?.favoriteCount
+                  ? d.eventInfo?.favoriteCount
                   : 0,
-              reviews:
-                typeof d.eventInfo.diaryCount === 'number'
-                  ? d.eventInfo.diaryCount
-                  : 0,
-            },
-          });
+                reviews: d.eventInfo?.diaryCount ? d.eventInfo?.diaryCount : 0,
+              },
+            });
+          }
         }
       } catch (err) {
         console.error('Failed to fetch diary detail:', err);
