@@ -13,6 +13,7 @@ import TwoButtonModal from '@/app/_components/TwoButtonModal';
 import { useToast } from '@/app/_providers/ToastProvider';
 import useRoomLike from '@/hooks/follow/useRoomLike';
 import { useAuthStore } from '@/stores/useAuthStore';
+import useBestFriendStatus from '@/hooks/follow/useBestFriendStatus';
 
 const DEFAULT_FLOOR = 39;
 const DEFAULT_SHELF = 38;
@@ -32,6 +33,7 @@ export default function NeighborHome() {
     room?.likeCount,
     room?.isLiked
   );
+  const { isBestFriend, fetchBestFriendStatus } = useBestFriendStatus(userId);
 
   const router = useRouter();
   const zIndex = manifest.defaults.zIndex;
@@ -46,7 +48,8 @@ export default function NeighborHome() {
   useEffect(() => {
     fetchStatus();
     fetchRoom();
-  }, [fetchStatus, fetchRoom]);
+    fetchBestFriendStatus();
+  }, [fetchStatus, fetchRoom, fetchBestFriendStatus]);
 
   if (roomLoading || !room) {
     return <LoadingModal open={roomLoading} />;
@@ -69,13 +72,14 @@ export default function NeighborHome() {
         className={`fixed top-0 left-1/2 transform -translate-x-1/2 z-50 max-w-[390px] w-full pt-[50px] pb-[20px]`}
       >
         <div className="relative flex items-center justify-center mx-auto">
-          {/*{room.isBestFriend && (*/}
-          {/*  <div className="w-3.5 h-3.5 rounded-full bg-yellow-400 flex items-center justify-center">*/}
-          {/*    <i className="mgc_star_fill text-background text-[8px]" />*/}
-          {/*  </div>*/}
-          {/*)}*/}
-          <h1 className="text-lg font-semibold ">{room.nickname} 님의 방</h1>
-
+          <div className="flex items-center justify-center">
+            {isBestFriend && (
+              <div className="w-3.5 h-3.5 rounded-full bg-sub-100 flex items-center justify-center mr-2">
+                <i className="mgc_star_fill text-background text-[8px]" />
+              </div>
+            )}
+            <h1 className="text-lg font-semibold ">{room.nickname} 님의 방</h1>
+          </div>
           <div className="absolute left-[16px]">
             <BackButton />
           </div>
