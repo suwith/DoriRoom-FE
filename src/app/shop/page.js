@@ -85,7 +85,8 @@ export default function Shop() {
             <img
               src={shopSrc(displayIds.FLOOR)}
               alt=""
-              className={`absolute top-60 z-${zIndex.FLOOR} block`}
+              className={`absolute top-60 block`}
+              style={{ zIndex: zIndex.FLOOR }}
             />
           )}
           {/* WALL (shop 이미지) */}
@@ -93,7 +94,8 @@ export default function Shop() {
             <img
               src={shopSrc(displayIds.WALL)}
               alt=""
-              className={`absolute -top-21 z-${zIndex.WALL} block`}
+              className={`absolute -top-21 block`}
+              style={{ zIndex: zIndex.WALL }}
             />
           )}
           {/* SHELF (src 이미지) */}
@@ -101,7 +103,8 @@ export default function Shop() {
             <img
               src={itemSrc(displayIds.SHELF)}
               alt=""
-              className={`absolute top-12 left-3 w-[90px] h-[237px] z-${zIndex.SHELF} block`}
+              className={`absolute top-12 left-3 w-[90px] h-[237px] block`}
+              style={{ zIndex: zIndex.SHELF }}
             />
           )}
           {/* OBJECT */}
@@ -109,7 +112,8 @@ export default function Shop() {
             <img
               src={itemSrc(displayIds.OBJECT)}
               alt=""
-              className={`absolute top-44 right-2 w-[90px] h-[110px] z-${zIndex.OBJECT} block`}
+              className={`absolute top-44 right-2 w-[90px] h-[110px] block`}
+              style={{ zIndex: zIndex.OBJECT }}
             />
           )}
           {/* WINDOW */}
@@ -117,7 +121,8 @@ export default function Shop() {
             <img
               src={itemSrc(displayIds.WINDOW)}
               alt=""
-              className={`absolute -top-8 w-[214px] h-[131px] z-${zIndex.WINDOW} block`}
+              className={`absolute -top-8 w-[214px] h-[131px] block`}
+              style={{ zIndex: zIndex.WINDOW }}
             />
           )}
           {/* APPAREL */}
@@ -125,7 +130,8 @@ export default function Shop() {
             <img
               src={itemSrc(displayIds.APPAREL)}
               alt=""
-              className={`absolute top-26 w-[150px] h-[184px] z-${zIndex.APPAREL} block`}
+              className={`absolute top-26 w-[150px] h-[184px] block`}
+              style={{ zIndex: zIndex.APPAREL }}
             />
           )}
           <button

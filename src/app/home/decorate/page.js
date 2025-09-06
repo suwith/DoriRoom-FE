@@ -42,13 +42,15 @@ export default function Decorate() {
               manifest.items?.[selectFLOOR?.itemId]?.asset?.shop ||
               manifest.items?.[DEFAULT_FLOOR]?.asset?.shop
             }
-            className={`absolute top-60 z-${zIndex.FLOOR}`}
+            className={`absolute top-60`}
+            style={{ zIndex: zIndex.FLOOR }}
           />
           {/* WALL */}
           {selectWALL && (
             <img
               src={manifest.items?.[selectWALL?.itemId]?.asset?.shop}
-              className={`absolute -top-21 z-${zIndex.WALL}`}
+              className={`absolute -top-21`}
+              style={{ zIndex: zIndex.WALL }}
             />
           )}
           {/* 선반 */}
@@ -57,32 +59,34 @@ export default function Decorate() {
               manifest.items[selectSHELF?.itemId]?.asset?.src ||
               manifest.items?.[DEFAULT_SHELF]?.asset?.src
             }
-            className={`absolute top-12 left-3 w-[90px] h-[237px] z-${zIndex.SHELF}`}
+            className={`absolute top-12 left-3 w-[90px] h-[237px]`}
+            style={{ zIndex: zIndex.SHELF }}
           />
           {/* OBJECT */}
           {selectOBJECT && (
             <img
               src={manifest.items[selectOBJECT?.itemId]?.asset?.src}
-              className={`absolute top-44 right-2 w-[90px] h-[110px] z-${zIndex.OBJECT}`}
+              className={`absolute top-44 right-2 w-[90px] h-[110px]`}
+              style={{ zIndex: zIndex.OBJECT }}
             />
           )}
           {/* WINDOW */}
-          {selectWINDOW && (
-            <img
-              src={
-                manifest.items[selectWINDOW?.itemId]?.asset?.src ||
-                manifest.items[DEFAULT_WINDOW]?.asset?.src
-              }
-              className={`absolute -top-8 w-[214px] h-[131px] z-${zIndex.WINDOW}`}
-            />
-          )}
+          <img
+            src={
+              manifest.items[selectWINDOW?.itemId]?.asset?.src ||
+              manifest.items[DEFAULT_WINDOW]?.asset?.src
+            }
+            className={`absolute -top-6 w-[214px] h-[131px]`}
+            style={{ zIndex: zIndex.WINDOW }}
+          />
           {/* APPAREL */}
           <img
             src={
               manifest.items[selectAPPAREL?.itemId]?.asset?.src ||
               manifest.items?.[DEFAULT_APPAREL]?.asset?.src
             }
-            className={`absolute top-25 w-[150px] h-[184px] z-${zIndex.APPAREL}`}
+            className={`absolute top-25 w-[150px] h-[184px]`}
+            style={{ zIndex: zIndex.APPAREL }}
           />
           <Link href="/shop" className="absolute bottom-0 right-2">
             <div className="flex gap-2 items-center justify-center rounded-xl px-4 py-2 bg-main-100 text-background">

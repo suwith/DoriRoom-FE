@@ -44,12 +44,14 @@ export default function Home() {
             manifest.items[selectFLOOR?.itemId]?.asset.src ||
             manifest.items[DEFAULT_FLOOR]?.asset.src
           }
-          className={`absolute top-130 z-${zIndex.FLOOR}`}
+          className={`absolute top-130`}
+          style={{ zIndex: zIndex.FLOOR }}
         />
         {/* WALL */}
         <img
           src={manifest.items[selectWALL?.itemId]?.asset.src}
-          className={`absolute top-0 z-${zIndex.WALL}`}
+          className={`absolute top-0`}
+          style={{ zIndex: zIndex.WALL }}
         />
         {/* 선반 */}
         <img
@@ -57,12 +59,14 @@ export default function Home() {
             manifest.items[selectSHELF?.itemId]?.asset.src ||
             manifest.items[DEFAULT_SHELF]?.asset.src
           }
-          className={`absolute top-75 left-3 z-${zIndex.SHELF}`}
+          className={`absolute top-75 left-3`}
+          style={{ zIndex: zIndex.SHELF }}
         />
         {/* OBJECT */}
         <img
           src={manifest.items[selectOBJECT?.itemId]?.asset.src}
-          className={`absolute top-109 right-2 z-${zIndex.OBJECT}`}
+          className={`absolute top-109 right-2`}
+          style={{ zIndex: zIndex.OBJECT }}
         />
         {/* WINDOW */}
         <div className="absolute top-37">
@@ -93,7 +97,8 @@ export default function Home() {
             manifest.items[selectAPPAREL?.itemId]?.asset.src ||
             manifest.items[DEFAULT_APPAREL]?.asset.src
           }
-          className={`absolute top-82 z-${zIndex.APPAREL}`}
+          className={`absolute top-82`}
+          style={{ zIndex: zIndex.APPAREL }}
         />
       </div>
 

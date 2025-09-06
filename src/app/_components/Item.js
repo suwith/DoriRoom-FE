@@ -17,7 +17,7 @@ export default function Item({
         {imageUrl ? (
           <img
             src={imageUrl}
-            className={`absolute top-2/5 left-1/2 transform -translate-x-1/2 -translate-y-1/2 text-black ${name === '선택안함' ? 'opacity-40' : null}`}
+            className={`absolute top-2/5 left-1/2 transform -translate-x-1/2 -translate-y-1/2 ${name === '선택안함' ? 'opacity-40' : null}`}
           />
         ) : (
           <GoCircleSlash
