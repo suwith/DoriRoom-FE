@@ -77,7 +77,13 @@ export default function NeighborHome() {
               </button>
             ) : (
               <button
-                onClick={follow}
+                onClick={() => {
+                  follow();
+                  show({
+                    message: `${room.nickname}님을 팔로우 했어요!`,
+                    variant: 'success',
+                  });
+                }}
                 className="px-2 py-1 rounded bg-main-100 text-background text-xs"
                 disabled={loading}
               >
@@ -187,6 +193,10 @@ export default function NeighborHome() {
           onConfirm={() => {
             unfollow();
             setShowUnfollowModal(false);
+            show({
+              message: '취소가 완료되었습니다.',
+              variant: 'success',
+            });
           }}
         />
       )}
