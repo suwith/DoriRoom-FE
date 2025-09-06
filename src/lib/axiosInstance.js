@@ -1,6 +1,6 @@
 import axios from 'axios';
 import { useAuthStore } from '@/stores/useAuthStore';
-import { useServerStatusStore } from '@/stores/useSeverStatusStore';
+import { useServerStatusStore } from '@/stores/useServerStatusStore';
 
 const axiosInstance = axios.create({
   baseURL: '/api/',
