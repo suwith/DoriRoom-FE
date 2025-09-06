@@ -65,7 +65,6 @@ export default function DiaryListItem({ diary, onDeleted, type }) {
                       'editingDiary',
                       JSON.stringify(diary)
                     );
-                    console.log(sessionStorage.getItem('editingDiary'));
                     router.push(`/diary/${diary.id}/edit`);
                   }}
                 >
