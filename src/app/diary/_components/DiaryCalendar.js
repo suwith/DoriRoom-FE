@@ -4,30 +4,37 @@ import React, { useMemo } from 'react';
 import DayPicker from 'react-day-picker';
 import 'react-day-picker/lib/style.css';
 import { ko } from 'date-fns/locale';
-import { mockDiaries } from '../mockData.js';
-import { format, parse } from 'date-fns';
+import { format, parse, parseISO } from 'date-fns';
 
-export default function DiaryCalendar({ onDateClick }) {
+function normalizeDate(dateStr) {
+  if (!dateStr) return '';
+  if (dateStr.includes('.')) return dateStr;
+  if (dateStr.includes('-')) return format(parseISO(dateStr), 'yyyy.MM.dd');
+  return dateStr;
+}
+
+export default function DiaryCalendar({ diaries = [], onDateClick }) {
   const diaryMap = useMemo(() => {
     const map = {};
-    mockDiaries.forEach((d) => {
-      if (!map[d.date]) map[d.date] = [];
-      map[d.date].push(d);
+    diaries.forEach((d) => {
+      const normalized = normalizeDate(d.date);
+      if (!map[normalized]) map[normalized] = [];
+      map[normalized].push(d);
     });
     return map;
-  }, []);
+  }, [diaries]);
 
-  const diaryWithImage = mockDiaries
+  const diaryWithImage = diaries
     .filter((d) => d.images?.length > 0)
-    .map((d) => parse(d.date, 'yyyy.MM.dd', new Date()));
+    .map((d) => parse(normalizeDate(d.date), 'yyyy.MM.dd', new Date()));
 
-  const diaryWithoutImage = mockDiaries
+  const diaryWithoutImage = diaries
     .filter((d) => !d.images?.length && !d.disabled)
-    .map((d) => parse(d.date, 'yyyy.MM.dd', new Date()));
+    .map((d) => parse(normalizeDate(d.date), 'yyyy.MM.dd', new Date()));
 
-  const disabledDays = mockDiaries
+  const disabledDays = diaries
     .filter((d) => d.disabled)
-    .map((d) => parse(d.date, 'yyyy.MM.dd', new Date()));
+    .map((d) => parse(normalizeDate(d.date), 'yyyy.MM.dd', new Date()));
 
   return (
     <div className="w-full max-w-sm mx-auto flex justify-center items-center">
@@ -54,8 +61,6 @@ export default function DiaryCalendar({ onDateClick }) {
           if (diaryMap[iso]?.some((d) => d.disabled)) return;
           onDateClick?.(iso);
         }}
-        selectedDays={[]} // 제어 컴포넌트에서 상태로 조절 가능
-        disabledDays={disabledDays}
         modifiers={{
           today: new Date(),
           diaryWithImage,
@@ -76,8 +81,8 @@ export default function DiaryCalendar({ onDateClick }) {
             fontWeight: 500,
             lineHeight: '32px',
             textAlign: 'center',
-            backgroundColor: '#F7F7F7', // neutral-100
-            color: '#737373', // neutral-500
+            backgroundColor: '#F7F7F7',
+            color: '#737373',
             paddingTop: '4px',
           };
 
@@ -96,8 +101,8 @@ export default function DiaryCalendar({ onDateClick }) {
 
           //오늘
           if (isToday) {
-            style.backgroundColor = '#F4FBF8'; // main-5
-            style.color = '#35C284'; // main-100
+            style.backgroundColor = '#F4FBF8';
+            style.color = '#35C284';
           }
 
           //일정 없는 날
@@ -108,11 +113,7 @@ export default function DiaryCalendar({ onDateClick }) {
             style.pointerEvents = 'none';
           }
 
-          return (
-            <div>
-              <div style={style}>{date.getDate()}</div>
-            </div>
-          );
+          return <div style={style}>{date.getDate()}</div>;
         }}
       />
     </div>

@@ -126,8 +126,6 @@ export function useSearchFestivals({
 
       const params = { page, size };
 
-      console.log('body', body);
-
       const res = await axiosInstance.post('/event/filtered', body, { params });
 
       const pageData = res?.data?.content;

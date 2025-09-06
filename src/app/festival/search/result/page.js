@@ -136,7 +136,7 @@ export default function FestivalSearchResultPage() {
     if (period.start) query.set('start', period.start.toISOString());
     if (period.end) query.set('end', period.end.toISOString());
     if (mode === 'select') query.set('mode', 'select');
-    router.push(`/festival/search/result?${query.toString()}`);
+    router.replace(`/festival/search/result?${query.toString()}`);
   };
 
   const toggleLike = (id) => {
@@ -364,9 +364,12 @@ export default function FestivalSearchResultPage() {
                   onSelect={() => {
                     sessionStorage.setItem(
                       'selectedFestival',
-                      JSON.stringify(festival)
+                      JSON.stringify({
+                        id: festival.id,
+                        title: festival.title,
+                      })
                     );
-                    router.push('/diary/write');
+                    router.replace('/diary/write');
                   }}
                 />
               </div>

@@ -1,27 +1,40 @@
 'use client';
 
-import { mockFestivals } from '@/app/festival/mockData';
 import { useState } from 'react';
 import { useRouter } from 'next/navigation';
 import TwoButtonModal from '@/app/_components/TwoButtonModal';
+import useDiaryLike from '@/hooks/diary/useDiaryLike';
+import useDiaryDelete from '@/hooks/diary/useDiaryDelete';
 
-export default function DiaryListItem({ diary }) {
+export default function DiaryListItem({ diary, onDeleted }) {
   const router = useRouter();
-  const festival = mockFestivals.find((f) => f.id === diary.festivalId);
-
   const [showDiaryMenu, setShowDiaryMenu] = useState(false);
   const [showDeleteModal, setShowDeleteModal] = useState(false);
 
-  const handleDelete = (e) => {
+  // 좋아요 훅
+  const {
+    liked,
+    loading: likeLoading,
+    mutating: likeMutating,
+    toggleLike,
+  } = useDiaryLike(diary.id);
+
+  const [likeCount, setLikeCount] = useState(diary.likes ?? 0);
+
+  const { deleteDiary, loading: deleteLoading } = useDiaryDelete();
+
+  const handleDelete = async (e) => {
     e.stopPropagation();
+    const success = await deleteDiary(diary.id);
+    if (success) {
+      onDeleted?.(diary.id);
+    }
     setShowDiaryMenu(false);
     setShowDeleteModal(false);
-    console.log('삭제 완료');
   };
-
   return (
     <div
-      className="bg-main-5 rounded-lg p-3 space-y-2"
+      className="bg-background rounded-lg p-3 space-y-2"
       onClick={() => {
         if (showDiaryMenu) return;
         router.push(`/diary/${diary.id}`);
@@ -29,8 +42,8 @@ export default function DiaryListItem({ diary }) {
     >
       <div className="flex items-center justify-between">
         {/* 축제명 */}
-        <div className="inline-block text-[13px] font-bold text-main-100 bg-background px-2 py-0.5 rounded-md">
-          {festival.title}
+        <div className="inline-block text-[13px] font-medium text-main-100 bg-main-5 px-2 py-0.5 rounded-md">
+          {diary.festivalName || '연결된 축제 없음'}
         </div>
         <div>
           <i
@@ -47,7 +60,9 @@ export default function DiaryListItem({ diary }) {
                 onClick={(e) => {
                   e.stopPropagation();
                   setShowDiaryMenu(false);
-                  console.log('수정 완료');
+                  sessionStorage.setItem('editingDiary', JSON.stringify(diary));
+                  console.log(sessionStorage.getItem('editingDiary'));
+                  router.push(`/diary/${diary.id}/edit`);
                 }}
               >
                 수정
@@ -91,16 +106,40 @@ export default function DiaryListItem({ diary }) {
       {/* 날짜 + 좋아요 개수 */}
       <div className="flex items-center justify-between text-[11px] text-neutral-400">
         <div className="flex items-center gap-1 text-main-100">
-          <i className="mgc_emoji_2_fill text-md text-main-100" />
-          <span className="pt-1">{diary.likes ?? 0}</span>
+          <button
+            onClick={async (e) => {
+              e.stopPropagation();
+              const nextLiked = !liked;
+              await toggleLike();
+              setLikeCount((prev) =>
+                nextLiked ? prev + 1 : Math.max(0, prev - 1)
+              );
+            }}
+            disabled={likeLoading || likeMutating}
+            aria-disabled={likeLoading || likeMutating}
+            aria-pressed={liked}
+            className="flex items-center"
+          >
+            {liked ? (
+              <i className="mgc_emoji_2_fill text-md text-main-100" />
+            ) : (
+              <i className="mgc_emoji_2_line text-md text-neutral-400" />
+            )}
+          </button>
+          <span
+            className={`flex items-center ${liked ? 'text-main-100' : 'text-neutral-400'}`}
+          >
+            {likeCount}
+          </span>
         </div>
         <div>{diary.date}</div>
       </div>
+
       {/* 삭제 모달 */}
       {showDeleteModal && (
         <TwoButtonModal
-          title="즐겨찾기를 삭제하시겠어요?"
-          description="삭제된 즐겨찾기는 복구가 불가능해요!"
+          title="일기를 삭제하시겠어요?"
+          description="삭제된 일기는 복구가 불가능해요!"
           cancelText="취소할래요"
           confirmText="삭제할래요"
           onCancel={() => setShowDeleteModal(false)}
