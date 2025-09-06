@@ -16,7 +16,8 @@ export default function useMyCredit() {
       const apiContent = res.data?.content || null;
 
       if (!mountedRef.current) return;
-      setCredit(apiContent.userCredit);
+      const userCredit = Number(apiContent?.userCredit ?? 0);
+      setCredit(userCredit);
     } catch (e) {
       if (!mountedRef.current) return;
       setError(e);
