@@ -21,12 +21,13 @@ export default function Decorate() {
   const { equip, loading: EILoading, refetch } = useEquipItems();
   const zIndex = manifest.defaults.zIndex;
 
-  const selectFLOOR = equip.find((item) => item.itemType === 'FLOOR');
-  const selectWALL = equip.find((item) => item.itemType === 'WALL');
-  const selectSHELF = equip.find((item) => item.itemType === 'SHELF');
-  const selectOBJECT = equip.find((item) => item.itemType === 'OBJECT');
-  const selectWINDOW = equip.find((item) => item.itemType === 'WINDOW');
-  const selectAPPAREL = equip.find((item) => item.itemType === 'APPAREL');
+  const byType = Object.fromEntries(equip.map((it) => [it.itemType, it]));
+  const selectFLOOR = byType.FLOOR;
+  const selectWALL = byType.WALL;
+  const selectSHELF = byType.SHELF;
+  const selectOBJECT = byType.OBJECT;
+  const selectWINDOW = byType.WINDOW;
+  const selectAPPAREL = byType.APPAREL;
 
   if (UILoading) return <LoadingContent loading={UILoading} />;
 

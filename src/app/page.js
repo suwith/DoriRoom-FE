@@ -34,14 +34,15 @@ export default function Home() {
     );
   }
 
-  const selectFLOOR = equippedItems.find((item) => item.itemType === 'FLOOR');
-  const selectWALL = equippedItems.find((item) => item.itemType === 'WALL');
-  const selectSHELF = equippedItems.find((item) => item.itemType === 'SHELF');
-  const selectOBJECT = equippedItems.find((item) => item.itemType === 'OBJECT');
-  const selectWINDOW = equippedItems.find((item) => item.itemType === 'WINDOW');
-  const selectAPPAREL = equippedItems.find(
-    (item) => item.itemType === 'APPAREL'
+  const byType = Object.fromEntries(
+    equippedItems.map((it) => [it.itemType, it])
   );
+  const selectFLOOR = byType.FLOOR;
+  const selectWALL = byType.WALL;
+  const selectSHELF = byType.SHELF;
+  const selectOBJECT = byType.OBJECT;
+  const selectWINDOW = byType.WINDOW;
+  const selectAPPAREL = byType.APPAREL;
 
   return (
     <>
