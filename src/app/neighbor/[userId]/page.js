@@ -28,11 +28,7 @@ export default function NeighborHome() {
 
   const { status, follow, unfollow, fetchStatus, loading } = useFollow(userId);
   const { room, fetchRoom, loading: roomLoading } = useNeighborRoom(userId);
-  const { likeCount, isLiked, toggleLike } = useRoomLike(
-    userId,
-    room?.likeCount,
-    room?.isLiked
-  );
+  const { likeCount, isLiked, toggleLike } = useRoomLike(userId);
   const { isBestFriend, fetchBestFriendStatus } = useBestFriendStatus(userId);
 
   const router = useRouter();
@@ -49,7 +45,7 @@ export default function NeighborHome() {
     fetchStatus();
     fetchRoom();
     fetchBestFriendStatus();
-  }, [fetchStatus, fetchRoom, fetchBestFriendStatus]);
+  }, [fetchStatus, fetchRoom, fetchBestFriendStatus, likeCount]);
 
   if (roomLoading || !room) {
     return <LoadingModal open={roomLoading} />;
@@ -198,7 +194,7 @@ export default function NeighborHome() {
       {/* 하단 정보 */}
       <RoomStatsCard
         today={room.viewCount}
-        like={likeCount}
+        like={room.likeCount}
         isLiked={isLiked}
         onLike={toggleLike}
         className="fixed bottom-12 z-10"

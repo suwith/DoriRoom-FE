@@ -15,7 +15,6 @@ export default function useFollowings({ page = 0, size = 20 }) {
           params: { page, size },
         });
         setFollowings(res.data?.content?.content || []);
-        console.log(res.data?.content?.content);
       } catch (err) {
         console.error('팔로잉 목록 불러오기 실패:', err);
       } finally {
