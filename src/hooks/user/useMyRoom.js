@@ -2,6 +2,7 @@ import { useEffect, useState, useMemo } from 'react';
 import axiosInstance from '@/lib/axiosInstance';
 
 function normalizeMyRoom(item) {
+  if (!api) return null;
   return {
     userId: item.userId,
     nickname: item.nickname,

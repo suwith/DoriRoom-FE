@@ -2,7 +2,7 @@ import { useEffect, useState, useMemo, useCallback, useRef } from 'react';
 import axiosInstance from '@/lib/axiosInstance';
 
 export default function useMyCredit() {
-  const [credit, setCredit] = useState([]);
+  const [credit, setCredit] = useState(0);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
 
@@ -23,7 +23,7 @@ export default function useMyCredit() {
     } finally {
       if (mountedRef.current) setLoading(false);
     }
-  });
+  }, []);
 
   useEffect(() => {
     mountedRef.current = true;

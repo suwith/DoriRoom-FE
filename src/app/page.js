@@ -14,7 +14,9 @@ const DEFAULT_WINDOW = 40;
 export default function Home() {
   const { data, loading, error } = useMyRoom();
   const zIndex = manifest.defaults.zIndex;
-  const equippedItems = data?.equippedItems;
+  const equippedItems = Array.isArray(data?.equippedItems)
+    ? data.equippedItems
+    : [];
 
   if (loading)
     return (
@@ -23,6 +25,14 @@ export default function Home() {
         className="max-w-[390px] w-screen h-screen"
       />
     );
+
+  if (error || !data) {
+    return (
+      <div className="max-w-[390px] w-screen h-screen flex items-center justify-center text-red-500">
+        데이터를 불러오는 중 오류가 발생했습니다.
+      </div>
+    );
+  }
 
   const selectFLOOR = equippedItems.find((item) => item.itemType === 'FLOOR');
   const selectWALL = equippedItems.find((item) => item.itemType === 'WALL');
@@ -48,11 +58,13 @@ export default function Home() {
           style={{ zIndex: zIndex.FLOOR }}
         />
         {/* WALL */}
-        <img
-          src={manifest.items[selectWALL?.itemId]?.asset.src}
-          className={`absolute top-0`}
-          style={{ zIndex: zIndex.WALL }}
-        />
+        {manifest.items[selectWALL?.itemId]?.asset.src && (
+          <img
+            src={manifest.items[selectWALL?.itemId]?.asset.src}
+            className={`absolute top-0`}
+            style={{ zIndex: zIndex.WALL }}
+          />
+        )}
         {/* 선반 */}
         <img
           src={
@@ -63,11 +75,13 @@ export default function Home() {
           style={{ zIndex: zIndex.SHELF }}
         />
         {/* OBJECT */}
-        <img
-          src={manifest.items[selectOBJECT?.itemId]?.asset.src}
-          className={`absolute top-109 right-2`}
-          style={{ zIndex: zIndex.OBJECT }}
-        />
+        {manifest.items[selectOBJECT?.itemId]?.asset.src && (
+          <img
+            src={manifest.items[selectOBJECT?.itemId]?.asset.src}
+            className={`absolute top-109 right-2`}
+            style={{ zIndex: zIndex.OBJECT }}
+          />
+        )}
         {/* WINDOW */}
         <div className="absolute top-37">
           <div className="relative w-[214px] h-[131px]">
@@ -86,7 +100,7 @@ export default function Home() {
               src={manifest.items[41]?.asset.src}
               alt=""
               className="absolute left-1/2 top-11 -translate-x-1/2"
-              style={{ zIndex: zIndex.WINDOW - 1 }} // 창문 위에
+              style={{ zIndex: zIndex.WINDOW - 1 }} // 창문 아래
             />
           </div>
         </div>

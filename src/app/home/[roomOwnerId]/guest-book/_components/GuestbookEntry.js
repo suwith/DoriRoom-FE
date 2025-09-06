@@ -4,6 +4,18 @@ import { SlOptionsVertical } from 'react-icons/sl';
 import OptionModal from './OptionModal';
 import { useState } from 'react';
 
+function formatCreatedAt(iso) {
+  if (!iso) return '';
+  const d = new Date(iso);
+  if (isNaN(d)) return '';
+  const y = String(d.getFullYear()).slice(2);
+  const M = String(d.getMonth() + 1).padStart(2, '0');
+  const D = String(d.getDate()).padStart(2, '0');
+  const h = String(d.getHours()).padStart(2, '0');
+  const m = String(d.getMinutes()).padStart(2, '0');
+  return `${y}.${M}.${D} ${h}:${m}`;
+}
+
 export default function GuestbookEntry({ data, DGMutate }) {
   const [isOpen, setIsOpen] = useState(false);
 
@@ -40,7 +52,7 @@ export default function GuestbookEntry({ data, DGMutate }) {
           />
         </div>
         <p className="self-end font-normal text-sm text-neutral-400">
-          {data.createdAt.substring(2, 16).replaceAll('-', '.')}
+          {formatCreatedAt(data?.createdAt)}
         </p>
         <OptionModal
           isOpen={isOpen}
