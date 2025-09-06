@@ -17,7 +17,7 @@ export default function UserProfile() {
       <img
         src={profileImageUrl}
         alt="profile_image"
-        className="rounded-full w-23 h-23"
+        className="rounded-full w-23 h-23 object-cover"
       />
       <p className="font-semibold text-xl">{info?.nickname || '익명'}</p>
       <button
