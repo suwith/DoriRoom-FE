@@ -1,4 +1,3 @@
-// app/festival/_components/FestivalDetail.jsx
 'use client';
 
 import { useEffect, useRef, useState } from 'react';
@@ -15,24 +14,25 @@ import useFestivalFavorite from '@/hooks/festival/useFestivalFavorite';
 import { useToast } from '@/app/_providers/ToastProvider';
 import useFestivalReviews from '@/hooks/festival/useFestivalReviews';
 import LoadingContent from '@/app/_components/LoadingContent';
+import useDiaryWritten from '@/hooks/diary/useDiaryWritten';
 
 export default function FestivalDetail({ festival }) {
   const router = useRouter();
 
   const [activeTab, setActiveTab] = useState('설명');
 
-  // Header color transition
   const [isScrolled, setIsScrolled] = useState(false);
   const sentinelRef = useRef(null);
   const HEADER_H = 70;
 
-  // Festival favorite
   const { liked, likeCount, loading, mutating, toggleFavorite } =
     useFestivalFavorite(festival.id, festival.likes);
 
-  // Toast on mount
+  const { written, loading: writtenLoading } = useDiaryWritten(festival.id);
+
   const { show } = useToast();
   const didShowRef = useRef(false);
+
   useEffect(() => {
     if (didShowRef.current) return;
     didShowRef.current = true;
@@ -183,12 +183,9 @@ export default function FestivalDetail({ festival }) {
 
         <div className="flex flex-row gap-3 text-sm">
           <p className="text-neutral-500 whitespace-nowrap">금액</p>
-          <p
-            className="text-neutral-700"
-            dangerouslySetInnerHTML={{
-              __html: String(festival.price || '').replace(/\n/g, '<br />'),
-            }}
-          />
+          <p className="text-neutral-700 whitespace-pre-line">
+            {String(festival.price || '')}
+          </p>
         </div>
       </div>
 
@@ -230,15 +227,9 @@ export default function FestivalDetail({ festival }) {
               <Icon path={mdiTree} className="w-4 h-4 text-main-100" />
               행사소개
             </div>
-            <p
-              className="text-neutral-600 leading-relaxed"
-              dangerouslySetInnerHTML={{
-                __html: String(festival.eventIntro || '').replace(
-                  /\n/g,
-                  '<br />'
-                ),
-              }}
-            />
+            <p className="text-neutral-600 leading-relaxed whitespace-pre-line">
+              {String(festival.eventIntro || '')}
+            </p>
           </div>
 
           <div>
@@ -246,15 +237,9 @@ export default function FestivalDetail({ festival }) {
               <Icon path={mdiTree} className="w-4 h-4 text-main-100" />
               행사내용
             </div>
-            <p
-              className="text-neutral-600 leading-relaxed"
-              dangerouslySetInnerHTML={{
-                __html: String(festival.eventContent || '').replace(
-                  /\n/g,
-                  '<br />'
-                ),
-              }}
-            />
+            <p className="text-neutral-600 leading-relaxed whitespace-pre-line">
+              {String(festival.eventContent || '')}
+            </p>
           </div>
         </div>
       )}
@@ -318,7 +303,7 @@ export default function FestivalDetail({ festival }) {
           )}
 
           <button
-            className="fixed bottom-7 left-1/2 -translate-x-1/2 w-[350px] py-2 bg-main-100 text-background rounded-lg text-sm font-medium shadow-md"
+            className={`fixed bottom-7 left-1/2 -translate-x-1/2 w-[350px] py-2 text-background rounded-lg text-sm font-medium shadow-md ${written ? 'bg-neutral-300' : 'bg-main-100'}`}
             onClick={() => {
               sessionStorage.setItem(
                 'selectedFestival',
@@ -326,10 +311,13 @@ export default function FestivalDetail({ festival }) {
               );
               router.push('/diary/write');
             }}
+            disabled={written}
           >
             <div className="flex items-center justify-center gap-2">
               <MdEditSquare className="text-background w-5 h-5" />
-              <span className="text-lg">일기 작성하기</span>
+              <span className="text-lg">
+                {written ? '이미 일기를 작성했어요' : '일기 작성하기'}
+              </span>
             </div>
           </button>
         </div>

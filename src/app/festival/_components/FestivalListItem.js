@@ -63,24 +63,16 @@ export default function FestivalListItem({
             </div>
           </div>
 
-          {written ? (
-            <button
-              className="flex text-background text-sm bg-neutral-300 px-3 py-1.5 rounded-sm "
-              disabled={true}
-            >
-              작성 완료
-            </button>
-          ) : (
-            <button
-              className="flex text-background text-sm bg-main-100 px-3 py-1.5 rounded-sm "
-              onClick={(e) => {
-                e.stopPropagation();
-                handleSelect();
-              }}
-            >
-              선택
-            </button>
-          )}
+          <button
+            className={`flex text-background text-sm px-3 py-1.5 rounded-sm $ {written ? "bg-neutral-300":"bg-main-100"} `}
+            onClick={(e) => {
+              e.stopPropagation();
+              handleSelect();
+            }}
+            disabled={written}
+          >
+            선택
+          </button>
         </div>
         {showAlreadyWrittenModal && (
           <TwoButtonModal
