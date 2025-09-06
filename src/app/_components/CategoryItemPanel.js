@@ -44,7 +44,6 @@ export default function CategoryItemPanel({
     { id: 6, name: '바닥', type: 'FLOOR', icon: 'mgc_map_2_fill' },
   ];
 
-  console.log(DEFAULT[selectedCategoryId]);
   return (
     <div className="flex flex-col overflow-y-auto z-15">
       {/* 탭 영역 */}
@@ -123,7 +122,7 @@ export default function CategoryItemPanel({
               onClick={async () => {
                 if (selectedItemId === item.itemId) return;
                 onItemSelect(item.itemId);
-                await mutate(item.itemId);
+                if (!isShop) await mutate(item.itemId);
               }}
               isSelected={
                 selectedItemId === item.itemId ||

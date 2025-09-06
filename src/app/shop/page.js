@@ -154,7 +154,7 @@ export default function Shop() {
           selectedItemId={selectedItemIdx}
           onItemSelect={handleSelect}
           isShop={true}
-          refetch={EIRefetch}
+          onEquipped={EIRefetch}
           equip={equip}
         />
       </div>
