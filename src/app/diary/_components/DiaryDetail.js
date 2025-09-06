@@ -76,7 +76,10 @@ export default function DiaryDetail({ diary }) {
           </div>
 
           <div className="flex items-center gap-2">
-            <button className="text-[11px] px-3 py-0.5 bg-main-5 text-main-100 rounded">
+            <button
+              className="text-[11px] px-3 py-0.5 bg-main-5 text-main-100 rounded"
+              onClick={() => router.push(`/neighbor/${diary.author.id}`)}
+            >
               방문
             </button>
           </div>

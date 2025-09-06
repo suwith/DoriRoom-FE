@@ -65,7 +65,10 @@ export default function ReviewItem({ review, type = 'diary', onLikeSync }) {
           </button>
         ) : (
           <div className="flex items-center gap-2">
-            <button className="text-[11px] px-3 py-0.5 bg-main-5 text-main-100 rounded">
+            <button
+              className="text-[11px] px-3 py-0.5 bg-main-5 text-main-100 rounded"
+              onClick={() => router.push(`/neighbor/${review.authorId}`)}
+            >
               방문
             </button>
           </div>
