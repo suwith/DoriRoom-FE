@@ -13,6 +13,7 @@ import useEquipItems from '@/hooks/decorate/useEquipItems';
 const DEFAULT_FLOOR = 39;
 const DEFAULT_SHELF = 38;
 const DEFAULT_APPAREL = 31;
+const DEFAULT_WINDOW = 40;
 
 export default function Decorate() {
   const [selectedItemIdx, setSelectedItemIdx] = useState(null);
@@ -68,7 +69,10 @@ export default function Decorate() {
           {/* WINDOW */}
           {selectWINDOW && (
             <img
-              src={manifest.items[selectWINDOW?.itemId]?.asset?.src}
+              src={
+                manifest.items[selectWINDOW?.itemId]?.asset?.src ||
+                manifest.items[DEFAULT_WINDOW]?.asset?.src
+              }
               className={`absolute -top-8 w-[214px] h-[131px] z-${zIndex.WINDOW}`}
             />
           )}

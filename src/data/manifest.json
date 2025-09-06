@@ -727,6 +727,93 @@
         "ox": 0,
         "oy": 0
       }
+    },
+    "40": {
+      "id": "40",
+      "name": "기본 창문",
+      "type": "WINDOW",
+      "group": "COMMON",
+      "slot": "window",
+      "theme": null,
+      "price": null,
+      "purchasable": false,
+      "defaultOwned": true,
+      "asset": {
+        "src": "/images/items/WINDOW/기본-창문.svg",
+        "thumb": "/images/thumb/WINDOW/기본-창문.svg",
+        "shop": "/images/shop/WINDOW/기본-창문.svg",
+        "z": 10,
+        "ox": 0,
+        "oy": 0
+      }
+    },
+    "41": {
+      "id": "41",
+      "name": "맑음",
+      "type": "WEATHER",
+      "group": "COMMON",
+      "slot": "",
+      "theme": null,
+      "price": null,
+      "purchasable": false,
+      "defaultOwned": true,
+      "asset": {
+        "src": "/images/items/WEATHER/맑음.svg",
+        "z": 10,
+        "ox": 0,
+        "oy": 0
+      }
+    },
+    "42": {
+      "id": "42",
+      "name": "눈",
+      "type": "WEATHER",
+      "group": "COMMON",
+      "slot": "",
+      "theme": null,
+      "price": null,
+      "purchasable": false,
+      "defaultOwned": true,
+      "asset": {
+        "src": "/images/items/WEATHER/눈.svg",
+        "z": 10,
+        "ox": 0,
+        "oy": 0
+      }
+    },
+    "43": {
+      "id": "43",
+      "name": "비",
+      "type": "WEATHER",
+      "group": "COMMON",
+      "slot": "",
+      "theme": null,
+      "price": null,
+      "purchasable": false,
+      "defaultOwned": true,
+      "asset": {
+        "src": "/images/items/WEATHER/비.svg",
+        "z": 10,
+        "ox": 0,
+        "oy": 0
+      }
+    },
+    "44": {
+      "id": "44",
+      "name": "흐림",
+      "type": "WEATHER",
+      "group": "COMMON",
+      "slot": "",
+      "theme": null,
+      "price": null,
+      "purchasable": false,
+      "defaultOwned": true,
+      "asset": {
+        "src": "/images/items/WEATHER/흐림.svg",
+        "z": 10,
+        "ox": 0,
+        "oy": 0
+      }
     }
   }
 }

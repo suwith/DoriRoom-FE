@@ -16,6 +16,7 @@ import manifest from '@/data/manifest.json';
 const DEFAULT_FLOOR = 39;
 const DEFAULT_SHELF = 38;
 const DEFAULT_APPAREL = 31;
+const DEFAULT_WINDOW = 40;
 
 export default function Shop() {
   const [selectedItemIdx, setSelectedItemIdx] = useState(null);
@@ -46,7 +47,7 @@ export default function Shop() {
     WALL: preview.WALL ?? null,
     SHELF: preview.SHELF ?? DEFAULT_SHELF,
     OBJECT: preview.OBJECT ?? null,
-    WINDOW: preview.WINDOW ?? null,
+    WINDOW: preview.WINDOW ?? DEFAULT_WINDOW,
     APPAREL: preview.APPAREL ?? DEFAULT_APPAREL,
   };
 

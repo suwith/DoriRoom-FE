@@ -9,6 +9,7 @@ import manifest from '@/data/manifest.json';
 const DEFAULT_FLOOR = 39;
 const DEFAULT_SHELF = 38;
 const DEFAULT_APPAREL = 31;
+const DEFAULT_WINDOW = 40;
 
 export default function Home() {
   const { data, loading, error } = useMyRoom();
@@ -64,10 +65,28 @@ export default function Home() {
           className={`absolute top-109 right-2 z-${zIndex.OBJECT}`}
         />
         {/* WINDOW */}
-        <img
-          src={manifest.items[selectWINDOW?.itemId]?.asset.src}
-          className={`absolute top-37 z-${zIndex.WINDOW}`}
-        />
+        <div className="absolute top-37">
+          <div className="relative w-[214px] h-[131px]">
+            {/* 창문 */}
+            <img
+              src={
+                manifest.items[selectWINDOW?.itemId]?.asset.src ||
+                manifest.items[DEFAULT_WINDOW]?.asset.src
+              }
+              alt=""
+              className="absolute inset-0"
+              style={{ zIndex: zIndex.WINDOW }} // 기준 레이어
+            />
+            {/* 날씨(가운데) */}
+            <img
+              src={manifest.items[41]?.asset.src}
+              alt=""
+              className="absolute left-1/2 top-11 -translate-x-1/2"
+              style={{ zIndex: zIndex.WINDOW - 1 }} // 창문 위에
+            />
+          </div>
+        </div>
+
         {/* APPAREL */}
         <img
           src={

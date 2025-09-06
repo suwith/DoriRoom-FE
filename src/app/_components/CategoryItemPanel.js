@@ -9,6 +9,7 @@ const DEFAULT = {
   FLOOR: 39,
   SHELF: 38,
   APPAREL: 31,
+  WINDOW: 40,
 };
 
 export default function CategoryItemPanel({
@@ -77,7 +78,9 @@ export default function CategoryItemPanel({
       <div className="overflow-y-auto bg-background h-screen px-3 pt-6 pb-[80px] grid grid-cols-3 content-start gap-2 scrollbar-hide">
         {/* 선택 안 함 */}
         {!isShop &&
-          (['APPAREL', 'SHELF', 'WINDOW'].includes(selectedCategoryId) ? (
+          (['APPAREL', 'SHELF', 'WINDOW', 'FLOOR'].includes(
+            selectedCategoryId
+          ) ? (
             <Item
               onClick={async () => {
                 onItemSelect(0);
