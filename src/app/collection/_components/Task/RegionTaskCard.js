@@ -5,10 +5,16 @@ import { FaFire } from 'react-icons/fa6';
 import { useRouter } from 'next/navigation';
 import useChallengesClaim from '@/hooks/collection/useChallengesClaim';
 import TaskCompleteModal from './TaskCompleteModal';
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import { IoMdMap } from 'react-icons/io';
 import LoadingModal from '@/app/_components/LoadingModal';
 import MapModal from '../Map/MapModal';
+import { useLocationStore } from '@/stores/useLocationStore';
+import { point, polygon } from '@turf/helpers';
+import booleanPointInPolygon from '@turf/boolean-point-in-polygon';
+import { useVisitChallengeStore } from '@/stores/useVisitChallengeStore';
+import { useToast } from '@/app/_providers/ToastProvider';
+import useChallengesStart from '@/hooks/collection/useChallengesStart';
 
 const regionDetails = [
   { atlasId: 1, name: '서울', areaGroup: 'SEOUL' },
@@ -31,6 +37,7 @@ export default function RegionTaskCard({
   challengeType,
   targetCount,
   eventId,
+  polygon: p = [],
   rewards,
   currentProgress,
   status,
@@ -39,6 +46,22 @@ export default function RegionTaskCard({
 }) {
   const [isOpen, setIsOpen] = useState(false);
   const [isMapOpen, setIsMapOpen] = useState(false);
+  const [isInside, setIsInside] = useState(false);
+
+  const location = useLocationStore((state) => state.location);
+
+  const { mutate: CSMutate } = useChallengesStart({
+    onSuccess: () => {
+      refetch({ group: 'AREA', area: area });
+    },
+    onError: () => {},
+  });
+  const { start: startVisit, session } = useVisitChallengeStore();
+  const lastCompleted = useVisitChallengeStore((s) => s.lastCompleted);
+  const clearLastCompleted = useVisitChallengeStore(
+    (s) => s.clearLastCompleted
+  );
+  const { show } = useToast();
   const { mutate, loading } = useChallengesClaim({
     onSuccess: () => {
       setIsOpen(true);
@@ -58,12 +81,68 @@ export default function RegionTaskCard({
   const area = regionDetails.find(
     (e) => e.atlasId === Number(regionId)
   )?.areaGroup;
+  const btnDisabled = challengeType === 'VISIT_EVENT' && !isInside;
 
   const onClick = () => {
     if (challengeType === 'REGIONAL_QUIZ') {
       router.push(`/collection/${regionId}/quiz/${challengeId}`);
     }
+
+    if (challengeType === 'VISIT_EVENT') {
+      // p(GeoJSON Polygon Feature?)에서 외곽 링을 추출
+      const raw = p?.coordinates;
+      if (!raw || raw.length < 3) {
+        // 필요 시 토스트
+        show({ message: '영역 정보가 없어요.', variant: 'error' });
+        return;
+      }
+
+      // 숫자화 + 링 닫기([첫점] = [끝점])
+      const ring = raw.map(([lng, lat]) => [Number(lng), Number(lat)]);
+      const [fx, fy] = ring[0];
+      const [lx, ly] = ring[ring.length - 1];
+      if (fx !== lx || fy !== ly) ring.push([fx, fy]);
+
+      // 10분(600000ms) 설정
+      startVisit({
+        challengeId,
+        regionId: Number(regionId),
+        polygon: ring,
+        // requiredMs: 10 * 60 * 1000,
+        requiredMs: 1000,
+      });
+
+      CSMutate({ challengeId });
+
+      // 선택: 토스트
+      show({
+        message: '도전을 시작했어요! 영역 안에서 10분 유지하면 완료됩니다.',
+      });
+      return;
+    }
   };
+
+  useEffect(() => {
+    if (!lastCompleted) return;
+    // 같은 지역 카드라면 refetch
+    if (Number(regionId) === Number(lastCompleted.regionId)) {
+      // 필요 파라미터 있으면 그대로 넣기
+      refetch({ group: 'AREA', area: areaGroup });
+      // 중복 트리거 방지
+      clearLastCompleted();
+    }
+  }, [lastCompleted?.at]); // at(타임스탬프)로 변화를 감지
+
+  useEffect(() => {
+    if (p && location.lng && location.lat) {
+      const tmp = p?.coordinates;
+      const poly = polygon([tmp]);
+      const pt = point([location.lng, location.lat]);
+
+      const inside = booleanPointInPolygon(pt, poly);
+      setIsInside(inside);
+    }
+  }, [location]);
 
   return (
     <div
@@ -98,8 +177,8 @@ export default function RegionTaskCard({
       >
         <div className="flex items-center gap-1 text-sm">
           {title}
-          {status === 'COMPLETED' && challengeType === 'VISIT_EVENT' && (
-            <p className="text-main-100">({progress}%)</p>
+          {status === 'IN_PROGRESS' && challengeType === 'VISIT_EVENT' && (
+            <p className="text-main-100">({session.elapsedMs}%)</p>
           )}
         </div>
         {status === 'IN_PROGRESS' ? (
@@ -111,8 +190,9 @@ export default function RegionTaskCard({
           </button>
         ) : status === 'NOT_STARTED' ? (
           <button
-            className="mr-1 bg-main-100 text-background rounded-sm px-2 py-1"
+            className={`mr-1 text-background rounded-sm px-2 py-1 ${!btnDisabled ? 'bg-main-100' : 'bg-neutral-300'}`}
             onClick={onClick}
+            disabled={btnDisabled}
           >
             도전
           </button>
@@ -140,20 +220,13 @@ export default function RegionTaskCard({
         credit={credit}
         title={title}
       />
-
-      <MapModal
-        isOpen={isMapOpen}
-        setIsOpen={setIsMapOpen}
-        coordinates={[
-          [126.93058863174969, 37.38487638219797],
-          [126.93108699436652, 37.38421177044464],
-          [126.93111905277988, 37.38422334909711],
-          [126.93129100245449, 37.384010301607134],
-          [126.93235184451322, 37.38457070783717],
-          [126.93163781620433, 37.385432150569585],
-          [126.93058863174969, 37.38487638219797],
-        ]}
-      />
+      {challengeType === 'VISIT_EVENT' && (
+        <MapModal
+          isOpen={isMapOpen}
+          setIsOpen={setIsMapOpen}
+          coordinates={p?.coordinates}
+        />
+      )}
     </div>
   );
 }

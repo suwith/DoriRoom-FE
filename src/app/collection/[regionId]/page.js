@@ -5,6 +5,7 @@ import HeaderNavigationBar from '@/app/_components/HeaderNavigationBar';
 import useAtlases from '@/hooks/collection/useAtlases';
 import { useParams } from 'next/navigation';
 import { useEffect } from 'react';
+import useLocationWatcher from '@/hooks/location/useLocationWatcher';
 
 const regionDetails = [
   { atlasId: 1, name: '서울', areaGroup: 'SEOUL' },
@@ -17,6 +18,8 @@ const regionDetails = [
 ];
 
 export default function Page() {
+  useLocationWatcher();
+
   const params = useParams();
   const regionId = Array.isArray(params.regionId)
     ? params.regionId[0]
