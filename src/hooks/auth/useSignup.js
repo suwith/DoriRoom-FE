@@ -89,11 +89,7 @@ export async function submitSignupProfile({
       formData.append('image', profileImage);
     }
 
-    const res = await axiosInstance.post('/auth/signup', formData, {
-      headers: {
-        'Content-Type': 'multipart/form-data',
-      },
-    });
+    const res = await axiosInstance.post('/auth/signup', formData);
 
     return res.data;
   } catch (e) {
