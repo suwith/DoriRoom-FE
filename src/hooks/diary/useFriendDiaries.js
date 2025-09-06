@@ -54,7 +54,14 @@ export default function useFriendDiaries({ pageSize = 20 } = {}) {
         setDiaries((prev) => [...prev, ...mapped]);
       }
 
-      setTotal(data?.content?.totalElements ?? mapped.length);
+      if (data?.content?.totalElements != null) {
+        setTotal(data.content.totalElements);
+      } else {
+        // 마지막 페이지(더 적게 반환)일 때만 총합을 확정
+        setTotal((prev) =>
+          list.length < pageSize ? nextPage * pageSize + list.length : prev
+        );
+      }
       setPage(nextPage);
     } catch (e) {
       if (e.name !== 'CanceledError') setError(e);
