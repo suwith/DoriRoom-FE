@@ -68,7 +68,7 @@ export default function ImageUploader({
     >
       <div className="relative" style={{ width: dim, height: dim }}>
         <img
-          src={preview}
+          src={preview || null}
           alt="프로필 이미지"
           className={`w-full h-full object-cover ${radius}`}
           draggable={false}

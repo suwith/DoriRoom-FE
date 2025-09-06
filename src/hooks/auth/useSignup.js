@@ -1,8 +1,3 @@
-// hooks/auth/useSignup.js
-// 회원가입 관련 API 훅/함수 모음 (JavaScript)
-// - 의존: lib/axiosInstance.js (baseURL, 인증헤더 등 공통 설정)
-// - 주의: 백엔드 스펙에 따라 엔드포인트 경로/응답 구조가 다르면 아래를 맞춰주세요.
-
 import axiosInstance from '@/lib/axiosInstance';
 
 function toReadableError(error) {
@@ -19,7 +14,6 @@ export async function sendSignupEmail(email) {
   const data = res.data;
 
   if (data?.statusCode && data.statusCode !== 200) {
-    console.error(data);
     throw data.error || '이메일 전송 실패';
   }
 
@@ -74,11 +68,33 @@ export async function submitSignupProfile({
   email,
   username,
   password,
-  nickname /*, avatarFile */,
+  nickname,
+  profileImage,
 }) {
   try {
-    const payload = { username, password, email, nickname };
-    const res = await axiosInstance.post('/auth/signup', payload);
+    const formData = new FormData();
+
+    const requestPayload = JSON.stringify({
+      username,
+      password,
+      email,
+      nickname,
+    });
+    formData.append(
+      'request',
+      new Blob([requestPayload], { type: 'application/json' })
+    );
+
+    if (profileImage instanceof File) {
+      formData.append('image', profileImage);
+    }
+
+    const res = await axiosInstance.post('/auth/signup', formData, {
+      headers: {
+        'Content-Type': 'multipart/form-data',
+      },
+    });
+
     return res.data;
   } catch (e) {
     throw toReadableError(e);
