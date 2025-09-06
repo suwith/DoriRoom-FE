@@ -74,7 +74,7 @@ export default function NeighborHome() {
           {/*    <i className="mgc_star_fill text-background text-[8px]" />*/}
           {/*  </div>*/}
           {/*)}*/}
-          <h1 className="text-xl font-semibold ">{room.nickname} 님의 방</h1>
+          <h1 className="text-lg font-semibold ">{room.nickname} 님의 방</h1>
 
           <div className="absolute left-[16px]">
             <BackButton />
@@ -147,7 +147,7 @@ export default function NeighborHome() {
           }
           className={`absolute bottom-[33%] left-3`}
           style={{ zIndex: zIndex.SHELF }}
-          onClick={() => router.push(`/diary/${room.userId}`)}
+          onClick={() => router.push(`/neighbor/${room.userId}/diary`)}
         />
         {/* OBJECT */}
         {manifest.items[selectOBJECT?.itemId]?.asset.src && (

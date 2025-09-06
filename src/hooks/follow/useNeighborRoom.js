@@ -13,7 +13,6 @@ export default function useNeighborRoom(userId) {
     try {
       const res = await axiosInstance.get(`/users/room/${userId}`);
       setRoom(res.data?.content || null);
-      console.log(res);
     } catch (err) {
       console.error('이웃 방 정보 조회 실패:', err);
     } finally {
