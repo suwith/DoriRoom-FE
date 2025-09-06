@@ -1,15 +1,34 @@
 'use client';
 
 import { useState } from 'react';
-import { GoCircleSlash } from 'react-icons/go';
 import Item from './Item';
+import usePostEquipItem from '@/hooks/decorate/usePostEquipItem';
+import manifest from '@/data/manifest.json';
+
+const DEFAULT = {
+  FLOOR: 39,
+  SHELF: 38,
+  APPAREL: 31,
+  WINDOW: 40,
+};
 
 export default function CategoryItemPanel({
   items,
   selectedItemId,
   onItemSelect,
   isShop,
+  equip,
+  onEquipped,
 }) {
+  const {
+    mutate,
+    loading: PEILoading,
+    error: PEIError,
+  } = usePostEquipItem({
+    onSuccess: () => {
+      onEquipped();
+    },
+  });
   const [selectedCategoryId, setSelectedCategoryId] = useState('APPAREL');
   const categoryBtns = [
     { id: 1, name: '의상', type: 'APPAREL', icon: 'mgc_t_shirt_fill' },
@@ -22,11 +41,11 @@ export default function CategoryItemPanel({
     { id: 3, name: '선반', type: 'SHELF', icon: 'mgc_layout_5_fill' },
     { id: 4, name: '창문', type: 'WINDOW', icon: 'mgc_curtain_fill' },
     { id: 5, name: '벽지', type: 'WALL', icon: 'mgc_paint_2_fill' },
-    { id: 6, name: '바닥', type: 'FLOOR', icon: 'mgc_paint_2_fill' },
+    { id: 6, name: '바닥', type: 'FLOOR', icon: 'mgc_map_2_fill' },
   ];
 
   return (
-    <div className="flex flex-col overflow-y-auto">
+    <div className="flex flex-col overflow-y-auto z-15">
       {/* 탭 영역 */}
       <div className="shrink-0 mt-5 flex gap-2 overflow-x-auto scrollbar-hide px-3">
         {categoryBtns.map(({ id, name, type, icon }) => {
@@ -55,25 +74,61 @@ export default function CategoryItemPanel({
       </div>
 
       {/* 아이템 리스트 */}
-      <div className="overflow-y-auto bg-background h-screen px-3 pt-3 pb-[80px] grid grid-cols-3 gap-2 scrollbar-hide">
+      <div className="overflow-y-auto bg-background h-screen px-3 pt-6 pb-[80px] grid grid-cols-3 content-start gap-2 scrollbar-hide">
         {/* 선택 안 함 */}
-        {!isShop && (
-          <Item
-            onClick={() => onItemSelect(0)}
-            isSelected={selectedItemId === 0}
-            icon={GoCircleSlash}
-            name="선택안함"
-          />
-        )}
+        {!isShop &&
+          (['APPAREL', 'SHELF', 'WINDOW', 'FLOOR'].includes(
+            selectedCategoryId
+          ) ? (
+            <Item
+              onClick={async () => {
+                onItemSelect(0);
+                const tmp = equip.find(
+                  (e) => e.itemType === selectedCategoryId
+                );
+                if (tmp) await mutate(tmp.itemId);
+              }}
+              isSelected={
+                selectedItemId === 0 ||
+                !equip.some((e) => e.itemType === selectedCategoryId)
+              }
+              imageUrl={
+                manifest.items?.[DEFAULT[selectedCategoryId]]?.asset.thumb
+              }
+              name={manifest.items?.[DEFAULT[selectedCategoryId]]?.name}
+            />
+          ) : (
+            <Item
+              onClick={async () => {
+                onItemSelect(0);
+                const tmp = equip.find(
+                  (e) => e.itemType === selectedCategoryId
+                );
+                if (tmp) await mutate(tmp.itemId);
+              }}
+              isSelected={
+                selectedItemId === 0 ||
+                !equip.some((e) => e.itemType === selectedCategoryId)
+              }
+              name="선택안함"
+            />
+          ))}
         {/* 선택된 카테고리 아이템 */}
         {items
           .filter((item) => item.itemType === selectedCategoryId)
           .map((item) => (
             <Item
               key={item.itemId}
-              onClick={() => onItemSelect(item.itemId)}
-              isSelected={selectedItemId === item.itemId}
-              icon={item.imageUrl}
+              onClick={async () => {
+                if (selectedItemId === item.itemId) return;
+                onItemSelect(item.itemId);
+                if (!isShop) await mutate(item.itemId);
+              }}
+              isSelected={
+                selectedItemId === item.itemId ||
+                equip.some((e) => e.itemId == item.itemId)
+              }
+              imageUrl={manifest.items?.[item.itemId]?.asset.thumb}
               name={item.name}
               price={isShop ? item.price : null}
               isOwned={item.isOwned}
