@@ -64,7 +64,7 @@ export default function FestivalListItem({
           </div>
 
           <button
-            className={`flex text-background text-sm px-3 py-1.5 rounded-sm $ {written ? "bg-neutral-300":"bg-main-100"} `}
+            className={`flex text-background text-sm px-3 py-1.5 rounded-sm ${written ? 'bg-neutral-300' : 'bg-main-100'} `}
             onClick={(e) => {
               e.stopPropagation();
               handleSelect();
