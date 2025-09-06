@@ -14,7 +14,7 @@ const DEFAULT_WINDOW = 40;
 export default function Home() {
   const { data, loading, error } = useMyRoom();
   const zIndex = manifest.defaults.zIndex;
-  const equippedItems = data.equippedItems;
+  const equippedItems = data?.equippedItems;
 
   if (loading)
     return (

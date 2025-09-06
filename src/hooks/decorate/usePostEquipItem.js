@@ -28,7 +28,6 @@ export default function usePostEquipItem(handler) {
 
   const mutate = useCallback(
     async (itemId) => {
-      console.log(itemId);
       if (!itemId) return;
       setLoading(true);
       setError(null);

@@ -24,7 +24,12 @@ export default function Shop() {
   const [preview, setPreview] = useState({});
 
   const { items, loading: IALoaing, error: IAError, refetch } = useItemAll();
-  const { credit, loading: MYLoading, error: MCError } = useMyCredit();
+  const {
+    credit,
+    loading: MYLoading,
+    error: MCError,
+    refetch: MCRefetch,
+  } = useMyCredit();
   const { equip, loading: EILoading, refetch: EIRefetch } = useEquipItems();
   const { show } = useToast();
 
@@ -164,6 +169,7 @@ export default function Shop() {
           setIsOpen={setIsOpenBuyModal}
           itemId={selectedItemIdx}
           refetch={refetch}
+          MCRefetch={MCRefetch}
         />
       )}
     </div>

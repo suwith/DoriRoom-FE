@@ -13,7 +13,7 @@ function normalizeMyRoom(item) {
 }
 
 export default function useMyRoom() {
-  const [room, setRoom] = useState([]);
+  const [room, setRoom] = useState(null);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
 

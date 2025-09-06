@@ -25,12 +25,12 @@ export default function useEquipItems() {
       if (!mountedRef.current) return;
       setItems(apiContent);
     } catch (e) {
-      if (!!mountedRef.current) return;
+      if (!mountedRef.current) return;
       setError(e);
     } finally {
       if (!mountedRef.current) setLoading(false);
     }
-  });
+  }, []);
 
   useEffect(() => {
     mountedRef.current = true;
