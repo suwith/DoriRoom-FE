@@ -11,9 +11,8 @@ function mapToDiaryItem(d) {
     images: parseImageUrls(d.imageUrls),
     likes: d.likes ?? 0,
     credit: d.credit ?? 0,
-    date: d.visitedAt
-      ? d.visitedAt.replace(/-/g, '.')
-      : d.createdAt.slice(0, 10).replace(/-/g, '.'),
+    date: d.visitedAt?.replace(/-/g, '.'),
+    createdAt: d.createdAt?.slice(0, 10).replace(/-/g, '.'),
     authorId: d.userInfo?.userId,
     authorName: d.userInfo?.nickname ?? '익명',
     authorImage: d.userInfo?.profileImageUrl ?? null,
