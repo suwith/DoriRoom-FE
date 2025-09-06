@@ -11,9 +11,7 @@ export default function useNeighborRoom(userId) {
     if (!userId) return;
     setLoading(true);
     try {
-      const res = await axiosInstance.get(`/users/room/${userId}`, {
-        params: { userId },
-      });
+      const res = await axiosInstance.get(`/users/room/${userId}`);
       setRoom(res.data?.content || null);
       console.log(res);
     } catch (err) {
