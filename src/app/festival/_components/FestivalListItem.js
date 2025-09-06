@@ -2,29 +2,46 @@
 
 import { GoHeart, GoHeartFill } from 'react-icons/go';
 import { FaCommentAlt } from 'react-icons/fa';
+import { useRef } from 'react';
+import useFestivalFavorite from '@/hooks/festival/useFestivalFavorite';
 
 export default function FestivalListItem({
   festival,
-  liked = false,
-  onLike = null,
   hideLikeButton = false,
   mode = 'default',
   onSelect = null,
 }) {
+  const imgRef = useRef(null);
+
+  const { liked, likeCount, loading, mutating, toggleFavorite } =
+    useFestivalFavorite(festival.eventId, festival.likes || 0);
+
+  const handleLike = (e) => {
+    e.stopPropagation();
+    if (!loading && !mutating) toggleFavorite();
+  };
+
   if (mode === 'select') {
     return (
       <div className="flex gap-3">
         <img
-          src={festival.thumbnail}
+          ref={imgRef}
+          src={festival.thumbnail || '/images/festivalImage_default.svg'}
           alt={festival.title}
-          className="object-cover w-15 h-15 rounded-lg overflow-hidden "
+          className="object-cover w-15 h-15 rounded-lg overflow-hidden"
+          onError={(e) => {
+            if (e.currentTarget.src.endsWith('festivalImage_default.svg'))
+              return;
+            e.currentTarget.onerror = null;
+            e.currentTarget.src = '/images/festivalImage_default.svg';
+          }}
         />
         <div className="flex justify-between flex-1 pr-1 items-center">
-          <div className="flex flex-col justify-center items-start">
-            <div className="flex text-sm font-semibold truncate">
+          <div className="flex flex-col justify-center items-start min-w-0">
+            <div className="text-sm font-semibold line-clamp-1 break-keep">
               {festival.title}
             </div>
-            <div className="text-neutral-600 mt-0.5 text-xs truncate">
+            <div className="text-neutral-600 mt-0.5 text-xs line-clamp-1 break-keep">
               {festival.location}
             </div>
           </div>
@@ -42,16 +59,32 @@ export default function FestivalListItem({
       </div>
     );
   }
+
   return (
-    <div className={` flex gap-3 ${hideLikeButton ? 'px-4 py-2' : ''}  `}>
+    <div className={`flex gap-3 ${hideLikeButton ? 'px-4 py-2' : ''}`}>
       <div className="relative w-20 h-20 rounded-lg overflow-hidden flex-shrink-0">
         <img
-          src={festival.thumbnail}
+          ref={imgRef}
+          src={festival.thumbnail || '/images/festivalImage_default.svg'}
           alt={festival.title}
           className="w-full h-full object-cover"
+          onError={(e) => {
+            if (e.currentTarget.src.endsWith('festivalImage_default.svg'))
+              return;
+            e.currentTarget.onerror = null;
+            e.currentTarget.src = '/images/festivalImage_default.svg';
+          }}
         />
+
         {!hideLikeButton && (
-          <button onClick={onLike} className="absolute top-1 left-1 z-10">
+          <button
+            type="button"
+            aria-label={liked ? '즐겨찾기 취소' : '즐겨찾기 추가'}
+            aria-pressed={liked}
+            disabled={loading || mutating}
+            className="absolute top-1.5 left-2 z-10"
+            onClick={handleLike}
+          >
             {liked ? (
               <GoHeartFill className="text-main-100 w-4 h-4 drop-shadow" />
             ) : (
@@ -61,23 +94,24 @@ export default function FestivalListItem({
         )}
       </div>
 
-      <div className="flex flex-col justify-between flex-1 pr-1">
+      <div className="flex flex-col justify-between flex-1 pr-1 min-w-0">
         <div>
           <div className="flex flex-wrap gap-1 mb-1 text-[11px]">
-            <span className="text-main-100 bg-main-5 px-1 py-[1px] rounded-sm">
-              {festival.region.slice(0, 2)}
-            </span>
-
-            <span className="text-main-100 bg-main-5 px-1 py-[1px] rounded-sm">
-              {festival.category}
-            </span>
-
+            {!!festival.region && (
+              <span className="text-main-100 bg-main-5 px-1 py-[1px] rounded-sm">
+                {String(festival.region).slice(0, 2)}
+              </span>
+            )}
+            {!!festival.category && (
+              <span className="text-main-100 bg-main-5 px-1 py-[1px] rounded-sm">
+                {festival.category}
+              </span>
+            )}
             {festival.reviews > 0 && (
               <span className="text-main-100 bg-main-5 px-1 py-[1px] rounded-sm">
                 일기 {festival.reviews}개
               </span>
             )}
-
             {festival.price === '무료' && (
               <span className="text-main-100 bg-main-5 px-1 py-[1px] rounded-sm">
                 무료
@@ -85,10 +119,11 @@ export default function FestivalListItem({
             )}
           </div>
 
-          <div className="font-bold text-sm mt-1.5 truncate">
+          {/* 제목/위치: 카드 내 넘침 방지 */}
+          <div className="font-bold text-sm mt-1.5 line-clamp-1 break-keep">
             {festival.title}
           </div>
-          <div className="text-neutral-600 mt-0.5 text-xs truncate">
+          <div className="text-neutral-600 mt-0.5 text-xs line-clamp-1 break-keep">
             {festival.location}
           </div>
         </div>
@@ -97,14 +132,14 @@ export default function FestivalListItem({
           <div className="text-neutral-400 text-[11px] font-thin">
             {festival.startDate}~{festival.endDate}
           </div>
-          <div className="flex gap-3 text-[11px]">
+          <div className="flex gap-3 text-[11px] ">
             <div className="flex items-center gap-1 text-main-100">
               <GoHeartFill className="w-3.5 h-3.5" />
-              <span>{festival.likes}</span>
+              <span>{likeCount}</span>
             </div>
             <div className="flex items-center gap-1 text-main-100">
               <FaCommentAlt className="w-3.5 h-3.5" />
-              <span>{festival.reviews.length}</span>
+              <span>{festival.reviews}</span>
             </div>
           </div>
         </div>

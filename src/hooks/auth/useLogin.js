@@ -1,8 +1,8 @@
-// hooks/auth/useLogin.js
 'use client';
 
 import { useCallback, useState } from 'react';
 import axiosInstance from '@/lib/axiosInstance';
+import useUserInfo from '../mypage/useUserInfo';
 
 function saveTokens({ accessToken, refreshToken }, remember) {
   try {
@@ -18,8 +18,8 @@ function saveTokens({ accessToken, refreshToken }, remember) {
 export default function useLogin() {
   const [loggingIn, setLoggingIn] = useState(false);
   const [error, setError] = useState(null);
+  const { refetch } = useUserInfo();
 
-  // credentials는 login 호출 시 인자로 받음
   const login = useCallback(
     async ({ username, password, remember = true } = {}) => {
       setLoggingIn(true);
@@ -35,39 +35,44 @@ export default function useLogin() {
           }
         );
 
-        const content = res?.data?.content || {};
+        const data = res?.data;
+        const content = data?.content || {};
         const accessToken = content.accessToken;
         const refreshToken = content.refreshToken;
 
+        // 백엔드 statusCode 분기 처리
+        if (data?.statusCode === 400) {
+          setError({ field: 'password', message: data.error });
+          return Promise.reject(new Error(data.error));
+        }
+        if (data?.statusCode === 404) {
+          setError({ field: 'username', message: data.error });
+          return Promise.reject(new Error(data.error));
+        }
+
         if (!accessToken || !refreshToken) {
           const err = new Error('Invalid login response');
-          setError(err);
+          setError({ field: 'form', message: err.message });
           return Promise.reject(err);
         }
 
         saveTokens({ accessToken, refreshToken }, remember);
         axiosInstance.defaults.headers.Authorization = `Bearer ${accessToken}`;
+
+        await refetch();
         return { accessToken, refreshToken };
       } catch (e) {
-        setError(e);
+        // 다른 네트워크 에러
+        if (!error) {
+          setError({ field: 'form', message: e.message });
+        }
         return Promise.reject(e);
       } finally {
         setLoggingIn(false);
       }
     },
-    []
+    [refetch]
   );
 
-  // 나중에 로그아웃 api 훅 분리했을 때 삭제
-  const logout = useCallback(() => {
-    try {
-      localStorage.removeItem('access_token');
-      localStorage.removeItem('refresh_token');
-      sessionStorage.removeItem('access_token');
-      sessionStorage.removeItem('refresh_token');
-      delete axiosInstance.defaults.headers.Authorization;
-    } catch (_) {}
-  }, []);
-
-  return { login, logout, loggingIn, error };
+  return { login, loggingIn, error };
 }

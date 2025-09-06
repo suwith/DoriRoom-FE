@@ -2,15 +2,17 @@
 
 import { useEffect, useState } from 'react';
 import { useRouter } from 'next/navigation';
-import RegionFilter from '../_components/RegionFilter';
+import RegionSection from '../_components/RegionSection';
 import 'mingcute_icon/font/Mingcute.css';
 import SearchInputBar from '@/app/festival/_components/SearchInputBar';
+import useSearchPopulars from '@/hooks/festival/useSearchPopulars';
 
 export default function SearchPage() {
   const router = useRouter();
   const [input, setInput] = useState('');
   const [recentSearches, setRecentSearches] = useState([]);
   const [isSelectMode, setIsSelectMode] = useState(false);
+  const { trending, loading, error } = useSearchPopulars();
 
   useEffect(() => {
     const mode = sessionStorage.getItem('selectMode');
@@ -27,28 +29,6 @@ export default function SearchPage() {
     }
   }, []);
 
-  const saveRecentSearch = (keyword) => {
-    setRecentSearches((prev) => {
-      const updated = [keyword, ...prev.filter((t) => t !== keyword)].slice(
-        0,
-        8
-      );
-      localStorage.setItem('recentSearches', JSON.stringify(updated));
-      return updated;
-    });
-  };
-
-  const trending = [
-    { keyword: '바다', status: 'up' },
-    { keyword: '수영', status: 'up' },
-    { keyword: '해수욕장', status: 'same' },
-    { keyword: '속초', status: 'same' },
-    { keyword: '강릉', status: 'same' },
-    { keyword: '캠핑', status: 'same' },
-    { keyword: '야외', status: 'same' },
-    { keyword: '피크닉', status: 'down' },
-  ];
-
   const removeTag = (tag) => {
     setRecentSearches((prev) => {
       const updated = prev.filter((t) => t !== tag);
@@ -61,9 +41,18 @@ export default function SearchPage() {
     const encoded = encodeURIComponent(keyword);
     const base = `/festival/search/result?query=${encoded}`;
     const path = isSelectMode ? `${base}&mode=select` : base;
-    saveRecentSearch(keyword);
     router.push(path);
   };
+
+  const SkeletonItem = ({ idx }) => (
+    <div className="w-full flex items-center justify-between pr-4 p-0.5 animate-pulse">
+      <span className="flex items-center">
+        <span className="mr-5 text-neutral-300 text-xs">{idx}</span>
+        <span className="h-3 w-20 bg-neutral-200 rounded"></span>
+      </span>
+      <span className="h-3 w-6 bg-neutral-200 rounded"></span>
+    </div>
+  );
 
   return (
     <div className="max-w-[390px] w-full h-screen bg-background mx-auto pt-[50px]">
@@ -78,7 +67,6 @@ export default function SearchPage() {
             const path = isSelectMode ? `${base}&mode=select` : base;
 
             router.push(path);
-            saveRecentSearch(text);
           }}
           onClear={() => setInput('')}
           withBack
@@ -118,69 +106,72 @@ export default function SearchPage() {
       {/* 카테고리 */}
       <div className="mt-6 px-4">
         <h3 className="text-sm mb-3 font-semibold">카테고리</h3>
-        <RegionFilter />
+        <RegionSection />
       </div>
 
       {/* 실시간 검색어 */}
       <div className="mt-10 mb-20 px-4">
         <h3 className="text-sm mb-3 font-semibold">실시간 검색어</h3>
         <div className="flex gap-6 pl-3">
-          {/* 왼쪽 컬럼 */}
-          <div className="flex-1 space-y-2 text-sm text-gray-800">
-            {trending.slice(0, 4).map((item, idx) => (
-              <button
-                key={item.keyword}
-                onClick={() => goToResult(item.keyword)}
-                className="w-full flex items-center justify-between pr-4 p-0.5"
-              >
-                <span className="flex items-center">
-                  <span className="mr-5 text-neutral-500 text-xs">
-                    {idx + 1}
-                  </span>
-                  <span className="text-[13px]">{item.keyword}</span>
-                </span>
-                <span className="text-xs gap-1 flex items-center">
-                  {item.status === 'up' && (
-                    <i className="mgc_up_small_fill text-main-100 text-2xl" />
-                  )}
-                  {item.status === 'down' && (
-                    <i className="mgc_down_small_fill text-sub-100 text-2xl" />
-                  )}
-                  {item.status === 'same' && (
-                    <span className="text-neutral-400 px-2.5 py-1">–</span>
-                  )}
-                </span>
-              </button>
-            ))}
+          <div className="flex-1 space-y-2 text-sm text-neutral-800">
+            {loading
+              ? [1, 2, 3, 4].map((idx) => <SkeletonItem key={idx} idx={idx} />)
+              : trending.slice(0, 4).map((item, idx) => (
+                  <button
+                    key={item.keyword}
+                    onClick={() => goToResult(item.keyword)}
+                    className="w-full flex items-center justify-between pr-4 p-0.5"
+                  >
+                    <span className="flex items-center">
+                      <span className="mr-5 text-neutral-500 text-xs">
+                        {idx + 1}
+                      </span>
+                      <span className="text-[13px]">{item.keyword}</span>
+                    </span>
+                    <span className="text-xs gap-1 flex items-center">
+                      {item.status === 'up' && (
+                        <i className="mgc_up_small_fill text-main-100 text-2xl" />
+                      )}
+                      {item.status === 'down' && (
+                        <i className="mgc_down_small_fill text-sub-100 text-2xl" />
+                      )}
+                      {item.status === 'same' && (
+                        <span className="text-neutral-400 px-2.5 py-1">–</span>
+                      )}
+                    </span>
+                  </button>
+                ))}
           </div>
 
           {/* 오른쪽 컬럼 */}
-          <div className="flex-1 space-y-2 text-sm text-gray-800">
-            {trending.slice(4).map((item, idx) => (
-              <button
-                key={item.keyword}
-                onClick={() => goToResult(item.keyword)}
-                className="w-full flex items-center justify-between pr-4 p-0.5"
-              >
-                <span className="flex items-center">
-                  <span className="mr-5 text-neutral-500 text-xs">
-                    {idx + 5}
-                  </span>
-                  <span className="text-[13px]">{item.keyword}</span>
-                </span>
-                <span className="text-xs gap-1 flex items-center">
-                  {item.status === 'up' && (
-                    <i className="mgc_up_small_fill text-main-100 text-2xl" />
-                  )}
-                  {item.status === 'down' && (
-                    <i className="mgc_down_small_fill text-sub-100 text-2xl" />
-                  )}
-                  {item.status === 'same' && (
-                    <span className="text-neutral-400 px-2.5 py-1">–</span>
-                  )}
-                </span>
-              </button>
-            ))}
+          <div className="flex-1 space-y-2 text-sm text-neutral-800">
+            {loading
+              ? [5, 6, 7, 8].map((idx) => <SkeletonItem key={idx} idx={idx} />)
+              : trending.slice(4).map((item, idx) => (
+                  <button
+                    key={item.keyword}
+                    onClick={() => goToResult(item.keyword)}
+                    className="w-full flex items-center justify-between pr-4 p-0.5"
+                  >
+                    <span className="flex items-center">
+                      <span className="mr-5 text-neutral-500 text-xs">
+                        {idx + 5}
+                      </span>
+                      <span className="text-[13px]">{item.keyword}</span>
+                    </span>
+                    <span className="text-xs gap-1 flex items-center">
+                      {item.status === 'up' && (
+                        <i className="mgc_up_small_fill text-main-100 text-2xl" />
+                      )}
+                      {item.status === 'down' && (
+                        <i className="mgc_down_small_fill text-sub-100 text-2xl" />
+                      )}
+                      {item.status === 'same' && (
+                        <span className="text-neutral-400 px-2.5 py-1">–</span>
+                      )}
+                    </span>
+                  </button>
+                ))}
           </div>
         </div>
       </div>

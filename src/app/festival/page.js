@@ -2,7 +2,7 @@
 
 import { useRouter } from 'next/navigation';
 import { GoHeartFill } from 'react-icons/go';
-import RegionFilter from './_components/RegionFilter';
+import RegionSection from './_components/RegionSection';
 import FestivalCardSection from './_components/FestivalCardSection';
 import 'mingcute_icon/font/Mingcute.css';
 import useMainFestivals from '@/hooks/festival/useMainFestivals';
@@ -41,7 +41,7 @@ export default function FestivalPage() {
 
       {/* 지역 선택 */}
       <div className="mt-4 px-4 overflow-x-auto no-scrollbar">
-        <RegionFilter />
+        <RegionSection />
       </div>
 
       {/* 로딩 시 스켈레톤 */}
