@@ -111,11 +111,7 @@ export default function MapModal({ isOpen, setIsOpen, coordinates }) {
             className="bg-main-5 rounded-full p-1"
             onClick={() => setIsOpen(false)}
           >
-            <FaXmark
-              size={13}
-              className="font-bold text-main-100"
-              onClick={() => {}}
-            />
+            <FaXmark size={13} className="font-bold text-main-100" />
           </div>
         </div>
         <KakaoMap

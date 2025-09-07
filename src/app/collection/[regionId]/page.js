@@ -6,6 +6,7 @@ import useAtlases from '@/hooks/collection/useAtlases';
 import { useParams } from 'next/navigation';
 import { useEffect } from 'react';
 import useLocationWatcher from '@/hooks/location/useLocationWatcher';
+import LoadingContent from '@/app/_components/LoadingContent';
 
 const regionDetails = [
   { atlasId: 1, name: '서울', areaGroup: 'SEOUL' },
@@ -32,6 +33,8 @@ export default function Page() {
     if (!region) return;
     refetch({ areaGroup: region.areaGroup });
   }, [region?.areaGroup, refetch]);
+
+  if (loading) return <LoadingContent loading={loading} />;
 
   return (
     <div className="max-w-[390px] w-screen mx-auto h-screen">
