@@ -8,6 +8,7 @@ import manifest from '@/data/manifest.json';
 import weather from '@/data/weather.json';
 import useWeather from '@/hooks/home/useWeather';
 import { useEffect } from 'react';
+import { useRouter } from 'next/navigation';
 
 const DEFAULT_FLOOR = 39;
 const DEFAULT_SHELF = 38;
@@ -21,7 +22,7 @@ export default function Home() {
   const equippedItems = Array.isArray(data?.equippedItems)
     ? data.equippedItems
     : [];
-
+  const router = useRouter();
   useEffect(() => {
     refetch();
   }, []);
@@ -82,6 +83,7 @@ export default function Home() {
           }
           className={`absolute top-75 left-3`}
           style={{ zIndex: zIndex.SHELF }}
+          onClick={() => router.push('/diary')}
         />
         {/* OBJECT */}
         {manifest.items[selectOBJECT?.itemId]?.asset.src && (
