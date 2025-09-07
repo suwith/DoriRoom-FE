@@ -25,12 +25,20 @@ export default function useWeather() {
   const [error, setError] = useState(null);
   const mountedRef = useRef(true);
 
-  const refetch = useCallback(async () => {
+  const lastFetchAt = useRef(0);
+  const MIN_GAP_MS = 5 * 60 * 1000;
+
+  const refetch = useCallback(async ({ lat, lon }) => {
+    if (!Number.isFinite(lat) || !Number.isFinite(lon)) return;
+
+    const now = Date.now();
+    if (now - lastFetchAt.current < MIN_GAP_MS) return; // 쓰로틀
+    lastFetchAt.current = now;
+
     try {
       setLoading(true);
       setError(null);
-      const lat = 33.30988532211815;
-      const lon = 126.6372046778684;
+
       const res = await axios.get('/api/weather', { params: { lat, lon } });
       const apiContent = res.data?.weather?.[0] || null;
 
@@ -46,7 +54,6 @@ export default function useWeather() {
 
   useEffect(() => {
     mountedRef.current = true;
-    refetch();
 
     return () => {
       mountedRef.current = false;

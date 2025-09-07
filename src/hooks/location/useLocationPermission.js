@@ -9,7 +9,6 @@ export default function useLocationPermission() {
   const [error, setError] = useState(null);
 
   useEffect(() => {
-    console.log('실행됨');
     const request = async () => {
       try {
         if (Capacitor.getPlatform() === 'web') {
