@@ -10,15 +10,13 @@ export default function NeighborListItem({
   user,
   mode = 'list',
   checked = false,
-  onUnfollow,
   onToggle,
   onFollowChange,
 }) {
   const router = useRouter();
 
-  const { status, follow, unfollow, fetchStatus, loading } = useFollow(
-    user.userId
-  );
+  const { status, follow, unfollow, removeFollower, fetchStatus, loading } =
+    useFollow(user.userId);
   const isMutualFollow = status.isFollowedBy && status.isFollowing;
 
   const [showUnfollowModal, setShowUnfollowModal] = React.useState(false);
@@ -29,7 +27,6 @@ export default function NeighborListItem({
     fetchStatus();
   }, [fetchStatus, isMutualFollow]);
 
-  // 공통 핸들러
   const handleFollow = async (e, nickname) => {
     try {
       e.stopPropagation();
@@ -55,7 +52,6 @@ export default function NeighborListItem({
         message: '팔로우 취소가 완료되었습니다.',
         variant: 'success',
       });
-      onFollowChange?.();
     } catch (err) {
       show({
         message: '팔로우 취소에 실패했습니다. 다시 시도해주세요.',
@@ -101,9 +97,21 @@ export default function NeighborListItem({
             </span>
           )}
           <button
-            onClick={(e) => {
-              e.stopPropagation();
-              onUnfollow?.(user.userId);
+            onClick={async (e) => {
+              try {
+                e.stopPropagation();
+                await removeFollower();
+                show({
+                  message: `${user.nickname}님을 팔로워 리스트에서 삭제했어요.`,
+                  variant: 'success',
+                });
+                onFollowChange?.();
+              } catch (err) {
+                show({
+                  message: '팔로워 삭제에 실패했습니다. 다시 시도해주세요.',
+                  variant: 'danger',
+                });
+              }
             }}
           >
             <i className="mgc_close_fill text-neutral-400" />

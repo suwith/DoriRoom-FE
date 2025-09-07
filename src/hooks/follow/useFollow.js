@@ -2,16 +2,9 @@
 
 import { useCallback, useState } from 'react';
 import axiosInstance from '@/lib/axiosInstance';
-import { useAuthStore } from '@/stores/useAuthStore';
 
 export default function useFollow(targetUserId) {
-  const { user } = useAuthStore();
-  const [status, setStatus] = useState({
-    isFollowing: false,
-    isFollowedBy: false,
-    isBestFriend: false,
-    isMutualFollow: false,
-  });
+  const [status, setStatus] = useState({});
   const [loading, setLoading] = useState(false);
 
   const fetchStatus = useCallback(async () => {
@@ -47,12 +40,14 @@ export default function useFollow(targetUserId) {
     }
   }, [targetUserId, fetchStatus]);
 
-  return {
-    currentUserId: user?.userId,
-    status,
-    fetchStatus,
-    follow,
-    unfollow,
-    loading,
-  };
+  const removeFollower = useCallback(async () => {
+    setLoading(true);
+    try {
+      await axiosInstance.delete(`/follows/follower/${targetUserId}`);
+    } finally {
+      setLoading(false);
+    }
+  }, [targetUserId]);
+
+  return { status, follow, unfollow, removeFollower, fetchStatus, loading };
 }
