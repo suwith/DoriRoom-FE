@@ -60,7 +60,7 @@ export default function Myinfo() {
           <img
             src={info.profileImageUrl || '/images/profileImage_default.svg'}
             alt="profile_image"
-            className="rounded-full w-30 h-30 bg-main-5"
+            className="rounded-full w-30 h-30 bg-main-5 object-cover"
           />
           <div
             className="absolute -bottom-1 -right-1 rounded-full p-2 bg-neutral-100"
