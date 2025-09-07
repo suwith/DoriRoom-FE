@@ -98,7 +98,7 @@ export default function Myinfo() {
       {CPLoading && (
         <LoadingContent
           loading={CPLoading}
-          className="max-w-[390px] w-full h-full fixed top-0 bottom-0 bg-black/50 z-50"
+          className="max-w-[390px] w-full h-full fixed top-0 bottom-0 bg-black/25 z-50"
         />
       )}
     </div>
