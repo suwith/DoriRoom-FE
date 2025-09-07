@@ -4,15 +4,17 @@ import { FaXmark } from 'react-icons/fa6';
 import GaugeBar from './GaugeBar';
 import { useRouter } from 'next/navigation';
 import useAtlases from '@/hooks/collection/useAtlases';
+import manifest from '@/data/manifest.json';
+import useAtlasesClaim from '@/hooks/collection/useAtlasesClaim';
 
 const regionDetails = [
-  { atlasId: 1, name: '서울', areaGroup: 'SEOUL' },
-  { atlasId: 2, name: '경기도', areaGroup: 'GYEONGGI' },
-  { atlasId: 3, name: '강원도', areaGroup: 'GANGWON' },
-  { atlasId: 6, name: '충청도', areaGroup: 'CHUNGNAM' },
-  { atlasId: 5, name: '전라도', areaGroup: 'JEOLLA' },
-  { atlasId: 4, name: '경상도', areaGroup: 'GYEONGSANG' },
-  { atlasId: 7, name: '제주도', areaGroup: 'JEJU' },
+  { atlasId: 1, name: '서울', areaGroup: 'SEOUL', itemId: 46 },
+  { atlasId: 2, name: '경기도', areaGroup: 'GYEONGGI', itemId: 45 },
+  { atlasId: 3, name: '강원도', areaGroup: 'GANGWON', itemId: 44 },
+  { atlasId: 6, name: '충청도', areaGroup: 'CHUNGNAM', itemId: 42 },
+  { atlasId: 5, name: '전라도', areaGroup: 'JEOLLA', itemId: 47 },
+  { atlasId: 4, name: '경상도', areaGroup: 'GYEONGSANG', itemId: 43 },
+  { atlasId: 7, name: '제주도', areaGroup: 'JEJU', itemId: 41 },
 ];
 
 export default function UnifiedKoreaMap() {
@@ -21,6 +23,7 @@ export default function UnifiedKoreaMap() {
   const [viewBox, setViewBox] = useState('0 0 390 623');
 
   const { atlases, loading, error, refetch } = useAtlases();
+  const { mutate } = useAtlasesClaim();
 
   const router = useRouter();
   const animRef = useRef();
@@ -322,7 +325,16 @@ export default function UnifiedKoreaMap() {
             </div>
           </div>
           <div className="flex flex-col gap-2 items-center mt-5">
-            <img src="/images/items/bear1.png" />
+            <img
+              src={
+                manifest.items[
+                  regionDetails.find(
+                    (region) => region.atlasId === atlases.atlasId
+                  ).itemId
+                ].asset?.src
+              }
+              className="w-[90px]"
+            />
             <div className="flex gap-2 justify-center items-center font-semibold">
               <div className="bg-sub-5 px-1 py-1 text-xs text-sub-100">
                 한정판 ✨
@@ -350,11 +362,26 @@ export default function UnifiedKoreaMap() {
                   달성하여 {atlases?.claimableRewardItems?.[0]?.itemName}을 받을
                   수 있어요!
                 </span>
-                <button className="shrink-0 self-center inline-flex items-center justify-center h-7 px-2 rounded-sm bg-sub2-100 text-background text-sm leading-none whitespace-nowrap">
+                <button
+                  className="shrink-0 self-center inline-flex items-center justify-center h-7 px-2 rounded-sm bg-sub2-100 text-background text-sm leading-none whitespace-nowrap"
+                  onClick={() => {
+                    const regionTmp = regionDetails.find(
+                      (r) => r.atlasId === atlases.atlasId
+                    );
+                    const atlasRewardId =
+                      atlases?.claimableRewardItems?.[0]?.atlasRewardId;
+                    mutate({ atlasRewardId });
+                    refetch({ areaGroup: regionTmp.areaGroup });
+                  }}
+                >
                   보상 받기
                 </button>
               </div>
-            ) : Object.keys(atlases?.nextRewardItem).length ? (
+            ) : (
+                Array.isArray(atlases?.nextRewardItem)
+                  ? Object.keys(atlases?.nextRewardItem).length
+                  : false
+              ) ? (
               <div className="flex justify-between items-center mt-3">
                 <span className="font-regular text-sm text-neutral-400">
                   Lv.{atlases?.nextRewardItem?.targetLevel}을 달성하면{' '}

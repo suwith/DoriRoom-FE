@@ -17,13 +17,13 @@ import { useToast } from '@/app/_providers/ToastProvider';
 import useChallengesStart from '@/hooks/collection/useChallengesStart';
 
 const regionDetails = [
-  { atlasId: 1, name: '서울', areaGroup: 'SEOUL' },
-  { atlasId: 2, name: '경기도', areaGroup: 'GYEONGGI' },
-  { atlasId: 3, name: '강원도', areaGroup: 'GANGWON' },
-  { atlasId: 6, name: '충청도', areaGroup: 'CHUNGNAM' },
-  { atlasId: 5, name: '전라도', areaGroup: 'JEOLLA' },
-  { atlasId: 4, name: '경상도', areaGroup: 'GYEONGSANG' },
-  { atlasId: 7, name: '제주도', areaGroup: 'JEJU' },
+  { atlasId: 1, name: '서울', areaGroup: 'SEOUL', itemId: 46 },
+  { atlasId: 2, name: '경기도', areaGroup: 'GYEONGGI', itemId: 45 },
+  { atlasId: 3, name: '강원도', areaGroup: 'GANGWON', itemId: 44 },
+  { atlasId: 6, name: '충청도', areaGroup: 'CHUNGNAM', itemId: 42 },
+  { atlasId: 5, name: '전라도', areaGroup: 'JEOLLA', itemId: 47 },
+  { atlasId: 4, name: '경상도', areaGroup: 'GYEONGSANG', itemId: 43 },
+  { atlasId: 7, name: '제주도', areaGroup: 'JEJU', itemId: 41 },
 ];
 
 export default function RegionTaskCard({
