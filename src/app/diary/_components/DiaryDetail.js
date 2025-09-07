@@ -11,7 +11,7 @@ import useDiaryLike from '@/hooks/diary/useDiaryLike';
 import { useAuthStore } from '@/stores/useAuthStore';
 import useDiaryDelete from '@/hooks/diary/useDiaryDelete';
 
-export default function DiaryDetail({ diary }) {
+export default function DiaryDetail({ diary, type }) {
   const router = useRouter();
   const [isBottomOpen, setIsBottomOpen] = useState(true);
   const [showDeleteModal, setShowDeleteModal] = useState(false);
@@ -50,7 +50,7 @@ export default function DiaryDetail({ diary }) {
     <div className="pt-20 pb-60">
       <HeaderNavigationBar
         title={diary.festival?.title || ''}
-        type="diary"
+        type={type === 'neighbor' ? null : 'diary'}
         onEditClick={() => handleEdit()}
         onDeleteClick={() => setShowDeleteModal(true)}
         className="bg-background"
@@ -76,7 +76,10 @@ export default function DiaryDetail({ diary }) {
           </div>
 
           <div className="flex items-center gap-2">
-            <button className="text-[11px] px-3 py-0.5 bg-main-5 text-main-100 rounded">
+            <button
+              className="text-[11px] px-3 py-0.5 bg-main-5 text-main-100 rounded"
+              onClick={() => router.push(`/neighbor/${diary.author.id}`)}
+            >
               방문
             </button>
           </div>

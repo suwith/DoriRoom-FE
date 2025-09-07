@@ -1,5 +1,6 @@
 import axios from 'axios';
 import { useAuthStore } from '@/stores/useAuthStore';
+import { useServerStatusStore } from '@/stores/useServerStatusStore';
 
 const axiosInstance = axios.create({
   baseURL: '/api/',
@@ -41,9 +42,17 @@ axiosInstance.interceptors.response.use(
   async (err) => {
     const original = err.config || {};
     if (original._skipAuthRefresh) return Promise.reject(err);
-    if (err?.response?.status !== 401 || original._retry)
-      return Promise.reject(err);
 
+    // 서버 점검(500) 감지
+    if (err?.response?.status === 500) {
+      useServerStatusStore.getState().setServerDown(true);
+      return Promise.reject(err);
+    }
+
+    // 토큰 만료(401) 감지
+    if (err?.response?.status !== 401 || original._retry) {
+      return Promise.reject(err);
+    }
     const { refreshToken, kind, setTokens, clearTokens } =
       useAuthStore.getState();
     if (!refreshToken) return Promise.reject(err);

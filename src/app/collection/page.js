@@ -3,7 +3,6 @@
 import { useState } from 'react';
 import KoreaMap from './_components/KoreaMap';
 import TasksPage from './_components/Task/TaskPage';
-import TaskCompleteModal from './_components/Task/TaskCompleteModal';
 
 export default function Collection() {
   const [activeTab, setActiveTab] = useState(1);
@@ -44,7 +43,6 @@ export default function Collection() {
         </div>
       )}
       {activeTab === 2 && <TasksPage type="general" />}
-      <TaskCompleteModal isOpen={false} />
     </div>
   );
 }

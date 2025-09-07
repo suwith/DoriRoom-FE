@@ -7,7 +7,7 @@ const comments = [
   'xp와 도깨비불은 과제 난이도와 비례해요',
 ];
 
-export default function TaskInfoModal({ isOpen, setIsOpen }) {
+export default function TaskInfoModal({ isOpen, setIsOpen, atlases }) {
   if (!isOpen) return null;
   const portalElement = document.getElementById('main');
 
@@ -35,7 +35,9 @@ export default function TaskInfoModal({ isOpen, setIsOpen }) {
           <div className="bg-sub-5 px-1 py-1 text-sm font-semibold text-sub-100">
             한정판 ✨
           </div>
-          <p className="text-lg text-main-100">반달가슴곰 인형</p>
+          <p className="text-lg text-main-100">
+            {atlases.nextRewardItem?.itemName}
+          </p>
         </div>
         <div className="space-y-2 w-full mt-5">
           {comments.map((comment, idx) => (
