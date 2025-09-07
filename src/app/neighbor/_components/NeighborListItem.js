@@ -29,6 +29,41 @@ export default function NeighborListItem({
     fetchStatus();
   }, [fetchStatus, isMutualFollow]);
 
+  // 공통 핸들러
+  const handleFollow = async (e, nickname) => {
+    try {
+      e.stopPropagation();
+      await follow();
+      show({
+        message: `${nickname}님을 팔로우 했어요!`,
+        variant: 'success',
+      });
+      onFollowChange?.();
+    } catch (err) {
+      show({
+        message: '팔로우에 실패했습니다. 다시 시도해주세요.',
+        variant: 'danger',
+      });
+    }
+  };
+
+  const handleUnfollow = async (e) => {
+    try {
+      e.stopPropagation();
+      await unfollow();
+      show({
+        message: '팔로우 취소가 완료되었습니다.',
+        variant: 'success',
+      });
+      onFollowChange?.();
+    } catch (err) {
+      show({
+        message: '팔로우 취소에 실패했습니다. 다시 시도해주세요.',
+        variant: 'danger',
+      });
+    }
+  };
+
   return (
     <li
       onClick={(e) => {
@@ -59,28 +94,12 @@ export default function NeighborListItem({
         <div className="flex items-center gap-2">
           {!isMutualFollow && (
             <span
-              onClick={async (e) => {
-                try {
-                  e.stopPropagation();
-                  follow();
-                  show({
-                    message: `${user.nickname}님을 팔로우 했어요!`,
-                    variant: 'success',
-                  });
-                  onFollowChange?.();
-                } catch (_) {
-                  show({
-                    message: '팔로우 실패했습니다. 다시 시도해주세요.',
-                    variant: 'danger',
-                  });
-                }
-              }}
+              onClick={(e) => handleFollow(e, user.nickname)}
               className="px-2 py-1 text-xs bg-main-100 text-background rounded"
             >
               맞팔로우
             </span>
           )}
-
           <button
             onClick={(e) => {
               e.stopPropagation();
@@ -91,6 +110,7 @@ export default function NeighborListItem({
           </button>
         </div>
       )}
+
       {mode === 'followings' && (
         <>
           {status.isFollowing ? (
@@ -106,15 +126,7 @@ export default function NeighborListItem({
             </button>
           ) : (
             <button
-              onClick={(e) => {
-                e.stopPropagation();
-                follow();
-                show({
-                  message: `${user.nickname}님을 팔로우 했어요!`,
-                  variant: 'success',
-                });
-                onFollowChange?.();
-              }}
+              onClick={(e) => handleFollow(e, user.nickname)}
               className="px-2 py-1 rounded bg-main-100 text-background text-xs"
               disabled={loading}
             >
@@ -132,15 +144,9 @@ export default function NeighborListItem({
           }}
         >
           {checked ? (
-            <i
-              className={`flex mgc_check_circle_fill text-main-100 text-xl }`}
-            />
+            <i className="flex mgc_check_circle_fill text-main-100 text-xl" />
           ) : (
-            <i
-              className={`w-4 h-4 mr-0.5 flex items-center justify-center rounded-full border
-              text-main-100
-              }`}
-            />
+            <i className="w-4 h-4 mr-0.5 flex items-center justify-center rounded-full border text-main-100" />
           )}
         </button>
       )}
@@ -149,17 +155,14 @@ export default function NeighborListItem({
         <TwoButtonModal
           title="정말 팔로우를 취소하시겠어요?"
           cancelText="아니오"
-          onCancel={() => setShowUnfollowModal(false)}
-          confirmText="네, 취소할래요"
-          onConfirm={(e) => {
+          onCancel={(e) => {
             e.stopPropagation();
-            unfollow();
             setShowUnfollowModal(false);
-            show({
-              message: '취소가 완료되었습니다.',
-              variant: 'success',
-            });
-            onFollowChange?.();
+          }}
+          confirmText="네, 취소할래요"
+          onConfirm={async (e) => {
+            await handleUnfollow(e);
+            setShowUnfollowModal(false);
           }}
         />
       )}
