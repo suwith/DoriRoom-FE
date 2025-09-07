@@ -6,6 +6,7 @@ import useMyRoom from '@/hooks/user/useMyRoom';
 import LoadingContent from './_components/LoadingContent';
 import manifest from '@/data/manifest.json';
 import { useRouter } from 'next/navigation';
+import weather from '@/data/weather.json';
 
 const DEFAULT_FLOOR = 39;
 const DEFAULT_SHELF = 38;
@@ -101,7 +102,7 @@ export default function Home() {
             />
             {/* 날씨(가운데) */}
             <img
-              src={manifest.items[41]?.asset.src}
+              src={weather[1]?.asset.src}
               alt=""
               className="absolute left-1/2 top-11 -translate-x-1/2"
               style={{ zIndex: zIndex.WINDOW - 1 }} // 창문 아래
