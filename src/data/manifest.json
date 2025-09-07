@@ -1,7 +1,7 @@
 {
   "version": 2,
   "keyedBy": "itemId",
-  "generatedAt": "2025-09-01T07:51:19.830877Z",
+  "generatedAt": "2025-09-07T03:34:15.791747Z",
   "defaults": {
     "zIndex": {
       "WALL": 1,
@@ -18,15 +18,14 @@
       "name": "사물함 선반",
       "type": "SHELF",
       "group": "COMMON",
-      "slot": "shelf",
+      "slot": "object",
       "theme": "CLASSROOM",
-      "price": null,
+      "price": 0,
       "purchasable": false,
-      "defaultOwned": true,
+      "defaultOwned": false,
       "asset": {
         "src": "/images/items/SHELF/사물함-선반.svg",
         "thumb": "/images/thumb/SHELF/사물함-선반.svg",
-        "z": 50,
         "ox": 0,
         "oy": 0
       }
@@ -36,15 +35,14 @@
       "name": "굴뚝 선반",
       "type": "SHELF",
       "group": "COMMON",
-      "slot": "shelf",
+      "slot": "object",
       "theme": "WINTER",
       "price": 10,
-      "purchasable": false,
-      "defaultOwned": true,
+      "purchasable": true,
+      "defaultOwned": false,
       "asset": {
         "src": "/images/items/SHELF/굴뚝-선반.svg",
         "thumb": "/images/thumb/SHELF/굴뚝-선반.svg",
-        "z": 50,
         "ox": 0,
         "oy": 0
       }
@@ -54,15 +52,14 @@
       "name": "캠핑의자 선반",
       "type": "SHELF",
       "group": "COMMON",
-      "slot": "shelf",
+      "slot": "object",
       "theme": "PICNIC",
       "price": 20,
-      "purchasable": false,
-      "defaultOwned": true,
+      "purchasable": true,
+      "defaultOwned": false,
       "asset": {
         "src": "/images/items/SHELF/캠핑의자-선반.svg",
         "thumb": "/images/thumb/SHELF/캠핑의자-선반.svg",
-        "z": 50,
         "ox": 0,
         "oy": 0
       }
@@ -72,15 +69,14 @@
       "name": "파라솔 선반",
       "type": "SHELF",
       "group": "COMMON",
-      "slot": "shelf",
+      "slot": "object",
       "theme": "SUMMER",
       "price": 30,
-      "purchasable": false,
-      "defaultOwned": true,
+      "purchasable": true,
+      "defaultOwned": false,
       "asset": {
         "src": "/images/items/SHELF/파라솔-선반.svg",
         "thumb": "/images/thumb/SHELF/파라솔-선반.svg",
-        "z": 50,
         "ox": 0,
         "oy": 0
       }
@@ -90,15 +86,14 @@
       "name": "아이스크림 선반",
       "type": "SHELF",
       "group": "COMMON",
-      "slot": "shelf",
+      "slot": "object",
       "theme": "DESSERT",
       "price": 40,
-      "purchasable": false,
-      "defaultOwned": true,
+      "purchasable": true,
+      "defaultOwned": false,
       "asset": {
         "src": "/images/items/SHELF/아이스크림-선반.svg",
         "thumb": "/images/thumb/SHELF/아이스크림-선반.svg",
-        "z": 50,
         "ox": 0,
         "oy": 0
       }
@@ -108,15 +103,14 @@
       "name": "선물 선반",
       "type": "SHELF",
       "group": "COMMON",
-      "slot": "shelf",
+      "slot": "object",
       "theme": "BIRTHDAY",
       "price": 50,
-      "purchasable": false,
-      "defaultOwned": true,
+      "purchasable": true,
+      "defaultOwned": false,
       "asset": {
         "src": "/images/items/SHELF/선물-선반.svg",
         "thumb": "/images/thumb/SHELF/선물-선반.svg",
-        "z": 50,
         "ox": 0,
         "oy": 0
       }
@@ -129,12 +123,11 @@
       "slot": "object",
       "theme": "CLASSROOM",
       "price": 10,
-      "purchasable": false,
-      "defaultOwned": true,
+      "purchasable": true,
+      "defaultOwned": false,
       "asset": {
         "src": "/images/items/OBJECT/책.svg",
         "thumb": "/images/thumb/OBJECT/책.svg",
-        "z": 70,
         "ox": 0,
         "oy": 0
       }
@@ -147,12 +140,11 @@
       "slot": "object",
       "theme": "WINTER",
       "price": 20,
-      "purchasable": false,
-      "defaultOwned": true,
+      "purchasable": true,
+      "defaultOwned": false,
       "asset": {
         "src": "/images/items/OBJECT/이글루.svg",
         "thumb": "/images/thumb/OBJECT/이글루.svg",
-        "z": 70,
         "ox": 0,
         "oy": 0
       }
@@ -165,12 +157,11 @@
       "slot": "object",
       "theme": "PICNIC",
       "price": 30,
-      "purchasable": false,
-      "defaultOwned": true,
+      "purchasable": true,
+      "defaultOwned": false,
       "asset": {
         "src": "/images/items/OBJECT/사과바구니.svg",
         "thumb": "/images/thumb/OBJECT/사과바구니.svg",
-        "z": 70,
         "ox": 0,
         "oy": 0
       }
@@ -183,12 +174,11 @@
       "slot": "object",
       "theme": "SUMMER",
       "price": 40,
-      "purchasable": false,
-      "defaultOwned": true,
+      "purchasable": true,
+      "defaultOwned": false,
       "asset": {
         "src": "/images/items/OBJECT/해바라기.svg",
         "thumb": "/images/thumb/OBJECT/해바라기.svg",
-        "z": 70,
         "ox": 0,
         "oy": 0
       }
@@ -201,12 +191,11 @@
       "slot": "object",
       "theme": "DESSERT",
       "price": 50,
-      "purchasable": false,
-      "defaultOwned": true,
+      "purchasable": true,
+      "defaultOwned": false,
       "asset": {
         "src": "/images/items/OBJECT/사탕다발.svg",
         "thumb": "/images/thumb/OBJECT/사탕다발.svg",
-        "z": 70,
         "ox": 0,
         "oy": 0
       }
@@ -219,12 +208,11 @@
       "slot": "object",
       "theme": "BIRTHDAY",
       "price": 60,
-      "purchasable": false,
-      "defaultOwned": true,
+      "purchasable": true,
+      "defaultOwned": false,
       "asset": {
         "src": "/images/items/OBJECT/풍선개.svg",
         "thumb": "/images/thumb/OBJECT/풍선개.svg",
-        "z": 70,
         "ox": 0,
         "oy": 0
       }
@@ -234,15 +222,14 @@
       "name": "비행기 창문",
       "type": "WINDOW",
       "group": "COMMON",
-      "slot": "window",
+      "slot": "object",
       "theme": "CLASSROOM",
-      "price": null,
-      "purchasable": false,
-      "defaultOwned": true,
+      "price": 10,
+      "purchasable": true,
+      "defaultOwned": false,
       "asset": {
         "src": "/images/items/WINDOW/비행기-창문.svg",
         "thumb": "/images/thumb/WINDOW/비행기-창문.svg",
-        "z": 45,
         "ox": 0,
         "oy": 0
       }
@@ -252,15 +239,14 @@
       "name": "눈밭 창문",
       "type": "WINDOW",
       "group": "COMMON",
-      "slot": "window",
+      "slot": "object",
       "theme": "WINTER",
-      "price": 10,
-      "purchasable": false,
-      "defaultOwned": true,
+      "price": 20,
+      "purchasable": true,
+      "defaultOwned": false,
       "asset": {
         "src": "/images/items/WINDOW/눈밭-창문.svg",
         "thumb": "/images/thumb/WINDOW/눈밭-창문.svg",
-        "z": 45,
         "ox": 0,
         "oy": 0
       }
@@ -270,15 +256,14 @@
       "name": "자연 창문",
       "type": "WINDOW",
       "group": "COMMON",
-      "slot": "window",
+      "slot": "object",
       "theme": "PICNIC",
-      "price": 20,
-      "purchasable": false,
-      "defaultOwned": true,
+      "price": 30,
+      "purchasable": true,
+      "defaultOwned": false,
       "asset": {
         "src": "/images/items/WINDOW/자연-창문.svg",
         "thumb": "/images/thumb/WINDOW/자연-창문.svg",
-        "z": 45,
         "ox": 0,
         "oy": 0
       }
@@ -288,15 +273,14 @@
       "name": "야자수 창문",
       "type": "WINDOW",
       "group": "COMMON",
-      "slot": "window",
+      "slot": "object",
       "theme": "SUMMER",
-      "price": 30,
-      "purchasable": false,
-      "defaultOwned": true,
+      "price": 40,
+      "purchasable": true,
+      "defaultOwned": false,
       "asset": {
         "src": "/images/items/WINDOW/야자수-창문.svg",
         "thumb": "/images/thumb/WINDOW/야자수-창문.svg",
-        "z": 45,
         "ox": 0,
         "oy": 0
       }
@@ -306,15 +290,14 @@
       "name": "초콜릿 창문",
       "type": "WINDOW",
       "group": "COMMON",
-      "slot": "window",
+      "slot": "object",
       "theme": "DESSERT",
-      "price": 40,
-      "purchasable": false,
-      "defaultOwned": true,
+      "price": 50,
+      "purchasable": true,
+      "defaultOwned": false,
       "asset": {
         "src": "/images/items/WINDOW/초콜릿-창문.svg",
         "thumb": "/images/thumb/WINDOW/초콜릿-창문.svg",
-        "z": 45,
         "ox": 0,
         "oy": 0
       }
@@ -324,15 +307,14 @@
       "name": "전구 창문",
       "type": "WINDOW",
       "group": "COMMON",
-      "slot": "window",
+      "slot": "object",
       "theme": "BIRTHDAY",
-      "price": 50,
-      "purchasable": false,
-      "defaultOwned": true,
+      "price": 60,
+      "purchasable": true,
+      "defaultOwned": false,
       "asset": {
         "src": "/images/items/WINDOW/전구-창문.svg",
         "thumb": "/images/thumb/WINDOW/전구-창문.svg",
-        "z": 45,
         "ox": 0,
         "oy": 0
       }
@@ -342,16 +324,14 @@
       "name": "교실 바닥",
       "type": "FLOOR",
       "group": "COMMON",
-      "slot": "floor",
+      "slot": "object",
       "theme": "CLASSROOM",
       "price": 10,
-      "purchasable": false,
-      "defaultOwned": true,
+      "purchasable": true,
+      "defaultOwned": false,
       "asset": {
         "src": "/images/items/FLOOR/교실-바닥.svg",
         "thumb": "/images/thumb/FLOOR/교실-바닥.svg",
-        "shop": "/images/shop/FLOOR/교실-바닥.svg",
-        "z": 20,
         "ox": 0,
         "oy": 0
       }
@@ -361,16 +341,14 @@
       "name": "얼음 바닥",
       "type": "FLOOR",
       "group": "COMMON",
-      "slot": "floor",
+      "slot": "object",
       "theme": "WINTER",
       "price": 20,
-      "purchasable": false,
-      "defaultOwned": true,
+      "purchasable": true,
+      "defaultOwned": false,
       "asset": {
         "src": "/images/items/FLOOR/얼음-바닥.svg",
         "thumb": "/images/thumb/FLOOR/얼음-바닥.svg",
-        "shop": "/images/shop/FLOOR/얼음-바닥.svg",
-        "z": 20,
         "ox": 0,
         "oy": 0
       }
@@ -380,16 +358,14 @@
       "name": "식탁보 바닥",
       "type": "FLOOR",
       "group": "COMMON",
-      "slot": "floor",
+      "slot": "object",
       "theme": "PICNIC",
       "price": 30,
-      "purchasable": false,
-      "defaultOwned": true,
+      "purchasable": true,
+      "defaultOwned": false,
       "asset": {
         "src": "/images/items/FLOOR/식탁보-바닥.svg",
         "thumb": "/images/thumb/FLOOR/식탁보-바닥.svg",
-        "shop": "/images/shop/FLOOR/식탁보-바닥.svg",
-        "z": 20,
         "ox": 0,
         "oy": 0
       }
@@ -399,16 +375,14 @@
       "name": "모래사장 바닥",
       "type": "FLOOR",
       "group": "COMMON",
-      "slot": "floor",
+      "slot": "object",
       "theme": "SUMMER",
       "price": 40,
-      "purchasable": false,
-      "defaultOwned": true,
+      "purchasable": true,
+      "defaultOwned": false,
       "asset": {
         "src": "/images/items/FLOOR/모래사장-바닥.svg",
         "thumb": "/images/thumb/FLOOR/모래사장-바닥.svg",
-        "shop": "/images/shop/FLOOR/모래사장-바닥.svg",
-        "z": 20,
         "ox": 0,
         "oy": 0
       }
@@ -418,16 +392,14 @@
       "name": "쿠키 바닥",
       "type": "FLOOR",
       "group": "COMMON",
-      "slot": "floor",
+      "slot": "object",
       "theme": "DESSERT",
       "price": 50,
-      "purchasable": false,
-      "defaultOwned": true,
+      "purchasable": true,
+      "defaultOwned": false,
       "asset": {
         "src": "/images/items/FLOOR/쿠키-바닥.svg",
         "thumb": "/images/thumb/FLOOR/쿠키-바닥.svg",
-        "shop": "/images/shop/FLOOR/쿠키-바닥.svg",
-        "z": 20,
         "ox": 0,
         "oy": 0
       }
@@ -437,16 +409,14 @@
       "name": "핑크 카펫 바닥",
       "type": "FLOOR",
       "group": "COMMON",
-      "slot": "floor",
+      "slot": "object",
       "theme": "BIRTHDAY",
       "price": 60,
-      "purchasable": false,
-      "defaultOwned": true,
+      "purchasable": true,
+      "defaultOwned": false,
       "asset": {
         "src": "/images/items/FLOOR/핑크-카펫-바닥.svg",
         "thumb": "/images/thumb/FLOOR/핑크-카펫-바닥.svg",
-        "shop": "/images/shop/FLOOR/핑크-카펫-바닥.svg",
-        "z": 20,
         "ox": 0,
         "oy": 0
       }
@@ -456,16 +426,14 @@
       "name": "칠판 벽지",
       "type": "WALL",
       "group": "COMMON",
-      "slot": "wall",
+      "slot": "object",
       "theme": "CLASSROOM",
       "price": 10,
-      "purchasable": false,
-      "defaultOwned": true,
+      "purchasable": true,
+      "defaultOwned": false,
       "asset": {
         "src": "/images/items/WALL/칠판-벽지.svg",
         "thumb": "/images/thumb/WALL/칠판-벽지.svg",
-        "shop": "/images/shop/WALL/칠판-벽지.svg",
-        "z": 10,
         "ox": 0,
         "oy": 0
       }
@@ -475,16 +443,14 @@
       "name": "눈꽃 벽지",
       "type": "WALL",
       "group": "COMMON",
-      "slot": "wall",
+      "slot": "object",
       "theme": "WINTER",
       "price": 20,
-      "purchasable": false,
-      "defaultOwned": true,
+      "purchasable": true,
+      "defaultOwned": false,
       "asset": {
         "src": "/images/items/WALL/눈꽃-벽지.svg",
         "thumb": "/images/thumb/WALL/눈꽃-벽지.svg",
-        "shop": "/images/shop/WALL/눈꽃-벽지.svg",
-        "z": 10,
         "ox": 0,
         "oy": 0
       }
@@ -494,16 +460,14 @@
       "name": "구름 벽지",
       "type": "WALL",
       "group": "COMMON",
-      "slot": "wall",
+      "slot": "object",
       "theme": "PICNIC",
       "price": 30,
-      "purchasable": false,
-      "defaultOwned": true,
+      "purchasable": true,
+      "defaultOwned": false,
       "asset": {
         "src": "/images/items/WALL/구름-벽지.svg",
         "thumb": "/images/thumb/WALL/구름-벽지.svg",
-        "shop": "/images/shop/WALL/구름-벽지.svg",
-        "z": 10,
         "ox": 0,
         "oy": 0
       }
@@ -513,16 +477,14 @@
       "name": "조개 벽지",
       "type": "WALL",
       "group": "COMMON",
-      "slot": "wall",
+      "slot": "object",
       "theme": "SUMMER",
       "price": 40,
-      "purchasable": false,
-      "defaultOwned": true,
+      "purchasable": true,
+      "defaultOwned": false,
       "asset": {
         "src": "/images/items/WALL/조개-벽지.svg",
         "thumb": "/images/thumb/WALL/조개-벽지.svg",
-        "shop": "/images/shop/WALL/조개-벽지.svg",
-        "z": 10,
         "ox": 0,
         "oy": 0
       }
@@ -532,16 +494,14 @@
       "name": "롤리팝 벽지",
       "type": "WALL",
       "group": "COMMON",
-      "slot": "wall",
+      "slot": "object",
       "theme": "DESSERT",
       "price": 50,
-      "purchasable": false,
-      "defaultOwned": true,
+      "purchasable": true,
+      "defaultOwned": false,
       "asset": {
         "src": "/images/items/WALL/롤리팝-벽지.svg",
         "thumb": "/images/thumb/WALL/롤리팝-벽지.svg",
-        "shop": "/images/shop/WALL/롤리팝-벽지.svg",
-        "z": 10,
         "ox": 0,
         "oy": 0
       }
@@ -551,16 +511,14 @@
       "name": "풍선 벽지",
       "type": "WALL",
       "group": "COMMON",
-      "slot": "wall",
+      "slot": "object",
       "theme": "BIRTHDAY",
       "price": 60,
-      "purchasable": false,
-      "defaultOwned": true,
+      "purchasable": true,
+      "defaultOwned": false,
       "asset": {
         "src": "/images/items/WALL/풍선-벽지.svg",
         "thumb": "/images/thumb/WALL/풍선-벽지.svg",
-        "shop": "/images/shop/WALL/풍선-벽지.svg",
-        "z": 10,
         "ox": 0,
         "oy": 0
       }
@@ -570,15 +528,14 @@
       "name": "도리",
       "type": "APPAREL",
       "group": "COMMON",
-      "slot": "apparel",
-      "theme": "",
-      "price": null,
-      "purchasable": false,
+      "slot": "object",
+      "theme": null,
+      "price": 0,
+      "purchasable": true,
       "defaultOwned": true,
       "asset": {
         "src": "/images/items/APPAREL/도리.svg",
         "thumb": "/images/thumb/APPAREL/도리.svg",
-        "z": 10,
         "ox": 0,
         "oy": 0
       }
@@ -588,15 +545,14 @@
       "name": "학사모 도리",
       "type": "APPAREL",
       "group": "COMMON",
-      "slot": "apparel",
+      "slot": "object",
       "theme": "CLASSROOM",
-      "price": null,
-      "purchasable": false,
-      "defaultOwned": true,
+      "price": 10,
+      "purchasable": true,
+      "defaultOwned": false,
       "asset": {
         "src": "/images/items/APPAREL/학사모-도리.svg",
         "thumb": "/images/thumb/APPAREL/학사모-도리.svg",
-        "z": 10,
         "ox": 0,
         "oy": 0
       }
@@ -606,15 +562,14 @@
       "name": "목도리 도리",
       "type": "APPAREL",
       "group": "COMMON",
-      "slot": "apparel",
+      "slot": "object",
       "theme": "WINTER",
-      "price": null,
-      "purchasable": false,
-      "defaultOwned": true,
+      "price": 20,
+      "purchasable": true,
+      "defaultOwned": false,
       "asset": {
         "src": "/images/items/APPAREL/목도리-도리.svg",
         "thumb": "/images/thumb/APPAREL/목도리-도리.svg",
-        "z": 10,
         "ox": 0,
         "oy": 0
       }
@@ -624,15 +579,14 @@
       "name": "빨간망토 도리",
       "type": "APPAREL",
       "group": "COMMON",
-      "slot": "apparel",
+      "slot": "object",
       "theme": "PICNIC",
-      "price": null,
-      "purchasable": false,
-      "defaultOwned": true,
+      "price": 30,
+      "purchasable": true,
+      "defaultOwned": false,
       "asset": {
         "src": "/images/items/APPAREL/빨간망토-도리.svg",
         "thumb": "/images/thumb/APPAREL/빨간망토-도리.svg",
-        "z": 10,
         "ox": 0,
         "oy": 0
       }
@@ -642,15 +596,14 @@
       "name": "튜브 도리",
       "type": "APPAREL",
       "group": "COMMON",
-      "slot": "apparel",
+      "slot": "object",
       "theme": "SUMMER",
-      "price": null,
-      "purchasable": false,
-      "defaultOwned": true,
+      "price": 40,
+      "purchasable": true,
+      "defaultOwned": false,
       "asset": {
         "src": "/images/items/APPAREL/튜브-도리.svg",
         "thumb": "/images/thumb/APPAREL/튜브-도리.svg",
-        "z": 10,
         "ox": 0,
         "oy": 0
       }
@@ -660,33 +613,31 @@
       "name": "메론빵 도리",
       "type": "APPAREL",
       "group": "COMMON",
-      "slot": "apparel",
+      "slot": "object",
       "theme": "DESSERT",
-      "price": null,
-      "purchasable": false,
-      "defaultOwned": true,
+      "price": 50,
+      "purchasable": true,
+      "defaultOwned": false,
       "asset": {
         "src": "/images/items/APPAREL/메론빵-도리.svg",
         "thumb": "/images/thumb/APPAREL/메론빵-도리.svg",
-        "z": 10,
         "ox": 0,
         "oy": 0
       }
     },
     "37": {
       "id": "37",
-      "name": "생일파티 도리",
+      "name": "생일파리 도리",
       "type": "APPAREL",
       "group": "COMMON",
-      "slot": "apparel",
+      "slot": "object",
       "theme": "BIRTHDAY",
-      "price": null,
-      "purchasable": false,
-      "defaultOwned": true,
+      "price": 60,
+      "purchasable": true,
+      "defaultOwned": false,
       "asset": {
         "src": "/images/items/APPAREL/생일파티-도리.svg",
         "thumb": "/images/thumb/APPAREL/생일파티-도리.svg",
-        "z": 10,
         "ox": 0,
         "oy": 0
       }
@@ -696,15 +647,14 @@
       "name": "기본 선반",
       "type": "SHELF",
       "group": "COMMON",
-      "slot": "apparel",
+      "slot": "object",
       "theme": null,
-      "price": null,
-      "purchasable": false,
+      "price": 0,
+      "purchasable": true,
       "defaultOwned": true,
       "asset": {
         "src": "/images/items/SHELF/기본-선반.svg",
         "thumb": "/images/thumb/SHELF/기본-선반.svg",
-        "z": 10,
         "ox": 0,
         "oy": 0
       }
@@ -714,16 +664,15 @@
       "name": "기본 바닥",
       "type": "FLOOR",
       "group": "COMMON",
-      "slot": "apparel",
+      "slot": "object",
       "theme": null,
-      "price": null,
-      "purchasable": false,
+      "price": 0,
+      "purchasable": true,
       "defaultOwned": true,
       "asset": {
         "src": "/images/items/FLOOR/기본-바닥.svg",
         "thumb": "/images/thumb/FLOOR/기본-바닥.svg",
         "shop": "/images/shop/FLOOR/기본-바닥.svg",
-        "z": 10,
         "ox": 0,
         "oy": 0
       }
@@ -733,84 +682,133 @@
       "name": "기본 창문",
       "type": "WINDOW",
       "group": "COMMON",
-      "slot": "window",
+      "slot": "object",
       "theme": null,
-      "price": null,
-      "purchasable": false,
+      "price": 0,
+      "purchasable": true,
       "defaultOwned": true,
       "asset": {
         "src": "/images/items/WINDOW/기본-창문.svg",
         "thumb": "/images/thumb/WINDOW/기본-창문.svg",
-        "shop": "/images/shop/WINDOW/기본-창문.svg",
-        "z": 10,
         "ox": 0,
         "oy": 0
       }
     },
     "41": {
       "id": "41",
-      "name": "맑음",
-      "type": "WEATHER",
+      "name": "감귤 도리",
+      "type": "APPAREL",
       "group": "COMMON",
-      "slot": "",
+      "slot": "object",
       "theme": null,
-      "price": null,
-      "purchasable": false,
+      "price": 0,
+      "purchasable": true,
       "defaultOwned": true,
       "asset": {
-        "src": "/images/items/WEATHER/맑음.svg",
-        "z": 10,
+        "src": "/images/items/APPAREL/감귤-도리.svg",
+        "thumb": "/images/thumb/APPAREL/감귤-도리.svg",
         "ox": 0,
         "oy": 0
       }
     },
     "42": {
       "id": "42",
-      "name": "눈",
-      "type": "WEATHER",
+      "name": "복숭아 도리",
+      "type": "APPAREL",
       "group": "COMMON",
-      "slot": "",
+      "slot": "object",
       "theme": null,
-      "price": null,
-      "purchasable": false,
+      "price": 0,
+      "purchasable": true,
       "defaultOwned": true,
       "asset": {
-        "src": "/images/items/WEATHER/눈.svg",
-        "z": 10,
+        "src": "/images/items/APPAREL/복숭아-도리.svg",
+        "thumb": "/images/thumb/APPAREL/복숭아-도리.svg",
         "ox": 0,
         "oy": 0
       }
     },
     "43": {
       "id": "43",
-      "name": "비",
-      "type": "WEATHER",
+      "name": "부산어묵 도리",
+      "type": "OBJECT",
       "group": "COMMON",
-      "slot": "",
+      "slot": "object",
       "theme": null,
-      "price": null,
-      "purchasable": false,
+      "price": 0,
+      "purchasable": true,
       "defaultOwned": true,
       "asset": {
-        "src": "/images/items/WEATHER/비.svg",
-        "z": 10,
+        "src": "/images/items/APPAREL/부산어묵-도리.svg",
+        "thumb": "/images/thumb/APPAREL/부산어묵-도리.svg",
         "ox": 0,
         "oy": 0
       }
     },
     "44": {
       "id": "44",
-      "name": "흐림",
-      "type": "WEATHER",
+      "name": "반달가슴곰 인형",
+      "type": "OBJECT",
       "group": "COMMON",
-      "slot": "",
+      "slot": "object",
       "theme": null,
-      "price": null,
-      "purchasable": false,
+      "price": 0,
+      "purchasable": true,
       "defaultOwned": true,
       "asset": {
-        "src": "/images/items/WEATHER/흐림.svg",
-        "z": 10,
+        "src": "/images/items/OBJECT/반달가슴곰-인형.svg",
+        "thumb": "/images/thumb/OBJECT/반달가슴곰-인형.svg",
+        "ox": 0,
+        "oy": 0
+      }
+    },
+    "45": {
+      "id": "45",
+      "name": "빨간버스",
+      "type": "OBJECT",
+      "group": "COMMON",
+      "slot": "object",
+      "theme": null,
+      "price": 0,
+      "purchasable": true,
+      "defaultOwned": true,
+      "asset": {
+        "src": "/images/items/OBJECT/빨간버스.svg",
+        "thumb": "/images/thumb/OBJECT/빨간버스.svg",
+        "ox": 0,
+        "oy": 0
+      }
+    },
+    "46": {
+      "id": "46",
+      "name": "해치 인형",
+      "type": "OBJECT",
+      "group": "COMMON",
+      "slot": "object",
+      "theme": null,
+      "price": 0,
+      "purchasable": true,
+      "defaultOwned": true,
+      "asset": {
+        "src": "/images/items/OBJECT/해치-인형.svg",
+        "thumb": "/images/thumb/OBJECT/해치-인형.svg",
+        "ox": 0,
+        "oy": 0
+      }
+    },
+    "47": {
+      "id": "47",
+      "name": "토용 도리",
+      "type": "OBJECT",
+      "group": "COMMON",
+      "slot": "object",
+      "theme": null,
+      "price": 0,
+      "purchasable": true,
+      "defaultOwned": true,
+      "asset": {
+        "src": "/images/items/OBJECT/토용-도리.svg",
+        "thumb": "/images/thumb/OBJECT/토용-도리.svg",
         "ox": 0,
         "oy": 0
       }

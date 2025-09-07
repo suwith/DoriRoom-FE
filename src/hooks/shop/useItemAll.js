@@ -30,7 +30,7 @@ export default function useItemAll() {
       const res = await axiosInstance.get('items');
       const raw = Array.isArray(res.data?.content) ? res.data.content : [];
       const apiContent = raw
-        .filter((item) => item?.isPurchasable === true)
+        .filter((item) => item?.isPurchasable === false)
         .map(normalizeItem);
 
       if (!mountedRef.current) return;
