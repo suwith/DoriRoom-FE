@@ -147,6 +147,9 @@ export default function RegionTaskCard({
   return (
     <div
       className={`rounded-xl p-3 ${status === 'COMPLETED' ? 'bg-sub-5' : status === 'IN_PROGRESS' ? 'bg-[#35C284]/15' : status === 'WAIT_REWARD' ? 'bg-sub2-5' : 'bg-neutral-100'}`}
+      onClick={() => {
+        if (eventId) router.push(`/festival/${eventId}`);
+      }}
     >
       <div className="flex justify-between items-center">
         <div className="flex gap-1 items-center text-xs">
