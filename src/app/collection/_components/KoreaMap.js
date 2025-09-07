@@ -383,11 +383,7 @@ export default function UnifiedKoreaMap() {
                   보상 받기
                 </button>
               </div>
-            ) : (
-                Array.isArray(atlases?.nextRewardItem)
-                  ? Object.keys(atlases?.nextRewardItem).length
-                  : false
-              ) ? (
+            ) : Object.keys(atlases?.nextRewardItem ?? {}).length !== 0 ? (
               <div className="flex justify-between items-center mt-3">
                 <span className="font-regular text-sm text-neutral-400">
                   Lv.{atlases?.nextRewardItem?.targetLevel}을 달성하면{' '}
