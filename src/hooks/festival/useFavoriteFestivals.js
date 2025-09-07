@@ -17,7 +17,7 @@ function normalizeFestival(item) {
     category: item.categoryName,
     likes: typeof item.favoriteCount === 'number' ? item.favoriteCount : 0,
     thumbnail: item.firstImage || item.secondImage || '',
-    reviews: Array.isArray(item.reviews) ? item.reviews : [],
+    reviews: typeof item.diaryCount === 'number' ? item.diaryCount : 0,
   };
 }
 
