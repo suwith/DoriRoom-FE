@@ -17,6 +17,8 @@ function normalizeWeather(item) {
       return 3;
     if (id >= 600 && id <= 622) return 2;
   }
+
+  return 1; // 미분류 시 기본을 맑음으로 처리
 }
 
 export default function useWeather() {
@@ -33,7 +35,6 @@ export default function useWeather() {
 
     const now = Date.now();
     if (now - lastFetchAt.current < MIN_GAP_MS) return; // 쓰로틀
-    lastFetchAt.current = now;
 
     try {
       setLoading(true);
@@ -44,13 +45,14 @@ export default function useWeather() {
 
       if (!mountedRef.current) return;
       setWeather(normalizeWeather(apiContent));
+      lastFetchAt.current = now;
     } catch (e) {
       if (!mountedRef.current) return;
       setError(e);
     } finally {
       if (mountedRef.current) setLoading(false);
     }
-  });
+  }, []);
 
   useEffect(() => {
     mountedRef.current = true;

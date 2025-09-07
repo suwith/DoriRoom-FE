@@ -41,7 +41,8 @@ export default function Home() {
   // 좌표가 준비되면 날씨 호출 (쓰로틀은 useWeather 내부에서 처리)
   useEffect(() => {
     if (!granted) return;
-    if (!location?.lat || !location?.lng) return;
+    if (!Number.isFinite(location?.lat) || !Number.isFinite(location?.lng))
+      return;
     refetch({ lat: location.lat, lon: location.lng });
   }, [granted, location?.lat, location?.lng, refetch]);
 
