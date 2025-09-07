@@ -3,18 +3,16 @@
 import axiosInstance from '@/lib/axiosInstance';
 import { useState, useCallback, useEffect, useRef } from 'react';
 
-function normalizeGuestBook(api) {
+function normalizeQuiz(api) {
   if (!api) return null;
   return {
-    guestbookId: api.guestbookId,
-    content: api.content,
-    writerId: api.writerId,
-    roomOwnerId: api.roomOwnerId,
-    createdAt: api.createdAt,
+    isCorrect: api.isCorrect,
+    correctAnswer: api.correctAnswer,
+    commentary: api.commentary,
   };
 }
 
-export default function usePostGuestBook(handler) {
+export default function useSubmitQuiz(handler) {
   const { onSuccess, onError } = handler;
   const [data, setData] = useState(null);
   const [loading, setLoading] = useState(false);
@@ -28,22 +26,21 @@ export default function usePostGuestBook(handler) {
   }, []);
 
   const mutate = useCallback(
-    async ({ roomOwnerId, content }) => {
-      const body = content?.trim();
-      if (!roomOwnerId || !body) return;
+    async ({ questionId, submittedAnswer }) => {
+      if (questionId == null || submittedAnswer == null) return;
       setLoading(true);
       setError(null);
 
       try {
-        const res = await axiosInstance.post('guestbooks', {
-          roomOwnerId,
-          content,
+        const res = await axiosInstance.post('quizzes/submit', {
+          questionId,
+          submittedAnswer,
         });
 
         const apiContent = res.data?.content || null;
         if (!mountedRef.current) return;
-        onSuccess?.(roomOwnerId);
-        setData(normalizeGuestBook(apiContent));
+        onSuccess?.();
+        setData(normalizeQuiz(apiContent));
       } catch (err) {
         if (!mountedRef.current) return;
         onError?.();

@@ -10,7 +10,7 @@ export default function HeaderNavigationBar({
   showBackButton = true,
   className = '',
   type = 'general',
-  lv = 0,
+  atlases,
   onEditClick,
   onDeleteClick,
   regionId = null,
@@ -28,7 +28,7 @@ export default function HeaderNavigationBar({
         {/* 중앙 타이틀 */}
         {type === 'collection' && (
           <div className="bg-sub-5 px-1 py-1 text-xs text-sub-100 mr-2">
-            Lv.{lv}
+            Lv.{atlases.currentLevel}
           </div>
         )}
         <h1 className="text-lg font-semibold text-gray-800">{title}</h1>
@@ -50,7 +50,6 @@ export default function HeaderNavigationBar({
             onClick={() => setIsOpen(true)}
           />
         )}
-        <TaskInfoModal isOpen={isOpen} setIsOpen={setIsOpen} />
 
         {/* 일기장 토글 버튼 */}
         {type === 'diary' && isMine && (
@@ -86,7 +85,11 @@ export default function HeaderNavigationBar({
         )}
       </div>
       {type === 'collection' && (
-        <TaskInfoModal isOpen={isOpen} setIsOpen={setIsOpen} />
+        <TaskInfoModal
+          isOpen={isOpen}
+          setIsOpen={setIsOpen}
+          atlases={atlases}
+        />
       )}
       {type === 'quiz' && (
         <QuizQuitModal

@@ -3,18 +3,7 @@
 import axiosInstance from '@/lib/axiosInstance';
 import { useState, useCallback, useEffect, useRef } from 'react';
 
-function normalizeGuestBook(api) {
-  if (!api) return null;
-  return {
-    guestbookId: api.guestbookId,
-    content: api.content,
-    writerId: api.writerId,
-    roomOwnerId: api.roomOwnerId,
-    createdAt: api.createdAt,
-  };
-}
-
-export default function usePostGuestBook(handler) {
+export default function useChallengesStart(handler = {}) {
   const { onSuccess, onError } = handler;
   const [data, setData] = useState(null);
   const [loading, setLoading] = useState(false);
@@ -28,22 +17,17 @@ export default function usePostGuestBook(handler) {
   }, []);
 
   const mutate = useCallback(
-    async ({ roomOwnerId, content }) => {
-      const body = content?.trim();
-      if (!roomOwnerId || !body) return;
+    async ({ challengeId }) => {
+      if (!challengeId) return;
       setLoading(true);
       setError(null);
 
       try {
-        const res = await axiosInstance.post('guestbooks', {
-          roomOwnerId,
-          content,
-        });
-
-        const apiContent = res.data?.content || null;
+        const res = await axiosInstance.post(`challenges/${challengeId}/start`);
+        const apiContent = res.data?.statusCode;
         if (!mountedRef.current) return;
-        onSuccess?.(roomOwnerId);
-        setData(normalizeGuestBook(apiContent));
+        onSuccess?.();
+        setData(apiContent);
       } catch (err) {
         if (!mountedRef.current) return;
         onError?.();

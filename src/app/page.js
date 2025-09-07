@@ -5,7 +5,13 @@ import RoomStatsCard from './_components/RoomStatsCard';
 import useMyRoom from '@/hooks/user/useMyRoom';
 import LoadingContent from './_components/LoadingContent';
 import manifest from '@/data/manifest.json';
+import useWeather from '@/hooks/home/useWeather';
+import { useEffect } from 'react';
 import { useRouter } from 'next/navigation';
+import weather from '@/data/weather.json';
+import useLocationPermission from '@/hooks/location/useLocationPermission';
+import useLocationWatcher from '@/hooks/location/useLocationWatcher';
+import { useLocationStore } from '@/stores/useLocationStore';
 
 const DEFAULT_FLOOR = 39;
 const DEFAULT_SHELF = 38;
@@ -15,10 +21,30 @@ const DEFAULT_WINDOW = 40;
 export default function Home() {
   const router = useRouter();
   const { data, loading, error } = useMyRoom();
+  const { granted } = useLocationPermission();
+  const { start, stop } = useLocationWatcher();
+
+  const { weather: info, refetch } = useWeather();
+  const location = useLocationStore((s) => s.location); // { lat, lng, ts }
+
   const zIndex = manifest.defaults.zIndex;
   const equippedItems = Array.isArray(data?.equippedItems)
     ? data.equippedItems
     : [];
+
+  // 권한이 허용됐을 때만 watch 시작/중지
+  useEffect(() => {
+    if (granted) start();
+    else stop();
+  }, [granted, start, stop]);
+
+  // 좌표가 준비되면 날씨 호출 (쓰로틀은 useWeather 내부에서 처리)
+  useEffect(() => {
+    if (!granted) return;
+    if (!Number.isFinite(location?.lat) || !Number.isFinite(location?.lng))
+      return;
+    refetch({ lat: location.lat, lon: location.lng });
+  }, [granted, location?.lat, location?.lng, refetch]);
 
   if (loading)
     return (
@@ -101,7 +127,7 @@ export default function Home() {
             />
             {/* 날씨(가운데) */}
             <img
-              src={manifest.items[41]?.asset.src}
+              src={weather?.[info]?.asset?.src}
               alt=""
               className="absolute left-1/2 top-11 -translate-x-1/2"
               style={{ zIndex: zIndex.WINDOW - 1 }} // 창문 아래
