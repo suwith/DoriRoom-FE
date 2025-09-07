@@ -5,6 +5,7 @@ import RoomStatsCard from './_components/RoomStatsCard';
 import useMyRoom from '@/hooks/user/useMyRoom';
 import LoadingContent from './_components/LoadingContent';
 import manifest from '@/data/manifest.json';
+import { useRouter } from 'next/navigation';
 
 const DEFAULT_FLOOR = 39;
 const DEFAULT_SHELF = 38;
@@ -12,6 +13,7 @@ const DEFAULT_APPAREL = 31;
 const DEFAULT_WINDOW = 40;
 
 export default function Home() {
+  const router = useRouter();
   const { data, loading, error } = useMyRoom();
   const zIndex = manifest.defaults.zIndex;
   const equippedItems = Array.isArray(data?.equippedItems)
@@ -74,6 +76,7 @@ export default function Home() {
           }
           className={`absolute top-75 left-3`}
           style={{ zIndex: zIndex.SHELF }}
+          onClick={() => router.push('/diary')}
         />
         {/* OBJECT */}
         {manifest.items[selectOBJECT?.itemId]?.asset.src && (

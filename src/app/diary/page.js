@@ -1,98 +1,72 @@
 'use client';
 
-import { useState } from 'react';
-import { mockDiaries } from './mockData';
-import DiaryCalendar from './_components/DiaryCalendar';
-import ReviewItem from '../festival/_components/ReviewItem';
-import HeaderNavigationBar from '@/app/_components/HeaderNavigationBar';
-import { isWithinInterval, parse, subDays } from 'date-fns';
-import { MdEditSquare } from 'react-icons/md';
+import { useEffect, useState } from 'react';
 import { useRouter } from 'next/navigation';
 
-export default function DiaryPage() {
-  const [likedIds, setLikedIds] = useState([]);
-  const router = useRouter();
+import HeaderNavigationBar from '@/app/_components/HeaderNavigationBar';
+import { MdEditSquare } from 'react-icons/md';
+import CollectTabSection from '@/app/diary/_components/CollectTabSection';
+import MyDiaryTabSection from '@/app/diary/_components/MyDiaryTabSection';
 
-  const handleLike = (id) => {
-    setLikedIds((prev) =>
-      prev.includes(id) ? prev.filter((i) => i !== id) : [...prev, id]
-    );
-  };
-
-  const today = new Date();
-  const oneWeekAgo = subDays(today, 6); // 오늘 포함 7일치 (오늘 ~ 6일 전)
-
-  const recentPublicDiaries = mockDiaries
-    .filter((d) => {
-      if (!d.isPublic) return false;
-
-      const diaryDate = parse(d.date, 'yyyy.MM.dd', new Date());
-
-      return isWithinInterval(diaryDate, {
-        start: oneWeekAgo,
-        end: today,
-      });
-    })
-    .sort((a, b) => {
-      const dateA = parse(a.date, 'yyyy.MM.dd', new Date());
-      const dateB = parse(b.date, 'yyyy.MM.dd', new Date());
-      return dateB - dateA; // 최신순 정렬
-    });
-
-  const handleDateClick = (isoDate) => {
-    const formattedDate = isoDate.replace(/-/g, '.');
-    const diariesForDate = mockDiaries.filter((d) => d.date === formattedDate);
-
-    if (diariesForDate.length === 1) {
-      router.push(`/diary/${diariesForDate[0].id}`); // 상세 페이지
-    } else if (diariesForDate.length > 1) {
-      router.push(`/diary/date/${formattedDate}`); // 목록 페이지
-    } else {
-    }
-  };
+// 탭 스위처
+function DiaryTabs({ tab, onChange }) {
   return (
-    <div className="space-y-2 min-h-screen pt-20">
+    <div className="px-4">
+      <div className="inline-flex rounded-full p-1 gap-2">
+        <button
+          className={`px-3 py-1 text-sm rounded-full transition font-normal ${
+            tab === 'collect'
+              ? 'bg-main-100 text-background'
+              : 'bg-main-5 text-main-100'
+          }`}
+          onClick={() => onChange('collect')}
+        >
+          일기 모아보기
+        </button>
+        <button
+          className={`px-3 py-1 text-sm rounded-full transition font-normal ${
+            tab === 'mine'
+              ? 'bg-main-100 text-background'
+              : 'bg-main-5 text-main-100'
+          }`}
+          onClick={() => onChange('mine')}
+        >
+          내 일기장
+        </button>
+      </div>
+    </div>
+  );
+}
+
+export default function DiaryPage() {
+  const router = useRouter();
+  const [tab, setTab] = useState('collect');
+
+  useEffect(() => {
+    const saved = sessionStorage.getItem('diaryTab');
+    if (saved === 'collect' || saved === 'mine') setTab(saved);
+  }, []);
+  useEffect(() => {
+    sessionStorage.setItem('diaryTab', tab);
+  }, [tab]);
+
+  return (
+    <div className="min-h-screen pt-24 max-w-[390px] w-screen flex flex-col bg-background">
       <HeaderNavigationBar
-        title={'일기장'}
+        title="일기장"
         showBackButton={true}
         className="bg-background"
       />
 
-      <DiaryCalendar diaries={mockDiaries} onDateClick={handleDateClick} />
+      <DiaryTabs tab={tab} onChange={setTab} />
 
-      {recentPublicDiaries.length > 0 && (
-        <section className="space-y-4 px-4 pb-20">
-          <h2 className="text-md font-bold mt-4 text-neutral-800">
-            친구가 새로 글을 업로드했어요! ☕️
-          </h2>
-          <div className="space-y-2">
-            {recentPublicDiaries.map((diary) => (
-              <ReviewItem
-                key={diary.id}
-                review={{
-                  id: diary.id,
-                  nickname: diary.authorName,
-                  content: diary.content,
-                  images: diary.images,
-                  date: diary.date,
-                  likes: 0,
-                }}
-                isLiked={likedIds.includes(diary.id)}
-                onLike={handleLike}
-              />
-            ))}
-          </div>
-        </section>
-      )}
+      {tab === 'collect' ? <CollectTabSection /> : <MyDiaryTabSection />}
 
-      <button className="fixed bottom-7 left-1/2 -translate-x-1/2 w-[350px] py-2 bg-main-100 text-background rounded-lg text-sm font-medium shadow-md">
-        <div
-          className="flex items-center justify-center gap-2"
-          onClick={() => {
-            router.push('/diary/write');
-          }}
-        >
-          {' '}
+      <button
+        className="fixed bottom-7 left-1/2 -translate-x-1/2 w-[350px] py-2 bg-main-100 text-background rounded-lg text-sm font-medium shadow-md"
+        onClick={() => router.push('/diary/write')}
+      >
+        <div className="flex items-center justify-center gap-2">
           <MdEditSquare className="text-background w-5 h-5" />
           <span className="text-lg">일기 작성하기</span>
         </div>

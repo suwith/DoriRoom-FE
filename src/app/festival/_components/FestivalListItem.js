@@ -2,8 +2,11 @@
 
 import { GoHeart, GoHeartFill } from 'react-icons/go';
 import { FaCommentAlt } from 'react-icons/fa';
-import { useRef } from 'react';
+import { useRef, useState } from 'react';
 import useFestivalFavorite from '@/hooks/festival/useFestivalFavorite';
+import TwoButtonModal from '@/app/_components/TwoButtonModal';
+import { useRouter } from 'next/navigation';
+import useDiaryWritten from '@/hooks/diary/useDiaryWritten';
 
 export default function FestivalListItem({
   festival,
@@ -11,7 +14,12 @@ export default function FestivalListItem({
   mode = 'default',
   onSelect = null,
 }) {
+  const router = useRouter();
   const imgRef = useRef(null);
+  const [showAlreadyWrittenModal, setShowAlreadyWrittenModal] = useState(false);
+  const { written, loading: writtenLoading } = useDiaryWritten(
+    festival.eventId
+  );
 
   const { liked, likeCount, loading, mutating, toggleFavorite } =
     useFestivalFavorite(festival.eventId, festival.likes || 0);
@@ -21,9 +29,18 @@ export default function FestivalListItem({
     if (!loading && !mutating) toggleFavorite();
   };
 
+  // 선택 버튼 클릭 시 확인 로직
+  const handleSelect = () => {
+    if (written) {
+      setShowAlreadyWrittenModal(true);
+    } else {
+      onSelect?.(festival);
+    }
+  };
+
   if (mode === 'select') {
     return (
-      <div className="flex gap-3">
+      <div className="flex gap-3 items-center">
         <img
           ref={imgRef}
           src={festival.thumbnail || '/images/festivalImage_default.svg'}
@@ -36,8 +53,8 @@ export default function FestivalListItem({
             e.currentTarget.src = '/images/festivalImage_default.svg';
           }}
         />
-        <div className="flex justify-between flex-1 pr-1 items-center">
-          <div className="flex flex-col justify-center items-start min-w-0">
+        <div className="flex justify-between flex-1 gap-2 items-center">
+          <div className="flex-3 flex-col justify-center items-start min-w-0">
             <div className="text-sm font-semibold line-clamp-1 break-keep">
               {festival.title}
             </div>
@@ -47,15 +64,31 @@ export default function FestivalListItem({
           </div>
 
           <button
-            className="text-background text-xs border bg-main-100 px-3 h-8 rounded-md"
+            className={`flex text-background text-sm px-3 py-1.5 rounded-sm ${written ? 'bg-neutral-300' : 'bg-main-100'} `}
             onClick={(e) => {
               e.stopPropagation();
-              onSelect?.(festival);
+              handleSelect();
             }}
+            disabled={written}
           >
             선택
           </button>
         </div>
+        {showAlreadyWrittenModal && (
+          <TwoButtonModal
+            title="방문한 축제에 대해서는 하나의 일기만 작성할 수 있어요! 😭"
+            description="다른 축제를 선택하시겠습니까?"
+            cancelText="작성 취소하기"
+            confirmText="다른 축제 검색"
+            onCancel={() => {
+              setShowAlreadyWrittenModal(false);
+              router.replace(`/diary`);
+            }}
+            onConfirm={() => {
+              setShowAlreadyWrittenModal(false);
+            }}
+          />
+        )}
       </div>
     );
   }
@@ -120,7 +153,7 @@ export default function FestivalListItem({
           </div>
 
           {/* 제목/위치: 카드 내 넘침 방지 */}
-          <div className="font-bold text-sm mt-1.5 line-clamp-1 break-keep">
+          <div className="font-bold text-sm mt-1 line-clamp-1 break-keep">
             {festival.title}
           </div>
           <div className="text-neutral-600 mt-0.5 text-xs line-clamp-1 break-keep">

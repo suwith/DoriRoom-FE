@@ -12,36 +12,26 @@ import ReviewItem from '@/app/festival/_components/ReviewItem';
 import { useRouter } from 'next/navigation';
 import useFestivalFavorite from '@/hooks/festival/useFestivalFavorite';
 import { useToast } from '@/app/_providers/ToastProvider';
+import useFestivalReviews from '@/hooks/festival/useFestivalReviews';
+import LoadingContent from '@/app/_components/LoadingContent';
+import useDiaryWritten from '@/hooks/diary/useDiaryWritten';
 
 export default function FestivalDetail({ festival }) {
   const router = useRouter();
-  const [activeTab, setActiveTab] = useState('설명');
-  const [likedReviews, setLikedReviews] = useState([]);
-  const [reviewSort, setReviewSort] = useState('latest');
 
-  // 헤더 전환 상태
+  const [activeTab, setActiveTab] = useState('설명');
+
   const [isScrolled, setIsScrolled] = useState(false);
   const sentinelRef = useRef(null);
-  const HEADER_H = 70; // 헤더 높이(px): h-12(=48) + 상단 패딩 보정 등이 있으면 맞춰 조정
+  const HEADER_H = 70;
 
   const { liked, likeCount, loading, mutating, toggleFavorite } =
     useFestivalFavorite(festival.id, festival.likes);
 
-  const toggleReviewLike = (reviewId) => {
-    setLikedReviews((prev) =>
-      prev.includes(reviewId)
-        ? prev.filter((id) => id !== reviewId)
-        : [...prev, reviewId]
-    );
-  };
-
-  const sortedReviews = [...festival.reviews].sort((a, b) => {
-    if (reviewSort === 'likes') return b.likes - a.likes;
-    return new Date(b.date) - new Date(a.date);
-  });
+  const { written, loading: writtenLoading } = useDiaryWritten(festival.id);
 
   const { show } = useToast();
-  const didShowRef = useRef(false); // StrictMode 중복 실행 가드
+  const didShowRef = useRef(false);
 
   useEffect(() => {
     if (didShowRef.current) return;
@@ -79,9 +69,38 @@ export default function FestivalDetail({ festival }) {
     return () => io.disconnect();
   }, []);
 
+  const [reviewSort, setReviewSort] = useState('latest');
+  const {
+    reviews,
+    loading: listLoading,
+    error: listError,
+    setReviews,
+    setSort,
+    loadMore,
+    hasMore,
+  } = useFestivalReviews({
+    eventId: festival.id,
+    enabled: activeTab === '일기장',
+    initialSort: reviewSort,
+    pageSize: 20,
+  });
+
+  const handleLikeSync = (id, liked) => {
+    setReviews((prev) =>
+      prev.map((r) =>
+        r.id === id
+          ? { ...r, likes: liked ? r.likes + 1 : Math.max(0, r.likes - 1) }
+          : r
+      )
+    );
+  };
+
+  useEffect(() => {
+    setSort(reviewSort);
+  }, [reviewSort, setSort]);
+
   return (
     <div className="max-w-[390px] w-screen min-h-screen pb-10">
-      {/* 고정 헤더: 가운데 정렬 + 전환 애니메이션 */}
       <div
         className={`fixed top-0 left-1/2 -translate-x-1/2 w-full pt-[50px] max-w-[390px] z-50 transition-colors duration-300 ${
           isScrolled ? 'bg-background' : 'bg-transparent'
@@ -129,10 +148,10 @@ export default function FestivalDetail({ festival }) {
             </span>
           </div>
         </div>
+
         <div className="flex flex-row items-center gap-3 text-sm">
           <p className="text-neutral-500 whitespace-nowrap">일자</p>
           <div className="flex flex-row gap-2 items-center">
-            {' '}
             <span
               className={`px-1.5 py-[1.8px] rounded-sm flex items-center font-normal text-[11px] ${
                 festival.status === '진행 예정'
@@ -148,27 +167,29 @@ export default function FestivalDetail({ festival }) {
             </span>
             <span>
               {festival.startDate} ~ {festival.endDate}
-            </span>{' '}
+            </span>
           </div>
         </div>
+
         <div className="flex flex-row gap-3 text-sm">
-          <p className=" text-neutral-500 whitespace-nowrap">위치</p>
+          <p className="text-neutral-500 whitespace-nowrap">위치</p>
           <p>{festival.location}</p>
         </div>
+
         <div className="flex flex-row gap-3 text-sm">
-          <p className=" text-neutral-500 whitespace-nowrap">주최</p>
+          <p className="text-neutral-500 whitespace-nowrap">주최</p>
           <p>{festival.host}</p>
         </div>
+
         <div className="flex flex-row gap-3 text-sm">
-          <p className=" text-neutral-500 whitespace-nowrap">금액</p>
-          <p
-            dangerouslySetInnerHTML={{
-              __html: festival.price.replace(/\n/g, '<br />'),
-            }}
-          />
+          <p className="text-neutral-500 whitespace-nowrap">금액</p>
+          <p className="text-neutral-700 whitespace-pre-line">
+            {String(festival.price || '')}
+          </p>
         </div>
       </div>
-      <div className="mt-1 w-full h-1.5 p-0 bg-neutral-100"></div>
+
+      <div className="mt-1 w-full h-1.5 p-0 bg-neutral-100" />
 
       {/* 탭 */}
       <div className="flex px-4 border-b-2 border-neutral-100">
@@ -206,33 +227,28 @@ export default function FestivalDetail({ festival }) {
               <Icon path={mdiTree} className="w-4 h-4 text-main-100" />
               행사소개
             </div>
-            <p
-              className="text-neutral-600 leading-relaxed"
-              dangerouslySetInnerHTML={{
-                __html: festival.eventIntro.replace(/\n/g, '<br />'),
-              }}
-            />{' '}
+            <p className="text-neutral-600 leading-relaxed whitespace-pre-line">
+              {String(festival.eventIntro || '')}
+            </p>
           </div>
+
           <div>
             <div className="text-main-100 font-medium mb-1 flex items-center gap-1">
               <Icon path={mdiTree} className="w-4 h-4 text-main-100" />
               행사내용
             </div>
-            <p
-              className="text-neutral-600 leading-relaxed"
-              dangerouslySetInnerHTML={{
-                __html: festival.eventContent.replace(/\n/g, '<br />'),
-              }}
-            />{' '}
+            <p className="text-neutral-600 leading-relaxed whitespace-pre-line">
+              {String(festival.eventContent || '')}
+            </p>
           </div>
         </div>
       )}
 
       {/* 일기장 탭 */}
       {activeTab === '일기장' && (
-        <div className="px-4 py-4 space-y-4">
+        <div className="px-4 py-4 space-y-2">
           <div className="flex items-center justify-between">
-            <p>일기 {festival.reviews.length}개</p>
+            <p>일기 {reviews.length}개</p>
             <select
               value={reviewSort}
               onChange={(e) => setReviewSort(e.target.value)}
@@ -243,7 +259,19 @@ export default function FestivalDetail({ festival }) {
             </select>
           </div>
 
-          {festival.reviews.length === 0 && (
+          {listLoading && (
+            <div className="py-10 text-center text-neutral-400 text-sm">
+              <LoadingContent loading={listLoading} />
+            </div>
+          )}
+
+          {listError && (
+            <div className="py-10 text-center text-red-400 text-sm">
+              일기를 불러오지 못했어요.
+            </div>
+          )}
+
+          {!listLoading && !listError && reviews.length === 0 && (
             <div className="flex flex-col items-center justify-center py-10 gap-4">
               <i className="mgc_sweats_fill text-5xl text-main-100" />
               <div className="text-center text-lg font-semibold">
@@ -252,17 +280,30 @@ export default function FestivalDetail({ festival }) {
             </div>
           )}
 
-          {sortedReviews.map((review) => (
+          {reviews.map((review) => (
             <ReviewItem
               key={review.id}
               review={review}
-              isLiked={likedReviews.includes(review.id)}
-              onLike={toggleReviewLike}
+              type="festival"
+              onLikeSync={handleLikeSync}
             />
           ))}
 
+          {hasMore && (
+            <div className="py-3">
+              <button
+                type="button"
+                onClick={loadMore}
+                disabled={listLoading}
+                className="w-full py-2 text-sm rounded-md border border-main-100 text-main-100 disabled:opacity-60"
+              >
+                {listLoading ? '불러오는 중...' : '더 불러오기'}
+              </button>
+            </div>
+          )}
+
           <button
-            className="fixed bottom-7 left-1/2 -translate-x-1/2 w-[350px] py-2 bg-main-100 text-background rounded-lg text-sm font-medium shadow-md"
+            className={`fixed bottom-7 left-1/2 -translate-x-1/2 w-[350px] py-2 text-background rounded-lg text-sm font-medium shadow-md ${written ? 'bg-neutral-300' : 'bg-main-100'}`}
             onClick={() => {
               sessionStorage.setItem(
                 'selectedFestival',
@@ -270,11 +311,13 @@ export default function FestivalDetail({ festival }) {
               );
               router.push('/diary/write');
             }}
+            disabled={written}
           >
             <div className="flex items-center justify-center gap-2">
-              {' '}
               <MdEditSquare className="text-background w-5 h-5" />
-              <span className="text-lg">일기 작성하기</span>
+              <span className="text-lg">
+                {written ? '이미 일기를 작성했어요' : '일기 작성하기'}
+              </span>
             </div>
           </button>
         </div>
