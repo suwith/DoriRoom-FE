@@ -5,6 +5,8 @@ import RoomStatsCard from './_components/RoomStatsCard';
 import useMyRoom from '@/hooks/user/useMyRoom';
 import LoadingContent from './_components/LoadingContent';
 import manifest from '@/data/manifest.json';
+import useWeather from '@/hooks/home/useWeather';
+import { useEffect } from 'react';
 import { useRouter } from 'next/navigation';
 import weather from '@/data/weather.json';
 
@@ -16,10 +18,15 @@ const DEFAULT_WINDOW = 40;
 export default function Home() {
   const router = useRouter();
   const { data, loading, error } = useMyRoom();
+  const { weather: info, refetch } = useWeather();
   const zIndex = manifest.defaults.zIndex;
   const equippedItems = Array.isArray(data?.equippedItems)
     ? data.equippedItems
     : [];
+
+  useEffect(() => {
+    refetch();
+  }, []);
 
   if (loading)
     return (
@@ -102,7 +109,7 @@ export default function Home() {
             />
             {/* 날씨(가운데) */}
             <img
-              src={weather[1]?.asset.src}
+              src={weather?.[info]?.asset?.src}
               alt=""
               className="absolute left-1/2 top-11 -translate-x-1/2"
               style={{ zIndex: zIndex.WINDOW - 1 }} // 창문 아래
