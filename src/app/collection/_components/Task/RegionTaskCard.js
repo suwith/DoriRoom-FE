@@ -181,7 +181,9 @@ export default function RegionTaskCard({
         <div className="flex items-center gap-1 text-sm">
           {title}
           {status === 'IN_PROGRESS' && challengeType === 'VISIT_EVENT' && (
-            <p className="text-main-100">({session.elapsedMs}%)</p>
+            <p className="text-main-100">
+              ({((session.elapsedMs / session.requiredMs) * 100).toFixed(1)}%)
+            </p>
           )}
         </div>
         {status === 'IN_PROGRESS' ? (
