@@ -150,6 +150,7 @@ export default function Home() {
         today={data.viewCount}
         like={data.likeCount}
         className="fixed bottom-22 z-10"
+        isMine={true}
       />
     </>
   );

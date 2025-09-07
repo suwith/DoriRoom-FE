@@ -39,6 +39,7 @@ export default function HeaderBar({ credit }) {
           <IconButton
             icon={<i className="mgc_user_follow_fill text-[#F36693] text-xl" />}
             label="이웃"
+            href="/neighbor"
             textColor="text-[#F36693]"
           />
           <IconButton
