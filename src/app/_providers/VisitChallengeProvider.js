@@ -8,7 +8,8 @@ import useChallengesComplete from '@/hooks/collection/useChallengesComplete';
 import booleanPointInPolygon from '@turf/boolean-point-in-polygon';
 
 export default function VisitChallengeProvider() {
-  const { session, setEnteredAt, stop, setElapsed } = useVisitChallengeStore();
+  const { session, setEnteredAt, stop, setElapsed, setInside, markCompleted } =
+    useVisitChallengeStore();
   const { mutate } = useChallengesComplete({
     onSuccess: () => {
       markCompleted({
@@ -58,6 +59,7 @@ export default function VisitChallengeProvider() {
           turfPolygon([polygon]),
           { ignoreBoundary: false }
         );
+        setInside(inside);
 
         if (inside) {
           if (!enteredAt) {

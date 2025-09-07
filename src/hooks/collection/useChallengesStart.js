@@ -3,7 +3,7 @@
 import axiosInstance from '@/lib/axiosInstance';
 import { useState, useCallback, useEffect, useRef } from 'react';
 
-export default function useChallengesStart(handler) {
+export default function useChallengesStart(handler = {}) {
   const { onSuccess, onError } = handler;
   const [data, setData] = useState(null);
   const [loading, setLoading] = useState(false);
@@ -12,7 +12,7 @@ export default function useChallengesStart(handler) {
   const mountedRef = useRef(true);
   useEffect(() => {
     return () => {
-      mountedRef.current = true;
+      mountedRef.current = false;
     };
   }, []);
 

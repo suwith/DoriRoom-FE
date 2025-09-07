@@ -11,7 +11,7 @@ export default function useChallengesClaim(handler) {
   const mountedRef = useRef(true);
   useEffect(() => {
     return () => {
-      mountedRef.current = true;
+      mountedRef.current = false;
     };
   }, []);
 
@@ -33,11 +33,10 @@ export default function useChallengesClaim(handler) {
         if (mountedRef.current) setLoading(false);
       }
     },
-    [loading, onSuccess, onError]
+    [onSuccess, onError]
   );
 
   const reset = () => {
-    setData(null);
     setError(null);
   };
 

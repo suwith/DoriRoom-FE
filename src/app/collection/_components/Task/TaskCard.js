@@ -42,7 +42,9 @@ export default function TaskCard({
             className={`flex items-center gap-1 bg-background px-2 py-1 rounded-sm font-normal ${status === 'COMPLETED' ? 'text-sub-100' : status === 'WAIT_REWARD' ? 'text-sub2-100' : 'text-main-100'}`}
           >
             <FaFire size={15} className="scale-x-[-1]" />
-            <span className="text-neutral-900">{rewards[0].amount}</span>
+            <span className="text-neutral-900">
+              {exp ?? rewards?.[0]?.amount ?? 0}
+            </span>
           </div>
         </div>
       </div>
@@ -71,7 +73,9 @@ export default function TaskCard({
             <div className="h-1 bg-gray-200 rounded-full overflow-hidden">
               <div
                 className="bg-main-100 h-full transition-all duration-300"
-                style={{ width: `${currentProgress / targetCount}%` }}
+                style={{
+                  width: `${Math.min(100, Math.max(0, targetCount ? (currentProgress / targetCount) * 100 : 0))}%`,
+                }}
               />
             </div>
           </div>

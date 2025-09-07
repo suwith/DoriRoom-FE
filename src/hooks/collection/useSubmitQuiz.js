@@ -21,13 +21,13 @@ export default function useSubmitQuiz(handler) {
   const mountedRef = useRef(true);
   useEffect(() => {
     return () => {
-      mountedRef.current = true;
+      mountedRef.current = false;
     };
   }, []);
 
   const mutate = useCallback(
     async ({ questionId, submittedAnswer }) => {
-      if (!questionId || !submittedAnswer) return;
+      if (questionId == null || submittedAnswer == null) return;
       setLoading(true);
       setError(null);
 

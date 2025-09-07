@@ -1,11 +1,10 @@
 'use client';
 
-import Link from 'next/link';
-
 export default function Result({ quiz, regionId }) {
-  const { success, rewards } = quiz;
-  const exp = rewards.find((r) => r.rewardType === 'EXP')?.amount;
-  const credit = rewards.find((r) => r.rewardType === 'CREDIT')?.amount;
+  const success = quiz?.succes;
+  const rewards = quiz?.rewards;
+  const exp = rewards.find((r) => r.rewardType === 'EXP')?.amount ?? 0;
+  const credit = rewards.find((r) => r.rewardType === 'CREDIT')?.amount ?? 0;
 
   if (!success) return null;
 

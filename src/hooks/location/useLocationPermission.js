@@ -19,15 +19,15 @@ export default function useLocationPermission() {
               const state = result.state;
               if (state === 'granted') {
                 setGranted(true);
-              } else if (state === 'propmt') {
-                navigator.geolocation.getCurrentPosition((pos) => {
-                  return pos;
-                });
-                setGranted(false);
+              } else if (state === 'prompt') {
+                navigator.geolocation.getCurrentPosition(
+                  () => setGranted(true),
+                  (e) => {
+                    setGranted(false);
+                    setError(e);
+                  }
+                );
               } else {
-                navigator.geolocation.getCurrentPosition((pos) => {
-                  return pos;
-                });
                 setGranted(false);
               }
             });

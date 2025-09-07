@@ -18,7 +18,7 @@ export default function OX({ quiz, setSequence, setIsStart, quizCount }) {
 
   return (
     <div className="h-screen mx-4 flex flex-col">
-      {sequence !== 5 && (
+      {Number(sequence) !== Number(quizCount) && (
         <div className="flex gap-2 pt-28">
           {Array.from({ length: quizCount }, (v, i) => i + 1).map((i) => (
             <hr
@@ -33,13 +33,13 @@ export default function OX({ quiz, setSequence, setIsStart, quizCount }) {
         <p className="font-semibold text-xl">{content}</p>
         <div className="flex w-full gap-2 mt-15 font-bold text-xl">
           <button
-            className={`w-full text-main-100 px-auto py-15 rounded-xl border ${selectBtn === 1 ? 'border-main-100 bg-main-15' : 'border-main-5 bg-main-5'}`}
+            className={`w-full text-main-100 mx-auto py-15 rounded-xl border ${selectBtn === 1 ? 'border-main-100 bg-main-15' : 'border-main-5 bg-main-5'}`}
             onClick={() => setSelectBtn(1)}
           >
             예
           </button>
           <button
-            className={`w-full text-sub-100 px-auto py-15 rounded-xl border ${selectBtn === 2 ? 'border-sub-100 bg-sub-15' : 'border-main-5 bg-sub-5'}`}
+            className={`w-full text-sub-100 mx-auto py-15 rounded-xl border ${selectBtn === 2 ? 'border-sub-100 bg-sub-15' : 'border-main-5 bg-sub-5'}`}
             onClick={() => setSelectBtn(2)}
           >
             아니오
@@ -56,7 +56,7 @@ export default function OX({ quiz, setSequence, setIsStart, quizCount }) {
           });
           setBottomSheetOpen(true);
         }}
-        disabled={selectBtn === null}
+        disabled={selectBtn === null || loading}
       >
         제출하기
       </button>
@@ -70,6 +70,8 @@ export default function OX({ quiz, setSequence, setIsStart, quizCount }) {
       >
         {loading ? (
           <LoadingContent loading={loading} />
+        ) : error ? (
+          <div>제출 중 오류가 발생했어요. 잠시 후 다시 시도해 주세요.</div>
         ) : (
           <>
             <p className="text-neutral-900 font-semibold text-lg text-center">

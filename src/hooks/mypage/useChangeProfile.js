@@ -19,7 +19,7 @@ export default function useChangeProfile(handler) {
   const mountedRef = useRef(true);
   useEffect(() => {
     return () => {
-      mountedRef.current = true;
+      mountedRef.current = false;
     };
   }, []);
 

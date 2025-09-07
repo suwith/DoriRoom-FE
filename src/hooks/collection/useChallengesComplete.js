@@ -12,7 +12,7 @@ export default function useChallengesComplete(handler = {}) {
   const mountedRef = useRef(true);
   useEffect(() => {
     return () => {
-      mountedRef.current = true;
+      mountedRef.current = false;
     };
   }, []);
 
@@ -38,7 +38,7 @@ export default function useChallengesComplete(handler = {}) {
         if (mountedRef.current) setLoading(false);
       }
     },
-    [loading, onSuccess, onError]
+    [onSuccess, onError]
   );
 
   const reset = () => {

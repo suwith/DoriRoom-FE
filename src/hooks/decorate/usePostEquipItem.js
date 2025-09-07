@@ -22,7 +22,7 @@ export default function usePostEquipItem(handler) {
   const mountedRef = useRef(true);
   useEffect(() => {
     return () => {
-      mountedRef.current = true;
+      mountedRef.current = false;
     };
   }, []);
 

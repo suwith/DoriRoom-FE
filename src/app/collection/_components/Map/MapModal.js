@@ -2,7 +2,7 @@
 
 import { createPortal } from 'react-dom';
 import { FaXmark } from 'react-icons/fa6';
-import { Map, Polygon, MapMarker } from 'react-kakao-maps-sdk';
+import { Map as KakaoMap, Polygon, MapMarker } from 'react-kakao-maps-sdk';
 import { useMemo, useEffect, useState } from 'react';
 import { useLocationStore } from '@/stores/useLocationStore';
 
@@ -88,7 +88,7 @@ export default function MapModal({ isOpen, setIsOpen, coordinates }) {
   const path = useMemo(() => {
     const ring = coordinates; // 외곽 링
     return ring.map(([lng, lat]) => ({ lat, lng }));
-  }, []);
+  }, [coordinates]);
 
   // 폴리곤 중심
   const center = useMemo(() => polygonCentroid(path), [path]);
@@ -118,7 +118,7 @@ export default function MapModal({ isOpen, setIsOpen, coordinates }) {
             />
           </div>
         </div>
-        <Map
+        <KakaoMap
           center={center}
           level={level}
           style={{ width: '100%', height: '400px' }}
@@ -132,7 +132,7 @@ export default function MapModal({ isOpen, setIsOpen, coordinates }) {
             fillOpacity={0.25}
           />
           <MapMarker clickable={false} draggable={false} position={location} />
-        </Map>
+        </KakaoMap>
       </div>
     </div>,
     portalElement

@@ -74,8 +74,10 @@ export default function RegionTaskCard({
   });
 
   const router = useRouter();
-  const exp = rewards.find((reward) => reward.rewardType === 'EXP')?.amount;
-  const credit = rewards.find(
+  const exp = (rewards ?? []).find(
+    (reward) => reward.rewardType === 'EXP'
+  )?.amount;
+  const credit = (rewards ?? []).find(
     (reward) => reward.rewardType === 'CREDIT'
   )?.amount;
   const area = regionDetails.find(
@@ -88,7 +90,7 @@ export default function RegionTaskCard({
       router.push(`/collection/${regionId}/quiz/${challengeId}`);
     }
 
-    if (challengeType === 'VISIT_EVENT') {
+    if (challengeType === 'VISIT_EVENT' && status !== 'IN_PROGRESS') {
       // p(GeoJSON Polygon Feature?)에서 외곽 링을 추출
       const raw = p?.coordinates;
       if (!raw || raw.length < 3) {
@@ -108,8 +110,7 @@ export default function RegionTaskCard({
         challengeId,
         regionId: Number(regionId),
         polygon: ring,
-        // requiredMs: 10 * 60 * 1000,
-        requiredMs: 1000,
+        requiredMs: 10 * 60 * 1000,
       });
 
       CSMutate({ challengeId });
@@ -134,8 +135,12 @@ export default function RegionTaskCard({
   }, [lastCompleted?.at]); // at(타임스탬프)로 변화를 감지
 
   useEffect(() => {
-    if (p && location.lng && location.lat) {
-      const tmp = p?.coordinates;
+    if (
+      p?.coordinates?.length >= 3 &&
+      location?.lng != null &&
+      location?.lat != null
+    ) {
+      const tmp = p.coordinates;
       const poly = polygon([tmp]);
       const pt = point([location.lng, location.lat]);
 
@@ -169,14 +174,17 @@ export default function RegionTaskCard({
         {challengeType === 'VISIT_EVENT' && (
           <div
             className="self-start flex items-center justify-center bg-white p-0.5 mr-1 rounded-md"
-            onClick={() => setIsMapOpen(true)}
+            onClick={(e) => {
+              e.stopPropagation();
+              setIsMapOpen(true);
+            }}
           >
             <IoMdMap className="text-main-100 text-lg" />
           </div>
         )}
       </div>
       <div
-        className={`flex justify-between items-center text-xs font-semibold mt-2 ${status === '달성' ? 'text-neutral-400' : 'text-neutral-900'}`}
+        className={`flex justify-between items-center text-xs font-semibold mt-2 ${status === 'COMPLETED' ? 'text-neutral-400' : 'text-neutral-900'}`}
       >
         <div className="flex items-center gap-1 text-sm">
           {title}

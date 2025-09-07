@@ -35,8 +35,8 @@ export default function QuizClient({
 
   // 끝난 상태라면: data가 올 때까지 로딩 → data 오면 Result
   if (finished) {
-    if (loading || !data) return <LoadingContent loading={true} />;
     if (error) return <div>제출 중 오류가 발생했어요. 다시 시도해주세요.</div>;
+    if (loading || !data) return <LoadingContent loading={true} />;
     return <Result quiz={data} regionId={regionId} />;
   }
 

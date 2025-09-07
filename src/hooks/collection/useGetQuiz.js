@@ -13,7 +13,7 @@ function normalizeQuiz(api) {
 }
 
 export default function useGetQuiz(challengeId) {
-  const [quiz, setQuiz] = useState([]);
+  const [quiz, setQuiz] = useState(null);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
   const mountedRef = useRef(true);
@@ -25,7 +25,6 @@ export default function useGetQuiz(challengeId) {
     try {
       const res = await axiosInstance.get(`quizzes/${challengeId}`);
       const apiContent = res.data?.content || null;
-      console.log(apiContent);
       if (!mountedRef.current) return;
       setQuiz(normalizeQuiz(apiContent));
     } catch (e) {

@@ -62,8 +62,12 @@ export default function useLocationWatcher() {
     }
 
     return () => {
-      if (watchId) Geolocation.clearWatch({ id: watchId });
-      navigator.geolocation.clearWatch(watchId);
+      const platform = Capacitor.getPlatform();
+      if (platform === 'web') {
+        if (watchId != null) navigator.geolocation.clearWatch(watchId);
+      } else if (watchId != null) {
+        Geolocation.clearWatch({ id: watchId });
+      }
     };
   }, [setLocation]);
 }

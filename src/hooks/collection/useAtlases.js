@@ -18,7 +18,7 @@ function normalizeAtlases(api) {
 }
 
 export default function useAtlases() {
-  const [atlases, setAtlases] = useState([]);
+  const [atlases, setAtlases] = useState(null);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
   const mountedRef = useRef(true);

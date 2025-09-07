@@ -25,12 +25,13 @@ export default function Page() {
     ? params.regionId[0]
     : params.regionId;
 
-  const region = regionDetails.find((r) => r.atlasId === Number(regionId)); // 배열에서 첫 번째 항목 찾기
+  const region = regionDetails.find((r) => r.atlasId === Number(regionId));
   const { atlases, loading, error, refetch } = useAtlases();
 
   useEffect(() => {
+    if (!region) return;
     refetch({ areaGroup: region.areaGroup });
-  }, []);
+  }, [region?.areaGroup, refetch]);
 
   return (
     <div className="max-w-[390px] w-screen mx-auto h-screen">

@@ -20,16 +20,18 @@ export default function Choices({ quiz, setSequence, setIsStart, quizCount }) {
   const options = [option1, option2, option3, option4];
   return (
     <div className="h-screen mx-4 flex flex-col">
-      {sequence !== 5 && (
+      {Number(sequence) < Number(quizCount) && (
         <div className="flex gap-2 pt-28">
-          {Array.from({ length: quizCount }, (v, i) => i + 1).map((i) => (
-            <hr
-              key={i}
-              className={`w-full py-1 border-none rounded-xl ${
-                i <= Number(sequence) ? 'bg-sub-100' : 'bg-sub-15'
-              }`}
-            />
-          ))}
+          {Array.from({ length: Number(quizCount) }, (v, i) => i + 1).map(
+            (i) => (
+              <hr
+                key={i}
+                className={`w-full py-1 border-none rounded-xl ${
+                  i <= Number(sequence) ? 'bg-sub-100' : 'bg-sub-15'
+                }`}
+              />
+            )
+          )}
         </div>
       )}
 
