@@ -12,12 +12,14 @@ export default function NeighborListItem({
   checked = false,
   onUnfollow,
   onToggle,
+  onFollowChange,
 }) {
   const router = useRouter();
 
   const { status, follow, unfollow, fetchStatus, loading } = useFollow(
     user.userId
   );
+  const isMutualFollow = status.isFollowedBy && status.isFollowing;
 
   const [showUnfollowModal, setShowUnfollowModal] = React.useState(false);
 
@@ -25,7 +27,7 @@ export default function NeighborListItem({
 
   useEffect(() => {
     fetchStatus();
-  }, [fetchStatus]);
+  }, [fetchStatus, isMutualFollow]);
 
   return (
     <li
@@ -55,15 +57,23 @@ export default function NeighborListItem({
       {/* 오른쪽: 모드별 UI */}
       {mode === 'followers' && (
         <div className="flex items-center gap-2">
-          {!user.isMutualFollow && (
+          {!isMutualFollow && (
             <span
-              onClick={(e) => {
-                e.stopPropagation();
-                follow();
-                show({
-                  message: `${user.nickname}님을 팔로우 했어요!`,
-                  variant: 'success',
-                });
+              onClick={async (e) => {
+                try {
+                  e.stopPropagation();
+                  follow();
+                  show({
+                    message: `${user.nickname}님을 팔로우 했어요!`,
+                    variant: 'success',
+                  });
+                  onFollowChange?.();
+                } catch (_) {
+                  show({
+                    message: '팔로우 실패했습니다. 다시 시도해주세요.',
+                    variant: 'danger',
+                  });
+                }
               }}
               className="px-2 py-1 text-xs bg-main-100 text-background rounded"
             >
@@ -103,6 +113,7 @@ export default function NeighborListItem({
                   message: `${user.nickname}님을 팔로우 했어요!`,
                   variant: 'success',
                 });
+                onFollowChange?.();
               }}
               className="px-2 py-1 rounded bg-main-100 text-background text-xs"
               disabled={loading}
@@ -148,6 +159,7 @@ export default function NeighborListItem({
               message: '취소가 완료되었습니다.',
               variant: 'success',
             });
+            onFollowChange?.();
           }}
         />
       )}

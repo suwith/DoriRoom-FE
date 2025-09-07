@@ -11,12 +11,22 @@ import clsx from 'clsx';
 
 export default function NeighborPage() {
   const [tab, setTab] = useState('followers');
-  const { followers, loading: followersLoading } = useFollowers({});
-  const { followings, loading: followingsLoading } = useFollowings({});
+  const {
+    followers,
+    loading: followersLoading,
+    refetch: refetchFollowers,
+  } = useFollowers({});
+  const {
+    followings,
+    loading: followingsLoading,
+    refetch: refetchFollowings,
+  } = useFollowings({});
   const [search, setSearch] = useState('');
 
   const currentList = tab === 'followers' ? followers : followings;
   const loading = tab === 'followers' ? followersLoading : followingsLoading;
+
+  console.log(currentList);
 
   const filteredList = currentList.filter((u) =>
     u.nickname.toLowerCase().includes(search.toLowerCase())
@@ -86,7 +96,15 @@ export default function NeighborPage() {
             </div>
             <div className="space-y-1">
               {filteredList.map((n) => (
-                <NeighborListItem key={n.userId} user={n} mode={tab} />
+                <NeighborListItem
+                  key={n.userId}
+                  user={n}
+                  mode={tab}
+                  onFollowChange={() => {
+                    refetchFollowers();
+                    refetchFollowings();
+                  }}
+                />
               ))}
             </div>
           </ul>

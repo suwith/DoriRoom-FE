@@ -1,6 +1,6 @@
 'use client';
 
-import { useEffect, useState } from 'react';
+import { useCallback, useEffect, useState } from 'react';
 import axiosInstance from '@/lib/axiosInstance';
 
 export default function useFollowers({
@@ -11,22 +11,23 @@ export default function useFollowers({
   const [followers, setFollowers] = useState([]);
   const [loading, setLoading] = useState(false);
 
-  useEffect(() => {
-    const fetchFollowers = async () => {
-      setLoading(true);
-      try {
-        const res = await axiosInstance.get('/follows/followers', {
-          params: { filterType, page, size },
-        });
-        setFollowers(res.data?.content?.content || []);
-      } catch (err) {
-        console.error('팔로워 목록 불러오기 실패:', err);
-      } finally {
-        setLoading(false);
-      }
-    };
-    fetchFollowers();
+  const fetchFollowers = useCallback(async () => {
+    setLoading(true);
+    try {
+      const res = await axiosInstance.get('/follows/followers', {
+        params: { filterType, page, size },
+      });
+      setFollowers(res.data?.content?.content || []);
+    } catch (err) {
+      console.error('팔로워 목록 불러오기 실패:', err);
+    } finally {
+      setLoading(false);
+    }
   }, [filterType, page, size]);
 
-  return { followers, loading };
+  useEffect(() => {
+    fetchFollowers();
+  }, [fetchFollowers]);
+
+  return { followers, loading, refetch: fetchFollowers };
 }

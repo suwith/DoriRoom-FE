@@ -207,13 +207,18 @@ export default function NeighborHome() {
           cancelText="아니오"
           onCancel={() => setShowUnfollowModal(false)}
           confirmText="네, 취소할래요"
-          onConfirm={() => {
-            unfollow();
-            setShowUnfollowModal(false);
-            show({
-              message: '취소가 완료되었습니다.',
-              variant: 'success',
-            });
+          onConfirm={async () => {
+            try {
+              await unfollow();
+              show({ message: '취소가 완료되었습니다.', variant: 'success' });
+            } catch (_) {
+              show({
+                message: '취소에 실패했습니다. 다시 시도해주세요.',
+                variant: 'danger',
+              });
+            } finally {
+              setShowUnfollowModal(false);
+            }
           }}
         />
       )}
