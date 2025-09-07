@@ -27,7 +27,7 @@ export default function BottomNavBar() {
   const pathname = usePathname();
 
   const HIDDEN_PATHS = [
-    '/home/decorate/',
+    '/home/decorate',
     '/festival/search/',
     '/festival/bookmarks/',
     '/login',
