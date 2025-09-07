@@ -12,9 +12,9 @@ import { useFestivalFilterStore } from '@/stores/useFestivalFilterStore';
 
 // 정렬 매핑
 const SORT_TO_PARAM = {
-  추천순: 'score,desc',
-  최신순: 'createdAt,desc',
-  좋아요순: 'favoriteCount,desc',
+  추천순: 'RECOMMENDED',
+  최신순: 'LATEST',
+  좋아요순: 'POPULAR',
 };
 
 // 서버 응답 → 리스트 아이템 매핑
@@ -36,22 +36,6 @@ function mapItem(item) {
     score: typeof item.score === 'number' ? item.score : 0,
     createdAt: item.createdAt ?? null,
   };
-}
-
-// 클라이언트 정렬
-function sortItems(list, sort = '추천순') {
-  switch (SORT_TO_PARAM[sort]) {
-    case 'createdAt,desc': // 최신순
-      return [...list].sort(
-        (a, b) => new Date(b.createdAt) - new Date(a.createdAt)
-      );
-    case 'favoriteCount,desc': // 좋아요순
-      return [...list].sort((a, b) => b.likes - a.likes);
-    case 'score,desc': // 추천순
-      return [...list].sort((a, b) => (b.score ?? 0) - (a.score ?? 0));
-    default:
-      return list;
-  }
 }
 
 export function useSearchFestivals({
@@ -122,6 +106,7 @@ export function useSearchFestivals({
           ? formatDateYYYYMMDD(period.end)
           : formatDateYYYYMMDD(period.start),
         keyword: keyword || undefined,
+        sortType: SORT_TO_PARAM[sort] || 'RECOMMENDED',
       };
 
       const params = { page, size };
@@ -132,7 +117,7 @@ export function useSearchFestivals({
       const list = Array.isArray(pageData?.content) ? pageData.content : [];
       const mapped = list.map(mapItem);
 
-      setItems((prev) => sortItems([...prev, ...mapped], sort));
+      setItems((prev) => [...prev, ...mapped]);
       setHasMore(!pageData?.last && mapped.length > 0);
       setPage((p) => p + 1);
       setTotal(pageData?.totalElements ?? 0);
