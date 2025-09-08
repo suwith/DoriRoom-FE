@@ -84,7 +84,7 @@ export default function Shop() {
           </Link>
         </div>
         {/* 캐릭터 */}
-        <div className="relative flex justify-center max-w-[390px] w-screen h-140">
+        <div className="relative flex justify-center max-w-[390px] w-screen min-h-76">
           {/* FLOOR (shop 이미지) */}
           {shopSrc(displayIds.FLOOR) && (
             <img
