@@ -536,6 +536,7 @@
       "asset": {
         "src": "/images/items/APPAREL/도리.svg",
         "thumb": "/images/thumb/APPAREL/도리.svg",
+        "guest": "/images/guest-book/APPAREL/도리.svg",
         "ox": 0,
         "oy": 0
       }
@@ -553,6 +554,7 @@
       "asset": {
         "src": "/images/items/APPAREL/학사모-도리.svg",
         "thumb": "/images/thumb/APPAREL/학사모-도리.svg",
+        "guest": "/images/guest-book/APPAREL/학사모-도리.svg",
         "ox": 0,
         "oy": 0
       }
@@ -570,6 +572,7 @@
       "asset": {
         "src": "/images/items/APPAREL/목도리-도리.svg",
         "thumb": "/images/thumb/APPAREL/목도리-도리.svg",
+        "guest": "/images/guest-book/APPAREL/목도리-도리.svg",
         "ox": 0,
         "oy": 0
       }
@@ -587,6 +590,7 @@
       "asset": {
         "src": "/images/items/APPAREL/빨간망토-도리.svg",
         "thumb": "/images/thumb/APPAREL/빨간망토-도리.svg",
+        "guest": "/images/guest-book/APPAREL/빨간망토-도리.svg",
         "ox": 0,
         "oy": 0
       }
@@ -604,6 +608,7 @@
       "asset": {
         "src": "/images/items/APPAREL/튜브-도리.svg",
         "thumb": "/images/thumb/APPAREL/튜브-도리.svg",
+        "guest": "/images/guest-book/APPAREL/튜브-도리.svg",
         "ox": 0,
         "oy": 0
       }
@@ -621,6 +626,7 @@
       "asset": {
         "src": "/images/items/APPAREL/메론빵-도리.svg",
         "thumb": "/images/thumb/APPAREL/메론빵-도리.svg",
+        "guest": "/images/guest-book/APPAREL/메론빵-도리.svg",
         "ox": 0,
         "oy": 0
       }
@@ -638,6 +644,7 @@
       "asset": {
         "src": "/images/items/APPAREL/생일파티-도리.svg",
         "thumb": "/images/thumb/APPAREL/생일파티-도리.svg",
+        "guest": "/images/guest-book/APPAREL/생일파티-도리.svg",
         "ox": 0,
         "oy": 0
       }
@@ -707,6 +714,7 @@
       "asset": {
         "src": "/images/items/APPAREL/감귤-도리.svg",
         "thumb": "/images/thumb/APPAREL/감귤-도리.svg",
+        "guest": "/images/guest-book/APPAREL/감귤-도리.svg",
         "ox": 0,
         "oy": 0
       }
@@ -724,6 +732,7 @@
       "asset": {
         "src": "/images/items/APPAREL/복숭아-도리.svg",
         "thumb": "/images/thumb/APPAREL/복숭아-도리.svg",
+        "guest": "/images/guest-book/APPAREL/복숭아-도리.svg",
         "ox": 0,
         "oy": 0
       }
@@ -741,6 +750,7 @@
       "asset": {
         "src": "/images/items/APPAREL/부산어묵-도리.svg",
         "thumb": "/images/thumb/APPAREL/부산어묵-도리.svg",
+        "guest": "/images/guest-book/APPAREL/부산어묵-도리.svg",
         "ox": 0,
         "oy": 0
       }
