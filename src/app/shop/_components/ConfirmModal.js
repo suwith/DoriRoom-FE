@@ -44,7 +44,7 @@ export default function ConfirmModal({
   }
 
   return (
-    <div className="fixed inset-0 z-50 flex justify-center">
+    <div className="fixed inset-0 z-55 flex justify-center">
       <div className="w-full max-w-[390px] bg-black/30 px-4 flex items-center justify-center">
         <div className="flex flex-col gap-4 bg-white rounded-lg shadow-lg w-[90%] max-w-sm px-10 py-6 animate-fade-in">
           <p className="text-center text-gray-800 text-base font-semibold">
