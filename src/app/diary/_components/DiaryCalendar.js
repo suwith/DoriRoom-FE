@@ -37,7 +37,7 @@ export default function DiaryCalendar({ diaries = [], onDateClick }) {
     .map((d) => parse(normalizeDate(d.date), 'yyyy.MM.dd', new Date()));
 
   return (
-    <div className="w-full max-w-sm mx-auto flex justify-center items-center">
+    <div className="w-full max-w-sm px-4 flex justify-center items-center">
       <DayPicker
         locale={ko}
         months={[
@@ -74,8 +74,8 @@ export default function DiaryCalendar({ diaries = [], onDateClick }) {
 
           // 기본 스타일
           const style = {
-            width: '39px',
-            height: '39px',
+            width: '36px',
+            height: '36px',
             borderRadius: '8px',
             fontSize: '14px',
             fontWeight: 500,
@@ -83,7 +83,7 @@ export default function DiaryCalendar({ diaries = [], onDateClick }) {
             textAlign: 'center',
             backgroundColor: '#F7F7F7',
             color: '#737373',
-            paddingTop: '4px',
+            paddingTop: '3px',
           };
 
           //썸네일 있는 일기가 있을 떄
