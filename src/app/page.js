@@ -73,7 +73,7 @@ export default function Home() {
   const selectAPPAREL = byType.APPAREL;
 
   return (
-    <>
+    <div className="h-screen overflow-y-hidden">
       <HeaderBar credit={data.credit} />
 
       <div className="relative flex-1 h-full flex justify-center items-center p-4 max-w-[390px] w-screen">
@@ -152,6 +152,6 @@ export default function Home() {
         className="fixed bottom-22 z-10"
         isMine={true}
       />
-    </>
+    </div>
   );
 }
