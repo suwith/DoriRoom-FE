@@ -5,9 +5,8 @@ import { useRouter } from 'next/navigation';
 import { useFindIdStore } from '@/stores/useFindIdStore';
 import HeaderNavigationBar from '@/app/_components/HeaderNavigationBar';
 import PrimaryButton from '@/app/_components/PrimaryButton';
-import { findUsername } from '@/hooks/auth/useFindId';
+import { findUsername, verifyEmailCode } from '@/hooks/auth/useFindId';
 import LoadingModal from '@/app/_components/LoadingModal';
-import { verifyEmailCode } from '@/hooks/auth/useEmailVerification';
 
 export default function FindIdCodePage() {
   const router = useRouter();

@@ -3,11 +3,11 @@
 import { useEffect, useLayoutEffect, useRef, useState } from 'react';
 import { useRouter } from 'next/navigation';
 import { useFindIdStore } from '@/stores/useFindIdStore';
-import { sendEmailVerification } from '@/hooks/auth/useEmailVerification';
 import HeaderNavigationBar from '@/app/_components/HeaderNavigationBar';
 import TextInput from '@/app/auth/_components/TextInput';
 import PrimaryButton from '@/app/_components/PrimaryButton';
 import LoadingModal from '@/app/_components/LoadingModal';
+import { sendEmailVerification } from '@/hooks/auth/useFindId';
 
 export default function FindIdEmailPage() {
   const router = useRouter();
