@@ -3,6 +3,7 @@
 import { useRouter } from 'next/navigation';
 import HeaderNavigationBar from '@/app/_components/HeaderNavigationBar';
 import PrimaryButton from '@/app/_components/PrimaryButton';
+import { useFindIdStore } from '@/stores/useFindIdStore';
 
 export default function FindIdResultPage() {
   const router = useRouter();

@@ -169,7 +169,7 @@ export default function FindPasswordCodePage() {
           form="find-password-code-form"
           disabled={loading || !isValid}
         >
-          입력 완료
+          인증하기
         </PrimaryButton>
       </div>
 

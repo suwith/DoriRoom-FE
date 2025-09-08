@@ -170,7 +170,7 @@ export default function ResetPasswordPage() {
             if (formEl?.tagName === 'FORM') formEl.requestSubmit();
           }}
         >
-          {loading ? '처리 중...' : '비밀번호 변경하기'}
+          변경 완료
         </PrimaryButton>
       </div>
 

@@ -5,7 +5,11 @@ import { useRouter } from 'next/navigation';
 import { useFindIdStore } from '@/stores/useFindIdStore';
 import HeaderNavigationBar from '@/app/_components/HeaderNavigationBar';
 import PrimaryButton from '@/app/_components/PrimaryButton';
-import { findUsername, verifyEmailCode } from '@/hooks/auth/useFindId';
+import {
+  findUsername,
+  sendEmailVerification,
+  verifyEmailCode,
+} from '@/hooks/auth/useFindId';
 import LoadingModal from '@/app/_components/LoadingModal';
 
 export default function FindIdCodePage() {
@@ -214,7 +218,7 @@ export default function FindIdCodePage() {
             disabled={loading || !isValid}
             form="find-id-code-form"
           >
-            입력 완료
+            인증하기
           </PrimaryButton>
         </div>
       </div>
