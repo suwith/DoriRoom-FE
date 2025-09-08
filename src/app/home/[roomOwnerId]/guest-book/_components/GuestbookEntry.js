@@ -3,6 +3,7 @@
 import { SlOptionsVertical } from 'react-icons/sl';
 import OptionModal from './OptionModal';
 import { useState } from 'react';
+import { useAuthStore } from '@/stores/useAuthStore';
 
 function formatCreatedAt(iso) {
   if (!iso) return '';
@@ -16,8 +17,10 @@ function formatCreatedAt(iso) {
   return `${y}.${M}.${D} ${h}:${m}`;
 }
 
-export default function GuestbookEntry({ data, DGMutate }) {
+export default function GuestbookEntry({ data, DGMutate, isOwner }) {
   const [isOpen, setIsOpen] = useState(false);
+
+  const user = useAuthStore((s) => s.user);
 
   return (
     <div className="flex w-full px-4 gap-8 items-center">
@@ -41,15 +44,16 @@ export default function GuestbookEntry({ data, DGMutate }) {
             fill="#FEFEFE"
           />
         </svg>
-
         <div className="flex">
-          <p className="flex-1 text-left font-normal text-neutral-900 text-base">
+          <p className="flex-1 min-w-0 text-left font-normal text-neutral-900 text-base break-words">
             {data.content}
           </p>
-          <SlOptionsVertical
-            className="text-neutral-400"
-            onClick={() => setIsOpen(true)}
-          />
+          {(user.userId === data.writerId || isOwner) && (
+            <SlOptionsVertical
+              className="text-neutral-400"
+              onClick={() => setIsOpen(true)}
+            />
+          )}
         </div>
         <p className="self-end font-normal text-sm text-neutral-400">
           {formatCreatedAt(data?.createdAt)}

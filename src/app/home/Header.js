@@ -5,11 +5,11 @@ import { FaFire } from 'react-icons/fa6';
 import { FaCamera } from 'react-icons/fa';
 import Link from 'next/link';
 import { useState } from 'react';
+import { useAuthStore } from '@/stores/useAuthStore';
 
 export default function HeaderBar({ credit }) {
   const [isOpenTogggle, setIsOpenToggle] = useState(false);
-  const userId =
-    localStorage.getItem('user_id') || sessionStorage.getItem('user_id');
+  const user = useAuthStore((e) => e.user);
 
   return (
     <header className="fixed top-15 left-0 right-0 z-50 mx-auto max-w-[390px] w-full">
@@ -33,7 +33,7 @@ export default function HeaderBar({ credit }) {
           <IconButton
             icon={<img src="/icons/mailbox.png" className="w-5 h-5" />}
             label="방명록"
-            href={`/home/${userId}/guest-book`}
+            href={`/home/${user.userId}/guest-book`}
             textColor="text-[#FD6161]"
           />
           <IconButton

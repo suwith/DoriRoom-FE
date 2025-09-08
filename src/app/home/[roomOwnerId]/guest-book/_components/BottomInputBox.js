@@ -30,7 +30,11 @@ export default function BottomInputBox({
         />
         <i
           className="mgc_send_fill text-3xl text-main-100 self-end"
-          onClick={sendMsg}
+          onClick={() => {
+            sendMsg();
+            setContent('');
+            textarea.current.style.height = 'auto'; //height 초기화
+          }}
         />
       </div>
     </div>
