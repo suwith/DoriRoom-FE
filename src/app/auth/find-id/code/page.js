@@ -5,12 +5,9 @@ import { useRouter } from 'next/navigation';
 import { useFindIdStore } from '@/stores/useFindIdStore';
 import HeaderNavigationBar from '@/app/_components/HeaderNavigationBar';
 import PrimaryButton from '@/app/_components/PrimaryButton';
-import {
-  findUsername,
-  sendEmailVerification,
-  verifyEmailCode,
-} from '@/hooks/auth/useFindId';
+import { findUsername } from '@/hooks/auth/useFindId';
 import LoadingModal from '@/app/_components/LoadingModal';
+import { verifyEmailCode } from '@/hooks/auth/useEmailVerification';
 
 export default function FindIdCodePage() {
   const router = useRouter();
@@ -20,9 +17,9 @@ export default function FindIdCodePage() {
   const [err, setErr] = useState(null);
   const inputsRef = useRef([]);
 
-  // useEffect(() => {
-  //   if (!email) router.replace('/auth/find-id/email');
-  // }, [email, router]);
+  useEffect(() => {
+    if (!email) router.replace('/auth/find-id/email');
+  }, [email, router]);
 
   function focusIndex(idx) {
     inputsRef.current[idx]?.focus();
