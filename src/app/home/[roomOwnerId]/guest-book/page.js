@@ -69,7 +69,7 @@ export default function GuestBookPage() {
         <div className="h-[calc(100vh-98px)] pt-[98px] pb-2 space-y-5 bg-[#F7F7F7] overflow-y-auto scrollbar-hide">
           {guestBook.map((data, idx) => (
             <GuestbookEntry
-              key={idx}
+              key={data.guestbookId}
               data={data}
               DGMutate={DGMutate}
               isOwner={isOwner}
