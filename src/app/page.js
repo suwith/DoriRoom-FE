@@ -12,6 +12,7 @@ import weather from '@/data/weather.json';
 import useLocationPermission from '@/hooks/location/useLocationPermission';
 import useLocationWatcher from '@/hooks/location/useLocationWatcher';
 import { useLocationStore } from '@/stores/useLocationStore';
+import { useAuthStore } from '@/stores/useAuthStore';
 
 const DEFAULT_FLOOR = 39;
 const DEFAULT_SHELF = 38;
@@ -31,6 +32,9 @@ export default function Home() {
   const equippedItems = Array.isArray(data?.equippedItems)
     ? data.equippedItems
     : [];
+
+  const user = useAuthStore((s) => s.user);
+  if (!user) router.push('/auth');
 
   // 권한이 허용됐을 때만 watch 시작/중지
   useEffect(() => {
