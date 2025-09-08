@@ -1,0 +1,8 @@
+include ':app', ':doriroom-image-picker'
+include ':capacitor-cordova-android-plugins'
+project(':capacitor-cordova-android-plugins').projectDir = new File('./capacitor-cordova-android-plugins/')
+
+project(':doriroom-image-picker').projectDir = new File(rootDir, '../doriroom-image-picker/android')
+
+
+apply from: 'capacitor.settings.gradle'

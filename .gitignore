@@ -23,7 +23,6 @@
 
 # production
 /build
-/android
 /ios
 
 # misc

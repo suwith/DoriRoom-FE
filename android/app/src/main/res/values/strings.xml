@@ -1,0 +1,7 @@
+<?xml version='1.0' encoding='utf-8'?>
+<resources>
+    <string name="app_name">doriroom</string>
+    <string name="title_activity_main">doriroom</string>
+    <string name="package_name">com.doritos.doriroom</string>
+    <string name="custom_url_scheme">com.doritos.doriroom</string>
+</resources>
