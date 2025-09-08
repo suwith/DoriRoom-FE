@@ -19,9 +19,6 @@ export function formatDateYYYYMMDD(d) {
   return `${y}-${m}-${day}`;
 }
 
-// 단일 시/도만 존재하는 그룹 코드: 서울(1), 강원(3), 제주(7)
-const SINGLE_AREA_GROUPS = new Set([1, 3, 7]);
-
 // 동일한 areaCode/sigunguCode 조합 중복 제거
 export function dedupLocations(locs) {
   const seen = new Set();
@@ -44,13 +41,6 @@ export function toApiLocation(l) {
     (l.areaCode === 0 || l.areaCode == null) && l.sigunguCode == null;
 
   if (isGroupAll) {
-    if (SINGLE_AREA_GROUPS.has(areaGroupCode)) {
-      return {
-        areaGroupCode,
-        areaCode: areaGroupCode,
-        sigunguCode: null,
-      };
-    }
     return {
       areaGroupCode,
       areaCode: null,

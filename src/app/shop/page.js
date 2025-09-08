@@ -66,9 +66,9 @@ export default function Shop() {
     <div className="flex justify-center h-screen pt-21 bg-neutral-100">
       <div className="flex flex-col max-w-[390px] w-screen mx-auto">
         {/* 상단 고정: 보유 포인트 (왼쪽 정렬) */}
-        <div className="fixed max-w-[390px] w-screen flex justify-between px-4 z-1">
+        <div className="fixed max-w-[390px] w-screen flex justify-between px-4 z-20">
           <div
-            className="flex justify-center items-center gap-2 rounded-lg w-auto px-2 h-8"
+            className="flex justify-center items-center gap-2 rounded-lg w-auto px-2 h-8 bg-background"
             style={{ boxShadow: '0 0 10px rgba(0,0,0,0.1)' }}
           >
             <FaFire className="trnsform scale-x-[-1] text-main-100 w-5 h-5" />
@@ -84,7 +84,7 @@ export default function Shop() {
           </Link>
         </div>
         {/* 캐릭터 */}
-        <div className="relative flex justify-center max-w-[390px] w-screen h-140">
+        <div className="relative flex justify-center max-w-[390px] w-screen min-h-76">
           {/* FLOOR (shop 이미지) */}
           {shopSrc(displayIds.FLOOR) && (
             <img

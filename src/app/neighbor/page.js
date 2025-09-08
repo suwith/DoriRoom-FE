@@ -26,8 +26,6 @@ export default function NeighborPage() {
   const currentList = tab === 'followers' ? followers : followings;
   const loading = tab === 'followers' ? followersLoading : followingsLoading;
 
-  console.log(currentList);
-
   const filteredList = currentList.filter((u) =>
     u.nickname.toLowerCase().includes(search.toLowerCase())
   );

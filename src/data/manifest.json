@@ -332,6 +332,7 @@
       "asset": {
         "src": "/images/items/FLOOR/교실-바닥.svg",
         "thumb": "/images/thumb/FLOOR/교실-바닥.svg",
+        "shop": "/images/shop/FLOOR/교실-바닥.svg",
         "ox": 0,
         "oy": 0
       }
@@ -349,6 +350,7 @@
       "asset": {
         "src": "/images/items/FLOOR/얼음-바닥.svg",
         "thumb": "/images/thumb/FLOOR/얼음-바닥.svg",
+        "shop": "/images/shop/FLOOR/얼음-바닥.svg",
         "ox": 0,
         "oy": 0
       }
@@ -366,6 +368,7 @@
       "asset": {
         "src": "/images/items/FLOOR/식탁보-바닥.svg",
         "thumb": "/images/thumb/FLOOR/식탁보-바닥.svg",
+        "shop": "/images/shop/FLOOR/식탁보-바닥.svg",
         "ox": 0,
         "oy": 0
       }
@@ -383,6 +386,7 @@
       "asset": {
         "src": "/images/items/FLOOR/모래사장-바닥.svg",
         "thumb": "/images/thumb/FLOOR/모래사장-바닥.svg",
+        "shop": "/images/shop/FLOOR/모래사장-바닥.svg",
         "ox": 0,
         "oy": 0
       }
@@ -400,6 +404,7 @@
       "asset": {
         "src": "/images/items/FLOOR/쿠키-바닥.svg",
         "thumb": "/images/thumb/FLOOR/쿠키-바닥.svg",
+        "shop": "/images/shop/FLOOR/쿠키-바닥.svg",
         "ox": 0,
         "oy": 0
       }
@@ -417,6 +422,7 @@
       "asset": {
         "src": "/images/items/FLOOR/핑크-카펫-바닥.svg",
         "thumb": "/images/thumb/FLOOR/핑크-카펫-바닥.svg",
+        "shop": "/images/shop/FLOOR/핑크-카펫-바닥.svg",
         "ox": 0,
         "oy": 0
       }
@@ -434,6 +440,7 @@
       "asset": {
         "src": "/images/items/WALL/칠판-벽지.svg",
         "thumb": "/images/thumb/WALL/칠판-벽지.svg",
+        "shop": "/images/shop/WALL/칠판-벽지.svg",
         "ox": 0,
         "oy": 0
       }
@@ -451,6 +458,7 @@
       "asset": {
         "src": "/images/items/WALL/눈꽃-벽지.svg",
         "thumb": "/images/thumb/WALL/눈꽃-벽지.svg",
+        "shop": "/images/shop/WALL/눈꽃-벽지.svg",
         "ox": 0,
         "oy": 0
       }
@@ -468,6 +476,7 @@
       "asset": {
         "src": "/images/items/WALL/구름-벽지.svg",
         "thumb": "/images/thumb/WALL/구름-벽지.svg",
+        "shop": "/images/shop/WALL/구름-벽지.svg",
         "ox": 0,
         "oy": 0
       }
@@ -485,6 +494,7 @@
       "asset": {
         "src": "/images/items/WALL/조개-벽지.svg",
         "thumb": "/images/thumb/WALL/조개-벽지.svg",
+        "shop": "/images/shop/WALL/조개-벽지.svg",
         "ox": 0,
         "oy": 0
       }
@@ -502,6 +512,7 @@
       "asset": {
         "src": "/images/items/WALL/롤리팝-벽지.svg",
         "thumb": "/images/thumb/WALL/롤리팝-벽지.svg",
+        "shop": "/images/shop/WALL/롤리팝-벽지.svg",
         "ox": 0,
         "oy": 0
       }
@@ -519,6 +530,7 @@
       "asset": {
         "src": "/images/items/WALL/풍선-벽지.svg",
         "thumb": "/images/thumb/WALL/풍선-벽지.svg",
+        "shop": "/images/shop/WALL/풍선-벽지.svg",
         "ox": 0,
         "oy": 0
       }

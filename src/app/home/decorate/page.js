@@ -36,7 +36,7 @@ export default function Decorate() {
       <HeaderNavigationBar title="꾸미기" className="bg-background shadow-sm" />
       <div className="flex flex-col max-w-[390px] w-screen mx-auto h-[calc(100vh-98px)] mt-[98px]">
         {/* 캐릭터 */}
-        <div className="relative flex justify-center max-w-[390px] w-screen h-150">
+        <div className="relative flex justify-center max-w-[390px] w-screen min-h-76">
           {/* FLOOR */}
           <img
             src={
@@ -89,7 +89,7 @@ export default function Decorate() {
             className={`absolute top-25 w-[150px] h-[184px]`}
             style={{ zIndex: zIndex.APPAREL }}
           />
-          <Link href="/shop" className="absolute bottom-0 right-2">
+          <Link href="/shop" className="absolute bottom-0 right-2 z-15">
             <div className="flex gap-2 items-center justify-center rounded-xl px-4 py-2 bg-main-100 text-background">
               <FaStore size={20} />
               <p className="font-bold text-[14px]">상점으로</p>
