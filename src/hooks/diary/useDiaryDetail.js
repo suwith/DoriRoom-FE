@@ -27,6 +27,7 @@ export default function useDiaryDetail(diaryId) {
               likes: d.likes ?? 0,
               date: d.visitedAt?.replace(/-/g, '.').slice(0, 10),
               createdAt: (d.createdAt || '').slice(0, 10),
+              visibility: d.visibility,
               author: {
                 id: d.userInfo?.userId,
                 name: d.userInfo?.nickname ?? '',
