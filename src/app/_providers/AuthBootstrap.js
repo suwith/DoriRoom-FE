@@ -35,7 +35,9 @@ export default function AuthBootstrap({ children }) {
     if (serverDown) return; // 점검 중이면 auth 로직도 막음
 
     const isAuthPage =
-      pathname?.startsWith('/login') || pathname?.startsWith('/signup');
+      pathname?.startsWith('/login') ||
+      pathname?.startsWith('/signup') ||
+      pathname?.startsWith('/auth');
 
     const tokens = getStoredTokens();
 
