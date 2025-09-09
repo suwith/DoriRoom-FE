@@ -12,6 +12,7 @@ import { MdChair } from 'react-icons/md';
 import Link from 'next/link';
 import useEquipItems from '@/hooks/decorate/useEquipItems';
 import manifest from '@/data/manifest.json';
+import LoadingContent from '../_components/LoadingContent';
 
 const DEFAULT_FLOOR = 39;
 const DEFAULT_SHELF = 38;
@@ -47,13 +48,15 @@ export default function Shop() {
     setPreview((prev) => ({ ...prev, [it.itemType]: itemId }));
   };
 
+  const byType = Object.fromEntries(equip.map((it) => [it.itemType, it]));
+
   const displayIds = {
-    FLOOR: preview.FLOOR ?? DEFAULT_FLOOR,
-    WALL: preview.WALL ?? null,
-    SHELF: preview.SHELF ?? DEFAULT_SHELF,
-    OBJECT: preview.OBJECT ?? null,
-    WINDOW: preview.WINDOW ?? DEFAULT_WINDOW,
-    APPAREL: preview.APPAREL ?? DEFAULT_APPAREL,
+    FLOOR: preview.FLOOR ?? byType.FLOOR?.itemId ?? DEFAULT_FLOOR,
+    WALL: preview.WALL ?? byType.WALL?.itemId ?? null,
+    SHELF: preview.SHELF ?? byType.SHELF?.itemId ?? DEFAULT_SHELF,
+    OBJECT: preview.OBJECT ?? byType.OBJECT?.itemId ?? null,
+    WINDOW: preview.WINDOW ?? byType.WINDOW?.itemId ?? DEFAULT_WINDOW,
+    APPAREL: preview.APPAREL ?? byType.APPAREL?.itemId ?? DEFAULT_APPAREL,
   };
 
   const shopSrc = (id) =>
@@ -62,6 +65,7 @@ export default function Shop() {
   const itemSrc = (id) =>
     id != null ? (manifest.items?.[id]?.asset?.src ?? null) : null;
 
+  if (IALoaing) return <LoadingContent loading={IALoaing} />;
   return (
     <div className="flex justify-center h-screen pt-21 bg-neutral-100">
       <div className="flex flex-col max-w-[390px] w-screen mx-auto">
