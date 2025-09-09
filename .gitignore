@@ -25,6 +25,7 @@
 /build
 /android
 /ios
+/release.keystore
 
 # misc
 .DS_Store

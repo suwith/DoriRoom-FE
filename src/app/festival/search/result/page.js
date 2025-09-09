@@ -271,10 +271,10 @@ export default function FestivalSearchResultPage() {
   }, [loadMore]);
 
   return (
-    <div className="max-w-[390px] mx-auto h-screen w-screen flex flex-col bg-background">
+    <div className="mx-auto h-screen w-screen flex flex-col bg-background appbar-padding-t">
       {/* 고정 헤더 */}
       <header className="sticky top-0 z-[10] bg-background">
-        <div className="pt-[50px] px-4 pb-3">
+        <div className="px-4 pb-3">
           <SearchInputBar
             value={input}
             onChange={(e) => setInput(e.target.value)}

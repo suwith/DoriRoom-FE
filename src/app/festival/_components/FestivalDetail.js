@@ -100,9 +100,9 @@ export default function FestivalDetail({ festival }) {
   }, [reviewSort, setSort]);
 
   return (
-    <div className="max-w-[390px] w-screen min-h-screen pb-10">
+    <div className=" w-screen min-h-screen appbar-padding-b">
       <div
-        className={`fixed top-0 left-1/2 -translate-x-1/2 w-full pt-[50px] max-w-[390px] z-50 transition-colors duration-300 ${
+        className={`fixed top-0 left-1/2 -translate-x-1/2 w-full appbar-padding-t z-50 transition-colors duration-300 ${
           isScrolled ? 'bg-background' : 'bg-transparent'
         }`}
       >
@@ -215,7 +215,7 @@ export default function FestivalDetail({ festival }) {
 
       {/* 설명 탭 */}
       {activeTab === '설명' && (
-        <div className="px-4 py-6 space-y-6 text-sm text-neutral-800">
+        <div className="px-4 pt-6 space-y-6 text-sm text-neutral-800">
           {festival.thumbnail && (
             <div>
               <img src={festival.thumbnail} alt={festival.title} />
@@ -246,7 +246,7 @@ export default function FestivalDetail({ festival }) {
 
       {/* 일기장 탭 */}
       {activeTab === '일기장' && (
-        <div className="px-4 py-4 space-y-2">
+        <div className="px-4 pt-4 pb-10 space-y-2">
           <div className="flex items-center justify-between">
             <p>일기 {reviews.length}개</p>
             <select
@@ -303,7 +303,7 @@ export default function FestivalDetail({ festival }) {
           )}
 
           <button
-            className={`fixed bottom-7 left-1/2 -translate-x-1/2 w-[350px] py-2 text-background rounded-lg text-sm font-medium shadow-md ${written ? 'bg-neutral-300' : 'bg-main-100'}`}
+            className={`fixed btn-fixed-b left-1/2 -translate-x-1/2 w-[90%] py-2 text-background rounded-lg text-sm font-medium shadow-md ${written ? 'bg-neutral-300' : 'bg-main-100'}`}
             onClick={() => {
               sessionStorage.setItem(
                 'selectedFestival',
