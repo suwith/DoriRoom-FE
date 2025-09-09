@@ -27,7 +27,7 @@ export default function HeaderBar({ credit }) {
 
         {/* 오른쪽 기능 버튼들 */}
         <div
-          className="flex flex-col items-center space-y-3 text-green-500 text-sm font-medium rounded-lg overflow-y-hidden px-4 pt-3 pb-2 bg-background"
+          className="flex flex-col items-center space-y-4 text-green-500 text-sm font-medium rounded-lg overflow-y-hidden px-4 pt-3 pb-2 bg-background"
           style={{ boxShadow: '0 0 3px rgba(0,0,0,0.1)' }}
         >
           <IconButton
@@ -50,7 +50,7 @@ export default function HeaderBar({ credit }) {
           <div
             className={`w-full overflow-hidden transition-all duration-500 ${isOpenTogggle ? 'max-h-40' : 'max-h-0'}`}
           >
-            <div className="flex flex-col items-center space-y-3">
+            <div className="flex flex-col items-center space-y-4">
               <IconButton
                 icon={<i className="mgc_mail_fill text-[#FFBF47] text-xl" />}
                 label="알림"
