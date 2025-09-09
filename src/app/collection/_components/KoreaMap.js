@@ -347,7 +347,12 @@ export default function UnifiedKoreaMap() {
               </div>
               <p className="text-lg text-main-100">
                 {atlases?.nextRewardItem?.itemName ||
-                  atlases?.claimableRewardItems?.[0]?.itemName}
+                  atlases?.claimableRewardItems?.[0]?.itemName ||
+                  manifest.items[
+                    regionDetails.find(
+                      (region) => region.atlasId === atlases.atlasId
+                    ).itemId
+                  ]?.name}
               </p>
             </div>
           </div>
