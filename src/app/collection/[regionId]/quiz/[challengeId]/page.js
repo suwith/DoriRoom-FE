@@ -40,7 +40,7 @@ export default function page() {
   }
 
   return (
-    <div className="max-w-[390px] w-screen mx-auto h-screen bg-linear-to-t from-main-100/15 to-background flex flex-col">
+    <div className="w-full w-screen mx-auto h-screen bg-linear-to-t from-main-100/15 to-background flex flex-col">
       <HeaderNavigationBar
         title={`${region.name} 퀴즈`}
         className="bg-background"
