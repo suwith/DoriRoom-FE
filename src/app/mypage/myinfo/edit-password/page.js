@@ -41,7 +41,7 @@ export default function EditPassword() {
   }, [statusCode, error]);
 
   return (
-    <div className="flex flex-col max-w-[390px] w-screen h-screen px-4 pt-28">
+    <div className="flex flex-col w-screen h-screen px-4 pt-28">
       <EditHeaderNavBar
         title="비밀번호 변경"
         onClick={async () => {
@@ -70,7 +70,6 @@ export default function EditPassword() {
           autoComplete="new-password"
           value={newPassword}
           onChange={(e) => setNewPassword(e.target.value)}
-          className="mb-2"
         />
         <PasswordInput
           id="confirm-password"
