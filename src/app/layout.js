@@ -17,7 +17,7 @@ export default function RootLayout({ children }) {
     <html lang="ko">
       <body className="bg-gray-100 overflow-hidden">
         <KeyboardInsetsProvider>
-          <div className="relative max-w-[390px] w-full mx-auto h-screen flex flex-col border-x border-gray-200">
+          <div className="relative w-full mx-auto h-screen flex flex-col border-x border-gray-200">
             {/* 고정된 앱 화면 높이에서 */}
             <main
               id="main"
