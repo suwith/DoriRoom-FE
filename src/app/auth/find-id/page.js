@@ -18,16 +18,13 @@ export default function FindIdResultPage() {
       className="min-h-full flex flex-col px-4 pt-28"
       style={{ minHeight: 'calc(var(--vh, 1vh) * 100)' }}
     >
-      <HeaderNavigationBar
-        title="아이디 찾기"
-        onBackClick={() => router.replace('/login')}
-      />
+      <HeaderNavigationBar title="아이디 찾기" />
 
       <div className="flex flex-col font-medium text-md gap-0">
         회원님의 아이디 정보입니다.
       </div>
-      <div className="flex flex-col items-center p-2 bg-main-5 rounded-lg mt-6">
-        <p className="text-2xl font-bold text-main-100">{username}</p>
+      <div className="flex flex-col items-center py-3 bg-main-5 rounded-lg mt-6">
+        <p className="text-lg">{username}</p>
       </div>
 
       {/* 버튼을 하단에 고정 */}

@@ -5,11 +5,7 @@ import { useRouter } from 'next/navigation';
 import { useFindIdStore } from '@/stores/useFindIdStore';
 import HeaderNavigationBar from '@/app/_components/HeaderNavigationBar';
 import PrimaryButton from '@/app/_components/PrimaryButton';
-import {
-  findUsername,
-  sendEmailVerification,
-  verifyEmailCode,
-} from '@/hooks/auth/useFindId';
+import { sendEmailVerification, verifyEmailCode } from '@/hooks/auth/useFindId';
 import LoadingModal from '@/app/_components/LoadingModal';
 
 export default function FindIdCodePage() {
@@ -98,8 +94,8 @@ export default function FindIdCodePage() {
     setErr(null);
     const verificationCode = digits.join('');
     try {
-      await verifyEmailCode({ email, verificationCode });
-      const username = await findUsername(email);
+      const username = await verifyEmailCode({ email, verificationCode });
+
       setUsername(username);
       router.replace('/auth/find-id');
     } catch (e2) {
