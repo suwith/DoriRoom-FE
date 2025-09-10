@@ -310,7 +310,7 @@ export default function DiaryWrite({ mode = 'create' }) {
               (img, i) => (
                 <div
                   key={i}
-                  className={`min-w-[120px] min-h-[120px] w-[120px] h-[120px] flex-shrink-0 rounded-md bg-neutral-100 flex items-center justify-center overflow-hidden relative ${
+                  className={`min-w-[120px] min-h-[120px] w-[120px] h-[120px] flex-shrink-0 rounded-md bg-neutral-100 flex overflow-hidden relative ${
                     img ? '' : 'border border-dashed border-neutral-300'
                   }`}
                 >
@@ -328,7 +328,7 @@ export default function DiaryWrite({ mode = 'create' }) {
                             prev.filter((_, idx) => idx !== i)
                           )
                         }
-                        className="bg-main-5 bg-opacity-50 text-main-100 rounded-full w-5 h-5 p-1 text-xs"
+                        className="absolute top-2 right-2 bg-main-5 bg-opacity-50 text-main-100 rounded-full w-5 h-5 p-1 text-xs"
                       >
                         <i className="mgc_close_line" />
                       </button>

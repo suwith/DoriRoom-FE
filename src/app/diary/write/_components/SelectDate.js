@@ -3,8 +3,12 @@
 import DayPicker from 'react-day-picker';
 import 'react-day-picker/lib/style.css';
 import React from 'react';
+import { useToast } from '@/app/_providers/ToastProvider';
 
 export default function SelectDate({ selectedDate, onSelect, onClose }) {
+  const today = new Date();
+
+  const { show } = useToast();
   return (
     <div
       className={`fixed bottom-0 left-1/2 transform -translate-x-1/2 w-full max-w-[390px] mx-auto z-100 bg-background rounded-t-xl px-4 py-4`}
@@ -18,10 +22,20 @@ export default function SelectDate({ selectedDate, onSelect, onClose }) {
         </button>
       </div>
 
-      <div className="w-full max-w-sm mx-auto flex justify-center items-center mb-3">
+      <div className="w-full max-w-sm px-4 flex justify-center items-center mb-3 ">
         <DayPicker
           selectedDays={selectedDate}
-          onDayClick={(date) => onSelect(date)}
+          disabledDays={{ after: new Date(today.setHours(0, 0, 0, 0) - 1) }}
+          onDayClick={(date, modifiers) => {
+            if (modifiers.disabled) {
+              show({
+                message: '오늘 이후 날짜는 선택할 수 없습니다.',
+                variant: 'error',
+              });
+              return;
+            }
+            onSelect(date);
+          }}
           months={[
             '1월',
             '2월',
@@ -44,8 +58,8 @@ export default function SelectDate({ selectedDate, onSelect, onClose }) {
               new Date(selectedDate).toDateString() === date.toDateString();
 
             const style = {
-              width: '39px',
-              height: '39px',
+              width: '36px',
+              height: '36px',
               borderRadius: '8px',
               fontSize: '14px',
               fontWeight: 500,
@@ -53,7 +67,7 @@ export default function SelectDate({ selectedDate, onSelect, onClose }) {
               textAlign: 'center',
               backgroundColor: isSelected ? '#35C284' : '#F7F7F7',
               color: isSelected ? '#FEFEFE' : '#737373',
-              paddingTop: '4px',
+              paddingTop: '3px',
             };
 
             return <div style={style}>{date.getDate()}</div>;

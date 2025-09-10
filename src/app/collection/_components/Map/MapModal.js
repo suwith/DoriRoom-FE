@@ -100,7 +100,7 @@ export default function MapModal({ isOpen, setIsOpen, coordinates }) {
   if (!isOpen || !portalElement) return null;
 
   return createPortal(
-    <div className="max-w-[390px] w-full fixed top-0 bottom-0 bg-black/50 flex justify-center items-center z-50">
+    <div className="w-full fixed top-0 bottom-0 bg-black/50 flex justify-center items-center z-50">
       <div className="flex flex-col items-center bg-background p-5 rounded-lg w-[90%]">
         <div className="flex items-center justify-between w-full mb-5">
           <div className="w-[13px]"></div>
