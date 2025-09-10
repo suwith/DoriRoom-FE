@@ -9,8 +9,8 @@ export default function Result({ quiz, regionId }) {
   if (!success) return null;
 
   return (
-    <div className="max-w-[390px] w-screen h-screen mx-auto bg-linear-to-t from-main-100/15 to-background flex flex-col">
-      <div className="flex-1 flex flex-col items-center justify-center px-[16px] text-center">
+    <div className="w-screen h-screen mx-auto bg-linear-to-t from-main-100/15 to-background flex flex-col">
+      <div className="flex-1 flex flex-col items-center justify-center px-4 text-center">
         <p className="font-medium text-2xl text-neutral-900">축하드려요!</p>
         <p className="font-semibold text-2xl text-neutral-900">
           모든 퀴즈를 맞히셨어요🎉
@@ -25,11 +25,10 @@ export default function Result({ quiz, regionId }) {
         />
       </div>
 
-      <div className="px-[16px] pb-10">
+      <div className="px-4 pb-10">
         <button
           className="block w-full bg-main-100 text-background text-center text-xl font-semibold rounded-md py-2.5"
           onClick={() => history.back()}
-          // href={`/collection/${regionId}`}
         >
           보상 받기
         </button>

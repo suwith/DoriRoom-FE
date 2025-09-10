@@ -35,7 +35,7 @@ export default function Choices({ quiz, setSequence, setIsStart, quizCount }) {
         </div>
       )}
 
-      <div className="flex-1 flex flex-col justify-center mb-20">
+      <div className="flex-1 flex flex-col justify-center">
         <p className="font-bold text-2xl text-main-100">Q{sequence}.</p>
         <p className="font-semibold text-xl">{content}</p>
         <div className="flex flex-col gap-2 mt-10 font-bold text-xl w-full">
@@ -56,7 +56,7 @@ export default function Choices({ quiz, setSequence, setIsStart, quizCount }) {
       </div>
 
       <button
-        className="mb-10 bg-main-100 text-background text-center text-xl font-semibold rounded-md w-full py-2.5"
+        className="mb-[30px] bg-main-100 text-background text-center text-xl font-semibold rounded-md w-full py-2.5"
         onClick={() => {
           if (selectBtn === null) return;
           mutate({
@@ -71,11 +71,11 @@ export default function Choices({ quiz, setSequence, setIsStart, quizCount }) {
       </button>
 
       <div
-        className={`fixed top-0 bottom-0 left-1/2 transform -translate-x-1/2 w-full max-w-[390px] transition-colors duration-300 ${bottomSheetOpen ? 'bg-black/25 z-99' : 'bg-black/0 -z-1'}`}
+        className={`fixed top-0 bottom-0 left-1/2 transform -translate-x-1/2 w-full transition-colors duration-300 ${bottomSheetOpen ? 'bg-black/25 z-99' : 'bg-black/0 -z-1'}`}
       />
 
       <div
-        className={`fixed bottom-0 left-1/2 transform -translate-x-1/2 w-full max-w-[390px] mx-auto z-100 bg-white rounded-t-xl px-4 py-8 transition-transform duration-300 ease-in-out ${
+        className={`fixed bottom-0 left-1/2 transform -translate-x-1/2 w-full mx-auto z-100 bg-white rounded-t-xl px-4 py-8 transition-transform duration-300 ease-in-out ${
           bottomSheetOpen ? 'translate-y-0' : 'translate-y-full'
         }`}
       >

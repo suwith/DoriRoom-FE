@@ -398,10 +398,6 @@ export default function UnifiedKoreaMap() {
                 </div>
               </div>
             )}
-            <TaskCompleteModal
-              isOpen={isOpen}
-              title={atlases?.nextRewardItem?.itemName}
-            />
           </div>
           <button
             className="w-full bg-main-100 font-semibold text-white text-lg rounded-lg py-2 mt-7"
@@ -413,6 +409,10 @@ export default function UnifiedKoreaMap() {
           </button>
         </div>
       )}
+      <TaskCompleteModal
+        isOpen={isOpen}
+        title={atlases?.nextRewardItem?.itemName}
+      />
     </>
   );
 }

@@ -7,7 +7,7 @@ export default function QuizQuitModal({ isOpen, setIsOpen, regionId }) {
   const portalElement = document.getElementById('main');
 
   return createPortal(
-    <div className="max-w-[390px] w-full fixed top-0 bottom-0 bg-black/25 flex justify-center items-center z-50">
+    <div className="w-full fixed top-0 bottom-0 bg-black/25 flex justify-center items-center z-50">
       <div className="bg-background px-5 pt-8 pb-4 rounded-lg w-[90%] text-center font-semibold text-lg">
         <p className="">퀴즈를 중단하시겠어요?</p>
         <p>지금까지 풀던 내역이 모두 사라져요 😢</p>

@@ -28,7 +28,7 @@ export default function OX({ quiz, setSequence, setIsStart, quizCount }) {
           ))}
         </div>
       )}
-      <div className="flex-1 flex flex-col justify-center w-full mb-20">
+      <div className="flex-1 flex flex-col justify-center w-full">
         <p className="font-bold text-2xl text-main-100">Q{sequence}.</p>
         <p className="font-semibold text-xl">{content}</p>
         <div className="flex w-full gap-2 mt-15 font-bold text-xl">
@@ -47,7 +47,7 @@ export default function OX({ quiz, setSequence, setIsStart, quizCount }) {
         </div>
       </div>
       <button
-        className="mb-10 bg-main-100 text-background text-center text-xl font-semibold rounded-md w-full py-2.5 justify-self-end"
+        className="mb-[30px] bg-main-100 text-background text-center text-xl font-semibold rounded-md w-full py-2.5 justify-self-end"
         onClick={() => {
           if (selectBtn === null) return;
           mutate({
