@@ -76,7 +76,7 @@ export default function Home() {
     <div className="h-screen overflow-y-hidden">
       <HeaderBar credit={data.credit} />
 
-      <div className="relative flex-1 h-full flex justify-center items-center bottomnavbar-padding-tb w-full">
+      <div className="relative flex-1 h-full flex justify-center items-center p-4 max-w-[390px] w-screen">
         {/* FLOOR */}
         <img
           src={
