@@ -67,10 +67,10 @@ export default function Shop() {
 
   if (IALoaing) return <LoadingContent loading={IALoaing} />;
   return (
-    <div className="flex justify-center h-screen pt-21 bg-neutral-100">
-      <div className="flex flex-col max-w-[390px] w-screen mx-auto">
+    <div className="flex justify-center h-screen bg-neutral-100">
+      <div className="flex flex-col w-screen mx-auto">
         {/* 상단 고정: 보유 포인트 (왼쪽 정렬) */}
-        <div className="fixed max-w-[390px] w-screen flex justify-between px-4 z-20">
+        <div className="fixed w-screen flex justify-between px-4 z-20 appbar-padding-t">
           <div
             className="flex justify-center items-center gap-2 rounded-lg w-auto px-2 h-8 bg-background"
             style={{ boxShadow: '0 0 10px rgba(0,0,0,0.1)' }}
@@ -88,13 +88,13 @@ export default function Shop() {
           </Link>
         </div>
         {/* 캐릭터 */}
-        <div className="relative flex justify-center max-w-[390px] w-screen min-h-76">
+        <div className="relative flex justify-center w-screen mt-21 min-h-76">
           {/* FLOOR (shop 이미지) */}
           {shopSrc(displayIds.FLOOR) && (
             <img
               src={shopSrc(displayIds.FLOOR)}
               alt=""
-              className={`absolute top-60 block`}
+              className={`absolute top-60 block w-full`}
               style={{ zIndex: zIndex.FLOOR }}
             />
           )}
@@ -103,7 +103,7 @@ export default function Shop() {
             <img
               src={shopSrc(displayIds.WALL)}
               alt=""
-              className={`absolute -top-21 block`}
+              className={`absolute -top-21 block w-full`}
               style={{ zIndex: zIndex.WALL }}
             />
           )}
@@ -145,7 +145,7 @@ export default function Shop() {
           )}
           <button
             disabled={selectedItemIdx === null}
-            className={`absolute z-15 bottom-0 right-2 flex gap-2 items-center justify-center rounded-xl px-4 py-2 text-background ${selectedItemIdx === null || credit - selectedItem.price < 0 ? 'bg-neutral-300' : 'bg-main-100'}`}
+            className={`absolute z-15 -bottom-3 right-2 flex gap-2 items-center justify-center rounded-xl px-4 py-2 text-background ${selectedItemIdx === null || credit - selectedItem.price < 0 ? 'bg-neutral-300' : 'bg-main-100'}`}
             onClick={() => {
               if (credit - selectedItem.price >= 0) setIsOpenBuyModal(true);
               else

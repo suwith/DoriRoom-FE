@@ -32,25 +32,24 @@ export default function Decorate() {
   if (UILoading) return <LoadingContent loading={UILoading} />;
 
   return (
-    <div className="flex justify-center h-screen bg-neutral-100">
+    <div className="flex justify-center h-screen bg-neutral-100 pt-[95px]">
       <HeaderNavigationBar title="꾸미기" className="bg-background shadow-sm" />
-      <div className="flex flex-col max-w-[390px] w-screen mx-auto h-[calc(100vh-98px)] mt-[98px]">
-        {/* 캐릭터 */}
-        <div className="relative flex justify-center max-w-[390px] w-screen min-h-76">
+      <div className="flex flex-col w-screen mx-auto">
+        <div className="relative flex justify-center w-screen min-h-76">
           {/* FLOOR */}
           <img
             src={
               manifest.items?.[selectFLOOR?.itemId]?.asset?.shop ||
               manifest.items?.[DEFAULT_FLOOR]?.asset?.shop
             }
-            className={`absolute top-60`}
+            className={`absolute top-60 w-full`}
             style={{ zIndex: zIndex.FLOOR }}
           />
           {/* WALL */}
           {selectWALL && (
             <img
               src={manifest.items?.[selectWALL?.itemId]?.asset?.shop}
-              className={`absolute -top-21`}
+              className={`absolute -top-21 w-full`}
               style={{ zIndex: zIndex.WALL }}
             />
           )}
