@@ -9,6 +9,7 @@ import useGuestBookDetail from '@/hooks/guest-book/useGuestBookDetail';
 import usePostGuestBook from '@/hooks/guest-book/usePostGuestBook';
 import useDeleteGuestBook from '@/hooks/guest-book/useDeleteGuestBook';
 import { useAuthStore } from '@/stores/useAuthStore';
+import LoadingContent from '@/app/_components/LoadingContent';
 
 export default function GuestBookPage() {
   const user = useAuthStore((s) => s.user);
@@ -44,10 +45,10 @@ export default function GuestBookPage() {
   if (!guestBook) return <div className="p-4">방명록이 없습니다.</div>;
 
   return (
-    <div className="max-w-[390px] w-screen h-screen bg-[#F7F7F7]">
+    <div className="w-screen h-screen bg-[#F7F7F7]">
       <HeaderNavigationBar title="방명록" className="bg-[#F7F7F7]" />
       {GBLoading ? (
-        <div className="text-center">로딩중...</div>
+        <LoadingContent loading={GBLoading} />
       ) : guestBook.length === 0 && !isOwner ? (
         <div className="flex flex-col items-center justify-center gap-3 min-h-screen">
           <i className="mgc_sweats_fill text-6xl text-main-100" />
@@ -81,7 +82,7 @@ export default function GuestBookPage() {
       {!isOwner && (
         <BottomInputBox
           classname={
-            'fixed bottom-0 left-1/2 transform -translate-x-1/2 w-full max-w-[390px] px-4 py-[10px] mb-[34px]'
+            'fixed btn-fixed-b left-1/2 transform -translate-x-1/2 w-full px-4 py-[10px]'
           }
           content={content}
           setContent={setContent}
