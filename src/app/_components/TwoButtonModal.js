@@ -10,7 +10,7 @@ export default function TwoButtonModal({
 }) {
   return (
     <div className="fixed inset-0 z-50 flex justify-center">
-      <div className="w-full max-w-[390px] bg-black/30 px-4 flex items-center justify-center">
+      <div className="w-full bg-black/30 px-4 flex items-center justify-center">
         <div className="bg-background w-full rounded-xl p-4 text-center shadow-lg">
           <p className="text-base font-semibold mt-3">{title}</p>
           {description && (
