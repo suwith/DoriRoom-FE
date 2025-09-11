@@ -85,8 +85,16 @@ export default function FindPasswordCodePage() {
     setLoading(true);
     setErr(null);
     try {
-      await verifyPasswordResetCode({ email, verificationCode });
-      router.replace('/auth/find-password');
+      const res = await verifyPasswordResetCode({ email, verificationCode });
+
+      if (res?.verified) {
+        const store = useFindPasswordStore.getState();
+        store.setResetToken(res.resetToken);
+        store.setUsername(res.username); // username 저장
+        router.replace('/auth/find-password');
+      } else {
+        setErr('인증에 실패했습니다.');
+      }
     } catch (e2) {
       setErr(e2?.message || '인증 실패');
     } finally {

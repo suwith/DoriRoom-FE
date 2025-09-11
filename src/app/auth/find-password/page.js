@@ -22,8 +22,8 @@ function validPassword(pw) {
 }
 
 export default function ResetPasswordPage() {
+  const { email, resetToken, username, reset } = useFindPasswordStore();
   const router = useRouter();
-  const { email, code, reset } = useFindPasswordStore();
   const [password, setPassword] = useState('');
   const [passwordConfirm, setPasswordConfirm] = useState('');
   const [loading, setLoading] = useState(false);
@@ -44,7 +44,7 @@ export default function ResetPasswordPage() {
     setLoading(true);
     setErr(null);
     try {
-      await resetPassword({ email, code, newPassword: password });
+      await resetPassword({ email, resetToken, newPassword: password }); // resetToken 사용
       reset();
       router.replace('/login');
     } catch (e2) {
@@ -82,10 +82,15 @@ export default function ResetPasswordPage() {
 
   return (
     <div
-      className="min-h-full flex flex-col px-4 pt-28"
+      className="min-h-full flex flex-col px-4 pt-28 space-y-6"
       style={{ minHeight: 'calc(var(--vh, 1vh) * 100)' }}
     >
       <HeaderNavigationBar title="비밀번호 재설정" />
+
+      <div className="flex flex-col font-medium gap-3">
+        <p>아이디</p>
+        <p>{username}</p>
+      </div>
 
       <form
         id="reset-password-form"

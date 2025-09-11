@@ -12,7 +12,7 @@ export async function sendPasswordResetCode(email) {
 }
 
 export async function verifyPasswordResetCode({ email, verificationCode }) {
-  const res = await axiosInstance.post('/auth/email/verify', {
+  const res = await axiosInstance.post('/auth/password/verify', {
     email,
     verificationCode,
   });
@@ -20,13 +20,15 @@ export async function verifyPasswordResetCode({ email, verificationCode }) {
   if (data?.statusCode && data.statusCode !== 200) {
     throw data.error || '인증코드 확인 실패';
   }
-  return data;
+  const { verified, resetToken, username } = data.content;
+
+  return { verified, resetToken, username };
 }
 
-export async function resetPassword({ email, code, newPassword }) {
+export async function resetPassword({ email, resetToken, newPassword }) {
   const res = await axiosInstance.post('/auth/password/reset', {
     email,
-    code,
+    resetToken,
     newPassword,
   });
   const data = res.data;
