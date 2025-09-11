@@ -23,7 +23,8 @@ export default function GuestbookEntry({ data, DGMutate, isOwner }) {
 
   const user = useAuthStore((s) => s.user);
   const APPARELID =
-    data.writerEquippedItems.find((i) => i.itemType === 'APPAREL').itemId ?? 31;
+    data.writerEquippedItems.find((i) => i.itemType === 'APPAREL')?.itemId ??
+    31;
 
   return (
     <div className="flex w-full px-4 gap-8 items-center">
