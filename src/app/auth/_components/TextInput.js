@@ -1,4 +1,3 @@
-// app/auth/_components/TextInput.jsx
 'use client';
 
 export default function TextInput({

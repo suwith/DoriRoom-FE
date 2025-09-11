@@ -1,0 +1,187 @@
+'use client';
+
+import { useEffect, useLayoutEffect, useRef, useState } from 'react';
+import { useRouter } from 'next/navigation';
+import { useFindPasswordStore } from '@/stores/useFindPasswordStore';
+import { verifyPasswordResetCode } from '@/hooks/auth/useFindPassword';
+import HeaderNavigationBar from '@/app/_components/HeaderNavigationBar';
+import PrimaryButton from '@/app/_components/PrimaryButton';
+import LoadingModal from '@/app/_components/LoadingModal';
+
+export default function FindPasswordCodePage() {
+  const router = useRouter();
+  const { email } = useFindPasswordStore();
+  const [digits, setDigits] = useState(Array(6).fill(''));
+  const [loading, setLoading] = useState(false);
+  const [err, setErr] = useState(null);
+  const inputsRef = useRef([]);
+
+  useEffect(() => {
+    if (!email) router.replace('/auth/find-password/email');
+  }, [email, router]);
+
+  function focusIndex(idx) {
+    inputsRef.current[idx]?.focus();
+    inputsRef.current[idx]?.select?.();
+  }
+
+  function onChangeDigit(i, v) {
+    const digit = v.replace(/\D/g, '').slice(0, 1);
+    setDigits((prev) => {
+      const next = [...prev];
+      next[i] = digit;
+      return next;
+    });
+    if (digit && i < 5) focusIndex(i + 1);
+  }
+
+  function onKeyDown(i, e) {
+    if (e.key === 'Backspace') {
+      if (digits[i]) {
+        setDigits((prev) => {
+          const next = [...prev];
+          next[i] = '';
+          return next;
+        });
+      } else if (i > 0) {
+        focusIndex(i - 1);
+        setDigits((prev) => {
+          const next = [...prev];
+          next[i - 1] = '';
+          return next;
+        });
+      }
+      e.preventDefault();
+    }
+    if (e.key === 'ArrowLeft' && i > 0) {
+      focusIndex(i - 1);
+      e.preventDefault();
+    }
+    if (e.key === 'ArrowRight' && i < 5) {
+      focusIndex(i + 1);
+      e.preventDefault();
+    }
+  }
+
+  function onPaste(e) {
+    e.preventDefault();
+    const text = (e.clipboardData.getData('text') || '')
+      .replace(/\D/g, '')
+      .slice(0, 6);
+    if (!text) return;
+    const filled = text.split('');
+    setDigits(() => {
+      const next = Array(6).fill('');
+      for (let i = 0; i < filled.length; i += 1) next[i] = filled[i];
+      return next;
+    });
+    focusIndex(Math.min(filled.length - 1, 5));
+  }
+
+  async function onSubmit(e) {
+    e.preventDefault();
+    const verificationCode = digits.join('');
+    if (verificationCode.length !== 6) return;
+    setLoading(true);
+    setErr(null);
+    try {
+      const res = await verifyPasswordResetCode({ email, verificationCode });
+
+      if (res?.verified) {
+        const store = useFindPasswordStore.getState();
+        store.setResetToken(res.resetToken);
+        store.setUsername(res.username); // username 저장
+        router.replace('/auth/find-password');
+      } else {
+        setErr('인증에 실패했습니다.');
+      }
+    } catch (e2) {
+      setErr(e2?.message || '인증 실패');
+    } finally {
+      setLoading(false);
+    }
+  }
+
+  const isValid = digits.filter((d) => /\d/.test(d)).length === 6;
+
+  const footerRef = useRef(null);
+  useLayoutEffect(() => {
+    const el = footerRef.current;
+    if (!el) return;
+    const setVar = () => {
+      const h = el.getBoundingClientRect().height || 0;
+      document.documentElement.style.setProperty(
+        '--footer-h',
+        `${Math.ceil(h)}px`
+      );
+    };
+    setVar();
+    const ro = new ResizeObserver(setVar);
+    ro.observe(el);
+    return () => ro.disconnect();
+  }, []);
+
+  return (
+    <div
+      className="min-h-full flex flex-col px-4 pt-28"
+      style={{ minHeight: 'calc(var(--vh, 1vh) * 100)' }}
+    >
+      <HeaderNavigationBar title="비밀번호 찾기" />
+
+      <form
+        id="find-password-code-form"
+        onSubmit={onSubmit}
+        className="flex-1 flex flex-col gap-5 w-full"
+      >
+        <div className="flex flex-col font-medium text-md gap-0">
+          <span>{email}로</span>
+          <span>전송된 인증코드 6자리를 입력해주세요.</span>
+        </div>
+        <div className="w-full flex items-center justify-center">
+          <div className="flex justify-between w-[80%] items-center gap-0.5">
+            {Array.from({ length: 6 }).map((_, i) => {
+              const digit = digits[i] || '';
+              const isFilled = digit.trim() !== '';
+              return (
+                <input
+                  key={i}
+                  ref={(el) => (inputsRef.current[i] = el)}
+                  inputMode="numeric"
+                  maxLength={1}
+                  value={digit}
+                  className={`w-10 h-12 text-center text-lg rounded-[10px] focus:outline-none focus:ring-0 ${
+                    isFilled
+                      ? 'bg-main-5 text-main-100'
+                      : 'bg-neutral-100 text-main'
+                  }`}
+                  onChange={(e) => onChangeDigit(i, e.target.value)}
+                  onKeyDown={(e) => onKeyDown(i, e)}
+                  onPaste={i === 0 ? onPaste : undefined}
+                />
+              );
+            })}
+          </div>
+        </div>
+        {err && <p className="text-xs text-red-600">{err}</p>}
+      </form>
+
+      <div
+        ref={footerRef}
+        className="sticky left-0 right-0 pt-4 pb-7"
+        style={{
+          bottom: 'calc(env(safe-area-inset-bottom) + var(--kb-offset,0px))',
+        }}
+      >
+        <PrimaryButton
+          type="submit"
+          form="find-password-code-form"
+          disabled={loading || !isValid}
+        >
+          인증하기
+        </PrimaryButton>
+      </div>
+
+      <LoadingModal open={loading} />
+    </div>
+  );
+}
