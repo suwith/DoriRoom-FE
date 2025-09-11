@@ -20,7 +20,7 @@ export default function AuthPage() {
 
       <div className="w-full space-y-4">
         <Link
-          href="/signup/email"
+          href="/signup/agreements"
           className="block w-full text-center rounded-[10px] bg-main-100 text-background py-2.5 font-semibold text-lg"
         >
           회원가입
