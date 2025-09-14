@@ -10,7 +10,7 @@ function normalizeGuestBook(api) {
     content: api.content,
     writerId: api.writerId,
     writerNickname: api.writerNickname,
-    writerEquippredItems: api.writerEquippredItems,
+    writerEquippedItems: api.writerEquippedItems,
     roomOwnerId: api.roomOwnerId,
     createdAt: api.createdAt,
   };
