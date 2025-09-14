@@ -73,24 +73,24 @@ export default function Home() {
   const selectAPPAREL = byType.APPAREL;
 
   return (
-    <div className="h-screen overflow-y-hidden">
+    <div className="h-screen w-screen overflow-y-hidden">
       <HeaderBar credit={data.credit} />
 
-      <div className="relative flex-1 h-full flex justify-center items-center p-4 max-w-[390px] w-screen">
+      <div className="relative flex-1 h-full w-full flex justify-center items-center">
         {/* FLOOR */}
         <img
           src={
             manifest.items[selectFLOOR?.itemId]?.asset.src ||
             manifest.items[DEFAULT_FLOOR]?.asset.src
           }
-          className={`absolute top-130`}
+          className={`absolute top-130 w-full`}
           style={{ zIndex: zIndex.FLOOR }}
         />
         {/* WALL */}
         {manifest.items[selectWALL?.itemId]?.asset.src && (
           <img
             src={manifest.items[selectWALL?.itemId]?.asset.src}
-            className={`absolute top-0`}
+            className={`absolute top-0 w-full`}
             style={{ zIndex: zIndex.WALL }}
           />
         )}
