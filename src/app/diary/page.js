@@ -51,7 +51,7 @@ export default function DiaryPage() {
   }, [tab]);
 
   return (
-    <div className="min-h-screen pt-24 max-w-[390px] w-screen flex flex-col bg-background">
+    <div className="min-h-screen pt-24 w-full header-padding-tb flex flex-col bg-background">
       <HeaderNavigationBar
         title="일기장"
         showBackButton={true}
@@ -63,7 +63,7 @@ export default function DiaryPage() {
       {tab === 'collect' ? <CollectTabSection /> : <MyDiaryTabSection />}
 
       <button
-        className="fixed bottom-7 left-1/2 -translate-x-1/2 w-[350px] py-2 bg-main-100 text-background rounded-lg text-sm font-medium shadow-md"
+        className="fixed btn-fixed-b left-1/2 -translate-x-1/2 w-[350px] py-2 bg-main-100 text-background rounded-lg text-sm font-medium shadow-md"
         onClick={() => router.push('/diary/write')}
       >
         <div className="flex items-center justify-center gap-2">
