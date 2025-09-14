@@ -37,7 +37,7 @@ export default function MyDiaryTabSection() {
 
   return (
     <>
-      <div className="px-10 mt-3">
+      <div className="px-4 mt-3">
         {calendarLoading ? (
           <LoadingContent loading={calendarLoading} />
         ) : (
@@ -45,7 +45,7 @@ export default function MyDiaryTabSection() {
         )}
       </div>
 
-      <section className="px-4 pb-24">
+      <section className="px-4 pb-12">
         <div className="flex items-center gap-1 mb-3">
           <div className="text-md font-bold">내 일기 모아보기 🔍</div>
         </div>

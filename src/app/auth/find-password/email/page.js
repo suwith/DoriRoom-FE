@@ -58,7 +58,7 @@ export default function FindPasswordEmailPage() {
 
   return (
     <div
-      className="min-h-full flex flex-col px-4 pt-28"
+      className="min-h-full flex flex-col px-4 w-screen header-padding-tb"
       style={{ minHeight: 'calc(var(--vh, 1vh) * 100)' }}
     >
       <HeaderNavigationBar
@@ -96,7 +96,7 @@ export default function FindPasswordEmailPage() {
 
       <div
         ref={footerRef}
-        className="sticky left-0 right-0 pt-4 pb-7"
+        className="sticky left-0 right-0 pt-4"
         style={{
           bottom: 'calc(env(safe-area-inset-bottom) + var(--kb-offset, 0px))',
         }}

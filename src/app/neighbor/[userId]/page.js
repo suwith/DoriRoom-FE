@@ -87,10 +87,10 @@ export default function NeighborHome() {
   const selectAPPAREL = byType.APPAREL;
 
   return (
-    <div className="min-h-screen flex flex-col bg-background">
+    <div className="min-h-screen flex flex-col bg-background w-screen header-padding-t">
       {/* 헤더 */}
       <header
-        className={`fixed top-0 left-1/2 transform -translate-x-1/2 z-50 max-w-[390px] w-full pt-[50px] pb-[20px]`}
+        className={`fixed top-0 left-1/2 transform -translate-x-1/2 z-50 w-screen header-padding-t bg-background pb-[20px]`}
       >
         <div className="relative flex items-center justify-center mx-auto">
           <div className="flex items-center justify-center">
@@ -135,10 +135,10 @@ export default function NeighborHome() {
 
       {/* 캐릭터 + 배경 */}
 
-      <div className="relative flex-1 h-screen flex justify-center items-center p-4 max-w-[390px]">
+      <div className="relative flex-1 h-screen flex justify-center items-center w-screen">
         <Link
           href={`/home/${userId}/guest-book`}
-          className={`absolute top-25 right-5`}
+          className={`absolute top-17 right-5`}
           style={{ zIndex: 1000 }}
         >
           <div className="flex flex-col items-center space-y-1">
@@ -153,14 +153,14 @@ export default function NeighborHome() {
             manifest.items[selectFLOOR?.itemId]?.asset.src ||
             manifest.items[DEFAULT_FLOOR]?.asset.src
           }
-          className={`absolute bottom-0`}
+          className={`absolute bottom-0 w-screen`}
           style={{ zIndex: zIndex.FLOOR }}
         />
         {/* WALL */}
         {manifest.items[selectWALL?.itemId]?.asset.src && (
           <img
             src={manifest.items[selectWALL?.itemId]?.asset.src}
-            className={`absolute top-0`}
+            className={`absolute top-0 w-screen`}
             style={{ zIndex: zIndex.WALL }}
           />
         )}
@@ -178,7 +178,7 @@ export default function NeighborHome() {
         {manifest.items[selectOBJECT?.itemId]?.asset.src && (
           <img
             src={manifest.items[selectOBJECT?.itemId]?.asset.src}
-            className={`absolute bottom-[33%] right-2`}
+            className={`absolute bottom-[33%] right-3`}
             style={{ zIndex: zIndex.OBJECT }}
           />
         )}
@@ -211,7 +211,7 @@ export default function NeighborHome() {
             manifest.items[selectAPPAREL?.itemId]?.asset.src ||
             manifest.items[DEFAULT_APPAREL]?.asset.src
           }
-          className={`absolute bottom-[33%]`}
+          className={`absolute bottom-[33%] `}
           style={{ zIndex: zIndex.APPAREL }}
         />
       </div>
@@ -222,7 +222,7 @@ export default function NeighborHome() {
         like={room.likeCount}
         isLiked={isLiked}
         onLike={toggleLike}
-        className="fixed bottom-12 z-10"
+        className="fixed btn-fixed-b z-10"
         isMine={isMine}
       />
 

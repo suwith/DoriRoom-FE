@@ -44,13 +44,13 @@ export default function NeighborDiary() {
   };
 
   return (
-    <div className="min-h-screen flex flex-col bg-background pt-20">
+    <div className="min-h-screen flex flex-col bg-background w-screen header-padding-tb">
       <HeaderNavigationBar
         title={room && `${room?.nickname} 님의 일기장`}
         showBackButton={true}
         className="bg-background"
       />
-      <div className="px-10 mt-3">
+      <div className="px-10">
         {calendarLoading ? (
           <LoadingContent loading={calendarLoading} />
         ) : (
@@ -58,7 +58,7 @@ export default function NeighborDiary() {
         )}
       </div>
 
-      <section className="px-4 pb-7">
+      <section className="px-4">
         <div className="flex items-center gap-1 mb-3">
           <div className="text-md font-bold">
             {room?.nickname} 님의 일기 모아보기 🔍
