@@ -1,4 +1,3 @@
-// app/signup/profileImage/page.jsx
 'use client';
 
 import { useEffect, useLayoutEffect, useRef, useState } from 'react';
@@ -63,7 +62,7 @@ export default function SignupAvatarPage() {
 
   return (
     <div
-      className="min-h-full flex flex-col px-4 pt-28"
+      className="min-h-full flex flex-col px-4 header-padding-tb w-screen"
       style={{ minHeight: 'calc(var(--vh, 1vh) * 100)' }}
     >
       <HeaderNavigationBar
@@ -87,7 +86,7 @@ export default function SignupAvatarPage() {
 
       <div
         ref={footerRef}
-        className="sticky left-0 right-0 pt-2 pb-7 space-y-3"
+        className="sticky left-0 right-0 pt-2 space-y-3"
         style={{
           bottom: 'calc(env(safe-area-inset-bottom) + var(--kb-offset, 0px))',
         }}
