@@ -37,7 +37,7 @@ export default function Page() {
   if (loading) return <LoadingContent loading={loading} />;
 
   return (
-    <div className="max-w-[390px] w-screen mx-auto h-screen">
+    <div className="w-full w-screen mx-auto h-screen">
       <HeaderNavigationBar
         title={region.name}
         className="bg-background"

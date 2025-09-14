@@ -18,26 +18,30 @@ export default function useGetQuiz(challengeId) {
   const [error, setError] = useState(null);
   const mountedRef = useRef(true);
 
-  const refetch = useCallback(async () => {
-    if (!challengeId) return;
-    setLoading(true);
-    setError(null);
-    try {
-      const res = await axiosInstance.get(`quizzes/${challengeId}`);
-      const apiContent = res.data?.content || null;
-      if (!mountedRef.current) return;
-      setQuiz(normalizeQuiz(apiContent));
-    } catch (e) {
-      if (!mountedRef.current) return;
-      setError(e);
-    } finally {
-      if (mountedRef.current) setLoading(false);
-    }
-  }, [challengeId]);
+  const refetch = useCallback(
+    async ({ challengeId }) => {
+      if (!challengeId) return;
+      setLoading(true);
+      setError(null);
+      try {
+        const res = await axiosInstance.get(`quizzes/${challengeId}`);
+        const apiContent = res.data?.content || null;
+        if (!mountedRef.current) return;
+        setQuiz(normalizeQuiz(apiContent));
+      } catch (e) {
+        if (!mountedRef.current) return;
+        setError(e);
+      } finally {
+        if (mountedRef.current) setLoading(false);
+      }
+    },
+    [challengeId]
+  );
 
   useEffect(() => {
     mountedRef.current = true;
-    refetch();
+
+    refetch({ challengeId });
 
     return () => {
       mountedRef.current = false;

@@ -1,4 +1,3 @@
-// app/_components/forms/PasswordInput.jsx
 'use client';
 
 import { useState } from 'react';
