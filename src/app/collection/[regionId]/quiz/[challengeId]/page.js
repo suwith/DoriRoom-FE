@@ -6,6 +6,7 @@ import useGetQuiz from '@/hooks/collection/useGetQuiz';
 import StartPage from './_components/StartPage';
 import QuizClient from '@/app/collection/_components/Quiz/QuizClient';
 import { useState } from 'react';
+import LoadingContent from '@/app/_components/LoadingContent';
 
 const regionDetails = [
   { atlasId: 1, name: '서울', areaGroup: 'SEOUL' },
@@ -29,18 +30,19 @@ export default function page() {
 
   const region = regionDetails.find((r) => r.atlasId === Number(regionId)); // 배열에서 첫 번째 항목 찾기
 
+  const { quiz, loading, error, refetch } = useGetQuiz(challengeId);
   const [isStart, setIsStart] = useState(false);
   const [sequence, setSequence] = useState(1);
-  const { quiz, loading, error, refetch } = useGetQuiz(challengeId);
-
-  const quizCount = quiz.questions?.length;
 
   if (!region) {
     return <div>해당 지역을 찾을 수 없습니다.</div>; // region이 없다면 에러 처리
   }
 
+  if (loading) return <LoadingContent loading={loading} />;
+  const quizCount = quiz.questions?.length;
+
   return (
-    <div className="max-w-[390px] w-screen mx-auto h-screen bg-linear-to-t from-main-100/15 to-background flex flex-col">
+    <div className="w-full w-screen mx-auto h-screen bg-linear-to-t from-main-100/15 to-background flex flex-col">
       <HeaderNavigationBar
         title={`${region.name} 퀴즈`}
         className="bg-background"

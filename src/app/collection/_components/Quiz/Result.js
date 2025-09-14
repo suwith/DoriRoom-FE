@@ -1,11 +1,10 @@
 'use client';
 
 export default function Result({ quiz, regionId }) {
-  const success = quiz?.succes;
+  const success = quiz?.success;
   const rewards = quiz?.rewards;
   const exp = rewards.find((r) => r.rewardType === 'EXP')?.amount ?? 0;
   const credit = rewards.find((r) => r.rewardType === 'CREDIT')?.amount ?? 0;
-
   if (!success) return null;
 
   return (

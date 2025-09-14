@@ -4,6 +4,7 @@ import { SlOptionsVertical } from 'react-icons/sl';
 import OptionModal from './OptionModal';
 import { useState } from 'react';
 import { useAuthStore } from '@/stores/useAuthStore';
+import manifest from '@/data/manifest.json';
 
 function formatCreatedAt(iso) {
   if (!iso) return '';
@@ -21,11 +22,14 @@ export default function GuestbookEntry({ data, DGMutate, isOwner }) {
   const [isOpen, setIsOpen] = useState(false);
 
   const user = useAuthStore((s) => s.user);
+  const APPARELID =
+    data.writerEquippedItems?.find((i) => i.itemType === 'APPAREL')?.itemId ??
+    31;
 
   return (
     <div className="flex w-full px-4 gap-8 items-center">
       <div className="w-[25%] text-center">
-        <img src={data.avatar} />
+        <img src={manifest.items?.[APPARELID]?.asset?.guest} className="" />
         <span className="font-semibold text-neutral-900 text-base">
           {data.writerNickname}
         </span>
