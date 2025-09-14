@@ -7,7 +7,7 @@ const OPTIONS = ['추천순', '최신순', '좋아요순'];
 export default function SortFilter({ open, onClose, value, onChange }) {
   return (
     <BottomSheet open={open} onClose={onClose} title="정렬">
-      <div className="space-y-2 pb-6">
+      <div className="space-y-2">
         {OPTIONS.map((o) => {
           const active = value === o;
           return (

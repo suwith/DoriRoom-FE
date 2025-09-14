@@ -79,7 +79,7 @@ export default function CategoryFilter({
       onClose={onClose}
       title="분야"
       footer={
-        <div className="flex items-center gap-2 pb-3">
+        <div className="flex items-center gap-2">
           <button
             type="button"
             className="px-4 py-3 rounded-md bg-main-15 text-main-100 font-semibold shrink-0"

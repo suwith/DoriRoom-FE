@@ -13,7 +13,7 @@ export default function BottomSheet({
   return (
     <div className="fixed inset-0">
       <div
-        className={`fixed bottom-0 left-1/2 transform -translate-x-1/2 w-full max-w-[390px] mx-auto bg-background rounded-t-xl py-5 ${
+        className={`fixed bottom-0 left-1/2 transform -translate-x-1/2 w-screen mx-auto bg-background rounded-t-xl pt-5 appbar-padding-b ${
           title === '지역' ? '' : 'px-4'
         }`}
       >
