@@ -23,7 +23,7 @@ export default function GuestbookEntry({ data, DGMutate, isOwner }) {
 
   const user = useAuthStore((s) => s.user);
   const APPARELID =
-    data.writerEquippedItems.find((i) => i.itemType === 'APPAREL')?.itemId ??
+    data.writerEquippedItems?.find((i) => i.itemType === 'APPAREL')?.itemId ??
     31;
 
   return (
