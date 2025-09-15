@@ -1,7 +1,7 @@
 'use client';
 
 import TaskList from './TaskList';
-import { useEffect, useState, useMemo } from 'react';
+import { useEffect, useMemo, useState } from 'react';
 import { IoIosArrowDown } from 'react-icons/io';
 import { FaXmark } from 'react-icons/fa6';
 import { IoCheckmarkSharp } from 'react-icons/io5';
@@ -67,7 +67,7 @@ export default function TasksPage({ type, regionId, area = '' }) {
     );
 
   return (
-    <div className="flex flex-col gap-3 p-4 h-[calc(100vh-86px)]">
+    <div className="flex flex-col gap-3 px-4 h-[calc(100vh-86px)]">
       <div
         className="flex gap-2 items-center text-neutral-600 self-end font-normal text-[14px]"
         onClick={() => setBottomSheetOpen(true)}
