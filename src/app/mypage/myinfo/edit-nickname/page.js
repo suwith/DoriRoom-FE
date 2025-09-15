@@ -34,7 +34,7 @@ export default function EditNickname() {
   }, [CHNStatusCode, error]);
 
   return (
-    <div className="flex flex-col max-w-[390px] w-screen h-screen px-4 pt-28">
+    <div className="flex flex-col w-screen h-screen px-4 pt-28">
       <EditHeaderNavBar
         title="닉네임 변경"
         onClick={() => {

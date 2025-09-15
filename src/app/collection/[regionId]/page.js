@@ -37,14 +37,14 @@ export default function Page() {
   if (loading) return <LoadingContent loading={loading} />;
 
   return (
-    <div className="w-full w-screen mx-auto h-screen">
+    <div className="w-screen mx-auto h-screen">
       <HeaderNavigationBar
         title={region.name}
         className="bg-background"
         type="collection"
         atlases={atlases}
       />
-      <div className="pt-20">
+      <div className="header-padding-tb">
         <TasksPage type="region" regionId={regionId} area={region.areaGroup} />
       </div>
     </div>

@@ -8,7 +8,7 @@ export default function Collection() {
   const [activeTab, setActiveTab] = useState(1);
 
   return (
-    <div className="w-full w-screen mx-auto h-screen">
+    <div className="w-screen mx-auto h-screen">
       <div className="flex justify-around border-b border-neutral-200 h-[86px]">
         <div
           className={`flex flex-col items-center justify-end cursor-pointer px-4 text-base ${

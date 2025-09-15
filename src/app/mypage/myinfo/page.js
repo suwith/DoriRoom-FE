@@ -53,7 +53,7 @@ export default function Myinfo() {
   if (PLoading) return <LoadingContent loading={PLoading} />;
 
   return (
-    <div className="flex flex-col max-w-[390px] w-screen h-screen">
+    <div className="flex flex-col w-screen h-screen">
       <HeaderNavigationBar title="내 정보" />
       <div className="flex-2 flex items-end justify-center px-4">
         <div className="relative mb-12">

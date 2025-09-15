@@ -28,7 +28,7 @@ export default function OX({ quiz, setSequence, setIsStart, quizCount }) {
           ))}
         </div>
       )}
-      <div className="flex-1 flex flex-col justify-center w-full mb-20">
+      <div className="flex-1 flex flex-col justify-center w-full">
         <p className="font-bold text-2xl text-main-100">Q{sequence}.</p>
         <p className="font-semibold text-xl">{content}</p>
         <div className="flex w-full gap-2 mt-15 font-bold text-xl">
@@ -47,7 +47,7 @@ export default function OX({ quiz, setSequence, setIsStart, quizCount }) {
         </div>
       </div>
       <button
-        className="mb-10 bg-main-100 text-background text-center text-xl font-semibold rounded-md w-full py-2.5 justify-self-end"
+        className="mb-[30px] bg-main-100 text-background text-center text-xl font-semibold rounded-md w-full py-2.5 justify-self-end"
         onClick={() => {
           if (selectBtn === null) return;
           mutate({
@@ -62,11 +62,11 @@ export default function OX({ quiz, setSequence, setIsStart, quizCount }) {
       </button>
 
       <div
-        className={`fixed top-0 bottom-0 left-1/2 transform -translate-x-1/2 w-full max-w-[390px] transition-colors duration-300 ${bottomSheetOpen ? 'bg-black/25 z-99' : 'bg-black/0 -z-1'}`}
+        className={`fixed top-0 bottom-0 left-1/2 transform -translate-x-1/2 w-full ransition-colors duration-300 ${bottomSheetOpen ? 'bg-black/25 z-99' : 'bg-black/0 -z-1'}`}
       />
 
       <div
-        className={`fixed bottom-0 left-1/2 transform -translate-x-1/2 w-full max-w-[390px] mx-auto z-100 bg-white rounded-t-xl px-4 py-8 transition-transform duration-300 ease-in-out ${bottomSheetOpen ? 'translate-y-0' : 'translate-y-full'}`}
+        className={`fixed bottom-0 left-1/2 transform -translate-x-1/2 w-full mx-auto z-100 bg-white rounded-t-xl px-4 py-8 transition-transform duration-300 ease-in-out ${bottomSheetOpen ? 'translate-y-0' : 'translate-y-full'}`}
       >
         {loading ? (
           <LoadingContent loading={loading} />

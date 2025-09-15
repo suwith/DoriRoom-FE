@@ -82,7 +82,7 @@ export default function TasksPage({ type, regionId, area = '' }) {
         refetch={refetch}
       />
       <div
-        className={`fixed bottom-0 left-1/2 transform -translate-x-1/2 w-full w-full mx-auto layout-padding-b z-100 bg-background rounded-t-xl px-3 pt-4 shadow-[0_-4px_12px_rgba(0,0,0,0.1)] transition-transform duration-300 ease-in-out ${bottomSheetOpen ? 'translate-y-0' : 'translate-y-full'}`}
+        className={`fixed bottom-0 left-1/2 transform -translate-x-1/2 w-full mx-auto appbar-padding-b z-100 bg-background rounded-t-xl px-3 pt-4 shadow-[0_-4px_12px_rgba(0,0,0,0.1)] transition-transform duration-300 ease-in-out ${bottomSheetOpen ? 'translate-y-0' : 'translate-y-full'}`}
       >
         <div className="flex items-center justify-between">
           <span className="font-semibold">정렬기준</span>

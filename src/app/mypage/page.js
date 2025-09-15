@@ -12,7 +12,7 @@ export default function Mypage() {
   const { logout, loggingOut } = useLogout();
 
   return (
-    <div className="flex flex-col max-w-[390px] w-screen h-screen">
+    <div className="flex flex-col w-screen h-screen">
       <div className="flex-2 flex items-center justify-center bg-main-5 px-4">
         <UserProfile />
       </div>

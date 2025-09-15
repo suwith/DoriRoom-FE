@@ -12,7 +12,7 @@ export default function HeaderBar({ credit }) {
   const user = useAuthStore((e) => e.user);
 
   return (
-    <header className="fixed top-15 left-0 right-0 z-50 mx-auto max-w-[390px] w-full">
+    <header className="fixed appbar-padding-t left-0 right-0 z-50 mx-auto w-full">
       <div className="flex justify-between items-start px-4 py-2">
         {/* 왼쪽 포인트 */}
         <div className="sticky flex z-10">

@@ -308,7 +308,7 @@ export default function UnifiedKoreaMap() {
       </svg>
       {isVisible && (
         <div
-          className={`fixed bottom-0 w-full w-full mx-auto pb-5 z-100 bg-white rounded-t-xl px-4 pt-4 transition-transform duration-300 ease-in-out ${bottomSheetOpen ? 'translate-y-0' : 'translate-y-full'}`}
+          className={`fixed bottom-0 w-full mx-auto appbar-padding-b z-100 bg-white rounded-t-xl px-4 pt-4 transition-transform duration-300 ease-in-out ${bottomSheetOpen ? 'translate-y-0' : 'translate-y-full'}`}
         >
           <div className="flex items-center justify-between">
             <span className="font-semibold">
