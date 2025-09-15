@@ -188,9 +188,9 @@ export default function LoginPage() {
         }}
       >
         <div className="mt-2 flex items-center justify-center gap-4 text-neutral-400">
-          <Link href="/auth/find-id">아이디 찾기</Link>
+          <Link href="/auth/find-id/email">아이디 찾기</Link>
           <span>|</span>
-          <Link href="/auth/find-password">비밀번호 찾기</Link>
+          <Link href="/auth/find-password/email">비밀번호 찾기</Link>
         </div>
         <PrimaryButton
           type="submit"

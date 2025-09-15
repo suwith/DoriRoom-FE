@@ -79,14 +79,13 @@ export default function BookmarkPage() {
   }
 
   return (
-    <div className="relative mx-auto max-w-[390px] h-screen bg-background">
+    <div className="relative w-screen header-padding-tb h-screen bg-background">
       {/* 고정 헤더 */}
       <header
-        className="fixed top-0 left-1/2 -translate-x-1/2 z-50 w-full max-w-[390px] pt-[50px] bg-background"
-        style={{ height: HEADER_TOTAL }}
+        className="fixed top-0 left-1/2 -translate-x-1/2 z-50 w-screen header-padding-t bg-background pb-[20px]"
         aria-hidden={false}
       >
-        <div className="relative w-full h-[60px] flex items-center justify-center px-4">
+        <div className="relative w-full  flex items-center justify-center">
           {editMode ? (
             <button
               onClick={cancelEdit}
@@ -113,12 +112,7 @@ export default function BookmarkPage() {
 
       {/* 스크롤 영역: 헤더 아래부터 화면 하단까지 */}
       <main
-        className={`absolute left-0 right-0 mx-auto max-w-[390px] overflow-y-auto scrollbar-hide `}
-        style={{
-          top: HEADER_TOTAL,
-          height: `calc(100vh - ${HEADER_TOTAL}px)`,
-          paddingBottom: hasBottomAction ? '92px' : '20px', // 하단 버튼이 있을 때 가리지 않도록 여유
-        }}
+        className={`absolute left-0 right-0 mx-screen overflow-y-auto appbar-padding-b scrollbar-hide `}
       >
         {loading && (
           <div className="space-y-3">
@@ -186,7 +180,7 @@ export default function BookmarkPage() {
 
       {/* 하단 고정 삭제 버튼 */}
       {hasBottomAction && (
-        <div className="fixed left-1/2 -translate-x-1/2 bottom-7 z-50 w-full max-w-[390px] px-4">
+        <div className="fixed left-1/2 -translate-x-1/2 btn-fixed-b z-50 w-[95%] px-4">
           <button
             disabled={deleting}
             onClick={() => setShowDeleteModal(true)}

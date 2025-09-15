@@ -54,10 +54,10 @@ export default function NeighborManagePage() {
   if (loading) return <LoadingContent loading={loading} />;
 
   return (
-    <div className="min-h-screen flex flex-col bg-white pt-20">
+    <div className="min-h-screen flex flex-col bg-background w-screen header-padding-tb">
       {/* 헤더 */}
       <header
-        className={`fixed top-0 left-1/2 transform -translate-x-1/2 z-50 max-w-[390px] w-full pt-[50px] pb-[20px]`}
+        className={`fixed top-0 left-1/2 transform -translate-x-1/2 z-50 w-screen header-padding-t bg-background pb-[20px]`}
       >
         <div className="relative flex items-center justify-center mx-auto">
           <h1 className="text-xl font-semibold text-gray-800">
@@ -78,7 +78,7 @@ export default function NeighborManagePage() {
       </header>
 
       {/* 리스트 */}
-      <div className="flex-1 overflow-y-auto px-4 pt-4">
+      <div className="flex-1 overflow-y-auto px-4">
         <p className="text-sm text-gray-600 mb-2">
           팔로잉 {followings.length}명
         </p>
@@ -96,7 +96,7 @@ export default function NeighborManagePage() {
       </div>
 
       {/* 하단 버튼 */}
-      <div className="px-4 py-3 bg-background pb-7">
+      <div className="w-[95%] bg-background fixed bottom-0 left-1/2 transform -translate-x-1/2 z-50 flex justify-center gap-4 btn-fixed-b">
         <button
           onClick={handleSave}
           className="w-full py-3 bg-main-100 text-background rounded-lg font-semibold"

@@ -292,7 +292,7 @@ export default function RegionFilter({
       onClose={onClose}
       title="지역"
       footer={
-        <div className="flex items-center gap-2 pb-3 px-4">
+        <div className="flex items-center gap-2 px-4">
           <button
             type="button"
             className="px-4 py-3 rounded-md bg-main-15 text-main-100 font-semibold shrink-0"

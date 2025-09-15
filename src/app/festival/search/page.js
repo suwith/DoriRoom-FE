@@ -60,7 +60,7 @@ export default function SearchPage() {
   );
 
   return (
-    <div className="max-w-[390px] w-full h-screen bg-background mx-auto pt-[50px]">
+    <div className="appbar-padding-t w-screen h-screen bg-background mx-auto">
       {/* 검색창 */}
       <div className="px-4">
         <SearchInputBar
@@ -137,7 +137,9 @@ export default function SearchPage() {
                       <span className="mr-5 text-neutral-500 text-xs">
                         {idx + 1}
                       </span>
-                      <span className="text-[13px]">{item.keyword}</span>
+                      <span className="text-[13px] truncate">
+                        {item.keyword}
+                      </span>
                     </span>
                     <span className="text-xs gap-1 flex items-center">
                       {item.status === 'up' && (
@@ -168,7 +170,9 @@ export default function SearchPage() {
                       <span className="mr-5 text-neutral-500 text-xs">
                         {idx + 5}
                       </span>
-                      <span className="text-[13px]">{item.keyword}</span>
+                      <span className="text-[13px] truncate">
+                        {item.keyword}
+                      </span>
                     </span>
                     <span className="text-xs gap-1 flex items-center">
                       {item.status === 'up' && (

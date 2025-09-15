@@ -13,7 +13,7 @@ export default function FestivalPage() {
   const { popular, upcoming, endingSoon, loading, error } = useMainFestivals();
 
   return (
-    <div className="pb-24 pt-[50px] max-w-[390px] ">
+    <div className="w-screen appbar-padding-t layout-padding-b ">
       {/* 상단 검색바 + 하트 */}
       <div className="flex items-center gap-1 px-4">
         <div

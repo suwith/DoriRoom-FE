@@ -20,14 +20,14 @@ export default function DiaryList({ date, diaries: initialDiaries, type }) {
   };
 
   return (
-    <div className="min-h-screen pt-20 pb-28 bg-neutral-100">
+    <div className="min-h-screen header-padding-tb w-screen pb-28 bg-neutral-100">
       <HeaderNavigationBar
         title={`${date} 일기`}
         showBackButton={true}
         className="bg-neutral-100"
       />
 
-      <div className="px-4 space-y-4 pt-5">
+      <div className="px-4 space-y-4">
         {diaries.map((diary) => (
           <DiaryListItem
             key={diary.id}
@@ -40,7 +40,7 @@ export default function DiaryList({ date, diaries: initialDiaries, type }) {
 
       {type !== 'neighbor' && (
         <button
-          className="fixed bottom-7 left-1/2 -translate-x-1/2 w-[350px] py-2 bg-main-100 text-background rounded-lg text-sm font-medium shadow-md"
+          className="fixed btn-fixed-b left-1/2 -translate-x-1/2 w-[90%] py-2 bg-main-100 text-background rounded-lg text-sm font-medium shadow-md"
           onClick={() => router.push('/diary/write')}
         >
           <div className="flex items-center justify-center gap-2">
