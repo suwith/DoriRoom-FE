@@ -62,7 +62,7 @@ export default function SignupEmailPage() {
 
   return (
     <div
-      className="min-h-full flex flex-col px-4 pt-28"
+      className="flex flex-col px-4 layout-padding-tb"
       style={{ minHeight: 'calc(var(--vh, 1vh) * 100)' }}
     >
       <HeaderNavigationBar
