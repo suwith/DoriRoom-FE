@@ -47,7 +47,7 @@ export default function CategoryItemPanel({
   return (
     <div className="flex flex-col overflow-y-auto z-15">
       {/* 탭 영역 */}
-      <div className="shrink-0 mt-5 flex gap-2 overflow-x-auto scrollbar-hide px-3">
+      <div className="shrink-0 flex gap-2 overflow-x-auto scrollbar-hide px-3">
         {categoryBtns.map(({ id, name, type, icon }) => {
           const isActive = type === selectedCategoryId;
           return (
