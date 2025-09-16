@@ -34,6 +34,8 @@ export default function Decorate() {
   const selectWINDOW = byType.WINDOW;
   const selectAPPAREL = byType.APPAREL;
 
+  const DEFAULT_H = selectWALL ? wallH : 300;
+
   if (UILoading) return <LoadingContent loading={UILoading} />;
 
   return (
@@ -43,7 +45,7 @@ export default function Decorate() {
         <div
           className="relative flex justify-center w-screen" // min-h-[420px]
           style={{
-            minHeight: (selectWALL ? wallH : 300) + floorH - 35,
+            minHeight: DEFAULT_H + floorH - 35,
           }}
         >
           {/* FLOOR */}
@@ -54,7 +56,7 @@ export default function Decorate() {
               manifest.items?.[DEFAULT_FLOOR]?.asset?.shop
             }
             className={`absolute w-full`}
-            style={{ zIndex: zIndex.FLOOR, top: selectWALL ? wallH : 300 }}
+            style={{ zIndex: zIndex.FLOOR, top: DEFAULT_H }}
             onLoad={(e) => setFloorH(e.currentTarget.clientHeight)} // 렌더된 높이
           />
           {/* WALL */}
@@ -74,14 +76,14 @@ export default function Decorate() {
               manifest.items?.[DEFAULT_SHELF]?.asset?.src
             }
             className={`absolute left-3 w-[90px] h-[237px]`}
-            style={{ zIndex: zIndex.SHELF, top: wallH - 180 }}
+            style={{ zIndex: zIndex.SHELF, top: DEFAULT_H - 180 }}
           />
           {/* OBJECT */}
           {selectOBJECT && (
             <img
               src={manifest.items[selectOBJECT?.itemId]?.asset?.src}
               className={`absolute right-2 w-[90px] h-[110px]`}
-              style={{ zIndex: zIndex.OBJECT, top: wallH - 70 }}
+              style={{ zIndex: zIndex.OBJECT, top: DEFAULT_H - 70 }}
             />
           )}
           {/* WINDOW */}
@@ -91,7 +93,7 @@ export default function Decorate() {
               manifest.items[DEFAULT_WINDOW]?.asset?.src
             }
             className={`absolute w-[214px] h-[131px]`}
-            style={{ zIndex: zIndex.WINDOW, top: wallH - 280 }}
+            style={{ zIndex: zIndex.WINDOW, top: DEFAULT_H - 280 }}
           />
           {/* APPAREL */}
           <img
@@ -100,7 +102,7 @@ export default function Decorate() {
               manifest.items?.[DEFAULT_APPAREL]?.asset?.src
             }
             className={`absolute w-[150px] h-[184px]`}
-            style={{ zIndex: zIndex.APPAREL, top: wallH - 130 }}
+            style={{ zIndex: zIndex.APPAREL, top: DEFAULT_H - 130 }}
           />
           <Link href="/shop" className="absolute bottom-2 right-2 z-15">
             <div className="flex gap-2 items-center justify-center rounded-xl px-4 py-2 bg-main-100 text-background">
