@@ -6,7 +6,7 @@ import Image from 'next/image';
 
 export default function AuthPage() {
   return (
-    <div className="min-h-screen flex flex-col items-center justify-between px-4 layout-padding-b">
+    <div className="min-h-screen flex flex-col items-center justify-between px-4 appbar-padding-b">
       <div />
       <div className="flex flex-col items-center pb-[50%]">
         <Image
