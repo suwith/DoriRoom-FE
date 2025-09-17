@@ -11,7 +11,7 @@ export default function SelectDate({ selectedDate, onSelect, onClose }) {
   const { show } = useToast();
   return (
     <div
-      className={`fixed bottom-0 left-1/2 transform -translate-x-1/2 w-full max-w-[390px] mx-auto z-100 bg-background rounded-t-xl px-4 py-4`}
+      className={`fixed bottom-0 left-1/2 transform -translate-x-1/2 w-screen mx-auto z-100 bg-background rounded-t-xl px-4 pt-4 appbar-padding-b`}
     >
       <div className="w-full text-right mb-1">
         <button
@@ -22,7 +22,7 @@ export default function SelectDate({ selectedDate, onSelect, onClose }) {
         </button>
       </div>
 
-      <div className="w-full max-w-sm px-4 flex justify-center items-center mb-3 ">
+      <div className="w-full px-4 flex justify-center items-center mb-3 ">
         <DayPicker
           selectedDays={selectedDate}
           disabledDays={{ after: new Date(today.setHours(0, 0, 0, 0) - 1) }}

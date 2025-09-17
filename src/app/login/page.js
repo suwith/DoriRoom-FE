@@ -94,7 +94,7 @@ export default function LoginPage() {
 
   return (
     <div
-      className="flex flex-col px-4 pt-28"
+      className="flex flex-col px-4 header-padding-tb"
       // 키보드 열릴 때는 페이지 전체 스크롤을 잠궈서 버튼 아래로 내려갈 수 없게 한다
       style={{
         minHeight: 'calc(var(--vh, 1vh) * 100)',

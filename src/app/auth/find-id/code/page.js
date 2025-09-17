@@ -135,7 +135,7 @@ export default function FindIdCodePage() {
 
   return (
     <div
-      className="min-h-full w-full flex flex-col px-4 pt-28"
+      className="min-h-full flex flex-col px-4 w-screen header-padding-tb"
       style={{ minHeight: 'calc(var(--vh, 1vh) * 100)' }}
     >
       <div className="bg-background">
@@ -195,7 +195,7 @@ export default function FindIdCodePage() {
 
       <div
         ref={footerRef}
-        className="sticky left-0 right-0 pt-4 pb-7 w-full"
+        className="sticky left-0 right-0 pt-4 w-full"
         style={{
           bottom: 'calc(env(safe-area-inset-bottom) + var(--kb-offset, 0px))',
         }}

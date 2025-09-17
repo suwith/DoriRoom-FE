@@ -31,7 +31,7 @@ export default function NeighborPage() {
   );
 
   return (
-    <div className="min-h-screen pt-20 flex flex-col pb-7">
+    <div className="min-h-screen flex flex-col w-screen header-padding-tb bg-background">
       <HeaderNavigationBar
         title={'이웃'}
         showBackButton={true}
@@ -40,7 +40,7 @@ export default function NeighborPage() {
       />
 
       {/* 탭 */}
-      <div className="flex my-4 text-sm border-b-2 border-neutral-100">
+      <div className="flex mb-4 text-sm border-b-2 border-neutral-100">
         <button
           onClick={() => setTab('followers')}
           className={clsx(

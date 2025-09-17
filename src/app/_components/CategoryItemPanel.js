@@ -47,7 +47,7 @@ export default function CategoryItemPanel({
   return (
     <div className="flex flex-col overflow-y-auto z-15">
       {/* 탭 영역 */}
-      <div className="shrink-0 mt-5 flex gap-2 overflow-x-auto scrollbar-hide px-3">
+      <div className="shrink-0 flex gap-2 overflow-x-auto scrollbar-hide px-3">
         {categoryBtns.map(({ id, name, type, icon }) => {
           const isActive = type === selectedCategoryId;
           return (
@@ -74,7 +74,7 @@ export default function CategoryItemPanel({
       </div>
 
       {/* 아이템 리스트 */}
-      <div className="overflow-y-auto bg-background h-screen px-3 pt-6 pb-[80px] grid grid-cols-3 content-start gap-2 scrollbar-hide">
+      <div className="overflow-y-auto bg-background h-screen px-3 bottomnavbar-padding-tb grid grid-cols-3 content-start gap-2 scrollbar-hide">
         {/* 선택 안 함 */}
         {!isShop &&
           (['APPAREL', 'SHELF', 'WINDOW', 'FLOOR'].includes(

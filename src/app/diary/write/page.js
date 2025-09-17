@@ -203,8 +203,8 @@ export default function DiaryWrite({ mode = 'create' }) {
   }, []);
 
   return (
-    <div className="min-h-screen pt-20">
-      <header className="fixed top-0 left-1/2 transform -translate-x-1/2 z-50 max-w-[390px] w-full pt-[50px] pb-[10px] bg-background">
+    <div className="min-h-screen header-padding-tb w-screen">
+      <header className="fixed top-0 left-1/2 transform -translate-x-1/2 z-50 w-full header-padding-t pb-[10px] bg-background">
         <div className="relative flex items-center justify-center mx-auto">
           <h1 className="text-lg font-semibold">
             {mode === 'edit' ? '일기 수정하기' : '일기 작성하기'}
@@ -222,7 +222,7 @@ export default function DiaryWrite({ mode = 'create' }) {
         </div>
       </header>
 
-      <div className="space-y-5 px-4 pt-7 pb-7">
+      <div className="space-y-5 px-4">
         {/* 축제 선택 */}
         <div>
           <p className="text-[15px] font-semibold mb-3">

@@ -6,6 +6,15 @@
 :root {
   --background: #FEFEFE;
   --foreground: #171717;
+
+  /* 패딩/마진 전역 변수 */
+  --layout-padding-top: 95px; /* 상단 padding */
+  --layout-padding-bottom: 50px; /* 하단 padding */
+  --header-padding-top: 40px; /* 헤더네비바 상단 padding */
+  --bottomnavbar-padding: 92px; /* 바텀네비바 padding */
+  --appbar-padding-top: 30px; /* 앱바 상단 padding */
+  --appbar-padding-bottom: 30px; /* 앱바 하단 padding */
+
 }
 
 @theme {
@@ -34,6 +43,58 @@
   body {
     @apply text-neutral-900;
     font-family: 'Pretendard', sans-serif;
+  }
+}
+
+@layer utilities {
+
+  .layout-padding-t {
+    padding-top: var(--layout-padding-top);
+  }
+
+  .layout-padding-b {
+    padding-bottom: var(--layout-padding-bottom);
+  }
+
+  .layout-padding-tb {
+    padding-top: var(--layout-padding-top);
+    padding-bottom: var(--layout-padding-bottom);
+  }
+
+  .header-padding-t {
+    padding-top: var(--header-padding-top);
+  }
+
+  /* 바텀 네비바만 있는 경우(홈, 축제, 상점 등) */
+  .bottomnavbar-padding-tb {
+    padding-top: var(--appbar-padding-top);
+    padding-bottom: var(--bottomnavbar-padding);
+  }
+
+  /* 헤더 네비바만 있는 경우(로그인, 회원가입 등) */
+  .header-padding-tb {
+    padding-top: var(--layout-padding-top);
+    padding-bottom: var(--appbar-padding-bottom);
+  }
+
+   /* 네비바 없이 하단 스크롤 있는 경우 */
+  .appbar-padding-t {
+    padding-top: var(--appbar-padding-top);
+  }
+
+  /* 스크롤 영역 하단 패딩 */
+  .appbar-padding-b {
+    padding-bottom: var(--appbar-padding-bottom);
+  }
+
+  /* 헤더, 바텀 네비바 모두 없는 경우 (축제 검색, 상세페이지 등) */
+  .appbar-padding-tb {
+    padding-top: var(--appbar-padding-top);
+    padding-bottom: var(--appbar-padding-bottom);
+  }
+
+  .btn-fixed-b {
+    @apply bottom-8;
   }
 }
 

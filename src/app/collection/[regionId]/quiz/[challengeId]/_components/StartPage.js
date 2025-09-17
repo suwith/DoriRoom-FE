@@ -20,7 +20,7 @@ export default function StartPage({ name, setIsStart, quizCount }) {
       </div>
 
       {/* 하단 버튼 */}
-      <div className="px-[16px] pb-10">
+      <div className="px-4 appbar-padding-b">
         <button
           className="bg-main-100 text-background text-center text-xl font-semibold rounded-md w-full py-2.5 block"
           onClick={() => setIsStart(true)}

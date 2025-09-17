@@ -140,7 +140,7 @@ export default function DateFilter({
       onClose={onClose}
       title="기간"
       footer={
-        <div className="flex gap-2 font-semibold pb-3">
+        <div className="flex gap-2 font-semibold">
           <button
             className="flex-1 py-3 rounded-md bg-main-15 text-main-100"
             onClick={() => setTemp({ start: null, end: null })}

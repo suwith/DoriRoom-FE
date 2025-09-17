@@ -10,7 +10,7 @@ export default function RoomStatsCard({
 }) {
   return (
     <div
-      className={`flex justify-center gap-2 max-w-[390px] w-screen mx-auto px-4 ${className}`}
+      className={`flex justify-center gap-2 w-screen mx-auto px-4 ${className}`}
     >
       <div className="flex flex-1 items-center justify-center gap-1 text-main-100 bg-main-5 text-lg rounded-lg px-4 py-2">
         <i className="mgc_calendar_fill mr-2" />
