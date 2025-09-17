@@ -79,6 +79,7 @@ export default function Home() {
   const selectWINDOW = byType.WINDOW;
   const selectAPPAREL = byType.APPAREL;
 
+  const DEFAULT_H = selectWALL ? wallH : 520;
   return (
     <div className="h-screen w-screen overflow-y-hidden">
       <HeaderBar credit={data.credit} />
@@ -91,7 +92,7 @@ export default function Home() {
             manifest.items[DEFAULT_FLOOR]?.asset.src
           }
           className={`absolute w-full`}
-          style={{ zIndex: zIndex.FLOOR, top: wallH }}
+          style={{ zIndex: zIndex.FLOOR, top: DEFAULT_H }}
         />
         {/* WALL */}
         {manifest.items[selectWALL?.itemId]?.asset.src && (
@@ -110,7 +111,7 @@ export default function Home() {
             manifest.items[DEFAULT_SHELF]?.asset.src
           }
           className={`absolute left-3`}
-          style={{ zIndex: zIndex.SHELF, top: wallH - 180 }}
+          style={{ zIndex: zIndex.SHELF, top: DEFAULT_H - 180 }}
           onClick={() => router.push('/diary')}
         />
         {/* OBJECT */}
@@ -118,11 +119,11 @@ export default function Home() {
           <img
             src={manifest.items[selectOBJECT?.itemId]?.asset.src}
             className={`absolute right-2`}
-            style={{ zIndex: zIndex.OBJECT, top: wallH - 44 }}
+            style={{ zIndex: zIndex.OBJECT, top: DEFAULT_H - 44 }}
           />
         )}
         {/* WINDOW */}
-        <div className="absolute" style={{ top: wallH - 401 }}>
+        <div className="absolute" style={{ top: DEFAULT_H - 401 }}>
           <div className="relative w-[214px] h-[131px]">
             {/* 창문 */}
             <img
@@ -151,7 +152,7 @@ export default function Home() {
             manifest.items[DEFAULT_APPAREL]?.asset.src
           }
           className={`absolute`}
-          style={{ zIndex: zIndex.APPAREL, top: wallH - 140 }}
+          style={{ zIndex: zIndex.APPAREL, top: DEFAULT_H - 140 }}
         />
       </div>
 
