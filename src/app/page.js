@@ -6,7 +6,7 @@ import useMyRoom from '@/hooks/user/useMyRoom';
 import LoadingContent from './_components/LoadingContent';
 import manifest from '@/data/manifest.json';
 import useWeather from '@/hooks/home/useWeather';
-import { useEffect } from 'react';
+import { useEffect, useRef, useState } from 'react';
 import { useRouter } from 'next/navigation';
 import weather from '@/data/weather.json';
 import useLocationPermission from '@/hooks/location/useLocationPermission';
@@ -27,6 +27,9 @@ export default function Home() {
 
   const { weather: info, refetch } = useWeather();
   const location = useLocationStore((s) => s.location); // { lat, lng, ts }
+
+  const [wallH, setWallH] = useState(0);
+  const wallRef = useRef(null);
 
   const zIndex = manifest.defaults.zIndex;
   const equippedItems = Array.isArray(data?.equippedItems)
@@ -76,6 +79,7 @@ export default function Home() {
   const selectWINDOW = byType.WINDOW;
   const selectAPPAREL = byType.APPAREL;
 
+  const DEFAULT_H = selectWALL ? wallH : 520;
   return (
     <div className="h-screen w-screen overflow-y-hidden">
       <HeaderBar credit={data.credit} />
@@ -87,15 +91,17 @@ export default function Home() {
             manifest.items[selectFLOOR?.itemId]?.asset.src ||
             manifest.items[DEFAULT_FLOOR]?.asset.src
           }
-          className={`absolute top-130 w-full`}
-          style={{ zIndex: zIndex.FLOOR }}
+          className={`absolute w-full`}
+          style={{ zIndex: zIndex.FLOOR, top: DEFAULT_H }}
         />
         {/* WALL */}
         {manifest.items[selectWALL?.itemId]?.asset.src && (
           <img
+            ref={wallRef}
             src={manifest.items[selectWALL?.itemId]?.asset.src}
             className={`absolute top-0 w-full`}
             style={{ zIndex: zIndex.WALL }}
+            onLoad={(e) => setWallH(e.currentTarget.clientHeight)} // 렌더된 높이
           />
         )}
         {/* 선반 */}
@@ -104,20 +110,20 @@ export default function Home() {
             manifest.items[selectSHELF?.itemId]?.asset.src ||
             manifest.items[DEFAULT_SHELF]?.asset.src
           }
-          className={`absolute top-75 left-3`}
-          style={{ zIndex: zIndex.SHELF }}
+          className={`absolute left-3`}
+          style={{ zIndex: zIndex.SHELF, top: DEFAULT_H - 180 }}
           onClick={() => router.push('/diary')}
         />
         {/* OBJECT */}
         {manifest.items[selectOBJECT?.itemId]?.asset.src && (
           <img
             src={manifest.items[selectOBJECT?.itemId]?.asset.src}
-            className={`absolute top-109 right-2`}
-            style={{ zIndex: zIndex.OBJECT }}
+            className={`absolute right-2`}
+            style={{ zIndex: zIndex.OBJECT, top: DEFAULT_H - 44 }}
           />
         )}
         {/* WINDOW */}
-        <div className="absolute top-37">
+        <div className="absolute" style={{ top: DEFAULT_H - 401 }}>
           <div className="relative w-[214px] h-[131px]">
             {/* 창문 */}
             <img
@@ -145,8 +151,8 @@ export default function Home() {
             manifest.items[selectAPPAREL?.itemId]?.asset.src ||
             manifest.items[DEFAULT_APPAREL]?.asset.src
           }
-          className={`absolute top-82`}
-          style={{ zIndex: zIndex.APPAREL }}
+          className={`absolute`}
+          style={{ zIndex: zIndex.APPAREL, top: DEFAULT_H - 140 }}
         />
       </div>
 

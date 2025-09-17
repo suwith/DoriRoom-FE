@@ -1,6 +1,6 @@
 'use client';
 
-import { useState, useMemo } from 'react';
+import { useState, useMemo, useRef } from 'react';
 import { FaFire } from 'react-icons/fa6';
 import { RiWallet3Fill } from 'react-icons/ri';
 import ConfirmModal from '@/app/shop/_components/ConfirmModal';
@@ -34,6 +34,11 @@ export default function Shop() {
   const { equip, loading: EILoading, refetch: EIRefetch } = useEquipItems();
   const { show } = useToast();
 
+  const [wallH, setWallH] = useState(0);
+  const [floorH, setFloorH] = useState(0);
+  const wallRef = useRef(null);
+  const floorRef = useRef(null);
+
   const zIndex = manifest.defaults.zIndex;
 
   const selectedItem = useMemo(
@@ -58,6 +63,8 @@ export default function Shop() {
     WINDOW: preview.WINDOW ?? byType.WINDOW?.itemId ?? DEFAULT_WINDOW,
     APPAREL: preview.APPAREL ?? byType.APPAREL?.itemId ?? DEFAULT_APPAREL,
   };
+
+  const DEFAULT_H = displayIds.WALL ? wallH : 300;
 
   const shopSrc = (id) =>
     id != null ? (manifest.items?.[id]?.asset?.shop ?? null) : null;
@@ -88,23 +95,35 @@ export default function Shop() {
           </Link>
         </div>
         {/* 캐릭터 */}
-        <div className="relative flex justify-center w-screen mt-21 min-h-76">
+        <div
+          className="relative flex justify-center w-screen"
+          style={{
+            minHeight: DEFAULT_H + floorH - 35,
+          }}
+        >
           {/* FLOOR (shop 이미지) */}
           {shopSrc(displayIds.FLOOR) && (
             <img
+              ref={floorRef}
               src={shopSrc(displayIds.FLOOR)}
               alt=""
-              className={`absolute top-60 block w-full`}
-              style={{ zIndex: zIndex.FLOOR }}
+              className={`absolute block w-full`}
+              style={{
+                zIndex: zIndex.FLOOR,
+                top: DEFAULT_H,
+              }}
+              onLoad={(e) => setFloorH(e.currentTarget.clientHeight)} // 렌더된 높이
             />
           )}
           {/* WALL (shop 이미지) */}
           {shopSrc(displayIds.WALL) && (
             <img
+              ref={wallRef}
               src={shopSrc(displayIds.WALL)}
               alt=""
-              className={`absolute -top-21 block w-full`}
+              className={`absolute top-0 block w-full`}
               style={{ zIndex: zIndex.WALL }}
+              onLoad={(e) => setWallH(e.currentTarget.clientHeight)} // 렌더된 높이
             />
           )}
           {/* SHELF (src 이미지) */}
@@ -112,8 +131,8 @@ export default function Shop() {
             <img
               src={itemSrc(displayIds.SHELF)}
               alt=""
-              className={`absolute top-12 left-3 w-[90px] h-[237px] block`}
-              style={{ zIndex: zIndex.SHELF }}
+              className={`absolute left-3 w-[90px] h-[237px] block`}
+              style={{ zIndex: zIndex.SHELF, top: DEFAULT_H - 190 }}
             />
           )}
           {/* OBJECT */}
@@ -121,8 +140,8 @@ export default function Shop() {
             <img
               src={itemSrc(displayIds.OBJECT)}
               alt=""
-              className={`absolute top-44 right-2 w-[90px] h-[110px] block`}
-              style={{ zIndex: zIndex.OBJECT }}
+              className={`absolute right-2 w-[90px] h-[110px] block`}
+              style={{ zIndex: zIndex.OBJECT, top: DEFAULT_H - 70 }}
             />
           )}
           {/* WINDOW */}
@@ -130,8 +149,8 @@ export default function Shop() {
             <img
               src={itemSrc(displayIds.WINDOW)}
               alt=""
-              className={`absolute -top-8 w-[214px] h-[131px] block`}
-              style={{ zIndex: zIndex.WINDOW }}
+              className={`absolute w-[214px] h-[131px] block`}
+              style={{ zIndex: zIndex.WINDOW, top: DEFAULT_H - 290 }}
             />
           )}
           {/* APPAREL */}
@@ -139,13 +158,13 @@ export default function Shop() {
             <img
               src={itemSrc(displayIds.APPAREL)}
               alt=""
-              className={`absolute top-26 w-[150px] h-[184px] block`}
-              style={{ zIndex: zIndex.APPAREL }}
+              className={`absolute w-[150px] h-[184px] block`}
+              style={{ zIndex: zIndex.APPAREL, top: DEFAULT_H - 140 }}
             />
           )}
           <button
             disabled={selectedItemIdx === null}
-            className={`absolute z-15 -bottom-3 right-2 flex gap-2 items-center justify-center rounded-xl px-4 py-2 text-background ${selectedItemIdx === null || credit - selectedItem.price < 0 ? 'bg-neutral-300' : 'bg-main-100'}`}
+            className={`absolute z-15 bottom-2 right-2 flex gap-2 items-center justify-center rounded-xl px-4 py-2 text-background ${selectedItemIdx === null || credit - selectedItem.price < 0 ? 'bg-neutral-300' : 'bg-main-100'}`}
             onClick={() => {
               if (credit - selectedItem.price >= 0) setIsOpenBuyModal(true);
               else

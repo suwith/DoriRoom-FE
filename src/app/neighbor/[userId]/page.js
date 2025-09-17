@@ -1,6 +1,6 @@
 'use client';
 
-import React, { useEffect } from 'react';
+import React, { useEffect, useRef, useState } from 'react';
 import { useParams, useRouter } from 'next/navigation';
 import useFollow from '@/hooks/follow/useFollow';
 import useNeighborRoom from '@/hooks/follow/useNeighborRoom';
@@ -63,7 +63,8 @@ export default function NeighborHome() {
   }, [granted, location?.lat, location?.lng, refetch]);
 
   const [showUnfollowModal, setShowUnfollowModal] = React.useState(false);
-
+  const [wallH, setWallH] = useState(0);
+  const wallRef = useRef(null);
   const { show } = useToast();
 
   useEffect(() => {
@@ -85,6 +86,8 @@ export default function NeighborHome() {
   const selectOBJECT = byType.OBJECT;
   const selectWINDOW = byType.WINDOW;
   const selectAPPAREL = byType.APPAREL;
+
+  const DEFAULT_H = selectWALL ? wallH : 520;
 
   return (
     <div className="min-h-screen flex flex-col bg-background w-screen header-padding-t">
@@ -153,15 +156,17 @@ export default function NeighborHome() {
             manifest.items[selectFLOOR?.itemId]?.asset.src ||
             manifest.items[DEFAULT_FLOOR]?.asset.src
           }
-          className={`absolute bottom-0 w-screen`}
-          style={{ zIndex: zIndex.FLOOR }}
+          className={`absolute w-screen`}
+          style={{ zIndex: zIndex.FLOOR, top: DEFAULT_H }}
         />
         {/* WALL */}
         {manifest.items[selectWALL?.itemId]?.asset.src && (
           <img
+            ref={wallRef}
             src={manifest.items[selectWALL?.itemId]?.asset.src}
             className={`absolute top-0 w-screen`}
             style={{ zIndex: zIndex.WALL }}
+            onLoad={(e) => setWallH(e.currentTarget.clientHeight)} // 렌더된 높이
           />
         )}
         {/* 선반 */}
@@ -170,20 +175,20 @@ export default function NeighborHome() {
             manifest.items[selectSHELF?.itemId]?.asset.src ||
             manifest.items[DEFAULT_SHELF]?.asset.src
           }
-          className={`absolute bottom-[33%] left-3`}
-          style={{ zIndex: zIndex.SHELF }}
+          className={`absolute left-3`}
+          style={{ zIndex: zIndex.SHELF, top: DEFAULT_H - 200 }}
           onClick={() => router.push(`/neighbor/${room.userId}/diary`)}
         />
         {/* OBJECT */}
         {manifest.items[selectOBJECT?.itemId]?.asset.src && (
           <img
             src={manifest.items[selectOBJECT?.itemId]?.asset.src}
-            className={`absolute bottom-[33%] right-3`}
-            style={{ zIndex: zIndex.OBJECT }}
+            className={`absolute right-3`}
+            style={{ zIndex: zIndex.OBJECT, top: DEFAULT_H - 80 }}
           />
         )}
         {/* WINDOW */}
-        <div className="absolute top-37">
+        <div className="absolute top-37" style={{ top: DEFAULT_H - 401 }}>
           <div className="relative w-[214px] h-[131px]">
             {/* 창문 */}
             <img
@@ -211,8 +216,8 @@ export default function NeighborHome() {
             manifest.items[selectAPPAREL?.itemId]?.asset.src ||
             manifest.items[DEFAULT_APPAREL]?.asset.src
           }
-          className={`absolute bottom-[33%] `}
-          style={{ zIndex: zIndex.APPAREL }}
+          className={`absolute`}
+          style={{ zIndex: zIndex.APPAREL, top: DEFAULT_H - 170 }}
         />
       </div>
 
