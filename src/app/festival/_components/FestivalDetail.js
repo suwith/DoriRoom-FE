@@ -102,11 +102,11 @@ export default function FestivalDetail({ festival }) {
   return (
     <div className=" w-screen min-h-screen appbar-padding-b">
       <div
-        className={`fixed top-0 left-1/2 -translate-x-1/2 w-full appbar-padding-t z-50 transition-colors duration-300 ${
+        className={`fixed top-0 left-1/2 transform -translate-x-1/2 z-50 w-full header-padding-t pb-[20px] transition-colors duration-300 ${
           isScrolled ? 'bg-background' : 'bg-transparent'
         }`}
       >
-        <div className="flex items-center h-12 px-3">
+        <div className="flex items-center px-3">
           <BackButton
             color={isScrolled ? 'text-neutral-500' : 'text-background'}
             isShadow={true}

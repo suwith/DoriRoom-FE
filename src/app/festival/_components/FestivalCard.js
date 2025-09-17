@@ -17,7 +17,7 @@ export default function FestivalCard({ festival }) {
   return (
     <div className="bg-background overflow-hidden">
       <div
-        className="relative bg-neutral-100 w-full h-40 bg-cover bg-center rounded-lg"
+        className="relative bg-neutral-100 w-full h-44 bg-cover bg-center rounded-lg"
         style={{
           backgroundImage: `url(${
             festival.thumbnail || '/images/festivalImage_default.svg'

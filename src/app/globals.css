@@ -8,9 +8,9 @@
   --foreground: #171717;
 
   /* 패딩/마진 전역 변수 */
-  --layout-padding-top: 95px; /* 상단 padding */
+  --layout-padding-top: 75px; /* 상단 padding */
   --layout-padding-bottom: 50px; /* 하단 padding */
-  --header-padding-top: 40px; /* 헤더네비바 상단 padding */
+  --header-padding-top: 20px; /* 헤더네비바 상단 padding */
   --bottomnavbar-padding: 92px; /* 바텀네비바 padding */
   --appbar-padding-top: 20px; /* 앱바 상단 padding */
   --appbar-padding-bottom: 20px; /* 앱바 하단 padding */
@@ -121,4 +121,13 @@ input:-webkit-autofill:active {
   -webkit-box-shadow: 0 0 0 1000px #f5f5f5 inset !important; /* #f5f5f5 : bg-neutral-100 */
   box-shadow: 0 0 0 1000px #f5f5f5 inset !important;
   caret-color: #171717; /* #171717 : bg-neutral-900 */
+}
+
+/* 축제 배너 활성 점 색상 */
+.swiper-pagination-bullet-active {
+  background-color: #35C284 !important;
+}
+
+.swiper-pagination {
+  bottom: 4px !important;
 }
