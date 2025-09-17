@@ -7,7 +7,7 @@ export default function ErrorContent({ error }) {
   if (!error) return null;
 
   return (
-    <div className="flex w-full h-full flex-col items-center justify-center  gap-4">
+    <div className="flex w-full h-full flex-col items-center justify-center gap-4">
       <i className="mgc_sweats_fill text-5xl text-main-100" />
 
       <div className="text-center text-lg font-semibold">{error}</div>
