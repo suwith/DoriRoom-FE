@@ -12,8 +12,8 @@
   --layout-padding-bottom: 50px; /* 하단 padding */
   --header-padding-top: 40px; /* 헤더네비바 상단 padding */
   --bottomnavbar-padding: 92px; /* 바텀네비바 padding */
-  --appbar-padding-top: 30px; /* 앱바 상단 padding */
-  --appbar-padding-bottom: 30px; /* 앱바 하단 padding */
+  --appbar-padding-top: 20px; /* 앱바 상단 padding */
+  --appbar-padding-bottom: 20px; /* 앱바 하단 padding */
 
 }
 
