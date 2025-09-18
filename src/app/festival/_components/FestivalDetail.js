@@ -11,7 +11,6 @@ import { MdEditSquare } from 'react-icons/md';
 import ReviewItem from '@/app/festival/_components/ReviewItem';
 import { useRouter } from 'next/navigation';
 import useFestivalFavorite from '@/hooks/festival/useFestivalFavorite';
-import { useToast } from '@/app/_providers/ToastProvider';
 import useFestivalReviews from '@/hooks/festival/useFestivalReviews';
 import LoadingContent from '@/app/_components/LoadingContent';
 import useDiaryWritten from '@/hooks/diary/useDiaryWritten';
@@ -29,23 +28,6 @@ export default function FestivalDetail({ festival }) {
     useFestivalFavorite(festival.id, festival.likes);
 
   const { written, loading: writtenLoading } = useDiaryWritten(festival.id);
-
-  const { show } = useToast();
-  const didShowRef = useRef(false);
-
-  useEffect(() => {
-    if (didShowRef.current) return;
-    didShowRef.current = true;
-
-    show({
-      message:
-        festival.visitedFriend > 0
-          ? `${festival.visitedFriend}명의 친구가 해당 장소에 방문했어요!`
-          : '아직 방문한 친구가 없어요',
-      variant: 'festival',
-      duration: 2500,
-    });
-  }, [show, festival.visitedFriend]);
 
   // 이미지 하단 센티넬이 헤더 뒤로 넘어가면 isScrolled = true
   useEffect(() => {
@@ -227,19 +209,24 @@ export default function FestivalDetail({ festival }) {
               <Icon path={mdiTree} className="w-4 h-4 text-main-100" />
               행사소개
             </div>
-            <p className="text-neutral-600 leading-relaxed whitespace-pre-line">
-              {String(festival.eventIntro || '')}
-            </p>
+            <p
+              className="text-neutral-600 leading-relaxed"
+              dangerouslySetInnerHTML={{
+                __html: (festival.eventIntro || '').replace(/\n/g, '<br />'),
+              }}
+            />
           </div>
-
           <div>
             <div className="text-main-100 font-medium mb-1 flex items-center gap-1">
               <Icon path={mdiTree} className="w-4 h-4 text-main-100" />
               행사내용
             </div>
-            <p className="text-neutral-600 leading-relaxed whitespace-pre-line">
-              {String(festival.eventContent || '')}
-            </p>
+            <p
+              className="text-neutral-600 leading-relaxed"
+              dangerouslySetInnerHTML={{
+                __html: (festival.eventContent || '').replace(/\n/g, '<br />'),
+              }}
+            />
           </div>
         </div>
       )}
