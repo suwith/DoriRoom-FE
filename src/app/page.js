@@ -158,7 +158,10 @@ export default function Home() {
             <div className="absolute inset-0 bottom-2 flex items-center justify-center px-4">
               <p className="text-center break-words [overflow-wrap:anywhere] whitespace-pre-wrap max-w-full font-normal text-sm">
                 제 방에 오신 것을 환영합니다. 제 방에 오신 것을 환영합니다.{' '}
-                <i className="mgc_pencil_fill text-neutral-400" />
+                <i
+                  className="mgc_pencil_fill text-neutral-400"
+                  onClick={() => router.push('/home/edit-intro')}
+                />
               </p>
             </div>
           </div>
