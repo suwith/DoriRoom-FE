@@ -211,14 +211,30 @@ export default function NeighborHome() {
         </div>
 
         {/* APPAREL */}
-        <img
-          src={
-            manifest.items[selectAPPAREL?.itemId]?.asset.src ||
-            manifest.items[DEFAULT_APPAREL]?.asset.src
-          }
-          className={`absolute`}
-          style={{ zIndex: zIndex.APPAREL, top: DEFAULT_H - 170 }}
-        />
+        <div
+          className="absolute"
+          style={{ zIndex: zIndex.APPAREL, top: DEFAULT_H - 200 }}
+        >
+          <div className="relative">
+            {/* 말풍선 이미지 */}
+            <img src="/images/bubble.svg" />
+
+            {/* 말풍선 전체를 덮는 레이어 */}
+            <div className="absolute inset-0 bottom-2 flex items-center justify-center px-4">
+              <p className="text-justify break-words [overflow-wrap:anywhere] whitespace-pre-wrap max-w-full font-normal text-sm">
+                제 방에 오신 것을 환영합니다. 제 방에 오신 것을 환영합니다.
+              </p>
+            </div>
+          </div>
+
+          <img
+            src={
+              manifest.items[selectAPPAREL?.itemId]?.asset.src ||
+              manifest.items[DEFAULT_APPAREL]?.asset.src
+            }
+            className="-mt-8"
+          />
+        </div>
       </div>
 
       {/* 하단 정보 */}
