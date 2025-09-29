@@ -2,14 +2,13 @@
 
 import UserProfile from './_components/UserProfile';
 import Link from 'next/link';
-import TwoButtonModal from '../_components/TwoButtonModal';
-import { useState } from 'react';
+import { useRouter } from 'next/navigation';
 import useLogout from '@/hooks/auth/useLogout';
 import LoadingModal from '@/app/_components/LoadingModal';
 
 export default function Mypage() {
-  const [isOpen, setIsOpen] = useState(false);
   const { logout, loggingOut } = useLogout();
+  const router = useRouter();
 
   return (
     <div className="flex flex-col w-screen h-screen">
@@ -37,31 +36,12 @@ export default function Mypage() {
         </div>
         <div
           className="flex items-center space-x-2 py-3 px-4 cursor-pointer"
-          onClick={() => setIsOpen(true)}
+          onClick={() => router.push('/mypage/delete')}
         >
           <i className="mgc_delete_2_fill text-main-100 text-xl" />
           <span className="text-sm font-normal text-neutral-900">탈퇴하기</span>
         </div>
       </div>
-
-      {isOpen && (
-        <TwoButtonModal
-          description={
-            <>
-              앗, 탈퇴하면 모든 데이터가 사라져요!
-              <br />
-              정말 탈퇴하시겠어요?
-            </>
-          }
-          cancelText="취소할래요"
-          confirmText="네, 탈퇴할래요"
-          onCancel={() => setIsOpen(false)}
-          onConfirm={() => {
-            console.log('탈퇴됨');
-            setIsOpen(false);
-          }}
-        />
-      )}
 
       {loggingOut && <LoadingModal open={loggingOut} />}
     </div>
