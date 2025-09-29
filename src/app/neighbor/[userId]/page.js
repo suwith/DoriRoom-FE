@@ -221,8 +221,10 @@ export default function NeighborHome() {
 
             {/* 말풍선 전체를 덮는 레이어 */}
             <div className="absolute inset-0 bottom-2 flex items-center justify-center px-4">
-              <p className="text-justify break-words [overflow-wrap:anywhere] whitespace-pre-wrap max-w-full font-normal text-sm">
-                제 방에 오신 것을 환영합니다. 제 방에 오신 것을 환영합니다.
+              <p className="text-justify break-words [overflow-wrap:anywhere] whitespace-pre-wrap max-w-full font-normal text-xs">
+                {room?.speechBubble
+                  ? room?.speechBubble
+                  : '한줋소개가 추가되지 않았아요.'}
               </p>
             </div>
           </div>
