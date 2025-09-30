@@ -28,6 +28,7 @@ export default function BottomNavBar() {
 
   const HIDDEN_PATHS = [
     '/home/decorate',
+    '/home/mailbox',
     '/festival/search/',
     '/festival/bookmarks/',
     '/login',
