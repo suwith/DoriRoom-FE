@@ -40,6 +40,7 @@ export default function BottomNavBar() {
     '/auth',
     '/mypage/myinfo',
     '/neighbor',
+    '/ranking',
   ];
 
   const shouldHide =
