@@ -224,7 +224,7 @@ export default function NeighborHome() {
               <p className="text-justify break-words [overflow-wrap:anywhere] whitespace-pre-wrap max-w-full font-normal text-xs">
                 {room?.speechBubble
                   ? room?.speechBubble
-                  : '한줋소개가 추가되지 않았아요.'}
+                  : '한줄소개가 추가되지 않았아요.'}
               </p>
             </div>
           </div>

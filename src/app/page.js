@@ -148,7 +148,7 @@ export default function Home() {
         {/* APPAREL */}
         <div
           className="absolute"
-          style={{ zIndex: zIndex.APPAREL, top: DEFAULT_H - 200 }}
+          style={{ zIndex: zIndex.APPAREL, top: DEFAULT_H - 220 }}
         >
           <div className="relative">
             {/* 말풍선 이미지 */}

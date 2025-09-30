@@ -3,6 +3,7 @@
 import EditHeaderNavBar from '@/app/mypage/_components/EditHeaderNavBar';
 import usePutSpeech from '@/hooks/user/usePutSpeech';
 import LoadingContent from '@/app/_components/LoadingContent';
+import useMyRoom from '@/hooks/user/useMyRoom';
 import { useToast } from '@/app/_providers/ToastProvider';
 import { useEffect, useState } from 'react';
 
@@ -10,6 +11,13 @@ export default function page() {
   const [context, setContext] = useState('');
   const { mutate, data, loading, error } = usePutSpeech();
   const { show } = useToast();
+  const { data: myRoom } = useMyRoom();
+
+  useEffect(() => {
+    if (myRoom?.speechBubble !== null) {
+      setContext(myRoom.speechBubble ?? '');
+    }
+  }, [myRoom?.speechBubble]);
 
   useEffect(() => {
     if (data?.statusCode === 400) show(data?.error);
