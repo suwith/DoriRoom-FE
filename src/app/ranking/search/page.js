@@ -54,6 +54,7 @@ export default function UserSearchPage() {
           onClear={() => setInput('')}
           withBack
           autoFocus
+          type={'ranking'}
         />
       </div>
 
@@ -87,13 +88,13 @@ export default function UserSearchPage() {
       <div className="mt-6 w-full h-2 bg-neutral-100"></div>
 
       {/* 최근 방문한 프로필 */}
-      <div className="mt-6 pl-4">
+      <div className="mt-6 ml-4">
         <h3 className="text-sm mb-3 font-semibold">최근 방문한 프로필</h3>
-        <div className="flex gap-4 scrollbar-hide overflow-x-auto">
+        <div className="flex overflow-x-auto flex-nowrap scrollbar-hide">
           {visits.map((user) => (
             <div
               key={user.userId}
-              className="flex flex-col items-center cursor-pointer"
+              className="flex flex-col items-center cursor-pointer shrink-0 mr-4"
               onClick={() => router.push(`/neighbor/${user.userId}`)}
             >
               <img

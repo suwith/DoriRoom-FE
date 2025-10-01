@@ -61,6 +61,7 @@ export default function SearchResultPage() {
           onClear={() => setInput('')}
           withBack
           autoFocus
+          type={'ranking'}
         />
       </div>
 
