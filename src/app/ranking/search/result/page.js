@@ -13,7 +13,7 @@ export default function SearchResultPage() {
   const initialQuery = searchParams.get('query') || '';
 
   const [query, setQuery] = useState(initialQuery);
-  const [tab, setTab] = useState('전체'); // "전체" | "이웃도리"
+  const [tab, setTab] = useState('전체도리');
 
   const { results: allResults } = useSearchAll(query);
   const { results: followResults } = useSearchFollow(query);
