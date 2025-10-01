@@ -337,7 +337,7 @@ export default function FestivalSearchResultPage() {
                 앗, 관련 축제가 없어요!
               </p>
               <p className="text-center text-sm text-neutral-500">
-                다른 키워드로 다시 검색해 주세요
+                다른 키워드로 다시 검색해 주세요 😢
               </p>
               <button
                 onClick={() => router.push('/festival')}
