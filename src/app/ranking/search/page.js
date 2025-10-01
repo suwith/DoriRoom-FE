@@ -9,18 +9,18 @@ import useRecentVisits from '@/hooks/ranking/useRecentVisits';
 export default function UserSearchPage() {
   const router = useRouter();
   const [input, setInput] = useState('');
-  const [recent, setRecent] = useState([]);
+  const [recentSearches, setRecentSearches] = useState([]);
   const { visits } = useRecentVisits();
 
   useEffect(() => {
     const stored = localStorage.getItem('userRecentSearches');
     if (stored) {
-      setRecent(JSON.parse(stored));
+      setRecentSearches(JSON.parse(stored));
     }
   }, []);
 
   const removeTag = (tag) => {
-    setRecent((prev) => {
+    setRecentSearches((prev) => {
       const updated = prev.filter((t) => t !== tag);
       localStorage.setItem('userRecentSearches', JSON.stringify(updated));
       return updated;
@@ -28,8 +28,19 @@ export default function UserSearchPage() {
   };
 
   const goToResult = (keyword) => {
+    if (!keyword.trim()) return;
     const encoded = encodeURIComponent(keyword);
     router.push(`/ranking/search/result?query=${encoded}`);
+
+    setRecentSearches((prev) => {
+      // 중복 제거 후 맨 앞 추가, 최대 10개 제한
+      const updated = [keyword, ...prev.filter((t) => t !== keyword)].slice(
+        0,
+        10
+      );
+      localStorage.setItem('userRecentSearches', JSON.stringify(updated));
+      return updated;
+    });
   };
 
   return (
@@ -50,10 +61,13 @@ export default function UserSearchPage() {
       <div className="mt-6 px-4">
         <h3 className="text-sm mb-3 font-semibold">최근 검색어</h3>
         <div className="flex gap-2 flex-wrap">
-          {recent.map((tag) => (
+          {recentSearches.map((tag) => (
             <button
               key={tag}
-              onClick={() => goToResult(tag)}
+              onClick={(e) => {
+                e.stopPropagation();
+                goToResult(tag);
+              }}
               className="bg-transparent text-xs px-2 py-1 rounded-full border border-neutral-200 text-neutral-900 flex items-center gap-1"
             >
               <span className="pt-0.5">{tag}</span>
@@ -73,7 +87,7 @@ export default function UserSearchPage() {
       <div className="mt-6 w-full h-2 bg-neutral-100"></div>
 
       {/* 최근 방문한 프로필 */}
-      <div className="mt-6 px-4">
+      <div className="mt-6 pl-4">
         <h3 className="text-sm mb-3 font-semibold">최근 방문한 프로필</h3>
         <div className="flex gap-4 scrollbar-hide overflow-x-auto">
           {visits.map((user) => (
