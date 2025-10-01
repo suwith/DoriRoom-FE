@@ -3,6 +3,10 @@
 import { Icon } from '@iconify/react';
 import manifest from '@/data/manifest.json';
 import { useRouter } from 'next/navigation';
+import useFollow from '@/hooks/follow/useFollow';
+import TwoButtonModal from '@/app/_components/TwoButtonModal';
+import React, { useEffect } from 'react';
+import { useToast } from '@/app/_providers/ToastProvider';
 
 export default function RankingCard({ user, isMy = false }) {
   const router = useRouter();
@@ -14,10 +18,22 @@ export default function RankingCard({ user, isMy = false }) {
   const displayName =
     user.nickname?.length > 7 ? user.nickname.slice(0, 7) + '…' : user.nickname;
 
-  const handleClick = () => {
+  const handleClick = (e) => {
+    e.stopPropagation();
     if (isMy) return;
     router.push(`/neighbor/${user.userId}`);
   };
+
+  const [showUnfollowModal, setShowUnfollowModal] = React.useState(false);
+  const { show } = useToast();
+
+  const { status, follow, unfollow, fetchStatus, loading } = useFollow(
+    user.userId
+  );
+
+  useEffect(() => {
+    fetchStatus();
+  }, [fetchStatus]);
 
   return (
     <div
@@ -55,16 +71,33 @@ export default function RankingCard({ user, isMy = false }) {
 
           {!isMy && (
             <>
-              {user.following ? (
+              {status.isFollowing ? (
+                // 내가  팔로우한 상태
                 <button
-                  onClick={(e) => e.stopPropagation()}
+                  onClick={(e) => {
+                    e.stopPropagation();
+                    setShowUnfollowModal(true);
+                  }}
                   className="px-1.5 py-0.5 rounded bg-background text-main-100 text-xs"
+                  disabled={loading}
                 >
                   팔로잉
                 </button>
               ) : (
-                <button className="px-1.5 py-0.5 rounded bg-main-100 text-background text-xs">
-                  + 팔로우
+                // 내가 팔로우 안 하고 있는 상태
+                <button
+                  onClick={(e) => {
+                    e.stopPropagation();
+                    follow();
+                    show({
+                      message: `${user.nickname}님을 팔로우 했어요!`,
+                      variant: 'success',
+                    });
+                  }}
+                  className="px-1.5 py-0.5 rounded bg-main-100 text-background text-xs"
+                  disabled={loading}
+                >
+                  {status.isFollowedBy ? '+ 맞팔로우' : '+ 팔로우'}
                 </button>
               )}
             </>
@@ -90,6 +123,31 @@ export default function RankingCard({ user, isMy = false }) {
           {user.speech}
         </p>
       </div>
+      {showUnfollowModal && (
+        <TwoButtonModal
+          title="정말 팔로우를 취소하시겠어요?"
+          cancelText="아니오"
+          onCancel={(e) => {
+            e.stopPropagation();
+            setShowUnfollowModal(false);
+          }}
+          confirmText="네, 취소할래요"
+          onConfirm={async (e) => {
+            try {
+              e.stopPropagation();
+              await unfollow();
+              show({ message: '취소가 완료되었습니다.', variant: 'success' });
+            } catch (_) {
+              show({
+                message: '취소에 실패했습니다. 다시 시도해주세요.',
+                variant: 'danger',
+              });
+            } finally {
+              setShowUnfollowModal(false);
+            }
+          }}
+        />
+      )}
     </div>
   );
 }
