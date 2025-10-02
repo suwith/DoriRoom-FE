@@ -169,6 +169,23 @@ export default function FestivalDetail({ festival }) {
             {String(festival.price || '')}
           </p>
         </div>
+
+        {festival.relatedChallengeId && (
+          <div
+            onClick={() => router.push('')}
+            className="my-2 px-4 py-3 space-y-2 rounded bg-main-5 flex items-center justify-between"
+          >
+            <div className="flex flex-col justify-start text-sm">
+              <span className="text-[16px] font-semibold">
+                지역 과제에 해당하는 축제예요!✨
+              </span>
+              <span className="text-[13px] text-neutral-600 font-normal">
+                해당 축제에 방문하면 경험치와 도깨비불을 얻을 수 있어요.
+              </span>
+            </div>
+            <i className="mgc_right_line text-3xl text-neutral-400" />
+          </div>
+        )}
       </div>
 
       <div className="mt-1 w-full h-1.5 p-0 bg-neutral-100" />

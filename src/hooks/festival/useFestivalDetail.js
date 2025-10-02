@@ -45,6 +45,7 @@ function normalizeFestival(api) {
     eventIntro: api.eventIntro || '',
     eventContent: api.eventContent || '',
     _raw: api,
+    relatedChallengeId: api.relatedChallengeId,
   };
 }
 
