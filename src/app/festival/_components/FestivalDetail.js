@@ -5,7 +5,6 @@ import { GoHeart, GoHeartFill } from 'react-icons/go';
 import Icon from '@mdi/react';
 import { mdiTree } from '@mdi/js';
 import 'mingcute_icon/font/Mingcute.css';
-import clsx from 'clsx';
 import BackButton from '@/app/_components/BackButton';
 import { MdEditSquare } from 'react-icons/md';
 import ReviewItem from '@/app/festival/_components/ReviewItem';
@@ -14,11 +13,14 @@ import useFestivalFavorite from '@/hooks/festival/useFestivalFavorite';
 import useFestivalReviews from '@/hooks/festival/useFestivalReviews';
 import LoadingContent from '@/app/_components/LoadingContent';
 import useDiaryWritten from '@/hooks/diary/useDiaryWritten';
+import Tabs from '@/app/_components/Tabs';
 
 export default function FestivalDetail({ festival }) {
   const router = useRouter();
 
-  const [activeTab, setActiveTab] = useState('설명');
+  const [activeTab, setActiveTab] = useState(0);
+
+  const tabList = ['섦영', '일기장'];
 
   const [isScrolled, setIsScrolled] = useState(false);
   const sentinelRef = useRef(null);
@@ -191,29 +193,15 @@ export default function FestivalDetail({ festival }) {
       <div className="mt-1 w-full h-1.5 p-0 bg-neutral-100" />
 
       {/* 탭 */}
-      <div className="flex px-4 border-b-2 border-neutral-100">
-        {['설명', '일기장'].map((tab) => (
-          <button
-            key={tab}
-            className={clsx(
-              'relative flex-1 text-sm text-center pt-3 pb-[10px]',
-              activeTab === tab ? 'text-main-100' : 'text-neutral-300'
-            )}
-            onClick={() => setActiveTab(tab)}
-          >
-            {tab}
-            <span
-              className={clsx(
-                'absolute left-1/2 -bottom-0.5 -translate-x-1/2 w-[45px] h-[2px] rounded-full',
-                activeTab === tab ? 'bg-main-100' : 'bg-neutral-200'
-              )}
-            />
-          </button>
-        ))}
-      </div>
+      <Tabs
+        tabs={tabList}
+        activeTab={activeTab}
+        setActiveTab={setActiveTab}
+        type="festival"
+      />
 
       {/* 설명 탭 */}
-      {activeTab === '설명' && (
+      {activeTab === 0 && (
         <div className="px-4 pt-6 space-y-6 text-sm text-neutral-800">
           {festival.thumbnail && (
             <div>
@@ -249,7 +237,7 @@ export default function FestivalDetail({ festival }) {
       )}
 
       {/* 일기장 탭 */}
-      {activeTab === '일기장' && (
+      {activeTab === 1 && (
         <div className="px-4 pt-4 pb-10 space-y-2">
           <div className="flex items-center justify-between">
             <p>일기 {reviews.length}개</p>

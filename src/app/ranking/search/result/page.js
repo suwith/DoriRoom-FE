@@ -9,6 +9,7 @@ import useSearchFollow from '@/hooks/ranking/useSearchFollow';
 import { IoIosArrowDown } from 'react-icons/io';
 import { FaXmark } from 'react-icons/fa6';
 import { IoCheckmarkSharp } from 'react-icons/io5';
+import Tabs from '@/app/_components/Tabs';
 
 const filterList = [
   { id: 0, name: '전체보기' },
@@ -28,7 +29,9 @@ export default function SearchResultPage() {
   const [input, setInput] = useState(initialQuery);
   // query: 실제 검색 실행 시 갱신되는 값
   const [query, setQuery] = useState(initialQuery ? initialQuery : null);
-  const [tab, setTab] = useState('전체도리');
+
+  const [activeTab, setActiveTab] = useState(0);
+  const tabList = ['전체도리', '이웃도리'];
 
   const { results: allResults } = useSearchAll(query || '');
   const { results: followResults } = useSearchFollow(query || '');
@@ -60,7 +63,7 @@ export default function SearchResultPage() {
   };
 
   // query가 없을 땐 결과를 보여주지 않음
-  const results = !query ? [] : tab === '전체도리' ? allResults : followResults;
+  const results = !query ? [] : activeTab === 0 ? allResults : followResults;
 
   return (
     <div className="appbar-padding-t w-screen h-screen bg-background mx-auto">
@@ -79,28 +82,18 @@ export default function SearchResultPage() {
 
       {/* 탭: 검색 실행 후에만 노출 */}
       {query && (
-        <div className="flex w-full border-b border-gray-200 mb-4 mt-4">
-          {['전체도리', '이웃도리'].map((t) => (
-            <button
-              key={t}
-              onClick={() => setTab(t)}
-              className={`flex-1 pb-2 font-medium text-center relative ${
-                tab === t ? 'text-main-100' : 'text-gray-400'
-              }`}
-            >
-              {t}
-              {tab === t && (
-                <span className="absolute bottom-0 left-0 right-0 h-0.5 bg-main-100 rounded-full"></span>
-              )}
-            </button>
-          ))}
-        </div>
+        <Tabs
+          tabs={tabList}
+          activeTab={activeTab}
+          setActiveTab={setActiveTab}
+          type="festival"
+        />
       )}
 
       {/* 검색 결과 */}
       {query && (
         <div className="px-4 mt-4 pb-4">
-          {tab === '이웃도리' && (
+          {activeTab === 2 && (
             <div
               className="flex gap-2 items-center justify-end text-neutral-600 self-end font-normal text-[14px]"
               onClick={() => setBottomSheetOpen(true)}

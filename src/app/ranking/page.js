@@ -1,7 +1,6 @@
 'use client';
 
 import { useState } from 'react';
-import RankingTabs from './_components/RankingTabs';
 import RegionSelector from './_components/RegionSelector';
 import RankingList from './_components/RankingList';
 import HeaderNavigationBar from '@/app/_components/HeaderNavigationBar';
@@ -11,9 +10,11 @@ import useRankingRegional from '@/hooks/ranking/useRankingRegional';
 import useMyRankingRegional from '@/hooks/ranking/useMyRankingRegional';
 import { useAuthStore } from '@/stores/useAuthStore';
 import RankingCard from '@/app/ranking/_components/RankingCard';
+import Tabs from '@/app/_components/Tabs';
 
 export default function RankingPage() {
-  const [tab, setTab] = useState('전체 랭킹');
+  const [activeTab, setActiveTab] = useState(0);
+  const tabList = ['전체 랭킹', '지역 랭킹'];
   const [region, setRegion] = useState('SEOUL');
   const user = useAuthStore((s) => s.user);
 
@@ -27,7 +28,7 @@ export default function RankingPage() {
   const { myRank: myRegionalRank, loading: myRegionalLoading } =
     useMyRankingRegional(region);
 
-  const isRegional = tab === '지역 랭킹';
+  const isRegional = activeTab === 1;
 
   return (
     <div className="w-screen layout-padding-t">
@@ -38,9 +39,14 @@ export default function RankingPage() {
       />
 
       {/* 탭 */}
-      <RankingTabs tab={tab} setTab={setTab} />
+      <Tabs
+        tabs={tabList}
+        activeTab={activeTab}
+        setActiveTab={setActiveTab}
+        type="festival"
+      />
 
-      <div className="px-4 pb-4">
+      <div className="p-4">
         {/* 지역 선택 */}
         {isRegional && <RegionSelector region={region} setRegion={setRegion} />}
 
