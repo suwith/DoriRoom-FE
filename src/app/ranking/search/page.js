@@ -94,7 +94,7 @@ export default function UserSearchPage() {
           {visits.map((user) => (
             <div
               key={user.userId}
-              className="flex flex-col items-center cursor-pointer shrink-0 mr-4"
+              className="flex flex-col items-center cursor-pointer shrink-0 mr-4 w-16"
               onClick={() => router.push(`/neighbor/${user.userId}`)}
             >
               <img
@@ -102,7 +102,7 @@ export default function UserSearchPage() {
                 alt={user.nickname}
                 className="w-16 h-16 rounded-full border border-neutral-200 object-cover"
               />
-              <span className="text-xs mt-1">{user.nickname}</span>
+              <div className="text-xs mt-1 truncate">{user.nickname}</div>
             </div>
           ))}
         </div>
