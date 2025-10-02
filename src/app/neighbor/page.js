@@ -45,7 +45,12 @@ export default function NeighborPage() {
       <NeighborSearchBar onSearch={setSearch} />
 
       {/* 탭 */}
-      <Tabs tabs={tabList} activeTab={activeTab} setActiveTab={setActiveTab} />
+      <Tabs
+        tabs={tabList}
+        activeTab={activeTab}
+        setActiveTab={setActiveTab}
+        type="festival"
+      />
 
       {/* 리스트 */}
       <div className="flex-1 overflow-y-auto px-4">
