@@ -6,11 +6,23 @@ import SearchInputBar from '@/app/festival/_components/SearchInputBar';
 import SearchResult from '../../_components/SearchResult';
 import useSearchAll from '@/hooks/ranking/useSearchAll';
 import useSearchFollow from '@/hooks/ranking/useSearchFollow';
+import { IoIosArrowDown } from 'react-icons/io';
+import { FaXmark } from 'react-icons/fa6';
+import { IoCheckmarkSharp } from 'react-icons/io5';
+
+const filterList = [
+  { id: 0, name: '전체보기' },
+  { id: 1, name: '팔로잉' },
+  { id: 2, name: '팔로워' },
+  { id: 3, name: '단짝도리' },
+];
 
 export default function SearchResultPage() {
   const router = useRouter();
   const searchParams = useSearchParams();
   const initialQuery = searchParams.get('query') || '';
+  const [selectFilter, setSelectFilter] = useState(filterList[0]);
+  const [bottomSheetOpen, setBottomSheetOpen] = useState(false);
 
   // input: 사용자가 타이핑 중인 값
   const [input, setInput] = useState(initialQuery);
@@ -88,9 +100,49 @@ export default function SearchResultPage() {
       {/* 검색 결과 */}
       {query && (
         <div className="px-4 mt-4 pb-4">
+          {tab === '이웃도리' && (
+            <div
+              className="flex gap-2 items-center justify-end text-neutral-600 self-end font-normal text-[14px]"
+              onClick={() => setBottomSheetOpen(true)}
+            >
+              <span>{selectFilter.name}</span>
+              <IoIosArrowDown />
+            </div>
+          )}
           <SearchResult query={query} results={results} />
         </div>
       )}
+      <div
+        className={`fixed bottom-0 left-1/2 transform -translate-x-1/2 w-full mx-auto appbar-padding-b z-100 bg-background rounded-t-xl px-3 pt-4 shadow-[0_-4px_12px_rgba(0,0,0,0.1)] transition-transform duration-300 ease-in-out ${bottomSheetOpen ? 'translate-y-0' : 'translate-y-full'}`}
+      >
+        <div className="flex items-center justify-between">
+          <span className="font-semibold">정렬기준</span>
+          <div className="bg-main-5 rounded-full p-1">
+            <FaXmark
+              size={13}
+              className="font-bold text-main-100"
+              onClick={() => {
+                setBottomSheetOpen(false);
+              }}
+            />
+          </div>
+        </div>
+        <div className="space-y-2 mt-5">
+          {filterList.map((filter) => (
+            <div
+              key={filter.id}
+              className={`flex items-center justify-between font-normal py-3 px-3 rounded-lg ${selectFilter.id === filter.id ? 'bg-main-5 text-main-100 font-semibold' : 'bg-neutral-100 text-neutral-900 font-normal'}`}
+              onClick={() => {
+                setSelectFilter(filter);
+                setBottomSheetOpen(false);
+              }}
+            >
+              {filter.name}
+              {selectFilter.id === filter.id && <IoCheckmarkSharp />}
+            </div>
+          ))}
+        </div>
+      </div>
     </div>
   );
 }
