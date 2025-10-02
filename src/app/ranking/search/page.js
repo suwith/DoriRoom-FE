@@ -98,7 +98,7 @@ export default function UserSearchPage() {
               onClick={() => router.push(`/neighbor/${user.userId}`)}
             >
               <img
-                src={user.profileImageUrl}
+                src={user.profileImageUrl || '/images/profileImage_default.svg'}
                 alt={user.nickname}
                 className="w-16 h-16 rounded-full border border-neutral-200 object-cover"
               />
