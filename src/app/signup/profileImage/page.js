@@ -6,7 +6,7 @@ import { useSignupStore } from '@/stores/useSignupStore';
 import HeaderNavigationBar from '@/app/_components/HeaderNavigationBar';
 import ImageUploader from '@/app/_components/ImageUploader';
 import PrimaryButton from '@/app/_components/PrimaryButton';
-import { submitSignupProfile } from '@/hooks/auth/useSignup';
+import { uploadProfileImage } from '@/hooks/auth/useSignup';
 import LoadingModal from '@/app/_components/LoadingModal';
 
 export default function SignupAvatarPage() {
@@ -34,6 +34,7 @@ export default function SignupAvatarPage() {
     ro.observe(el);
     return () => ro.disconnect();
   }, []);
+
   useEffect(() => {
     const style = document.createElement('style');
     style.textContent =
@@ -42,17 +43,11 @@ export default function SignupAvatarPage() {
     return () => document.head.removeChild(style);
   }, []);
 
-  async function finishSignup(withImage) {
-    if (loading) return;
+  async function handleUpload() {
+    if (loading || !profile.profileImage) return;
     setLoading(true);
     try {
-      await submitSignupProfile({
-        email,
-        username: profile.username,
-        password: profile.password,
-        nickname: profile.nickname,
-        profileImage: withImage ? profile.profileImage : null,
-      });
+      await uploadProfileImage(profile.profileImage);
       reset();
       router.replace('/login');
     } finally {
@@ -95,7 +90,7 @@ export default function SignupAvatarPage() {
           <button
             type="button"
             disabled={loading}
-            onClick={() => finishSignup(false)}
+            onClick={() => router.replace('/login')}
             className="w-18 text-sm text-neutral-400 border-b-1 border-neutral-400 mb-4"
           >
             다음에 하기
@@ -103,8 +98,8 @@ export default function SignupAvatarPage() {
 
           <PrimaryButton
             type="button"
-            disabled={loading}
-            onClick={() => finishSignup(true)}
+            disabled={loading || !profile.profileImage}
+            onClick={handleUpload}
           >
             가입 완료
           </PrimaryButton>

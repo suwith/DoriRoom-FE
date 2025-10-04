@@ -69,28 +69,25 @@ export async function submitSignupProfile({
   username,
   password,
   nickname,
-  profileImage,
 }) {
   try {
+    const payload = { email, username, password, nickname };
+    const res = await axiosInstance.post('/auth/signup', payload);
+    return res.data;
+  } catch (e) {
+    throw toReadableError(e);
+  }
+}
+
+// 프로필 이미지 업로드
+export async function uploadProfileImage(file) {
+  try {
     const formData = new FormData();
+    formData.append('file', file);
 
-    const requestPayload = JSON.stringify({
-      username,
-      password,
-      email,
-      nickname,
+    const res = await axiosInstance.post('/users/me/profile-image', formData, {
+      headers: { 'Content-Type': 'multipart/form-data' },
     });
-    formData.append(
-      'request',
-      new Blob([requestPayload], { type: 'application/json' })
-    );
-
-    if (profileImage instanceof File) {
-      formData.append('image', profileImage);
-    }
-
-    const res = await axiosInstance.post('/auth/signup', formData);
-
     return res.data;
   } catch (e) {
     throw toReadableError(e);
