@@ -12,10 +12,10 @@ import { IoCheckmarkSharp } from 'react-icons/io5';
 import Tabs from '@/app/_components/Tabs';
 
 const filterList = [
-  { id: 0, name: '전체보기' },
-  { id: 1, name: '팔로잉' },
-  { id: 2, name: '팔로워' },
-  { id: 3, name: '단짝도리' },
+  { id: 0, name: '전체보기', type: 'ALL' },
+  { id: 1, name: '팔로잉', type: 'FOLLOWING' },
+  { id: 2, name: '팔로워', type: 'FOLLOWER' },
+  { id: 3, name: '단짝도리', type: 'BEST_FRIEND' },
 ];
 
 export default function SearchResultPage() {
@@ -34,7 +34,10 @@ export default function SearchResultPage() {
   const tabList = ['전체도리', '이웃도리'];
 
   const { results: allResults } = useSearchAll(query || '');
-  const { results: followResults } = useSearchFollow(query || '');
+  const { results: followResults } = useSearchFollow(
+    query || '',
+    selectFilter.type
+  );
 
   const goToResult = (keyword) => {
     if (!keyword.trim()) return;
