@@ -95,10 +95,10 @@ export default function SearchResultPage() {
 
       {/* 검색 결과 */}
       {query && (
-        <div className="px-4 mt-4 pb-4">
-          {activeTab === 2 && (
+        <div className="px-4">
+          {activeTab === 1 && (
             <div
-              className="flex gap-2 items-center justify-end text-neutral-600 self-end font-normal text-[14px]"
+              className="flex gap-2 items-center justify-end text-neutral-600 self-end font-normal text-[14px] my-3"
               onClick={() => setBottomSheetOpen(true)}
             >
               <span>{selectFilter.name}</span>
@@ -123,7 +123,7 @@ export default function SearchResultPage() {
             />
           </div>
         </div>
-        <div className="space-y-2 mt-5">
+        <div className="space-y-2 mt-5 ">
           {filterList.map((filter) => (
             <div
               key={filter.id}
