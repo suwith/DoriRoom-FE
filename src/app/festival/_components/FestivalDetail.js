@@ -42,7 +42,7 @@ export default function FestivalDetail({ festival }) {
 
   const [activeTab, setActiveTab] = useState(0);
 
-  const tabList = ['섦영', '일기장'];
+  const tabList = ['설명', '일기장'];
 
   const [isScrolled, setIsScrolled] = useState(false);
   const sentinelRef = useRef(null);
