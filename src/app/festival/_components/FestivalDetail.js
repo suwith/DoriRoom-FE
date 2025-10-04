@@ -200,15 +200,18 @@ export default function FestivalDetail({ festival }) {
 
         <div className="flex flex-row gap-3 text-sm">
           <p className="text-neutral-500 whitespace-nowrap">금액</p>
-          <p className="text-neutral-700 whitespace-pre-line">
-            {String(festival.price || '')}
-          </p>
+          <p
+            className="text-neutral-700"
+            dangerouslySetInnerHTML={{
+              __html: String(festival.price || '').replace(/\n/g, '<br>'),
+            }}
+          />
         </div>
 
         {festival.relatedChallengeId && (
           <div
             onClick={handleRegionNavigation}
-            className="my-2 px-4 py-3 space-y-2 rounded bg-main-5 flex items-center justify-between"
+            className="my-2 px-4 py-4 mt-4 space-y-2 rounded bg-main-5 flex items-center justify-between"
           >
             <div className="flex flex-col justify-start text-sm">
               <span className="text-[16px] font-semibold">
