@@ -201,7 +201,6 @@ export default function SignupInfoPage() {
     setGlobalErr(null);
 
     if (!formValid) {
-      // 어떤 것이 부족한지 안내
       if (!usernameFormatOk)
         return setGlobalErr('아이디 형식을 확인해 주세요.');
       if (!uidCheckedAndValid)
@@ -221,8 +220,8 @@ export default function SignupInfoPage() {
         username: usernameRaw,
         password: profile.password,
         nickname: nicknameRaw,
-        avatarFile: profile.avatarFile,
       });
+
       router.replace('/signup/profileImage');
     } catch (e2) {
       setGlobalErr(extractErrorMessage(e2) || '회원가입에 실패했습니다.');
