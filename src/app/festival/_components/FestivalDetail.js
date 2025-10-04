@@ -14,9 +14,31 @@ import useFestivalReviews from '@/hooks/festival/useFestivalReviews';
 import LoadingContent from '@/app/_components/LoadingContent';
 import useDiaryWritten from '@/hooks/diary/useDiaryWritten';
 import Tabs from '@/app/_components/Tabs';
+import { useToast } from '@/app/_providers/ToastProvider';
+
+const regionDetails = [
+  { atlasId: 1, areaCode: 1 }, // 서울
+  { atlasId: 2, areaCode: 2 }, // 인천
+  { atlasId: 2, areaCode: 31 }, // 경기
+  { atlasId: 3, areaCode: 32 }, // 강원
+  { atlasId: 4, areaCode: 4 }, // 대구
+  { atlasId: 4, areaCode: 6 }, // 부산
+  { atlasId: 4, areaCode: 7 }, // 울산
+  { atlasId: 4, areaCode: 35 }, // 경북
+  { atlasId: 4, areaCode: 36 }, // 경남
+  { atlasId: 5, areaCode: 5 }, // 광주
+  { atlasId: 5, areaCode: 37 }, // 전북
+  { atlasId: 5, areaCode: 38 }, // 전남
+  { atlasId: 6, areaCode: 3 }, // 대전
+  { atlasId: 6, areaCode: 8 }, // 세종
+  { atlasId: 6, areaCode: 33 }, // 충북
+  { atlasId: 6, areaCode: 34 }, // 충남
+  { atlasId: 7, areaCode: 39 }, // 제주
+];
 
 export default function FestivalDetail({ festival }) {
   const router = useRouter();
+  const { show } = useToast();
 
   const [activeTab, setActiveTab] = useState(0);
 
@@ -82,6 +104,17 @@ export default function FestivalDetail({ festival }) {
   useEffect(() => {
     setSort(reviewSort);
   }, [reviewSort, setSort]);
+
+  const handleRegionNavigation = () => {
+    const { areaCode } = festival;
+    const region = regionDetails.find((r) => r.areaCode === areaCode);
+
+    if (region) {
+      router.push(`/collection/${region.atlasId}`);
+    } else {
+      show('해당 지역의 페이지가 존재하지 않습니다.');
+    }
+  };
 
   return (
     <div className=" w-screen min-h-screen appbar-padding-b">
@@ -174,7 +207,7 @@ export default function FestivalDetail({ festival }) {
 
         {festival.relatedChallengeId && (
           <div
-            onClick={() => router.push('')}
+            onClick={handleRegionNavigation}
             className="my-2 px-4 py-3 space-y-2 rounded bg-main-5 flex items-center justify-between"
           >
             <div className="flex flex-col justify-start text-sm">
