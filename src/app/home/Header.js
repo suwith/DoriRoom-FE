@@ -60,6 +60,7 @@ export default function HeaderBar({ credit }) {
               <IconButton
                 icon={<i className="mgc_award_fill text-sub2-100 text-xl" />}
                 label="랭킹"
+                href="/ranking"
                 textColor="text-sub2-100"
               />
               <IconButton

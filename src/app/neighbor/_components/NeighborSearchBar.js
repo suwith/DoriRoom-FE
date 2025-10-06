@@ -4,7 +4,7 @@ import React from 'react';
 
 export default function NeighborSearchBar({ onSearch }) {
   return (
-    <div className="mb-3 px-4">
+    <div className="px-4">
       <div className="relative flex-1">
         <input
           type="text"

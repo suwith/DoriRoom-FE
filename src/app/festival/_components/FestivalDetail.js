@@ -5,7 +5,6 @@ import { GoHeart, GoHeartFill } from 'react-icons/go';
 import Icon from '@mdi/react';
 import { mdiTree } from '@mdi/js';
 import 'mingcute_icon/font/Mingcute.css';
-import clsx from 'clsx';
 import BackButton from '@/app/_components/BackButton';
 import { MdEditSquare } from 'react-icons/md';
 import ReviewItem from '@/app/festival/_components/ReviewItem';
@@ -14,11 +13,36 @@ import useFestivalFavorite from '@/hooks/festival/useFestivalFavorite';
 import useFestivalReviews from '@/hooks/festival/useFestivalReviews';
 import LoadingContent from '@/app/_components/LoadingContent';
 import useDiaryWritten from '@/hooks/diary/useDiaryWritten';
+import Tabs from '@/app/_components/Tabs';
+import { useToast } from '@/app/_providers/ToastProvider';
+
+const regionDetails = [
+  { atlasId: 1, areaCode: 1 }, // 서울
+  { atlasId: 2, areaCode: 2 }, // 인천
+  { atlasId: 2, areaCode: 31 }, // 경기
+  { atlasId: 3, areaCode: 32 }, // 강원
+  { atlasId: 4, areaCode: 4 }, // 대구
+  { atlasId: 4, areaCode: 6 }, // 부산
+  { atlasId: 4, areaCode: 7 }, // 울산
+  { atlasId: 4, areaCode: 35 }, // 경북
+  { atlasId: 4, areaCode: 36 }, // 경남
+  { atlasId: 5, areaCode: 5 }, // 광주
+  { atlasId: 5, areaCode: 37 }, // 전북
+  { atlasId: 5, areaCode: 38 }, // 전남
+  { atlasId: 6, areaCode: 3 }, // 대전
+  { atlasId: 6, areaCode: 8 }, // 세종
+  { atlasId: 6, areaCode: 33 }, // 충북
+  { atlasId: 6, areaCode: 34 }, // 충남
+  { atlasId: 7, areaCode: 39 }, // 제주
+];
 
 export default function FestivalDetail({ festival }) {
   const router = useRouter();
+  const { show } = useToast();
 
-  const [activeTab, setActiveTab] = useState('설명');
+  const [activeTab, setActiveTab] = useState(0);
+
+  const tabList = ['설명', '일기장'];
 
   const [isScrolled, setIsScrolled] = useState(false);
   const sentinelRef = useRef(null);
@@ -80,6 +104,17 @@ export default function FestivalDetail({ festival }) {
   useEffect(() => {
     setSort(reviewSort);
   }, [reviewSort, setSort]);
+
+  const handleRegionNavigation = () => {
+    const { areaCode } = festival;
+    const region = regionDetails.find((r) => r.areaCode === areaCode);
+
+    if (region) {
+      router.push(`/collection/${region.atlasId}`);
+    } else {
+      show('해당 지역의 페이지가 존재하지 않습니다.');
+    }
+  };
 
   return (
     <div className=" w-screen min-h-screen appbar-padding-b">
@@ -165,38 +200,44 @@ export default function FestivalDetail({ festival }) {
 
         <div className="flex flex-row gap-3 text-sm">
           <p className="text-neutral-500 whitespace-nowrap">금액</p>
-          <p className="text-neutral-700 whitespace-pre-line">
-            {String(festival.price || '')}
-          </p>
+          <p
+            className="text-neutral-700"
+            dangerouslySetInnerHTML={{
+              __html: String(festival.price || '').replace(/\n/g, '<br>'),
+            }}
+          />
         </div>
+
+        {festival.relatedChallengeId && (
+          <div
+            onClick={handleRegionNavigation}
+            className="my-2 px-4 py-4 mt-4 space-y-2 rounded bg-main-5 flex items-center justify-between"
+          >
+            <div className="flex flex-col justify-start text-sm">
+              <span className="text-[16px] font-semibold">
+                지역 과제에 해당하는 축제예요!✨
+              </span>
+              <span className="text-[13px] text-neutral-600 font-normal">
+                해당 축제에 방문하면 경험치와 도깨비불을 얻을 수 있어요.
+              </span>
+            </div>
+            <i className="mgc_right_line text-3xl text-neutral-400" />
+          </div>
+        )}
       </div>
 
       <div className="mt-1 w-full h-1.5 p-0 bg-neutral-100" />
 
       {/* 탭 */}
-      <div className="flex px-4 border-b-2 border-neutral-100">
-        {['설명', '일기장'].map((tab) => (
-          <button
-            key={tab}
-            className={clsx(
-              'relative flex-1 text-sm text-center pt-3 pb-[10px]',
-              activeTab === tab ? 'text-main-100' : 'text-neutral-300'
-            )}
-            onClick={() => setActiveTab(tab)}
-          >
-            {tab}
-            <span
-              className={clsx(
-                'absolute left-1/2 -bottom-0.5 -translate-x-1/2 w-[45px] h-[2px] rounded-full',
-                activeTab === tab ? 'bg-main-100' : 'bg-neutral-200'
-              )}
-            />
-          </button>
-        ))}
-      </div>
+      <Tabs
+        tabs={tabList}
+        activeTab={activeTab}
+        setActiveTab={setActiveTab}
+        type="festival"
+      />
 
       {/* 설명 탭 */}
-      {activeTab === '설명' && (
+      {activeTab === 0 && (
         <div className="px-4 pt-6 space-y-6 text-sm text-neutral-800">
           {festival.thumbnail && (
             <div>
@@ -232,7 +273,7 @@ export default function FestivalDetail({ festival }) {
       )}
 
       {/* 일기장 탭 */}
-      {activeTab === '일기장' && (
+      {activeTab === 1 && (
         <div className="px-4 pt-4 pb-10 space-y-2">
           <div className="flex items-center justify-between">
             <p>일기 {reviews.length}개</p>
