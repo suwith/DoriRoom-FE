@@ -3,8 +3,10 @@
 
 import Link from 'next/link';
 import Image from 'next/image';
+import { registerNotifications } from '@/lib/fcmPush';
 
 export default function AuthPage() {
+  registerNotifications();
   return (
     <div className="min-h-screen flex flex-col items-center justify-between px-4 appbar-padding-b">
       <div />

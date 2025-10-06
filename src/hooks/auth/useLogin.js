@@ -3,6 +3,7 @@
 import { useCallback, useState } from 'react';
 import axiosInstance from '@/lib/axiosInstance';
 import useUserInfo from '../mypage/useUserInfo';
+import { addListeners } from '@/lib/fcmPush';
 
 function saveTokens({ accessToken, refreshToken }, remember) {
   try {
@@ -56,6 +57,7 @@ export default function useLogin() {
           return Promise.reject(err);
         }
 
+        addListeners();
         saveTokens({ accessToken, refreshToken }, remember);
         axiosInstance.defaults.headers.Authorization = `Bearer ${accessToken}`;
 
