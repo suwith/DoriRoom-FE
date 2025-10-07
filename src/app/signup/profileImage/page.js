@@ -8,15 +8,12 @@ import ImageUploader from '@/app/_components/ImageUploader';
 import PrimaryButton from '@/app/_components/PrimaryButton';
 import { uploadProfileImage } from '@/hooks/auth/useSignup';
 import LoadingModal from '@/app/_components/LoadingModal';
+import { useAuthStore } from '@/stores/useAuthStore';
 
 export default function SignupAvatarPage() {
   const router = useRouter();
   const { email, profile, setProfile, reset } = useSignupStore();
   const [loading, setLoading] = useState(false);
-
-  useEffect(() => {
-    if (!email) router.replace('/signup/email');
-  }, [email, router]);
 
   const footerRef = useRef(null);
   useLayoutEffect(() => {
@@ -48,8 +45,13 @@ export default function SignupAvatarPage() {
     setLoading(true);
     try {
       await uploadProfileImage(profile.profileImage);
-      reset();
-      router.replace('/login');
+
+      // 프로필 등록 완료 후 토큰 제거
+      const { clearTokens } = useAuthStore.getState();
+      clearTokens();
+
+      await router.replace('/login');
+      setTimeout(() => reset(), 0);
     } finally {
       setLoading(false);
     }
