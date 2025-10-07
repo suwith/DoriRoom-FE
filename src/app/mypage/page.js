@@ -24,6 +24,7 @@ export default function Mypage() {
         <IconButton
           icon={<i className="mgc_pen_fill text-main-100 text-xl" />}
           label="이용약관"
+          href="/mypage/terms"
           textColor="text-neutral-900"
         />
         {/* 로그아웃 버튼 */}
