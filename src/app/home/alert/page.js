@@ -12,7 +12,7 @@ export default function page() {
 
   return (
     <div className="flex justify-center h-screen bg-background header-padding-tb">
-      <HeaderNavigationBar title="알림" />
+      <HeaderNavigationBar title="알림" className="bg-background" />
       <div>
         {notifications?.map((noti) => (
           <AlertBox key={noti.notificationId} noti={noti} />
