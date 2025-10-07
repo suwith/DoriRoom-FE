@@ -7,6 +7,7 @@ import HeaderNavigationBar from '@/app/_components/HeaderNavigationBar';
 import PrimaryButton from '@/app/_components/PrimaryButton';
 import { sendSignupEmail, verifySignupCode } from '@/hooks/auth/useSignup';
 import LoadingModal from '@/app/_components/LoadingModal';
+import { useToast } from '@/app/_providers/ToastProvider';
 
 export default function SignupCodePage() {
   const router = useRouter();
@@ -15,6 +16,8 @@ export default function SignupCodePage() {
   const [loading, setLoading] = useState(false);
   const [err, setErr] = useState(null);
   const inputsRef = useRef([]);
+
+  const { show } = useToast();
 
   useEffect(() => {
     if (!email) router.replace('/signup/email');
@@ -81,9 +84,15 @@ export default function SignupCodePage() {
 
   async function onResend() {
     if (!email) return;
+    setLoading(true);
     try {
       await sendSignupEmail(email);
-    } catch (_) {}
+      show({ message: '인증코드가 다시 발송되었습니다.', variant: 'success' });
+    } catch (e) {
+      show({ message: '인증코드 발송에 실패했습니다.', variant: 'error' });
+    } finally {
+      setLoading(false);
+    }
   }
 
   const isValid = digits.filter((d) => /\d/.test(d)).length === 6;
@@ -204,6 +213,7 @@ export default function SignupCodePage() {
           <button
             type="button"
             onClick={onResend}
+            disabled={loading}
             className="w-auto text-sm text-neutral-400 border-b-1 border-neutral-400 mb-4"
           >
             인증코드 다시 받기
