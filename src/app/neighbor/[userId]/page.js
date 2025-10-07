@@ -33,8 +33,14 @@ export default function NeighborHome() {
 
   const { status, follow, unfollow, fetchStatus, loading } = useFollow(userId);
   const { room, fetchRoom, loading: roomLoading } = useNeighborRoom(userId);
-  const { likeCount, isLiked, toggleLike } = useRoomLike(userId);
+  const { likeCount, isLiked, toggleLike, setLikeCount } = useRoomLike(userId);
   const { isBestFriend, fetchBestFriendStatus } = useBestFriendStatus(userId);
+
+  useEffect(() => {
+    if (room?.likeCount != null) {
+      setLikeCount(room.likeCount);
+    }
+  }, [room?.likeCount, setLikeCount]);
 
   const router = useRouter();
   const zIndex = manifest.defaults.zIndex;
@@ -71,7 +77,7 @@ export default function NeighborHome() {
     fetchStatus();
     fetchRoom();
     fetchBestFriendStatus();
-  }, [fetchStatus, fetchRoom, fetchBestFriendStatus, likeCount]);
+  }, [fetchStatus, fetchRoom, fetchBestFriendStatus]);
 
   if (roomLoading || !room) {
     return <LoadingModal open={roomLoading} />;
@@ -224,8 +230,7 @@ export default function NeighborHome() {
       {/* 하단 정보 */}
       <RoomStatsCard
         today={room.viewCount}
-        like={room.likeCount}
-        isLiked={isLiked}
+        like={likeCount}
         onLike={toggleLike}
         className="fixed btn-fixed-b z-10"
         isMine={isMine}
