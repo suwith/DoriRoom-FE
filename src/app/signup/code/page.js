@@ -175,7 +175,7 @@ export default function SignupCodePage() {
                   value={digit}
                   className={`w-10 h-12 text-center text-lg rounded-[10px] focus:outline-none focus:ring-0 ${
                     isFilled
-                      ? 'bg-main-5 text-main-100'
+                      ? 'bg-main-5 text-main-100 font-semibold'
                       : 'bg-neutral-100 text-main'
                   }`}
                   onChange={(e) => onChangeDigit(i, e.target.value)}
