@@ -102,7 +102,9 @@ export default function UserSearchPage() {
                 alt={user.nickname}
                 className="w-16 h-16 rounded-full border border-neutral-200 object-cover"
               />
-              <div className="text-xs mt-1 truncate">{user.nickname}</div>
+              <div className="text-xs mt-1 text-center break-words leading-tight">
+                {user.nickname}
+              </div>
             </div>
           ))}
         </div>
