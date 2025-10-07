@@ -19,6 +19,7 @@ export default function Mypage() {
         <IconButton
           icon={<i className="mgc_pin_fill text-main-100 text-xl" />}
           label="공지사항"
+          href="/mypage/notice"
           textColor="text-neutral-900"
         />
         <IconButton
