@@ -1,20 +1,18 @@
 'use client';
 
 import axiosInstance from '@/lib/axiosInstance';
+import { useAuthStore } from '@/stores/useAuthStore';
 import { useState, useCallback, useEffect, useRef } from 'react';
+import { useRouter } from 'next/navigation';
 
-function normalizeProfileImage(api) {
-  if (!api) return null;
-  return {
-    profileImageUrl: api.profileImageUrl,
-  };
-}
-
-export default function useChangeProfile(handler) {
-  const { onSuccess, onError } = handler;
+export default function useDeleteUser() {
   const [data, setData] = useState(null);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState(null);
+
+  const clearTokens = useAuthStore((s) => s.clearTokens);
+  const clearUser = useAuthStore((s) => s.clearUser);
+  const router = useRouter();
 
   const mountedRef = useRef(true);
   useEffect(() => {
@@ -25,31 +23,31 @@ export default function useChangeProfile(handler) {
   }, []);
 
   const mutate = useCallback(
-    async (file) => {
-      if (!file) return;
+    async (password) => {
+      if (!password) return;
       setLoading(true);
       setError(null);
-      const formData = new FormData();
-      formData.append('file', file);
-      try {
-        const res = await axiosInstance.post(
-          'users/me/profile-image',
-          formData
-        );
 
-        const apiContent = res.data?.content || null;
+      try {
+        const res = await axiosInstance.post('users/me/withdraw', { password });
+
+        const apiContent = res.data;
         if (!mountedRef.current) return;
-        onSuccess?.();
-        setData(normalizeProfileImage(apiContent));
+        if (apiContent.statusCode === 200) {
+          clearTokens();
+          clearUser();
+          delete axiosInstance.defaults.headers.Authorization;
+          router.replace('/auth');
+        }
+        setData(apiContent);
       } catch (err) {
         if (!mountedRef.current) return;
         setError(err);
-        onError?.();
       } finally {
         if (mountedRef.current) setLoading(false);
       }
     },
-    [loading, onSuccess]
+    [loading]
   );
 
   const reset = () => {

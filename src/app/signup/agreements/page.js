@@ -52,10 +52,14 @@ export default function SignupAgreementsPage() {
 
   return (
     <div
-      className="min-h-full flex flex-col px-4 pt-28"
+      className="min-h-full flex flex-col px-4 layout-padding-t"
       style={{ minHeight: 'calc(var(--vh, 1vh) * 100)' }}
     >
-      <HeaderNavigationBar title="회원가입" onBackClick={() => router.back()} />
+      <HeaderNavigationBar
+        title="회원가입"
+        onBackClick={() => router.back()}
+        className="bg-background"
+      />
 
       <div className="flex-1 flex flex-col gap-4">
         {terms.map((term) => (
@@ -76,10 +80,12 @@ export default function SignupAgreementsPage() {
               />
             </button>
             {openId === term.id && (
-              <div className="px-4 py-3 text-sm text-neutral-600 whitespace-pre-line">
+              <div className="px-4 pb-3 text-sm text-neutral-600 whitespace-pre-line leading-relaxed">
+                <hr className="border-t border-neutral-200 pb-3" />
                 {term.content}
               </div>
             )}
+
             <div className="flex gap-4 px-4 py-2 border-t border-neutral-200 justify-end text-sm">
               <label className="flex items-center gap-2">
                 <input

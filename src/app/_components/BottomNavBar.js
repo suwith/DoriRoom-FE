@@ -38,7 +38,7 @@ export default function BottomNavBar() {
     '/diary',
     '/signup/',
     '/auth',
-    '/mypage/myinfo',
+    '/mypage/',
     '/neighbor',
     '/ranking',
   ];

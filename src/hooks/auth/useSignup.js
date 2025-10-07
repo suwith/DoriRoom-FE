@@ -1,4 +1,5 @@
 import axiosInstance from '@/lib/axiosInstance';
+import { useAuthStore } from '@/stores/useAuthStore';
 
 function toReadableError(error) {
   if (error?.response?.data?.message)
@@ -73,7 +74,20 @@ export async function submitSignupProfile({
   try {
     const payload = { email, username, password, nickname };
     const res = await axiosInstance.post('/auth/signup', payload);
-    return res.data;
+    const data = res.data?.content;
+
+    if (!data?.accessToken || !data?.refreshToken) {
+      throw new Error('토큰이 응답에 포함되지 않았습니다.');
+    }
+
+    // accessToken, refreshToken 저장
+    const { setTokens } = useAuthStore.getState();
+    setTokens(data.accessToken, data.refreshToken, 'USER');
+
+    // axiosInstance Authorization 헤더 즉시 갱신
+    axiosInstance.defaults.headers.Authorization = `Bearer ${data.accessToken}`;
+
+    return data;
   } catch (e) {
     throw toReadableError(e);
   }
