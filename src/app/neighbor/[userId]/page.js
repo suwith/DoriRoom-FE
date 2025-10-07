@@ -33,7 +33,7 @@ export default function NeighborHome() {
 
   const { status, follow, unfollow, fetchStatus, loading } = useFollow(userId);
   const { room, fetchRoom, loading: roomLoading } = useNeighborRoom(userId);
-  const { likeCount, isLiked, toggleLike, setLikeCount } = useRoomLike(userId);
+  const { likeCount, toggleLike, setLikeCount } = useRoomLike(userId);
   const { isBestFriend, fetchBestFriendStatus } = useBestFriendStatus(userId);
 
   useEffect(() => {
