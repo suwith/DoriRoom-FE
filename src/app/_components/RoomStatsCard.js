@@ -3,7 +3,6 @@
 export default function RoomStatsCard({
   today,
   like,
-  isLiked,
   onLike,
   className,
   isMine,
@@ -21,13 +20,11 @@ export default function RoomStatsCard({
       <button
         onClick={onLike}
         disabled={!onLike || isMine}
-        className={`flex flex-1 items-center justify-center gap-1 text-lg rounded-lg px-4 py-2
+        className={`flex flex-1 items-center justify-center gap-1 text-lg rounded-lg px-4 py-2 transition-colors duration-150
           ${
             isMine
               ? 'text-gray-300 bg-gray-100 cursor-not-allowed'
-              : isLiked
-                ? 'text-sub-100 bg-sub-5'
-                : 'text-gray-400 bg-gray-100'
+              : 'text-sub-100 bg-sub-5 active:scale-95'
           }`}
       >
         <i className="mgc_thumb_up_2_fill mr-2" />
