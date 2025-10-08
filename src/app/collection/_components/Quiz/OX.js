@@ -15,10 +15,10 @@ export default function OX({ quiz, setSequence, setIsStart, quizCount }) {
     onSuccess: () => {},
     onError: () => {},
   });
-
+  console.log(sequence, quizCount);
   return (
     <div className="h-screen mx-4 flex flex-col">
-      {Number(sequence) !== Number(quizCount) && (
+      {
         <div className="flex gap-2 pt-28">
           {Array.from({ length: quizCount }, (v, i) => i + 1).map((i) => (
             <hr
@@ -27,7 +27,7 @@ export default function OX({ quiz, setSequence, setIsStart, quizCount }) {
             />
           ))}
         </div>
-      )}
+      }
       <div className="flex-1 flex flex-col justify-center w-full">
         <p className="font-bold text-2xl text-main-100">Q{sequence}.</p>
         <p className="font-semibold text-xl">{content}</p>
