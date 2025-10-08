@@ -21,6 +21,9 @@ export default function TaskCard({
   const [isOpen, setIsOpen] = useState(false);
 
   const exp = rewards.find((reward) => reward.rewardType === 'EXP')?.amount;
+  const credit = rewards.find(
+    (reward) => reward.rewardType === 'CREDIT'
+  )?.amount;
   const { mutate, loading } = useChallengesClaim({
     onSuccess: () => {
       setIsOpen(true);
@@ -88,6 +91,7 @@ export default function TaskCard({
         setIsOpen={setIsOpen}
         exp={exp}
         title={title}
+        credit={credit}
       />
     </div>
   );

@@ -6,7 +6,9 @@ export default function TaskList({ type, tasks, regionId, refetch }) {
     <div className="space-y-3 max-h-screen overflow-y-auto scrollbar-hide mb-16">
       {tasks.map((task) => {
         if (type === 'general')
-          return <TaskCard key={task.challengeId} {...task} />;
+          return (
+            <TaskCard key={task.challengeId} {...task} refetch={refetch} />
+          );
         else if (type === 'region')
           return (
             <RegionTaskCard
