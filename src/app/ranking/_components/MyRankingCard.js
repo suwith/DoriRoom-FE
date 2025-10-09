@@ -40,7 +40,7 @@ export default function MyRankingCard({ user }) {
           </p>
         </div>
         <div
-          className="text-xs text-neutral-500 text-right bg-neutral-100 p-2 rounded-lg rounded-bl-none"
+          className="text-xs text-neutral-500 text-right bg-neutral-100 py-2 px-3 rounded-lg rounded-bl-none"
           style={{
             display: '-webkit-box',
             WebkitLineClamp: 2,
