@@ -7,24 +7,20 @@ export default function useDiaryLike(diaryId) {
   const [liked, setLiked] = useState(false);
   const [loading, setLoading] = useState(true);
   const [mutating, setMutating] = useState(false);
-
   const mountedRef = useRef(true);
-  const inflightRef = useRef(0); // 동시요청 레이스 방지
 
-  const safeSet = (updater) => {
-    if (mountedRef.current) updater();
+  const safeSet = (fn) => {
+    if (mountedRef.current) fn();
   };
 
+  // 최초 좋아요 상태 조회
   const refetch = async () => {
-    const reqId = ++inflightRef.current;
     try {
       const res = await axiosInstance.get(`/diary/like/check/${diaryId}`);
-      if (reqId !== inflightRef.current) return; // 마지막 응답만 반영
       const serverLiked = res?.data?.content === true;
       safeSet(() => setLiked(serverLiked));
-      // likeCount는 서버 카운트를 쓰지 않으므로 유지
-    } catch (e) {
-      // 필요시 로깅
+    } catch {
+      // 조회 실패는 무시
     } finally {
       safeSet(() => setLoading(false));
     }
@@ -32,58 +28,49 @@ export default function useDiaryLike(diaryId) {
 
   useEffect(() => {
     mountedRef.current = true;
-    if (diaryId) {
-      setLoading(true);
-      refetch();
-    } else {
-      setLoading(false);
-    }
+    if (diaryId) refetch();
     return () => {
       mountedRef.current = false;
-      inflightRef.current += 1; // 이후 응답 무시
     };
   }, [diaryId]);
 
-  // 탭 복귀/포커스 시 상태 재동기화
-  useEffect(() => {
-    const onVisible = () => {
-      if (document.visibilityState === 'visible') refetch();
-    };
-    const onFocus = () => refetch();
-    document.addEventListener('visibilitychange', onVisible);
-    window.addEventListener('focus', onFocus);
-    return () => {
-      document.removeEventListener('visibilitychange', onVisible);
-      window.removeEventListener('focus', onFocus);
-    };
-  }, []);
-
   const toggleLike = async () => {
-    if (mutating || !diaryId) return;
-    safeSet(() => setMutating(true));
-
+    if (!diaryId || mutating) return;
     const nextLiked = !liked;
 
-    safeSet(() => {
-      setLiked(nextLiked);
-    });
+    safeSet(() => setLiked(nextLiked));
+    safeSet(() => setMutating(true));
 
     try {
-      await axiosInstance.post('/diary/like', {
+      const res = await axiosInstance.post('/diary/like', {
         diaryId,
         isLiked: nextLiked,
       });
-      // 서버 상태 확인으로 최종 동기화
-      await refetch();
+
+      const status = res?.status;
+      const code = res?.data?.statusCode;
+      const errorMsg = res?.data?.error;
+
+      // 응답 구조 안전하게 검사
+      if (status !== 200 || code !== 0) {
+        throw new Error(errorMsg || '좋아요 처리 중 오류가 발생했습니다.');
+      }
+
+      return true;
     } catch (e) {
-      // 실패 시 롤백
-      safeSet(() => {
-        setLiked((prev) => !prev);
-      });
+      // 롤백
+      safeSet(() => setLiked((prev) => !prev));
+
+      // e.response.data.error가 존재할 수도 있음
+      const message =
+        e?.response?.data?.error ||
+        e.message ||
+        '좋아요 처리 중 오류가 발생했습니다.';
+      throw new Error(message);
     } finally {
       safeSet(() => setMutating(false));
     }
   };
 
-  return { liked, loading, mutating, toggleLike, refetch };
+  return { liked, loading, mutating, toggleLike };
 }
