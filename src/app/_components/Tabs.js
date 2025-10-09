@@ -2,7 +2,7 @@ import React from 'react';
 
 const Tabs = ({ tabs, activeTab, setActiveTab, type }) => {
   return (
-    <div className="flex justify-around border-b border-neutral-200 my-2 pt-1">
+    <div className="flex justify-around border-b border-neutral-200 mt-2 pt-1">
       {tabs.map((tab, index) => {
         const isActive = activeTab === index;
 

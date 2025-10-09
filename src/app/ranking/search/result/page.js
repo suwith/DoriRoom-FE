@@ -95,10 +95,10 @@ export default function SearchResultPage() {
 
       {/* 검색 결과 */}
       {query && (
-        <div className="px-4">
+        <div className="p-4">
           {activeTab === 1 && (
             <div
-              className="flex gap-2 items-center justify-end text-neutral-600 self-end font-normal text-[14px] my-3"
+              className="flex gap-2 items-center justify-end text-neutral-600 self-end font-normal text-[14px] mb-2"
               onClick={() => setBottomSheetOpen(true)}
             >
               <span>{selectFilter.name}</span>
