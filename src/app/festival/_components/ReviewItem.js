@@ -4,11 +4,13 @@ import { useState } from 'react';
 import useDiaryLike from '@/hooks/diary/useDiaryLike';
 import { useRouter } from 'next/navigation';
 import { useAuthStore } from '@/stores/useAuthStore';
+import { useToast } from '@/app/_providers/ToastProvider';
 
 export default function ReviewItem({ review, type = 'diary', onLikeSync }) {
   const router = useRouter();
   const [expanded, setExpanded] = useState(false);
   const user = useAuthStore((state) => state.user);
+  const { show } = useToast();
 
   const isMine = review.authorId === user.userId;
 
@@ -43,7 +45,7 @@ export default function ReviewItem({ review, type = 'diary', onLikeSync }) {
             <img
               src={review.authorImage || '/images/profileImage_default.svg'}
               alt="profile"
-              className="w-8 h-8 rounded-full oobject-cover"
+              className="w-8 h-8 rounded-full object-cover"
             />
             <div className="text-sm font-semibold text-neutral-800">
               {review.authorName}
@@ -113,17 +115,35 @@ export default function ReviewItem({ review, type = 'diary', onLikeSync }) {
           </button>
         )}
       </div>
+
+      {/* 좋아요 영역 */}
       <div className="flex items-center mt-2 gap-2">
         <div className="text-xs text-neutral-400">{formattedDate} 방문 •</div>
         <div className="flex items-center gap-1 text-main-100 text-xs">
           <button
             onClick={async () => {
               const nextLiked = !liked;
-              await toggleLike();
-              setLikeCount((prev) =>
-                nextLiked ? prev + 1 : Math.max(0, prev - 1)
-              );
-              onLikeSync?.(review.id, nextLiked); // 부모에도 반영
+              try {
+                const result = await toggleLike();
+
+                if (result?.ok) {
+                  setLikeCount((prev) =>
+                    nextLiked ? prev + 1 : Math.max(0, prev - 1)
+                  );
+                  onLikeSync?.(review.id, nextLiked);
+                } else {
+                  show({
+                    message:
+                      result?.message || '좋아요 처리 중 오류가 발생했어요.',
+                    variant: 'error',
+                  });
+                }
+              } catch (e) {
+                show({
+                  message: e.message || '좋아요 처리 중 오류가 발생했어요.',
+                  variant: 'error',
+                });
+              }
             }}
             disabled={likeLoading || likeMutating}
             aria-disabled={likeLoading || likeMutating}
