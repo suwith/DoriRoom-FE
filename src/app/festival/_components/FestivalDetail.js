@@ -45,7 +45,10 @@ export default function FestivalDetail({ festival }) {
   const tabList = ['설명', '일기장'];
 
   const [isScrolled, setIsScrolled] = useState(false);
-  const sentinelRef = useRef(null);
+
+  const headerSentinelRef = useRef(null);
+  const scrollSentinelRef = useRef(null);
+
   const HEADER_H = 70;
 
   const { liked, likeCount, loading, mutating, toggleFavorite } =
@@ -55,18 +58,14 @@ export default function FestivalDetail({ festival }) {
 
   // 이미지 하단 센티넬이 헤더 뒤로 넘어가면 isScrolled = true
   useEffect(() => {
-    const el = sentinelRef.current;
+    const el = headerSentinelRef.current;
     if (!el) return;
 
     const io = new IntersectionObserver(
-      ([entry]) => {
-        // entry가 보이면 아직 이미지 영역, 안 보이면 정보 영역
-        setIsScrolled(!entry.isIntersecting);
-      },
+      ([entry]) => setIsScrolled(!entry.isIntersecting),
       {
         root: null,
         threshold: 0,
-        // 헤더 높이만큼 위쪽을 미리 깎아, 헤더와 정확히 맞닿을 때 전환되게 함
         rootMargin: `-${HEADER_H}px 0px 0px 0px`,
       }
     );
@@ -74,6 +73,26 @@ export default function FestivalDetail({ festival }) {
     io.observe(el);
     return () => io.disconnect();
   }, []);
+
+  // 무한스크롤 옵저버
+  useEffect(() => {
+    if (activeTab !== 1) return;
+    const el = scrollSentinelRef.current;
+    if (!el) return;
+
+    const observer = new IntersectionObserver(
+      (entries) => {
+        const first = entries[0];
+        if (first.isIntersecting && hasMore && !listLoading) {
+          loadMore();
+        }
+      },
+      { rootMargin: '600px 0px' }
+    );
+
+    observer.observe(el);
+    return () => observer.disconnect();
+  }, [activeTab]); // 의존성 최소화
 
   const [reviewSort, setReviewSort] = useState('latest');
   const {
@@ -102,8 +121,8 @@ export default function FestivalDetail({ festival }) {
   };
 
   useEffect(() => {
-    setSort(reviewSort);
-  }, [reviewSort, setSort]);
+    if (activeTab === 1) setSort(reviewSort);
+  }, [activeTab, reviewSort, setSort]);
 
   const handleRegionNavigation = () => {
     const { areaCode } = festival;
@@ -141,7 +160,7 @@ export default function FestivalDetail({ festival }) {
       </div>
 
       {/* 이미지 바로 아래 센티넬: 이 지점이 헤더 뒤로 넘어갈 때 배경/아이콘 색 전환 */}
-      <div ref={sentinelRef} className="h-px" />
+      <div ref={headerSentinelRef} className="h-px" />
 
       {/* 정보 */}
       <div className="px-4 py-3 space-y-2">
@@ -287,18 +306,17 @@ export default function FestivalDetail({ festival }) {
             </select>
           </div>
 
-          {listLoading && (
+          {/* 로딩/에러/빈 상태 */}
+          {listLoading && reviews.length === 0 && (
             <div className="py-10 text-center text-neutral-400 text-sm">
               <LoadingContent loading={listLoading} />
             </div>
           )}
-
           {listError && (
             <div className="py-10 text-center text-red-400 text-sm">
               일기를 불러오지 못했어요.
             </div>
           )}
-
           {!listLoading && !listError && reviews.length === 0 && (
             <div className="flex flex-col items-center justify-center py-10 gap-4">
               <i className="mgc_sweats_fill text-5xl text-main-100" />
@@ -308,6 +326,7 @@ export default function FestivalDetail({ festival }) {
             </div>
           )}
 
+          {/* 리뷰 리스트 */}
           {reviews.map((review) => (
             <ReviewItem
               key={review.id}
@@ -317,21 +336,21 @@ export default function FestivalDetail({ festival }) {
             />
           ))}
 
-          {hasMore && (
-            <div className="py-3">
-              <button
-                type="button"
-                onClick={loadMore}
-                disabled={listLoading}
-                className="w-full py-2 text-sm rounded-md border border-main-100 text-main-100 disabled:opacity-60"
-              >
-                {listLoading ? '불러오는 중...' : '더 불러오기'}
-              </button>
+          {/*일기 목록 무한 스크롤 센티넬*/}
+          <div ref={scrollSentinelRef} className="h-[1px]" />
+
+          {/* 로딩 표시 (하단 로딩 전용) */}
+          {listLoading && reviews.length > 0 && (
+            <div className="py-4 flex justify-center">
+              <LoadingContent loading={listLoading} />
             </div>
           )}
 
+          {/* 작성 버튼 */}
           <button
-            className={`fixed btn-fixed-b left-1/2 -translate-x-1/2 w-[90%] py-2 text-background rounded-lg text-sm font-medium shadow-md ${written ? 'bg-neutral-300' : 'bg-main-100'}`}
+            className={`fixed btn-fixed-b left-1/2 -translate-x-1/2 w-[90%] py-2 text-background rounded-lg text-sm font-medium shadow-md ${
+              written ? 'bg-neutral-300' : 'bg-main-100'
+            }`}
             onClick={() => {
               sessionStorage.setItem(
                 'selectedFestival',
