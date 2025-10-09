@@ -233,7 +233,7 @@ export default function DiaryWrite({ mode = 'create' }) {
               readOnly
               type="text"
               disabled={mode === 'edit'}
-              className="flex-1 text-sm bg-neutral-100 rounded-md px-3 py-3 placeholder:text-neutral-300 focus:outline-none"
+              className="flex-7 text-sm bg-neutral-100 rounded-md px-3 py-3 placeholder:text-neutral-300 focus:outline-none"
               placeholder="페스티벌 찾기"
               value={selectedFestival?.title || ''}
               onChange={(e) =>
@@ -245,7 +245,7 @@ export default function DiaryWrite({ mode = 'create' }) {
             />
             {mode === 'create' && (
               <button
-                className="bg-main-100 text-background px-5 py-3 text-[15px] rounded-lg"
+                className="flex-1 bg-main-100 text-background px-5 py-3 text-[15px] rounded-lg"
                 onClick={() => {
                   sessionStorage.setItem('selectMode', 'true');
                   sessionStorage.setItem(
@@ -276,12 +276,12 @@ export default function DiaryWrite({ mode = 'create' }) {
             <input
               readOnly
               type="text"
-              className="flex-1 rounded-md bg-neutral-100 text-sm px-3 py-2 placeholder:text-neutral-300 focus:outline-none"
+              className="flex-7 rounded-md bg-neutral-100 text-sm px-3 py-2 placeholder:text-neutral-300 focus:outline-none"
               placeholder="00-00-00"
               value={selectedDate ? format(selectedDate, 'yy-MM-dd') : ''}
             />
             <button
-              className="bg-main-100 text-background px-5 py-3 text-[15px] rounded-lg"
+              className="flex-1 bg-main-100 text-background px-5 py-3 text-[15px] rounded-lg"
               onClick={() => setShowCalendar(true)}
             >
               선택

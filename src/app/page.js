@@ -54,16 +54,11 @@ export default function Home() {
   }, [granted, location?.lat, location?.lng, refetch]);
 
   if (loading)
-    return (
-      <LoadingContent
-        loading={loading}
-        className="max-w-[390px] w-screen h-screen"
-      />
-    );
+    return <LoadingContent loading={loading} className="w-screen h-screen" />;
 
   if (error || !data) {
     return (
-      <div className="max-w-[390px] w-screen h-screen flex items-center justify-center text-red-500">
+      <div className="w-screen h-screen flex items-center justify-center text-red-500">
         데이터를 불러오는 중 오류가 발생했습니다.
       </div>
     );

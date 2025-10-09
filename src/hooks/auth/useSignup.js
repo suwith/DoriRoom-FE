@@ -1,4 +1,5 @@
 import axiosInstance from '@/lib/axiosInstance';
+import { useAuthStore } from '@/stores/useAuthStore';
 
 function toReadableError(error) {
   if (error?.response?.data?.message)
@@ -69,28 +70,38 @@ export async function submitSignupProfile({
   username,
   password,
   nickname,
-  profileImage,
 }) {
   try {
-    const formData = new FormData();
+    const payload = { email, username, password, nickname };
+    const res = await axiosInstance.post('/auth/signup', payload);
+    const data = res.data?.content;
 
-    const requestPayload = JSON.stringify({
-      username,
-      password,
-      email,
-      nickname,
-    });
-    formData.append(
-      'request',
-      new Blob([requestPayload], { type: 'application/json' })
-    );
-
-    if (profileImage instanceof File) {
-      formData.append('image', profileImage);
+    if (!data?.accessToken || !data?.refreshToken) {
+      throw new Error('토큰이 응답에 포함되지 않았습니다.');
     }
 
-    const res = await axiosInstance.post('/auth/signup', formData);
+    // accessToken, refreshToken 저장
+    const { setTokens } = useAuthStore.getState();
+    setTokens(data.accessToken, data.refreshToken, 'USER');
 
+    // axiosInstance Authorization 헤더 즉시 갱신
+    axiosInstance.defaults.headers.Authorization = `Bearer ${data.accessToken}`;
+
+    return data;
+  } catch (e) {
+    throw toReadableError(e);
+  }
+}
+
+// 프로필 이미지 업로드
+export async function uploadProfileImage(file) {
+  try {
+    const formData = new FormData();
+    formData.append('file', file);
+
+    const res = await axiosInstance.post('/users/me/profile-image', formData, {
+      headers: { 'Content-Type': 'multipart/form-data' },
+    });
     return res.data;
   } catch (e) {
     throw toReadableError(e);

@@ -17,7 +17,7 @@ export default function LoadingModal({ open }) {
 
   return (
     <div
-      className="min-w-[390px] fixed inset-0 z-[1000] flex items-center justify-center"
+      className="w-screen fixed inset-0 z-[1000] flex items-center justify-center"
       aria-modal="true"
       role="dialog"
     >

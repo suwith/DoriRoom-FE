@@ -7,6 +7,25 @@ import FestivalCardSection from './_components/FestivalCardSection';
 import 'mingcute_icon/font/Mingcute.css';
 import useMainFestivals from '@/hooks/festival/useMainFestivals';
 import FestivalCardSectionSkeleton from '@/app/festival/_components/FestivalCardSectionSkeleton';
+import 'swiper/css';
+import 'swiper/css/pagination';
+import { Swiper, SwiperSlide } from 'swiper/react';
+import { Autoplay, Pagination } from 'swiper/modules';
+
+const bannerImages = [
+  {
+    src: '/images/festival/banner1.svg',
+    link: '/festival/abcc55a2-84b8-4107-b80b-73e0d1ea1627',
+  },
+  {
+    src: '/images/festival/banner2.svg',
+    link: '/festival/d3af3a7a-5385-49b8-bda3-b57a8fda1c19',
+  },
+  {
+    src: '/images/festival/banner3.svg',
+    link: '/festival/add51933-faec-4c85-afb9-a52f6dbd09e3',
+  },
+];
 
 export default function FestivalPage() {
   const router = useRouter();
@@ -35,8 +54,25 @@ export default function FestivalPage() {
       </div>
 
       {/* 배너 */}
-      <div className="mt-4 px-4 w-full h-64 overflow-x-auto no-scrollbar">
-        <div className="text-sm text-background bg-neutral-100 w-full h-full rounded-md"></div>
+      <div className="mt-4 px-4 w-full h-72">
+        <Swiper
+          modules={[Autoplay, Pagination]}
+          autoplay={{ delay: 5000, disableOnInteraction: false }}
+          pagination={{ clickable: true }}
+          loop={true}
+          className="w-full h-full rounded-md"
+        >
+          {bannerImages.map((banner, idx) => (
+            <SwiperSlide key={idx}>
+              <img
+                src={banner.src}
+                alt={`banner-${idx}`}
+                className="w-full h-full object-contain rounded-md cursor-pointer"
+                onClick={() => router.push(banner.link)}
+              />
+            </SwiperSlide>
+          ))}
+        </Swiper>
       </div>
 
       {/* 지역 선택 */}

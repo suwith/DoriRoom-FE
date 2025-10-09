@@ -101,7 +101,10 @@ export default function TasksPage({ type, regionId, area = '' }) {
             <div
               key={filter.id}
               className={`flex items-center justify-between font-normal py-3 px-3 rounded-lg ${selectFilter.id === filter.id ? 'bg-main-5 text-main-100 font-semibold' : 'bg-neutral-100 text-neutral-900 font-normal'}`}
-              onClick={() => setSelectFilter(filter)}
+              onClick={() => {
+                setSelectFilter(filter);
+                setBottomSheetOpen(false);
+              }}
             >
               {filter.name}
               {selectFilter.id === filter.id && <IoCheckmarkSharp />}
