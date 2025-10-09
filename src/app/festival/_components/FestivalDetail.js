@@ -86,7 +86,7 @@ export default function FestivalDetail({ festival }) {
     hasMore,
   } = useFestivalReviews({
     eventId: festival.id,
-    enabled: activeTab === '일기장',
+    enabled: activeTab === 1,
     initialSort: reviewSort,
     pageSize: 20,
   });
