@@ -10,6 +10,7 @@ import { useState } from 'react';
 import useDiaryLike from '@/hooks/diary/useDiaryLike';
 import { useAuthStore } from '@/stores/useAuthStore';
 import useDiaryDelete from '@/hooks/diary/useDiaryDelete';
+import { useToast } from '@/app/_providers/ToastProvider';
 
 export default function DiaryDetail({ diary, type }) {
   const router = useRouter();
@@ -18,6 +19,7 @@ export default function DiaryDetail({ diary, type }) {
 
   const user = useAuthStore((state) => state.user);
   const isMine = diary.author.id === user.userId;
+  const { show } = useToast();
 
   // 좋아요 훅 사용
   const {
@@ -105,10 +107,17 @@ export default function DiaryDetail({ diary, type }) {
             <button
               onClick={async () => {
                 const nextLiked = !liked;
-                await toggleLike();
-                setLikeCount((prev) =>
-                  nextLiked ? prev + 1 : Math.max(0, prev - 1)
-                );
+                try {
+                  await toggleLike();
+                  setLikeCount((prev) =>
+                    nextLiked ? prev + 1 : Math.max(0, prev - 1)
+                  );
+                } catch (e) {
+                  show({
+                    message: e.message || '좋아요 처리 중 오류가 발생했어요.',
+                    variant: 'error',
+                  });
+                }
               }}
               disabled={likeLoading || likeMutating}
               aria-disabled={likeLoading || likeMutating}

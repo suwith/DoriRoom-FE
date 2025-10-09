@@ -3,9 +3,12 @@
 import { useState } from 'react';
 import { useRouter } from 'next/navigation';
 import useDiaryLike from '@/hooks/diary/useDiaryLike';
+import { useToast } from '@/app/_providers/ToastProvider';
 
 export default function DiaryCard({ item }) {
   const router = useRouter();
+  const { show } = useToast();
+
   const {
     liked,
     loading: likeLoading,
@@ -23,6 +26,30 @@ export default function DiaryCard({ item }) {
   // date 포맷 변환: 2025-08-10 → 2025.08.10
   const formattedDate = item.date ? item.date.replace(/-/g, '.') : '';
 
+  // 좋아요 버튼 클릭
+  const handleLikeClick = async (e) => {
+    e.stopPropagation();
+    const nextLiked = !liked;
+
+    try {
+      const result = await toggleLike();
+
+      if (result?.ok) {
+        setLikeCount((prev) => (nextLiked ? prev + 1 : Math.max(0, prev - 1)));
+      } else {
+        show({
+          message: result?.message || '좋아요 처리 중 오류가 발생했어요.',
+          variant: 'error',
+        });
+      }
+    } catch (e) {
+      show({
+        message: e.message || '좋아요 처리 중 오류가 발생했어요.',
+        variant: 'error',
+      });
+    }
+  };
+
   return (
     <div
       className="w-[150px] shrink-0 text-left cursor-pointer"
@@ -36,14 +63,7 @@ export default function DiaryCard({ item }) {
         />
         <div className="absolute top-2 right-1 flex flex-col items-center px-2 py-0.5">
           <button
-            onClick={async (e) => {
-              e.stopPropagation();
-              const nextLiked = !liked;
-              await toggleLike();
-              setLikeCount((prev) =>
-                nextLiked ? prev + 1 : Math.max(0, prev - 1)
-              );
-            }}
+            onClick={handleLikeClick}
             disabled={likeLoading || likeMutating}
             aria-disabled={likeLoading || likeMutating}
             aria-pressed={liked}

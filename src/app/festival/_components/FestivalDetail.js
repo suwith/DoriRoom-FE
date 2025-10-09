@@ -131,7 +131,10 @@ export default function FestivalDetail({ festival }) {
     if (region) {
       router.push(`/collection/${region.atlasId}`);
     } else {
-      show('해당 지역의 페이지가 존재하지 않습니다.');
+      show({
+        message: '해당 지역의 페이지가 존재하지 않습니다.',
+        variant: 'error',
+      });
     }
   };
 
