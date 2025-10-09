@@ -15,7 +15,7 @@ export default function OX({ quiz, setSequence, setIsStart, quizCount }) {
     onSuccess: () => {},
     onError: () => {},
   });
-  console.log(sequence, quizCount);
+
   return (
     <div className="h-screen mx-4 flex flex-col">
       {
