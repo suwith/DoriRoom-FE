@@ -4,6 +4,7 @@ import EditHeaderNavBar from '@/app/mypage/_components/EditHeaderNavBar';
 import usePutSpeech from '@/hooks/user/usePutSpeech';
 import LoadingContent from '@/app/_components/LoadingContent';
 import useMyRoom from '@/hooks/user/useMyRoom';
+import { useRouter } from 'next/navigation';
 import { useToast } from '@/app/_providers/ToastProvider';
 import { useEffect, useState } from 'react';
 
@@ -13,19 +14,23 @@ export default function page() {
   const { show } = useToast();
   const { data: myRoom } = useMyRoom();
 
+  const router = useRouter();
+
   useEffect(() => {
-    if (myRoom?.speechBubble !== null) {
+    if (myRoom?.speechBubble != null) {
       setContext(myRoom.speechBubble ?? '');
     }
   }, [myRoom?.speechBubble]);
 
   useEffect(() => {
     if (data?.statusCode === 400) show(data?.error);
-    else if (data?.statusCode === 200)
+    else if (data?.statusCode === 200) {
       show({
         message: '한줄소개가 정상적으로 등록되었어요!',
         variant: 'success',
       });
+      router.back();
+    }
   }, [data]);
 
   if (loading) return <LoadingContent loading={loading} />;
