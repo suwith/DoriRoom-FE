@@ -7,9 +7,12 @@ import useFollow from '@/hooks/follow/useFollow';
 import TwoButtonModal from '@/app/_components/TwoButtonModal';
 import React, { useEffect } from 'react';
 import { useToast } from '@/app/_providers/ToastProvider';
+import { useAuthStore } from '@/stores/useAuthStore';
 
-export default function RankingCard({ user, isMy = false }) {
+export default function RankingCard({ user }) {
   const router = useRouter();
+  const me = useAuthStore((s) => s.user);
+  const isMy = me.userId === user.userId;
   // APPAREL 아이템 ID 가져오기 (없으면 31번 기본값)
   const APPARELID =
     user.equippedItems?.find((i) => i.itemType === 'APPAREL')?.itemId ?? 31;
@@ -110,7 +113,7 @@ export default function RankingCard({ user, isMy = false }) {
 
         {/* speech: 한 줄에 10자, 최대 2줄 */}
         <p
-          className="text-xs text-gray-600 text-right"
+          className="text-xs text-neutral-500 text-right"
           style={{
             display: '-webkit-box',
             WebkitLineClamp: 2,
