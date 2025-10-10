@@ -156,7 +156,9 @@ export default function Home() {
 
             {/* 말풍선 전체를 덮는 레이어 */}
             <div className="absolute inset-0 bottom-2 flex items-center justify-center px-4">
-              <p className="text-justify break-words [overflow-wrap:anywhere] whitespace-pre-wrap max-w-full font-normal text-xs">
+              <p
+                className={`text-justify break-words [overflow-wrap:anywhere] whitespace-pre-wrap max-w-full font-normal text-xs ${data?.speechBubble ? 'text-black' : 'text-neutral-400'}`}
+              >
                 {data?.speechBubble
                   ? data?.speechBubble
                   : '한줄소개를 추가해 보세요!'}{' '}
