@@ -22,6 +22,7 @@ const DEFAULT_WINDOW = 40;
 export default function Shop() {
   const [selectedItemIdx, setSelectedItemIdx] = useState(null);
   const [isOpenBuyModal, setIsOpenBuyModal] = useState(false);
+  const [selectedCategoryId, setSelectedCategoryId] = useState('APPAREL');
   const [preview, setPreview] = useState({});
 
   const { items, loading: IALoaing, error: IAError, refetch } = useItemAll();
@@ -184,6 +185,8 @@ export default function Shop() {
           isShop={true}
           onEquipped={EIRefetch}
           equip={equip}
+          selectedCategoryId={selectedCategoryId}
+          setSelectedCategoryId={setSelectedCategoryId}
         />
       </div>
       {isOpenBuyModal && (

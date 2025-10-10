@@ -17,6 +17,7 @@ const DEFAULT_WINDOW = 40;
 
 export default function Decorate() {
   const [selectedItemIdx, setSelectedItemIdx] = useState(null);
+  const [selectedCategoryId, setSelectedCategoryId] = useState('APPAREL');
   const { items, loading: UILoading, error } = useUserItems();
   const { equip, loading: EILoading, refetch } = useEquipItems();
   const zIndex = manifest.defaults.zIndex;
@@ -118,6 +119,8 @@ export default function Decorate() {
           isShop={false}
           equip={equip}
           onEquipped={refetch}
+          selectedCategoryId={selectedCategoryId}
+          setSelectedCategoryId={setSelectedCategoryId}
         />
       </div>
     </div>
