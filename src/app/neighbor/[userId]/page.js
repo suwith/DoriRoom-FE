@@ -33,8 +33,14 @@ export default function NeighborHome() {
 
   const { status, follow, unfollow, fetchStatus, loading } = useFollow(userId);
   const { room, fetchRoom, loading: roomLoading } = useNeighborRoom(userId);
-  const { likeCount, isLiked, toggleLike } = useRoomLike(userId);
+  const { likeCount, toggleLike, setLikeCount } = useRoomLike(userId);
   const { isBestFriend, fetchBestFriendStatus } = useBestFriendStatus(userId);
+
+  useEffect(() => {
+    if (room?.likeCount != null) {
+      setLikeCount(room.likeCount);
+    }
+  }, [room?.likeCount, setLikeCount]);
 
   const router = useRouter();
   const zIndex = manifest.defaults.zIndex;
@@ -71,7 +77,7 @@ export default function NeighborHome() {
     fetchStatus();
     fetchRoom();
     fetchBestFriendStatus();
-  }, [fetchStatus, fetchRoom, fetchBestFriendStatus, likeCount]);
+  }, [fetchStatus, fetchRoom, fetchBestFriendStatus]);
 
   if (roomLoading || !room) {
     return <LoadingModal open={roomLoading} />;
@@ -211,21 +217,38 @@ export default function NeighborHome() {
         </div>
 
         {/* APPAREL */}
-        <img
-          src={
-            manifest.items[selectAPPAREL?.itemId]?.asset.src ||
-            manifest.items[DEFAULT_APPAREL]?.asset.src
-          }
-          className={`absolute`}
-          style={{ zIndex: zIndex.APPAREL, top: DEFAULT_H - 170 }}
-        />
+        <div
+          className="absolute"
+          style={{ zIndex: zIndex.APPAREL, top: DEFAULT_H - 200 }}
+        >
+          <div className="relative">
+            {/* 말풍선 이미지 */}
+            <img src="/images/bubble.svg" />
+
+            {/* 말풍선 전체를 덮는 레이어 */}
+            <div className="absolute inset-0 bottom-2 flex items-center justify-center px-4">
+              <p className="text-justify break-words [overflow-wrap:anywhere] whitespace-pre-wrap max-w-full font-normal text-xs">
+                {room?.speechBubble
+                  ? room?.speechBubble
+                  : '한줄소개가 추가되지 않았아요.'}
+              </p>
+            </div>
+          </div>
+
+          <img
+            src={
+              manifest.items[selectAPPAREL?.itemId]?.asset.src ||
+              manifest.items[DEFAULT_APPAREL]?.asset.src
+            }
+            className="-mt-8"
+          />
+        </div>
       </div>
 
       {/* 하단 정보 */}
       <RoomStatsCard
         today={room.viewCount}
-        like={room.likeCount}
-        isLiked={isLiked}
+        like={likeCount}
         onLike={toggleLike}
         className="fixed btn-fixed-b z-10"
         isMine={isMine}

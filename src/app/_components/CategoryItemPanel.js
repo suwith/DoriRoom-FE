@@ -1,6 +1,5 @@
 'use client';
 
-import { useState } from 'react';
 import Item from './Item';
 import usePostEquipItem from '@/hooks/decorate/usePostEquipItem';
 import manifest from '@/data/manifest.json';
@@ -19,6 +18,8 @@ export default function CategoryItemPanel({
   isShop,
   equip,
   onEquipped,
+  selectedCategoryId,
+  setSelectedCategoryId,
 }) {
   const {
     mutate,
@@ -29,7 +30,6 @@ export default function CategoryItemPanel({
       onEquipped();
     },
   });
-  const [selectedCategoryId, setSelectedCategoryId] = useState('APPAREL');
   const categoryBtns = [
     { id: 1, name: '의상', type: 'APPAREL', icon: 'mgc_t_shirt_fill' },
     {

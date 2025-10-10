@@ -15,6 +15,7 @@
     "@capacitor/cli": "^7.4.0",
     "@capacitor/core": "^7.4.0",
     "@capacitor/geolocation": "^7.1.5",
+    "@iconify/react": "^6.0.2",
     "@capacitor/local-notifications": "^7.0.3",
     "@capacitor/push-notifications": "^7.0.3",
     "@mdi/js": "^7.4.47",

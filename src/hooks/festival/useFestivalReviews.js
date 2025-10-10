@@ -61,10 +61,9 @@ export default function useFestivalReviews({
     return items.length < total;
   }, [items.length, total]);
 
-  const loadPage = async (nextPage = 0) => {
+  const loadPage = async (nextPage = 0, externalController = null) => {
     if (!enabled || !eventId) return;
-    abortRef.current?.abort();
-    const controller = new AbortController();
+    const controller = externalController || new AbortController();
     abortRef.current = controller;
 
     setLoading(true);
@@ -99,8 +98,12 @@ export default function useFestivalReviews({
 
   useEffect(() => {
     if (!enabled || !eventId) return;
-    loadPage(0);
-    return () => abortRef.current?.abort();
+
+    const controller = new AbortController();
+    abortRef.current = controller;
+    loadPage(0, controller);
+
+    return () => controller.abort();
   }, [enabled, eventId]);
 
   const reload = () => loadPage(0);

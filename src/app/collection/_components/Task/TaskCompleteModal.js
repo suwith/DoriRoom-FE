@@ -11,7 +11,7 @@ export default function TaskCompleteModal({
   if (!isOpen) return null;
 
   return (
-    <div className="w-full fixed top-0 bottom-0 left-1/2 transform -translate-x-1/2 tr bg-black/25 flex justify-center items-center z-50">
+    <div className="w-full fixed top-0 bottom-0 left-1/2 transform -translate-x-1/2 tr bg-black/25 flex justify-center items-center z-100">
       <div className="flex flex-col items-center bg-background p-6 rounded-lg w-[90%]">
         <img src="/firecracker.png" />
         <span className="text-neutral-500 font-normal text-base">

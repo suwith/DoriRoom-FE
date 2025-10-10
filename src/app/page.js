@@ -54,16 +54,11 @@ export default function Home() {
   }, [granted, location?.lat, location?.lng, refetch]);
 
   if (loading)
-    return (
-      <LoadingContent
-        loading={loading}
-        className="max-w-[390px] w-screen h-screen"
-      />
-    );
+    return <LoadingContent loading={loading} className="w-screen h-screen" />;
 
   if (error || !data) {
     return (
-      <div className="max-w-[390px] w-screen h-screen flex items-center justify-center text-red-500">
+      <div className="w-screen h-screen flex items-center justify-center text-red-500">
         데이터를 불러오는 중 오류가 발생했습니다.
       </div>
     );
@@ -146,14 +141,38 @@ export default function Home() {
         </div>
 
         {/* APPAREL */}
-        <img
-          src={
-            manifest.items[selectAPPAREL?.itemId]?.asset.src ||
-            manifest.items[DEFAULT_APPAREL]?.asset.src
-          }
-          className={`absolute`}
-          style={{ zIndex: zIndex.APPAREL, top: DEFAULT_H - 140 }}
-        />
+        <div
+          className="absolute"
+          style={{ zIndex: zIndex.APPAREL, top: DEFAULT_H - 220 }}
+        >
+          <div className="relative">
+            {/* 말풍선 이미지 */}
+            <img src="/images/bubble.svg" />
+
+            {/* 말풍선 전체를 덮는 레이어 */}
+            <div className="absolute inset-0 bottom-2 flex items-center justify-center px-4">
+              <p
+                className={`text-justify break-words [overflow-wrap:anywhere] whitespace-pre-wrap max-w-full font-normal text-xs ${data?.speechBubble ? 'text-black' : 'text-neutral-400'}`}
+              >
+                {data?.speechBubble
+                  ? data?.speechBubble
+                  : '한줄소개를 추가해 보세요!'}{' '}
+                <i
+                  className="mgc_pencil_fill text-neutral-400"
+                  onClick={() => router.push('/home/edit-intro')}
+                />
+              </p>
+            </div>
+          </div>
+
+          <img
+            src={
+              manifest.items[selectAPPAREL?.itemId]?.asset.src ||
+              manifest.items[DEFAULT_APPAREL]?.asset.src
+            }
+            className="-mt-8"
+          />
+        </div>
       </div>
 
       <RoomStatsCard

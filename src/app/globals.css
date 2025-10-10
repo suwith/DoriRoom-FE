@@ -8,7 +8,7 @@
   --foreground: #171717;
 
   /* 패딩/마진 전역 변수 */
-  --layout-padding-top: 75px; /* 상단 padding */
+  --layout-padding-top: 70px; /* 상단 padding */
   --layout-padding-bottom: 50px; /* 하단 padding */
   --header-padding-top: 20px; /* 헤더네비바 상단 padding */
   --bottomnavbar-padding: 92px; /* 바텀네비바 padding */
