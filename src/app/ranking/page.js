@@ -75,7 +75,7 @@ export default function RankingPage() {
               onClick={() => setIsBottomOpen((v) => !v)}
               aria-label="내 랭킹 패널 열기/닫기"
             />
-            <MyRankingCard key={user.userId} user={currentMyRank} isMy />
+            <MyRankingCard key={user.userId} user={currentMyRank} />
           </div>
         )}
       </div>
