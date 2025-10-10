@@ -7,7 +7,7 @@ export default function EditHeaderNavBar({
 }) {
   return (
     <header
-      className={`fixed top-0 left-1/2 transform -translate-x-1/2 z-50 max-w-[390px] w-full pt-[50px] pb-[20px] ${className}`}
+      className={`fixed top-0 left-1/2 transform -translate-x-1/2 z-50 w-screen header-padding-t ${className}`}
     >
       <div className="relative flex items-center justify-center mx-auto">
         <h1 className="text-lg font-semibold text-gray-800">{title}</h1>
