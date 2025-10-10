@@ -10,6 +10,7 @@ function normalizeMyRoom(item) {
     viewCount: item.viewCount,
     likeCount: item.likeCount,
     credit: item.credit,
+    speechBubble: item.speechBubble,
   };
 }
 
