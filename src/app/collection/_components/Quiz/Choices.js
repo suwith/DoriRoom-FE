@@ -20,7 +20,7 @@ export default function Choices({ quiz, setSequence, setIsStart, quizCount }) {
   const options = [option1, option2, option3, option4];
   return (
     <div className="h-screen mx-4 flex flex-col">
-      {Number(sequence) < Number(quizCount) && (
+      {
         <div className="flex gap-2 pt-28">
           {Array.from({ length: Number(quizCount) }, (v, i) => i + 1).map(
             (i) => (
@@ -33,7 +33,7 @@ export default function Choices({ quiz, setSequence, setIsStart, quizCount }) {
             )
           )}
         </div>
-      )}
+      }
 
       <div className="flex-1 flex flex-col justify-center">
         <p className="font-bold text-2xl text-main-100">Q{sequence}.</p>
