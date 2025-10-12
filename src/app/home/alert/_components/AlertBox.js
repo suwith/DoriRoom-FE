@@ -5,9 +5,10 @@ import { useRouter } from 'next/navigation';
 export default function AlertBox({ noti }) {
   // targetId 상태 제거
   const router = useRouter();
+  const targetId = noti?.targetId;
 
   async function handleNoti() {
-    if (noti?.targetId) {
+    if (targetId) {
       switch (noti?.type) {
         case 'DIARY_LIKE':
           router.replace(`/diary/${targetId}`);

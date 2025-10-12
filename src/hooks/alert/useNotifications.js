@@ -41,6 +41,7 @@ function normalizeNotificate(api) {
     content: api.content,
     type: api.type,
     isRead: api.isRead,
+    targetId: api.targetId,
     createdAt: formatRelative(api.createdAt),
   };
 }

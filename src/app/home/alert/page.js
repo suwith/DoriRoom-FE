@@ -5,7 +5,7 @@ import AlertBox from './_components/AlertBox';
 import useNotifications from '@/hooks/alert/useNotifications';
 import LoadingContent from '@/app/_components/LoadingContent';
 
-export default function page() {
+export default function AlertPage() {
   const { notifications, loading, error, refetch } = useNotifications();
 
   if (loading) return <LoadingContent loading={loading} />;

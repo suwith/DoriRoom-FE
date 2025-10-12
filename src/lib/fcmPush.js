@@ -25,6 +25,7 @@ export const addListeners = async (router, mutate) => {
     async (notification) => {
       const data = notification.notification.data;
       const notificationId = data?.notificationId;
+      const type = data?.type;
       const targetId = data?.targetId;
 
       if (!notificationId) {
