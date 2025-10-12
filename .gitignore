@@ -23,7 +23,7 @@
 
 # production
 /build
-/android
+# /android
 /ios
 /release.keystore
 

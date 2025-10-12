@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "1045582376725",
+    "project_id": "doriroom-3bb18",
+    "storage_bucket": "doriroom-3bb18.firebasestorage.app"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:1045582376725:android:64e8a2576c89617aef431c",
+        "android_client_info": {
+          "package_name": "com.doriroom.app"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyD6TUoqtUGksJpC1KrNko3m6YQTJZorwSE"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
