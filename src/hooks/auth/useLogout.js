@@ -20,7 +20,9 @@ export default function useLogout() {
     } catch (_) {
       // 실패해도 무조건 정리
     } finally {
-      deleteFcmToken();
+      await deleteFcmToken().catch((error) => {
+        console.error('Failed to delete FCM token:', error);
+      });
       clearTokens();
       clearUser();
       delete axiosInstance.defaults.headers.Authorization;
