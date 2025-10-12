@@ -59,7 +59,7 @@ export default function useNotifications() {
       const apiContent = (res.data?.content?.content || []).map(
         normalizeNotificate
       );
-      console.log(apiContent);
+
       if (!mountedRef.current) return;
       setNotifications(apiContent);
     } catch (e) {
