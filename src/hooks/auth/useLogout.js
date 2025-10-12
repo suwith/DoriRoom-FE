@@ -4,6 +4,7 @@ import { useCallback, useState } from 'react';
 import { useRouter } from 'next/navigation';
 import axiosInstance from '@/lib/axiosInstance';
 import { useAuthStore } from '@/stores/useAuthStore';
+import { deleteFcmToken } from '@/services/fcm';
 
 export default function useLogout() {
   const clearTokens = useAuthStore((s) => s.clearTokens);
@@ -19,6 +20,9 @@ export default function useLogout() {
     } catch (_) {
       // 실패해도 무조건 정리
     } finally {
+      await deleteFcmToken().catch((error) => {
+        console.error('Failed to delete FCM token:', error);
+      });
       clearTokens();
       clearUser();
       delete axiosInstance.defaults.headers.Authorization;

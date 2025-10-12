@@ -56,6 +56,7 @@ export default function HeaderBar({ credit }) {
                 icon={<i className="mgc_mail_fill text-[#FFBF47] text-xl" />}
                 label="알림"
                 textColor="text-[#FFBF47]"
+                href="/home/alert"
               />
               <IconButton
                 icon={<i className="mgc_award_fill text-sub2-100 text-xl" />}

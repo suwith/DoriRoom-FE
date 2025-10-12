@@ -5,6 +5,7 @@ import ToastProvider from './_providers/ToastProvider';
 import KeyboardInsetsProvider from '@/app/_providers/KeyboardInsetsProvider';
 import Script from 'next/script';
 import VisitChallengeProvider from '@/app/_providers/VisitChallengeProvider';
+import PushSetup from './_components/PushSetup';
 
 export const API = `https://dapi.kakao.com/v2/maps/sdk.js?appkey=${process.env.KAKAOMAP_JAVASCRIPT_KEY}&autoload=false`;
 
@@ -31,6 +32,7 @@ export default function RootLayout({ children }) {
               </div>
             </main>
             <BottomNavBar />
+            <PushSetup />
             <Script src={API} strategy="beforeInteractive" />
           </div>
         </KeyboardInsetsProvider>
