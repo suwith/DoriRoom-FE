@@ -67,6 +67,7 @@ export default function HeaderBar({ credit }) {
               <IconButton
                 icon={<FaCamera className="w-4 h-4 text-[#7595EA]" />}
                 label="촬영"
+                href="/home/capture"
                 textColor="text-[#7595EA]"
               />
             </div>

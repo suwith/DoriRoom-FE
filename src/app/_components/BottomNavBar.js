@@ -32,6 +32,7 @@ export default function BottomNavBar() {
     '/festival/search/',
     '/festival/bookmarks/',
     '/login',
+    '/home/capture',
   ];
 
   const HIDDEN_PREFIXES = [
