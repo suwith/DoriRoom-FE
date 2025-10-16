@@ -1,7 +1,7 @@
 'use client';
 
 import React, { useEffect, useRef, useState } from 'react';
-import domtoimage from 'dom-to-image-more';
+import html2canvas from 'html2canvas';
 import { useRouter } from 'next/navigation';
 import manifest from '@/data/manifest.json';
 import useMyRoom from '@/hooks/user/useMyRoom';
@@ -77,32 +77,51 @@ export default function CapturePage() {
 
   const handleCapture = async () => {
     try {
-      await new Promise((r) => setTimeout(r, 100)); // 렌더 안정화 대기
+      await new Promise((r) => setTimeout(r, 100)); // 렌더 안정화
       const node = captureRef.current;
       if (!node) return;
 
-      const rect = node.getBoundingClientRect();
-
-      // 위 40px, 아래 40px 잘라내기
-      const clip = {
-        x: 0,
-        y: 40,
-        width: rect.width,
-        height: rect.height - 80,
-      };
-
-      const dataUrl = await domtoimage.toPng(node, {
-        bgcolor: '#ffffff',
-        quality: 1,
-        cacheBust: true,
-        clip, // ← 바로 적용
-        style: {
-          border: 'none',
-          outline: 'none',
-          boxShadow: 'none',
+      const canvas = await html2canvas(node, {
+        useCORS: true,
+        scale: 2,
+        backgroundColor: '#ffffff',
+        logging: false,
+        onclone: (clonedDoc) => {
+          clonedDoc.querySelectorAll('*').forEach((el) => {
+            const style = el.style;
+            const cs = window.getComputedStyle(el);
+            if (cs.backgroundColor.includes('oklch'))
+              style.backgroundColor = '#ffffff';
+            if (cs.color.includes('oklch')) style.color = '#000000';
+            if (cs.borderColor.includes('oklch'))
+              style.borderColor = 'transparent';
+          });
         },
       });
 
+      // 위/아래 크롭
+      const cropTop = 200;
+      const cropBottom = 40;
+      const croppedHeight = canvas.height - (cropTop + cropBottom);
+
+      const croppedCanvas = document.createElement('canvas');
+      croppedCanvas.width = canvas.width;
+      croppedCanvas.height = croppedHeight;
+
+      const ctx = croppedCanvas.getContext('2d');
+      ctx.drawImage(
+        canvas,
+        0,
+        cropTop,
+        canvas.width,
+        croppedHeight,
+        0,
+        0,
+        canvas.width,
+        croppedHeight
+      );
+
+      const dataUrl = croppedCanvas.toDataURL('image/png');
       setCapturedImg(dataUrl);
       setIsModalOpen(true);
     } catch (err) {
@@ -111,28 +130,40 @@ export default function CapturePage() {
     }
   };
 
-  const handleDownload = () => {
-    const link = document.createElement('a');
-    link.href = capturedImg;
-    link.download = 'doriroom.png';
-    link.click();
-  };
-
-  const handleShare = async () => {
-    if (navigator.share) {
+  const handleSave = async () => {
+    try {
       const blob = await (await fetch(capturedImg)).blob();
       const file = new File([blob], 'doriroom.png', { type: 'image/png' });
-      try {
+
+      // Web Share API 지원 시
+      if (navigator.share && navigator.canShare?.({ files: [file] })) {
         await navigator.share({
           files: [file],
           title: '도리룸 내 방 촬영',
           text: '내 도리룸을 구경해보세요!',
         });
-      } catch (err) {
-        console.log('공유 취소 또는 실패', err);
+        return;
       }
-    } else {
-      handleDownload();
+
+      // Android WebView 환경 (bridge 존재 시)
+      if (
+        window.Android &&
+        typeof window.Android.saveBase64Image === 'function'
+      ) {
+        // base64만 전달 (Android 쪽에서 처리)
+        window.Android.saveBase64Image(capturedImg);
+        alert('이미지가 갤러리에 저장되었습니다.');
+        return;
+      }
+
+      // 일반 브라우저 fallback
+      const link = document.createElement('a');
+      link.href = capturedImg;
+      link.download = 'doriroom.png';
+      link.click();
+    } catch (err) {
+      console.error('저장 실패:', err);
+      alert('이미지를 저장할 수 없습니다.');
     }
   };
 
@@ -141,7 +172,7 @@ export default function CapturePage() {
       {/* 헤더 */}
       <HeaderNavigationBar title="촬영" className="bg-background" />
 
-      {/* 촬영 대상 (방 전체) */}
+      {/* 촬영 대상 */}
       <div
         ref={captureRef}
         className="relative flex-1 h-full w-full flex justify-center items-center"
@@ -268,7 +299,7 @@ export default function CapturePage() {
                 다시 촬영하기
               </button>
               <button
-                onClick={handleShare}
+                onClick={handleSave}
                 className="flex-1 py-2 bg-main-100 text-background rounded-lg font-medium"
               >
                 저장하기
